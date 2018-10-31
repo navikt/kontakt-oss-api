@@ -5,4 +5,4 @@ jobs:
     - image: circleci/openjdk:11
     steps:
     - checkout
-    - run: askjhdksjhf
+    - run: echo "A first hello"
