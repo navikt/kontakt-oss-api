@@ -1,22 +1,21 @@
 package no.nav.tag.interessemelding;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class HealthcheckController {
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/isAlive", method = RequestMethod.GET)
     @ResponseBody
-    public String isAlive() {
-        return "ok";
+    public Interessemelding isAlive() {
+        return new Interessemelding();
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/isReady", method = RequestMethod.GET)
     @ResponseBody
-    public String isReady() {
-        return "ok";
+    public Interessemelding isReady() {
+        return new Interessemelding();
     }
 }

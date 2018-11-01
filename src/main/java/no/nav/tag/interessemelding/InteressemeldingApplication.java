@@ -2,7 +2,6 @@ package no.nav.tag.interessemelding;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @SpringBootApplication
 public class InteressemeldingApplication {
@@ -11,8 +10,4 @@ public class InteressemeldingApplication {
 		SpringApplication.run(InteressemeldingApplication.class, args);
 	}
 
-    @RequestMapping("/")
-    String home() {
-        return "Hello World!";
-    }
 }
