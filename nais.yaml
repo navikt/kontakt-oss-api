@@ -7,10 +7,9 @@ spec:
   image: navikt/interessemelding:latest
   team: teamtag
   port: 80
-  healthcheck:
-    liveness:
-      path: /isAlive
-      initialDelay: 20
-    readiness:
-      path: /isReady
-      initialDelay: 20
+  liveness:
+    path: /isAlive
+    initialDelay: 20
+  readiness:
+    path: /isReady
+    initialDelay: 20
