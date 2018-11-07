@@ -1,0 +1,16 @@
+apiVersion: "nais.io/v1alpha1"
+kind: "Application"
+metadata:
+  name: interessemelding
+  namespace: default
+spec:
+  image: navikt/interessemelding:latest
+  team: teamtag
+  port: 80
+  healthcheck:
+    liveness:
+      path: /isAlive
+      initialDelay: 20
+    readiness:
+      path: /isReady
+      initialDelay: 20
