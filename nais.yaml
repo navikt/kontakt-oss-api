@@ -10,8 +10,8 @@ spec:
   team: teamtag
   port: 80
   liveness:
-    path: /internal/isAlive
+    path: /interessemelding/isAlive
     initialDelay: 60
   readiness:
-    path: /internal/isReady
+    path: /interessemelding/isReady
     initialDelay: 60
