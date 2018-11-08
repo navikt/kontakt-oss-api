@@ -10,7 +10,7 @@ spec:
   team: teamtag
   port: 8080
   ingresses:
-    - https://interessemelding.nais.preprod.local
+    - https://interessemelding.nais.oera-q.local
   liveness:
     path: /interessemelding/isAlive
     initialDelay: 40
