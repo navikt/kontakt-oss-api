@@ -14,4 +14,4 @@ Hvis localhost ikke fungerer, prøv med IP-en du finner med følgende kommando:
 
 `docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' container_name_or_id`
 
-Nais-url: https://interessemelding.nais.oera-q.local
+Nais-url preprod: https://tag-inkludering.nais.oera-q.local
