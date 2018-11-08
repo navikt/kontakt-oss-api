@@ -12,8 +12,8 @@ spec:
   ingresses:
     - https://interessemelding.nais.oera-q.local
   liveness:
-    path: /interessemelding/isAlive
+    path: /isAlive
     initialDelay: 40
   readiness:
-    path: /interessemelding/isReady
+    path: /isReady
     initialDelay: 40
