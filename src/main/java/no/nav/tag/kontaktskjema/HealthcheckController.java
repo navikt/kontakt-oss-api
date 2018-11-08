@@ -1,4 +1,4 @@
-package no.nav.tag.interessemelding;
+package no.nav.tag.kontaktskjema;
 
 import org.springframework.web.bind.annotation.*;
 

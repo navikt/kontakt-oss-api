@@ -1,13 +1,13 @@
-package no.nav.tag.interessemelding;
+package no.nav.tag.kontaktskjema;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class InteressemeldingApplication {
+public class KontaktskjemaApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(InteressemeldingApplication.class, args);
+		SpringApplication.run(KontaktskjemaApplication.class, args);
 	}
 
 }

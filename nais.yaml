@@ -1,16 +1,16 @@
 apiVersion: "nais.io/v1alpha1"
 kind: "Application"
 metadata:
-  name: interessemelding
+  name: tag-kontaktskjema
   namespace: default
   labels:
     team: teamtag
 spec:
-  image: navikt/interessemelding:latest
+  image: navikt/tag-kontaktskjema:latest
   team: teamtag
   port: 8080
   ingresses:
-    - https://interessemelding.nais.oera-q.local
+    - https://tag-kontaktskjema.nais.oera-q.local
   liveness:
     path: /isAlive
     initialDelay: 40
