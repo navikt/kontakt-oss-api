@@ -3,10 +3,10 @@
 [![CircleCI](https://circleci.com/gh/navikt/tiltaksgjennomforing.svg?style=svg)](https://circleci.com/gh/navikt/tiltaksgjennomforing)
 
 Bygg image
-`docker build -t interessemelding .`
+`docker build -t tag-kontaktskjema .`
 
 Kjør container
-`docker run -d -p 8080:80 interessemelding`
+`docker run -d -p 8080:80 tag-kontaktskjema `
 
 Åpnes i browser: [http://localhost:8080/](http://localhost:8080/)
 

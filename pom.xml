@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>no.nav.tag</groupId>
-	<artifactId>interessemelding</artifactId>
+	<artifactId>tag-kontaktskjema</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>interessemelding</name>
+	<name>tag-kontaktskjema</name>
 	<description>#TAG - Tjenester til arbeidsgivere</description>
 
 	<parent>

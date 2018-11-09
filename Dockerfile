@@ -5,4 +5,4 @@ COPY ./src ./src
 RUN mvn clean package
 
 FROM navikt/java:11
-COPY --from=builder /target/interessemelding-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=builder /target/tag-kontaktskjema-0.0.1-SNAPSHOT.jar app.jar
