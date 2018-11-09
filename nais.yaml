@@ -1,0 +1,20 @@
+apiVersion: "nais.io/v1alpha1"
+kind: "Application"
+metadata:
+  name: tag-kontaktskjema
+  namespace: default
+  labels:
+    team: teamtag
+spec:
+  image: navikt/tag-kontaktskjema:latest
+  team: teamtag
+  port: 8080
+  ingresses:
+    - https://tag-kontaktskjema.nais.oera-q.local
+    - https://tjenester-q1.nav.no/tag-kontaktskjema
+  liveness:
+    path: /isAlive
+    initialDelay: 40
+  readiness:
+    path: /isReady
+    initialDelay: 40
