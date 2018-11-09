@@ -11,6 +11,7 @@ spec:
   port: 8080
   ingresses:
     - https://tag-kontaktskjema.nais.oera-q.local
+    - https://tjenester-q1.nav.no/tag-kontaktskjema
   liveness:
     path: /isAlive
     initialDelay: 40
