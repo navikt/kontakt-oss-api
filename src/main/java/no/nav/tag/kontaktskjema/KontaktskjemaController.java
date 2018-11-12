@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class KontaktskjemaController {
 
-    @PostMapping(value = "/meldInteresse")
+    @PostMapping(value = "/tag-kontaktskjema/meldInteresse")
     public ResponseEntity meldInteresse(
             @RequestBody Skjema skjema
     ) {
