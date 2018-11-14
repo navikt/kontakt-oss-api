@@ -1,9 +1,12 @@
 package no.nav.tag.kontaktskjema;
 
 import lombok.Data;
+import org.springframework.data.annotation.Id;
 
 @Data
-public class Skjema {
+public class Kontaktskjema {
+    @Id
+    private Integer id;
     private String fylke;
     private String kommune;
     private String bedriftsnavn;
