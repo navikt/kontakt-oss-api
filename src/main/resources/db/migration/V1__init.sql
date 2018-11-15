@@ -8,7 +8,7 @@ create table KONTAKTSKJEMA (
   fornavn varchar(255) not null,
   etternavn varchar(255) not null,
   epost varchar(255) not null,
-  telefonnr varchar(255) not null,
+  telefonnr varchar(255) not null
 );
 
 
