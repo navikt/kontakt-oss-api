@@ -9,6 +9,7 @@ spec:
   image: navikt/tag-kontaktskjema:latest
   team: teamtag
   port: 8080
+  secrets: true
   ingresses:
     - https://tag-kontaktskjema.nais.oera-q.local
     - https://tjenester-q1.nav.no/tag-kontaktskjema
