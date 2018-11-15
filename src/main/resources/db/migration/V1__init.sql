@@ -1,3 +1,5 @@
+drop table if exists KONTAKTSKJEMA;
+
 create table KONTAKTSKJEMA (
 	id serial primary key,
 	fylke varchar(255) not null,
