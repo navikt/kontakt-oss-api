@@ -13,6 +13,7 @@ spec:
   ingresses:
     - https://tag-kontaktskjema.nais.oera-q.local
     - https://tjenester-q1.nav.no/tag-kontaktskjema
+    - https://tjenester-t1.nav.no/tag-kontaktskjema
   liveness:
     path: /tag-kontaktskjema/isAlive
     initialDelay: 40
