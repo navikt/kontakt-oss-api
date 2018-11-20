@@ -24,9 +24,4 @@ public class KontaktskjemaController {
         repository.save(kontaktskjema);
         return ResponseEntity.ok(HttpStatus.OK);
     }
-
-    @RequestMapping(value = "/tag-kontaktskjema/hentAlle", method = RequestMethod.GET)
-    public Iterable<Kontaktskjema> hentAlle() {
-        return repository.findAll();
-    }
 }
