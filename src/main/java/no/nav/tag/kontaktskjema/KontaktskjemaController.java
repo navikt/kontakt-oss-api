@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin
 @RestController
 public class KontaktskjemaController {
 
@@ -22,10 +23,5 @@ public class KontaktskjemaController {
         System.out.println(kontaktskjema);
         repository.save(kontaktskjema);
         return ResponseEntity.ok(HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/tag-kontaktskjema/hentAlle", method = RequestMethod.GET)
-    public Iterable<Kontaktskjema> hentAlle() {
-        return repository.findAll();
     }
 }
