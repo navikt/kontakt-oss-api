@@ -11,10 +11,10 @@ spec:
   port: 8080
   secrets: true
   ingresses:
-    - https://tag-kontaktskjema.nais.oera.no
+    - https://arbeidsgiver-q.nav.no/kontaktskjema
   liveness:
-    path: /tag-kontaktskjema/isAlive
+    path: /kontaktskjema/isAlive
     initialDelay: 40
   readiness:
-    path: /tag-kontaktskjema/isReady
+    path: /kontaktskjema/isReady
     initialDelay: 40
