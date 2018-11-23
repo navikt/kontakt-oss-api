@@ -20,7 +20,6 @@ public class KontaktskjemaController {
     public ResponseEntity meldInteresse(
             @RequestBody Kontaktskjema kontaktskjema
     ) {
-        System.out.println(kontaktskjema);
         repository.save(kontaktskjema);
         return ResponseEntity.ok(HttpStatus.OK);
     }
