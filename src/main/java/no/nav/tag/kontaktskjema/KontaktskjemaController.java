@@ -10,9 +10,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class KontaktskjemaController {
 
-    @Value("${epostliste:fant ingen epostliste}")
-    private String epostliste;
-
     private final KontaktskjemaRepository repository;
 
     @Autowired
@@ -26,21 +23,20 @@ public class KontaktskjemaController {
     ) {
         kontaktskjema.setMelding(genererMelding(kontaktskjema));
         repository.save(kontaktskjema);
-        System.out.println("epostliste: " + epostliste);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
     private String genererMelding(Kontaktskjema kontaktskjema) {
-        return String.format("Emnefelt; Kontaktskjema Inkludering\n" +
-                "Arbeidsgiver har sendt henvendelse gjennom Kontaktskjema Inkludering;\n" +
-                "Navn: %s\n" +
-                "Nummer: %s %s\n" +
-                "E-post: %s\n" +
-                "Kommune: %s\n" +
-                "Kontakt arbeidsgiver for å   avklare hva henvendelsen gjelder.\n" +
-                "Minner om at arbeidsgiver skal kontaktes innen 48 timer.\n" +
-                "Husk å registrere henvendelsen som «Kontaktskjema Inkludering» i arena (ikke telefonkontakt)\n" +
-                "Når arbeidsgiver er kontaktet og henvendelsen registrert i Arena skal denne eposten slettes.\n",
+        return String.format("Emnefelt; Kontaktskjema Inkludering" +
+                "Arbeidsgiver har sendt henvendelse gjennom Kontaktskjema Inkludering;" +
+                "Navn: %s" +
+                "Nummer: %s %s" +
+                "E-post: %s" +
+                "Kommune: %s" +
+                "Kontakt arbeidsgiver for å avklare hva henvendelsen gjelder." +
+                "Minner om at arbeidsgiver skal kontaktes innen 48 timer." +
+                "Husk å registrere henvendelsen som «Kontaktskjema Inkludering» i arena (ikke telefonkontakt)" +
+                "Når arbeidsgiver er kontaktet og henvendelsen registrert i Arena skal denne eposten slettes.",
                 kontaktskjema.getFornavn(), kontaktskjema.getEtternavn(), kontaktskjema.getTelefonnr(), kontaktskjema.getEpost(), kontaktskjema.getKommune()
         );
 
