@@ -1,6 +1,7 @@
 package no.nav.tag.kontaktskjema;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -8,6 +9,9 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = {"https://tjenester.nav.no", "https://tjenester-q1.nav.no", "https://tjenester-t1.nav.no"})
 @RestController
 public class KontaktskjemaController {
+
+    @Value("${epostliste:fant ingen epostliste}")
+    private String epostliste;
 
     private final KontaktskjemaRepository repository;
 
@@ -22,6 +26,7 @@ public class KontaktskjemaController {
     ) {
         kontaktskjema.setMelding(genererMelding(kontaktskjema));
         repository.save(kontaktskjema);
+        System.out.println("epostliste: " + epostliste);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
