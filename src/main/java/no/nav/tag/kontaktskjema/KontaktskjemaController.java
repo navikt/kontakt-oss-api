@@ -21,9 +21,13 @@ public class KontaktskjemaController {
     public ResponseEntity meldInteresse(
             @RequestBody Kontaktskjema kontaktskjema
     ) {
-        kontaktskjema.setMelding(genererMelding(kontaktskjema));
-        repository.save(kontaktskjema);
-        return ResponseEntity.ok(HttpStatus.OK);
+        try {
+            kontaktskjema.setMelding(genererMelding(kontaktskjema));
+            repository.save(kontaktskjema);
+            return ResponseEntity.ok(HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     private String genererMelding(Kontaktskjema kontaktskjema) {
