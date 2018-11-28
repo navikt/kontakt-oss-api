@@ -1,16 +1,17 @@
 package no.nav.tag.kontaktskjema;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.Id;
+
+import java.util.Date;
 
 @Data
 @Accessors
 public class Kontaktskjema {
     @Id
     private Integer id;
+    private Date opprettet;
     private String melding;
     private String fylke;
     private String kommune;
