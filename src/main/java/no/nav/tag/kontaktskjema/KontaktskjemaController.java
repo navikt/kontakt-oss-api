@@ -1,7 +1,6 @@
 package no.nav.tag.kontaktskjema;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +16,7 @@ public class KontaktskjemaController {
         this.repository = repository;
     }
 
-    @PostMapping(value = "/kontaktskjema/meldInteresse")
+    @PostMapping(value = "/kontaktskjemaUthenting/meldInteresse")
     public ResponseEntity meldInteresse(
             @RequestBody Kontaktskjema kontaktskjema
     ) {
@@ -29,6 +28,11 @@ public class KontaktskjemaController {
             System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    @GetMapping(value = "/kontaktskjemaUthenting/hentAlle")
+    public Iterable<Kontaktskjema> hentAlle() {
+        return repository.findAll();
     }
 
     private String genererMelding(Kontaktskjema kontaktskjema) {
