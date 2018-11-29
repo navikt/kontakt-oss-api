@@ -11,7 +11,7 @@ spec:
   port: 8080
   secrets: true
   ingresses:
-    - https://arbeidsgiver-q.nav.no/kontaktskjema
+    - https://arbeidsgiver-q.nav.no/kontaktskjemaUthenting
   liveness:
     path: /kontaktskjemaUthenting/isAlive
     initialDelay: 40
