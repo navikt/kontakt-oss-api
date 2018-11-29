@@ -1,7 +1,7 @@
-drop table if exists KONTAKTSKJEMA;
-
 create table KONTAKTSKJEMA (
 	id serial primary key,
+	opprettet timestamp not null default current_timestamp,
+	melding varchar(10000) not null,
 	fylke varchar(255) not null,
   kommune varchar(255) not null,
   bedriftsnavn varchar(255) not null,
@@ -10,7 +10,3 @@ create table KONTAKTSKJEMA (
   epost varchar(255) not null,
   telefonnr varchar(255) not null
 );
-
-
-insert into KONTAKTSKJEMA (fylke, kommune, bedriftsnavn, fornavn, etternavn, epost, telefonnr)
-values ('Østfold', 'Moss', 'Flesk og ris AS', 'Nora', 'Østervest', 'søskjer@fleskogris.no', '+47 12 34 56 78');
