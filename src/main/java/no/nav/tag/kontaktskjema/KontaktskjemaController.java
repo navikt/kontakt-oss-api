@@ -16,7 +16,7 @@ public class KontaktskjemaController {
         this.repository = repository;
     }
 
-    @PostMapping(value = "/kontaktskjemaUthenting/meldInteresse")
+    @PostMapping(value = "${controller_basepath}/meldInteresse")
     public ResponseEntity meldInteresse(
             @RequestBody Kontaktskjema kontaktskjema
     ) {
@@ -30,7 +30,7 @@ public class KontaktskjemaController {
         }
     }
 
-    @GetMapping(value = "/kontaktskjemaUthenting/hentAlle")
+    @GetMapping(value = "${controller_basepath}/hentAlle")
     public Iterable<Kontaktskjema> hentAlle() {
         return repository.findAll();
     }
