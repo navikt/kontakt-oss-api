@@ -22,4 +22,4 @@ spec:
   - name: CONTROLLER_BASEPATH
     value: /kontaktskjemaUthenting
   - name: FEATURE_TOGGLE_UTHENTINGSENDEPUNKT
-    value: True
+    value: isTrue
