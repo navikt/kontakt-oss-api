@@ -18,7 +18,7 @@ public class KontaktskjemaController {
         this.repository = repository;
     }
 
-    @PostMapping(value = "${controller_basepath}/meldInteresse")
+    @PostMapping(value = "${controller.basepath}/meldInteresse")
     public ResponseEntity meldInteresse(
             @RequestBody Kontaktskjema kontaktskjema
     ) {
