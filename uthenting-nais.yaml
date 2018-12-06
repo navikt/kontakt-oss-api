@@ -6,12 +6,6 @@ metadata:
   labels:
     team: teamtag
 spec:
-  containers:
-  - env:
-    - name: CONTROLLER_BASEPATH
-      value: /kontaktskjemaUthenting
-    - name: FEATURE_TOGGLE_UTHENTINGSENDEPUNKT
-      value: true
   image: navikt/tag-kontaktskjema:latest
   team: teamtag
   port: 8080
