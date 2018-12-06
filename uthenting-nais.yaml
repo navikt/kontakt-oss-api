@@ -18,3 +18,8 @@ spec:
   readiness:
     path: /kontaktskjemaUthenting/isReady
     initialDelay: 40
+  env:
+  - name: CONTROLLER_BASEPATH
+    value: /kontaktskjemaUthenting
+  - name: FEATURE_TOGGLE_UTHENTINGSENDEPUNKT
+    value: True

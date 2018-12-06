@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@ConditionalOnProperty(prefix = "feature.toggle", name = "uthentingsendepunkt", havingValue="true")
+@ConditionalOnProperty(prefix = "feature.toggle", name = "uthentingsendepunkt", havingValue="True")
 @CrossOrigin(origins = {"https://tjenester.nav.no", "https://tjenester-q1.nav.no", "https://tjenester-t1.nav.no"})
 @RestController
 public class UthentingController {
