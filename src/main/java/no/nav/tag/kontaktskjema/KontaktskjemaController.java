@@ -1,6 +1,8 @@
 package no.nav.tag.kontaktskjema;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,16 +32,11 @@ public class KontaktskjemaController {
         }
     }
 
-    @GetMapping(value = "${controller_basepath}/hentAlle")
-    public Iterable<Kontaktskjema> hentAlle() {
-        return repository.findAll();
-    }
-
     private String genererMelding(Kontaktskjema kontaktskjema) {
         return String.format("Emnefelt; Kontaktskjema Inkludering " +
                 "Arbeidsgiver har sendt henvendelse gjennom Kontaktskjema Inkludering; " +
-                "Navn: %s " +
-                "Nummer: %s %s " +
+                "Navn: %s %s " +
+                "Nummer: %s " +
                 "E-post: %s " +
                 "Kommune: %s " +
                 "Kontakt arbeidsgiver for å avklare hva henvendelsen gjelder. " +

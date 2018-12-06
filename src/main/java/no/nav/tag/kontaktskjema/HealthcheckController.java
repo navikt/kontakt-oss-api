@@ -5,13 +5,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class HealthcheckController {
 
-    @RequestMapping(value = "/kontaktskjema/isAlive", method = RequestMethod.GET)
+    @RequestMapping(value = "${controller_basepath}/isAlive", method = RequestMethod.GET)
     @ResponseBody
     public String isAlive() {
         return "ok";
     }
 
-    @RequestMapping(value = "/kontaktskjema/isReady", method = RequestMethod.GET)
+    @RequestMapping(value = "${controller_basepath}/isReady", method = RequestMethod.GET)
     @ResponseBody
     public String isReady() {
         return "ok";
