@@ -13,8 +13,8 @@ spec:
   ingresses:
     - https://arbeidsgiver-q.nav.no/kontaktskjema
   liveness:
-    path: /kontaktskjema/isAlive
+    path: /kontaktskjema/internal/isAlive
     initialDelay: 40
   readiness:
-    path: /kontaktskjema/isReady
+    path: /kontaktskjema/internal/isReady
     initialDelay: 40
