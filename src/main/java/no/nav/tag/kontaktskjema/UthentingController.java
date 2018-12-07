@@ -18,7 +18,7 @@ public class UthentingController {
         this.repository = repository;
     }
 
-    @GetMapping(value = "${controller.basepath}/hentAlle")
+    @GetMapping(value = "${controller.basepath}/internal/hentAlle")
     public Iterable<Kontaktskjema> hentAlle() {
         return repository.findAll();
     }
