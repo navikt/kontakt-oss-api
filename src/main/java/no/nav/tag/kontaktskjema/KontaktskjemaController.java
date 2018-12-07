@@ -19,7 +19,7 @@ import static no.nav.tag.kontaktskjema.EpostlisteUtils.getMottakere;
 @RestController
 public class KontaktskjemaController {
 
-    @Value("${epostliste}")
+    @Value("${epostliste:}")
     private String epostlisteB64;
 
     private final KontaktskjemaRepository repository;
