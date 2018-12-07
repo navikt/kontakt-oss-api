@@ -43,8 +43,13 @@ public class KontaktskjemaController {
         }
     }
 
-    private String genererMelding(Kontaktskjema kontaktskjema) throws IOException {
-        String mottakere = getMottakere(epostlisteB64, kontaktskjema);
+    private String genererMelding(Kontaktskjema kontaktskjema) {
+        String mottakere;
+        try {
+            mottakere = getMottakere(epostlisteB64, kontaktskjema);
+        } catch (IOException e) {
+            mottakere = "Fant ingen mottakere";
+        }
         return String.format("Emnefelt; Kontaktskjema Inkludering " +
                 "Denne mailen skal sendes til: %s " +
                 "Arbeidsgiver har sendt henvendelse gjennom Kontaktskjema Inkludering; " +
