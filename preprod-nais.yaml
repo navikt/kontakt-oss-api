@@ -18,6 +18,9 @@ spec:
   readiness:
     path: /kontaktskjema/internal/actuator/info
     initialDelay: 40
+  env:
+  - name: FEATURE_TOGGLE_UTHENTINGSENDEPUNKT
+    value: enabled
 prometheus:
   enabled: true
   path: /kontaktskjema/internal/actuator/prometheus
