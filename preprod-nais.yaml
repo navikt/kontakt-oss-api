@@ -13,8 +13,11 @@ spec:
   ingresses:
     - https://arbeidsgiver-q.nav.no/kontaktskjema
   liveness:
-    path: /kontaktskjema/internal/isAlive
+    path: /kontaktskjema/internal/actuator/info
     initialDelay: 40
   readiness:
-    path: /kontaktskjema/internal/isReady
+    path: /kontaktskjema/internal/actuator/info
     initialDelay: 40
+prometheus:
+  enabled: true
+  path: /kontaktskjema/internal/actuator/prometheus
