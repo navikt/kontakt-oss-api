@@ -12,6 +12,7 @@ spec:
   secrets: true
   ingresses:
     - https://arbeidsgiver-q.nav.no/kontaktskjema
+    - https://tag-kontaktskjema.nais.oera-q.local
   liveness:
     path: /kontaktskjema/internal/actuator/info
     initialDelay: 40
