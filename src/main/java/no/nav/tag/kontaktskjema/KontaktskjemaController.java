@@ -1,7 +1,6 @@
 package no.nav.tag.kontaktskjema;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,22 +9,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
-
-import static no.nav.tag.kontaktskjema.EpostlisteUtils.getMottakere;
+import java.util.List;
+import java.util.Map;
 
 @ConditionalOnProperty(prefix = "feature.toggle", name = "uthentingsendepunkt", havingValue="disabled")
 @CrossOrigin(origins = {"https://tjenester.nav.no", "https://tjenester-q1.nav.no", "https://tjenester-t1.nav.no"})
 @RestController
 public class KontaktskjemaController {
 
-    @Value("${epostliste:}")
-    private String epostlisteB64;
-
+    private final Map<String, List<String>> epostliste;
     private final KontaktskjemaRepository repository;
 
     @Autowired
-    public KontaktskjemaController(KontaktskjemaRepository repository) {
+    public KontaktskjemaController(Map<String, List<String>> epostliste, KontaktskjemaRepository repository) {
+        this.epostliste = epostliste;
         this.repository = repository;
     }
 
@@ -44,12 +41,8 @@ public class KontaktskjemaController {
     }
 
     private String genererMelding(Kontaktskjema kontaktskjema) {
-        String mottakere;
-        try {
-            mottakere = getMottakere(epostlisteB64, kontaktskjema);
-        } catch (Exception e) {
-            mottakere = "Fant ingen mottakere";
-        }
+        String mottakere = String.valueOf(epostliste.get(kontaktskjema.getKommunenr()));
+
         return String.format("Emnefelt; Kontaktskjema Inkludering " +
                 "Denne mailen skal sendes til: %s " +
                 "Arbeidsgiver har sendt henvendelse gjennom Kontaktskjema Inkludering; " +

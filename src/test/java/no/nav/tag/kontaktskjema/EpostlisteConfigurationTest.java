@@ -2,16 +2,17 @@ package no.nav.tag.kontaktskjema;
 
 import org.junit.Test;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import static org.junit.Assert.*;
 
-public class EpostlisteUtilsTest {
+public class EpostlisteConfigurationTest {
 
     @Test
-    public void skalDekodeB64JsonEpostlisteTilMap() throws IOException {
+    public void skalDekodeB64JsonEpostlisteTilMap() {
+        EpostlisteConfiguration epostlisteConfiguration = new EpostlisteConfiguration();
+
         String json = "{\"Aremark\": [\"ostfold@nav.no\", \"geir@nav.no\"], \"Askim\": [\"ostfold@nav.no\"], \"Eidsberg\": [\"ostfold@nav.no\", \"anne@nav.no\", \"berit@nav.no\"]}";
         byte[] encoded = Base64.getEncoder().encode(json.getBytes());
         String epostlisteB64 = new String(encoded, StandardCharsets.UTF_8);
@@ -21,7 +22,7 @@ public class EpostlisteUtilsTest {
         onsketEpostliste.put("Askim", Collections.singletonList("ostfold@nav.no"));
         onsketEpostliste.put("Eidsberg", Arrays.asList("ostfold@nav.no", "anne@nav.no", "berit@nav.no"));
 
-        assertEquals(onsketEpostliste, EpostlisteUtils.oversettTilMap(epostlisteB64));
+        assertEquals(onsketEpostliste, epostlisteConfiguration.epostliste(epostlisteB64));
     }
 
 }
