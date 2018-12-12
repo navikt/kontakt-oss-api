@@ -1,5 +1,6 @@
 package no.nav.tag.kontaktskjema;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import java.util.Map;
 @ConditionalOnProperty(prefix = "feature.toggle", name = "uthentingsendepunkt", havingValue="disabled")
 @CrossOrigin(origins = {"https://tjenester.nav.no", "https://tjenester-q1.nav.no", "https://tjenester-t1.nav.no"})
 @RestController
+@Slf4j
 public class KontaktskjemaController {
 
     private final Map<String, List<String>> epostliste;
@@ -35,7 +37,7 @@ public class KontaktskjemaController {
             repository.save(kontaktskjema);
             return ResponseEntity.ok(HttpStatus.OK);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Feil ved innsending av skjema", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
