@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,11 +17,13 @@ public class EpostlisteUtils {
     public static Map<String, List<String>> oversettTilMap(String epostlisteB64) throws IOException {
         byte[] decoded = decoder.decode(epostlisteB64);
         String json = new String(decoded, StandardCharsets.UTF_8);
-        return objectMapper.readValue(json, new TypeReference<Map<String, List<String>>>(){});
+        Map<String, List<String>> map = objectMapper.readValue(json, new TypeReference<Map<String, List<String>>>() {});
+        return map == null ? new HashMap<>() : map;
     }
 
     public static String getMottakere(String epostlisteB64, Kontaktskjema kontaktskjema) throws IOException {
-        return EpostlisteUtils.oversettTilMap(epostlisteB64).get(kontaktskjema.getKommune()).toString();
+        List<String> mottakere = EpostlisteUtils.oversettTilMap(epostlisteB64).get(kontaktskjema.getKommune());
+        return mottakere == null ? "" : mottakere.toString();
     }
 
 }
