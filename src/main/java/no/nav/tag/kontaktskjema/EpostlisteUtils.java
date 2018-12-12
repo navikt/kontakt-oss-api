@@ -22,7 +22,7 @@ public class EpostlisteUtils {
     }
 
     public static String getMottakere(String epostlisteB64, Kontaktskjema kontaktskjema) throws IOException {
-        List<String> mottakere = EpostlisteUtils.oversettTilMap(epostlisteB64).get(kontaktskjema.getKommune());
+        List<String> mottakere = EpostlisteUtils.oversettTilMap(epostlisteB64).get(kontaktskjema.getKommunenr());
         return mottakere == null ? "" : mottakere.toString();
     }
 
