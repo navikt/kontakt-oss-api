@@ -38,7 +38,7 @@ public class KontaktskjemaController {
             repository.save(kontaktskjema);
             return ResponseEntity.ok(HttpStatus.OK);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
