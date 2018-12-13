@@ -37,9 +37,6 @@ public class EpostlisteConfiguration {
         } catch (IOException e) {
             throw new KontaktskjemaException("Kunne ikke hente epostliste", e);
         }
-        if (map == null) {
-            throw new KontaktskjemaException("Kunne ikke hente epostliste");
-        }
         return map;
     }
 }
