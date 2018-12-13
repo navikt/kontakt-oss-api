@@ -25,4 +25,15 @@ public class EpostlisteConfigurationTest {
         assertEquals(onsketEpostliste, epostlisteConfiguration.epostliste(epostlisteB64));
     }
 
+    @Test(expected = KontaktskjemaException.class)
+    public void skalFeileHvisEpostlistenErUgyldig() {
+        String ugyldig = new String(Base64.getEncoder().encode("ugyldig".getBytes()), StandardCharsets.UTF_8);
+        (new EpostlisteConfiguration()).epostliste(ugyldig);
+    }
+
+    @Test(expected = KontaktskjemaException.class)
+    public void skalFeileHvisEpostlistenErNull() {
+        (new EpostlisteConfiguration()).epostliste(null);
+    }
+
 }

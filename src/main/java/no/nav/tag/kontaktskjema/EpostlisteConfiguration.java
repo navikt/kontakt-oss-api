@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Configuration;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,19 +19,27 @@ public class EpostlisteConfiguration {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @Bean("epostliste")
-    public Map<String, List<String>> epostliste(@Value("${epostliste:}") String epostlisteB64) {
+    public Map<String, List<String>> epostliste(@Value("${epostliste:null}") String epostlisteB64) {
         return oversettTilMap(epostlisteB64);
     }
 
     private Map<String, List<String>> oversettTilMap(String epostlisteB64) {
+        if (epostlisteB64 == null) {
+            throw new KontaktskjemaException("Kunne ikke hente epostliste");
+        }
+
         byte[] decoded = decoder.decode(epostlisteB64);
         String json = new String(decoded, StandardCharsets.UTF_8);
         Map<String, List<String>> map;
+
         try {
             map = objectMapper.readValue(json, new TypeReference<Map<String, List<String>>>() {});
         } catch (IOException e) {
-            return new HashMap<>();
+            throw new KontaktskjemaException("Kunne ikke hente epostliste", e);
         }
-        return map == null ? new HashMap<>() : map;
+        if (map == null) {
+            throw new KontaktskjemaException("Kunne ikke hente epostliste");
+        }
+        return map;
     }
 }
