@@ -12,9 +12,13 @@ spec:
   secrets: true
   ingresses:
     - https://arbeidsgiver.nav.no/kontaktskjema
+    - https://tag-kontaktskjema.nais.oera.no
   liveness:
-    path: /kontaktskjema/internal/isAlive
+    path: /kontaktskjema/internal/actuator/info
     initialDelay: 40
   readiness:
-    path: /kontaktskjema/internal/isReady
+    path: /kontaktskjema/internal/actuator/info
     initialDelay: 40
+prometheus:
+  enabled: true
+  path: /kontaktskjema/internal/actuator/prometheus
