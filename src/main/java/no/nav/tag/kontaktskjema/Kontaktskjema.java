@@ -13,6 +13,7 @@ public class Kontaktskjema {
     private String melding;
     private String fylke;
     private String kommune;
+    private String kommunenr;
     private String bedriftsnavn;
     private String fornavn;
     private String etternavn;
