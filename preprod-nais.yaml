@@ -12,15 +12,13 @@ spec:
   secrets: true
   ingresses:
     - https://arbeidsgiver-q.nav.no/kontaktskjema
+    - https://tag-kontaktskjema.nais.oera-q.local
   liveness:
-    path: /kontaktskjema/internal/isAlive
+    path: /kontaktskjema/internal/actuator/info
     initialDelay: 40
   readiness:
-    path: /kontaktskjema/internal/isReady
+    path: /kontaktskjema/internal/actuator/info
     initialDelay: 40
-  env:
-  - name: FEATURE_TOGGLE_UTHENTINGSENDEPUNKT
-    value: enabled
 prometheus:
   enabled: true
   path: /kontaktskjema/internal/actuator/prometheus
