@@ -12,7 +12,6 @@ public class Kontaktskjema {
     @Id
     private Integer id;
     private LocalDateTime opprettet = LocalDateTime.now();
-    private String melding;
     private String fylke;
     private String kommune;
     private String kommunenr;

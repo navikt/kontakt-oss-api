@@ -31,6 +31,7 @@ public class KontaktskjemaController {
     ) {
         try {
             repository.save(kontaktskjema);
+            log.info("Vellykket innsending.")
             return ResponseEntity.ok(HttpStatus.OK);
         } catch (Exception e) {
             log.error("Feil ved innsending av skjema", e);

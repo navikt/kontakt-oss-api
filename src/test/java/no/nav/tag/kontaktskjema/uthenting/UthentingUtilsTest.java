@@ -21,7 +21,6 @@ public class UthentingUtilsTest {
         Kontaktskjema kontaktskjema = new Kontaktskjema(
                 734,
                 LocalDateTime.now(),
-                "dette er en melding",
                 "nordland",
                 "Bodø",
                 "0011",
