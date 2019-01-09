@@ -1,5 +1,6 @@
-package no.nav.tag.kontaktskjema;
+package no.nav.tag.kontaktskjema.uthenting;
 
+import no.nav.tag.kontaktskjema.KontaktskjemaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -12,15 +13,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class UthentingController {
 
     private final KontaktskjemaRepository repository;
+    private final UthentingUtils uthentingUtils;
 
     @Autowired
-    public UthentingController(KontaktskjemaRepository repository) {
+    public UthentingController(KontaktskjemaRepository repository, UthentingUtils uthentingUtils) {
         this.repository = repository;
+        this.uthentingUtils = uthentingUtils;
     }
 
     @GetMapping(value = "${controller.basepath}/internal/hentAlle")
-    public Iterable<Kontaktskjema> hentAlle() {
-        return repository.findAll();
+    public Iterable<KontaktskjemaUthenting> hentAlle() {
+        return uthentingUtils.lagUthentinger(repository.findAll());
     }
-
 }

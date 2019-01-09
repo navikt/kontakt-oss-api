@@ -18,12 +18,10 @@ import java.util.Map;
 @Slf4j
 public class KontaktskjemaController {
 
-    private final Map<String, List<String>> epostliste;
     private final KontaktskjemaRepository repository;
 
     @Autowired
-    public KontaktskjemaController(Map<String, List<String>> epostliste, KontaktskjemaRepository repository) {
-        this.epostliste = epostliste;
+    public KontaktskjemaController(KontaktskjemaRepository repository) {
         this.repository = repository;
     }
 
@@ -32,31 +30,11 @@ public class KontaktskjemaController {
             @RequestBody Kontaktskjema kontaktskjema
     ) {
         try {
-            kontaktskjema.setMelding(genererMelding(kontaktskjema));
             repository.save(kontaktskjema);
             return ResponseEntity.ok(HttpStatus.OK);
         } catch (Exception e) {
             log.error("Feil ved innsending av skjema", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-    }
-
-    private String genererMelding(Kontaktskjema kontaktskjema) {
-        String mottakere = String.valueOf(epostliste.get(kontaktskjema.getKommunenr()));
-
-        return String.format("Emnefelt; Kontaktskjema Inkludering " +
-                "Denne mailen skal sendes til: %s " +
-                "Arbeidsgiver har sendt henvendelse gjennom Kontaktskjema Inkludering; " +
-                "Navn: %s %s " +
-                "Nummer: %s " +
-                "E-post: %s " +
-                "Kommune: %s (kommunenr: %s)" +
-                "Kontakt arbeidsgiver for å avklare hva henvendelsen gjelder. " +
-                "Minner om at arbeidsgiver skal kontaktes innen 48 timer. " +
-                "Husk å registrere henvendelsen som «Kontaktskjema Inkludering» i arena (ikke telefonkontakt) " +
-                "Når arbeidsgiver er kontaktet og henvendelsen registrert i Arena skal denne eposten slettes.",
-                mottakere, kontaktskjema.getFornavn(), kontaktskjema.getEtternavn(), kontaktskjema.getTelefonnr(), kontaktskjema.getEpost(), kontaktskjema.getKommune(), kontaktskjema.getKommunenr()
-        );
-
     }
 }

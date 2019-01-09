@@ -1,7 +1,8 @@
-package no.nav.tag.kontaktskjema;
+package no.nav.tag.kontaktskjema.uthenting;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import no.nav.tag.kontaktskjema.KontaktskjemaException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
