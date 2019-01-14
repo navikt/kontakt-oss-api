@@ -1,5 +1,7 @@
-package no.nav.tag.kontaktskjema;
+package no.nav.tag.kontaktskjema.uthenting;
 
+import no.nav.tag.kontaktskjema.KontaktskjemaException;
+import no.nav.tag.kontaktskjema.uthenting.EpostlisteConfiguration;
 import org.junit.Test;
 
 import java.nio.charset.StandardCharsets;

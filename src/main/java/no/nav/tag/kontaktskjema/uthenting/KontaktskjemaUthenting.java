@@ -1,18 +1,20 @@
-package no.nav.tag.kontaktskjema;
+package no.nav.tag.kontaktskjema.uthenting;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.experimental.Accessors;
-import org.springframework.data.annotation.Id;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-@AllArgsConstructor
 @Data
-public class Kontaktskjema {
-    @Id
+@AllArgsConstructor
+@EqualsAndHashCode
+public class KontaktskjemaUthenting {
     private Integer id;
     private LocalDateTime opprettet;
+    private String melding;
+    private List<String> mottakere;
     private String fylke;
     private String kommune;
     private String kommunenr;
