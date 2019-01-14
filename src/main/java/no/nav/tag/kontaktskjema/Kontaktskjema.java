@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @Data
-@Accessors(chain = true)
 public class Kontaktskjema {
     @Id
     private Integer id;
