@@ -20,6 +20,8 @@ spec:
     path: /kontaktskjemaUthenting/internal/actuator/info
     initialDelay: 40
   env:
+  - name: SPRING_PROFILES_ACTIVE
+    value: uthenting
   - name: CONTROLLER_BASEPATH
     value: /kontaktskjemaUthenting
   - name: FEATURE_TOGGLE_UTHENTINGSENDEPUNKT
