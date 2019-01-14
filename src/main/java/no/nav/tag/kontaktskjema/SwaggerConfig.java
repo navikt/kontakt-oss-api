@@ -14,7 +14,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
 @EnableSwagger2
-@Profile("h2")
+@Profile("preprod")
 public class SwaggerConfig {
 
     @Bean
@@ -26,4 +26,3 @@ public class SwaggerConfig {
           .build();
     }
 }
-
