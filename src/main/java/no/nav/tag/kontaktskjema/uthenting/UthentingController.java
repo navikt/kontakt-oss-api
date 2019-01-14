@@ -23,6 +23,6 @@ public class UthentingController {
 
     @GetMapping(value = "${controller.basepath}/internal/hentAlle")
     public Iterable<KontaktskjemaUthenting> hentAlle() {
-        return uthentingUtils.lagUthentinger(repository.findAll());
+        return uthentingUtils.lagSorterteUthentinger(repository.findAll());
     }
 }

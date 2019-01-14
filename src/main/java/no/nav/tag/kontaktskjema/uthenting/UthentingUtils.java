@@ -4,9 +4,8 @@ import no.nav.tag.kontaktskjema.Kontaktskjema;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class UthentingUtils {
@@ -18,7 +17,17 @@ public class UthentingUtils {
         this.epostliste = epostliste;
     }
 
-    public List<KontaktskjemaUthenting> lagUthentinger(Iterable<Kontaktskjema> kontaktskjemaer) {
+    public List<KontaktskjemaUthenting> lagSorterteUthentinger(Iterable<Kontaktskjema> kontaktskjemaer) {
+        return sorterUthentinger(lagUthentinger(kontaktskjemaer));
+    }
+
+    private List<KontaktskjemaUthenting> sorterUthentinger(List<KontaktskjemaUthenting> uthentinger) {
+        return uthentinger.stream()
+                .sorted(Comparator.comparing(KontaktskjemaUthenting::getId))
+                .collect(Collectors.toList());
+    }
+
+    private List<KontaktskjemaUthenting> lagUthentinger(Iterable<Kontaktskjema> kontaktskjemaer) {
         List<KontaktskjemaUthenting> uthentinger = new ArrayList<>();
         for (Kontaktskjema kontaktskjema : kontaktskjemaer) {
             uthentinger.add(lagUthenting(kontaktskjema));
