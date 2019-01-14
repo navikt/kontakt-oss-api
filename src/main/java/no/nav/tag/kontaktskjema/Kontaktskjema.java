@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public class Kontaktskjema {
     @Id
     private Integer id;
-    private LocalDateTime opprettet = LocalDateTime.now();
+    private LocalDateTime opprettet;
     private String fylke;
     private String kommune;
     private String kommunenr;

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -30,8 +31,9 @@ public class KontaktskjemaController {
             @RequestBody Kontaktskjema kontaktskjema
     ) {
         try {
+            kontaktskjema.setOpprettet(LocalDateTime.now());
             repository.save(kontaktskjema);
-            log.info("Vellykket innsending.")
+            log.info("Vellykket innsending.");
             return ResponseEntity.ok(HttpStatus.OK);
         } catch (Exception e) {
             log.error("Feil ved innsending av skjema", e);
