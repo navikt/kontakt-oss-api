@@ -65,19 +65,18 @@ public class UthentingUtilsTest {
 
     @Test
     public void skalSortereUthentingerPaaId() {
-        Set<Kontaktskjema> usorterteKontaktskjemaer = new HashSet<>();
-        Kontaktskjema kontaktskjema;
-        for (int i=0; i<100; i++) {
-            kontaktskjema = lagKontaktskjema();
-            kontaktskjema.setId(i);
-            usorterteKontaktskjemaer.add(kontaktskjema);
-        }
+        List<Kontaktskjema> usorterteKontaktskjemaer = new ArrayList<>();
+        usorterteKontaktskjemaer.add(Kontaktskjema.builder().id(4).build());
+        usorterteKontaktskjemaer.add(Kontaktskjema.builder().id(1).build());
+        usorterteKontaktskjemaer.add(Kontaktskjema.builder().id(3).build());
+        usorterteKontaktskjemaer.add(Kontaktskjema.builder().id(2).build());
+        usorterteKontaktskjemaer.add(Kontaktskjema.builder().id(5).build());
+        usorterteKontaktskjemaer.add(Kontaktskjema.builder().id(0).build());
 
         List<KontaktskjemaUthenting> uthentinger = uthentingUtils.lagSorterteUthentinger(usorterteKontaktskjemaer);
-        List<KontaktskjemaUthenting> sorterteUthentinger = uthentinger
-                .stream()
-                .sorted(Comparator.comparing(KontaktskjemaUthenting::getId))
+        List<Integer> ider = uthentinger.stream()
+                .map(KontaktskjemaUthenting::getId)
                 .collect(Collectors.toList());
-        assertEquals("Listen er ikke sortert.", sorterteUthentinger, uthentinger);
+        assertEquals("Listen er ikke sortert.", Arrays.asList(0, 1, 2, 3, 4, 5), ider);
     }
 }

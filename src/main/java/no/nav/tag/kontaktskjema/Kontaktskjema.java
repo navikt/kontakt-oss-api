@@ -1,14 +1,15 @@
 package no.nav.tag.kontaktskjema;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.experimental.Accessors;
 import org.springframework.data.annotation.Id;
 
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @Data
+@Builder
 public class Kontaktskjema {
     @Id
     private Integer id;
