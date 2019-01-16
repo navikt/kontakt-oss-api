@@ -16,7 +16,7 @@ public class KontaktskjemaControllerTest {
     KontaktskjemaController kontaktskjemaController;
 
     @Test
-    public void skalFeileVedLagringAvKontaktskjemaMedForhandsdefinertId() {
+    public void skalLagreKontaktskjemaOk() {
         kontaktskjemaController.meldInteresse(lagKontaktskjema());
     }
 }
