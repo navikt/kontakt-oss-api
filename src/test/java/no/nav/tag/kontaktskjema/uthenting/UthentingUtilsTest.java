@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static no.nav.tag.kontaktskjema.TestData.lagKontaktskjema;
 import static no.nav.tag.kontaktskjema.uthenting.UthentingUtils.MELDING;
 import static org.junit.Assert.assertEquals;
 
