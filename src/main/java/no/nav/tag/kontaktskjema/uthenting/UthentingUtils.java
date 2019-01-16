@@ -9,7 +9,12 @@ import java.util.stream.Collectors;
 
 @Component
 public class UthentingUtils {
-    public final static String MELDING = "Arbeidsgiver har sendt henvendelse gjennom Kontaktskjema. Kontakt arbeidsgiver for å avklare hva henvendelsen gjelder. Minner om at arbeidsgiver skal kontaktes innen 48 timer. Husk å registrere henvendelsen som «Kontaktskjema» i Arena (ikke telefonkontakt). Når arbeidsgiver er kontaktet og henvendelsen registrert i Arena skal denne eposten slettes.";
+    
+    final static String MELDING = "Arbeidsgiver har sendt henvendelse gjennom Kontaktskjema. "
+            + "Kontakt arbeidsgiver for å avklare hva henvendelsen gjelder. Minner om at arbeidsgiver skal kontaktes innen 48 timer. "
+            + "Husk å registrere henvendelsen som «Kontaktskjema» i Arena (ikke telefonkontakt). "
+            + "Når arbeidsgiver er kontaktet og henvendelsen registrert i Arena skal denne eposten slettes.";
+
     private final Map<String, List<String>> epostliste;
 
     @Autowired
