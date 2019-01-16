@@ -15,10 +15,8 @@ public class KontaktskjemaControllerTest {
     @Autowired
     KontaktskjemaController kontaktskjemaController;
 
-    @Test(expected = KontaktskjemaException.class)
+    @Test
     public void skalFeileVedLagringAvKontaktskjemaMedForhandsdefinertId() {
-        Kontaktskjema kontaktskjema = lagKontaktskjema();
-        kontaktskjema.setId(52);
-        kontaktskjemaController.meldInteresse(kontaktskjema);
+        kontaktskjemaController.meldInteresse(lagKontaktskjema());
     }
 }

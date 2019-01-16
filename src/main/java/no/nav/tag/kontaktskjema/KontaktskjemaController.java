@@ -2,7 +2,6 @@ package no.nav.tag.kontaktskjema;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -11,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
 
 @CrossOrigin(origins = {"https://tjenester.nav.no", "https://tjenester-q1.nav.no", "https://tjenester-t1.nav.no"})
 @RestController
@@ -30,9 +27,6 @@ public class KontaktskjemaController {
     public ResponseEntity meldInteresse(
             @RequestBody Kontaktskjema kontaktskjema
     ) {
-        if (kontaktskjema.getId() != null) {
-            throw new KontaktskjemaException("Innsendt kontaktskjema skal ikke ha satt id.");
-        }
         try {
             kontaktskjema.setOpprettet(LocalDateTime.now());
             repository.save(kontaktskjema);
