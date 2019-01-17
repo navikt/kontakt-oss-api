@@ -9,8 +9,9 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import javax.sql.DataSource;
 
 @Configuration
-@Profile({"prod", "preprod", "uthenting"})
+@Profile({"prod", "preprod", "uthenting", "local"})
 public class DataSourceConfiguration {
+
     @Value("${db_url}")
     private String url;
     @Value("${db_username}")
