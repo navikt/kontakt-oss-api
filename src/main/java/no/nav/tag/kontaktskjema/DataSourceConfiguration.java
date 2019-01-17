@@ -9,8 +9,9 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import javax.sql.DataSource;
 
 @Configuration
-@Profile({"prod", "preprod", "uthenting"})
-public class PostgresDataSourceConfiguration {
+@Profile({"prod", "preprod", "uthenting", "local"})
+public class DataSourceConfiguration {
+
     @Value("${db_url}")
     private String url;
     @Value("${db_username}")
@@ -21,7 +22,6 @@ public class PostgresDataSourceConfiguration {
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("org.postgresql.Driver");
         dataSource.setUrl(url);
         dataSource.setUsername(username);
         dataSource.setPassword(password);
