@@ -1,23 +1,23 @@
 package no.nav.tag.kontaktskjema;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
 
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Stream.generate;
+import static no.nav.tag.kontaktskjema.KontaktskjemaController.MAX_INNSENDINGER_PR_TI_MIN;
 import static no.nav.tag.kontaktskjema.TestData.lagKontaktskjema;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.*;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+import java.time.LocalDateTime;
+
 public class KontaktskjemaControllerTest {
 
-    @Autowired
-    KontaktskjemaController kontaktskjemaController;
+    private KontaktskjemaRepository repository = Mockito.mock(KontaktskjemaRepository.class);
+    private KontaktskjemaController kontaktskjemaController = new KontaktskjemaController(repository);
 
     @Test(expected = KontaktskjemaException.class)
     public void skalFeileVedLagringAvKontaktskjemaMedForhandsdefinertId() {
@@ -27,12 +27,21 @@ public class KontaktskjemaControllerTest {
     }
 
     @Test
-    public void skalReturnere429VedForMangeInnsendinger() {
-        for (int i=0; i<10; i++) {
-            kontaktskjemaController.meldInteresse(lagKontaktskjema());
-        }
-
-        ResponseEntity result = kontaktskjemaController.meldInteresse(lagKontaktskjema());
-        assertThat(result.getStatusCode(), is(HttpStatus.TOO_MANY_REQUESTS));
+    public void skalReturnereStatus500DersomLagringFeiler() {
+        when(repository.save(any(Kontaktskjema.class))).thenThrow(new RuntimeException("Feil ved lagring"));
+        assertThat(kontaktskjemaController.meldInteresse(lagKontaktskjema()).getStatusCode(), is(HttpStatus.INTERNAL_SERVER_ERROR));
     }
+
+    @Test
+    public void skalReturnere429VedForMangeInnsendinger() {
+        when(repository.findAllNewerThan(any(LocalDateTime.class))).thenReturn(generate(() -> lagKontaktskjema()).limit(MAX_INNSENDINGER_PR_TI_MIN).collect(toList()));
+        assertThat(kontaktskjemaController.meldInteresse(lagKontaktskjema()).getStatusCode(), is(HttpStatus.TOO_MANY_REQUESTS));
+    }
+    
+    @Test
+    public void skalReturnereStatus200DersomOK() {
+        assertThat(kontaktskjemaController.meldInteresse(lagKontaktskjema()).getStatusCode(), is(HttpStatus.OK));
+    }
+
+
 }

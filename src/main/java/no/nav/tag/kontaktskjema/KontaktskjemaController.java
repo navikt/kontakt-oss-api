@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 @Slf4j
 public class KontaktskjemaController {
 
+    static final int MAX_INNSENDINGER_PR_TI_MIN = 10;
     private final KontaktskjemaRepository repository;
 
     @Autowired
@@ -32,7 +33,7 @@ public class KontaktskjemaController {
         }
         try {
             kontaktskjema.setOpprettet(LocalDateTime.now());
-            if(repository.findAllNewerThan(LocalDateTime.now().minusMinutes(10)).size() >= 10) {
+            if(repository.findAllNewerThan(LocalDateTime.now().minusMinutes(10)).size() >= MAX_INNSENDINGER_PR_TI_MIN) {
                 return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
             };
             repository.save(kontaktskjema);
