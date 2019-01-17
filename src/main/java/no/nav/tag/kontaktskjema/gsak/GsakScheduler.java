@@ -14,9 +14,9 @@ public class GsakScheduler {
 
     private static final String THIRTY_SECONDS = "PT30S";
 
-    @Scheduled(cron = "0 * * * * ?")
+    @Scheduled(cron = "* * * * * ?")
     @SchedulerLock(name = "navn", lockAtMostForString = ONE_MIN, lockAtLeastForString = THIRTY_SECONDS)
     public void scheduledBehandleSkjemaer() {
-        log.info("Kjører jobb for gsak");
+        log.debug("Kjører jobb for gsak");
     }
 }
