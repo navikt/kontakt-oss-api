@@ -5,14 +5,19 @@ import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @Data
 @Builder
 public class Kontaktskjema {
+
     @Id
+    @JsonIgnore
     private Integer id;
+    @JsonIgnore
     private LocalDateTime opprettet;
     private String fylke;
     private String kommune;

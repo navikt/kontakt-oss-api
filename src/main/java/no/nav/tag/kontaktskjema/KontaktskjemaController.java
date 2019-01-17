@@ -27,9 +27,6 @@ public class KontaktskjemaController {
     public ResponseEntity meldInteresse(
             @RequestBody Kontaktskjema kontaktskjema
     ) {
-        if (kontaktskjema.getId() != null) {
-            throw new KontaktskjemaException("Innsendt kontaktskjema skal ikke ha satt id.");
-        }
         try {
             kontaktskjema.setOpprettet(LocalDateTime.now());
             if(repository.findAllNewerThan(LocalDateTime.now().minusMinutes(10)).size() >= 10) {
