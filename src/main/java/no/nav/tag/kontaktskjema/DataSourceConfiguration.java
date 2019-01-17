@@ -10,7 +10,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @Profile({"prod", "preprod", "uthenting"})
-public class PostgresDataSourceConfiguration {
+public class DataSourceConfiguration {
     @Value("${db_url}")
     private String url;
     @Value("${db_username}")
