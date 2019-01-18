@@ -56,5 +56,9 @@ public class KontaktskjemaRepositoryTest {
         return skjema1;
     }
 
-    
+    @Test
+    public void skalHenteSkjemaSomIkkeHarGsakOppgave() {
+        kontaktskjemaRepository.save(lagKontaktskjema());
+        assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size(), is(1));
+    }
 }
