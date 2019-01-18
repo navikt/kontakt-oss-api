@@ -19,7 +19,7 @@ public class GsakSchedulerTest {
 
     @Test
     public void skalFeileVedLagringAvKontaktskjemaMedForhandsdefinertId() throws InterruptedException {
-        Thread.sleep(1000);
+        Thread.sleep(1500);
         assertThat(jdbcTemplate.queryForObject("SELECT COUNT(*) FROM SHEDLOCK", Integer.class), is(1));
     }
 
