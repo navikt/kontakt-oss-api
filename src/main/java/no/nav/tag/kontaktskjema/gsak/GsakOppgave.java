@@ -13,5 +13,11 @@ public class GsakOppgave {
     private Integer id;
     private Integer kontaktskjemaId;
     private Integer gsakId;
-    private String gsakStatus;
+    private OppgaveStatus status;
+    
+    public enum OppgaveStatus {
+        DISABLED,
+        OK,
+        FEILET
+    }
 }
