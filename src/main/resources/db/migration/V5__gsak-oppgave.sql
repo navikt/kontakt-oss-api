@@ -3,4 +3,5 @@ create table GSAK_OPPGAVE (
     kontaktskjema_id number not null ,
     gsak_id number,
     status varchar(255),
+    opprettet timestamp(6) not null default current_timestamp
 );
