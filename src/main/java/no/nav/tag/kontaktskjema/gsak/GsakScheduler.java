@@ -27,8 +27,8 @@ public class GsakScheduler {
     private GsakOppgaveForSkjema oppgaveForSkjema;    
     
     @Scheduled(cron = "* * * * * ?")
-    @SchedulerLock(name = "navn", lockAtMostForString = ONE_MIN, lockAtLeastForString = THIRTY_SECONDS)
-    public void scheduledBehandleSkjemaer() {
+    @SchedulerLock(name = "opprettOppgaveForSkjemaer", lockAtMostForString = ONE_MIN, lockAtLeastForString = THIRTY_SECONDS)
+    public void scheduledOpprettOppgaveForSkjemaer() {
         Collection<Kontaktskjema> skjemaer = kontaktskjemaRepository.findAllWithNoGsakOppgave();
         log.info("Fant {} skjemaer som ikke har gsak-oppgave", skjemaer.size());
         skjemaer.forEach(oppgaveForSkjema::opprettOppgaveOgLagreStatus);
