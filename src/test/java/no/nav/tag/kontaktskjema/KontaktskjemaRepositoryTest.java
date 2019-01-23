@@ -14,6 +14,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.relational.core.conversion.DbActionExecutionException;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import no.nav.tag.kontaktskjema.gsak.GsakOppgave;
+import no.nav.tag.kontaktskjema.gsak.GsakOppgaveRepository;
+import no.nav.tag.kontaktskjema.gsak.GsakOppgave.OppgaveStatus;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class KontaktskjemaRepositoryTest {
@@ -22,11 +26,15 @@ public class KontaktskjemaRepositoryTest {
     private KontaktskjemaRepository kontaktskjemaRepository;
 
     @Autowired
+    private GsakOppgaveRepository oppgaveRepository;
+
+    @Autowired
     private Transactor transactor;
 
     @After
     public void tearDown() {
         kontaktskjemaRepository.deleteAll();
+        oppgaveRepository.deleteAll();
     }
     
     @Test
@@ -66,4 +74,39 @@ public class KontaktskjemaRepositoryTest {
             assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size(), is(1));
         });
     }
+
+    @Test
+    public void skalIkkeHenteSkjemaDersomGsakOppgaveErOpprettet() {
+        transactor.inTransaction(() -> {
+            Kontaktskjema lagretSkjema = kontaktskjemaRepository.save(lagKontaktskjema());
+            assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size(), is(1));
+            oppgaveRepository.save(GsakOppgave.builder().kontaktskjemaId(lagretSkjema.getId()).status(OppgaveStatus.OK).build());
+            assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size(), is(0));
+        });
+    }
+
+    @Test
+    public void skalIkkeHenteSkjemaDersomGsakOppgaveErDisabled() {
+        transactor.inTransaction(() -> {
+            Kontaktskjema lagretSkjema = kontaktskjemaRepository.save(lagKontaktskjema());
+            assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size(), is(1));
+            oppgaveRepository.save(GsakOppgave.builder().kontaktskjemaId(lagretSkjema.getId()).status(OppgaveStatus.DISABLED).build());
+            assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size(), is(0));
+        });
+    }
+    
+    @Test
+    public void skalHenteSkjemaDersomGsakOppgaveHarFeilet() {
+        transactor.inTransaction(() -> {
+            Kontaktskjema lagretSkjema = kontaktskjemaRepository.save(lagKontaktskjema());
+            assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size(), is(1));
+            oppgaveRepository.save(GsakOppgave.builder().kontaktskjemaId(lagretSkjema.getId()).status(OppgaveStatus.FEILET).build());
+            assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size(), is(1));
+            oppgaveRepository.save(GsakOppgave.builder().kontaktskjemaId(lagretSkjema.getId()).status(OppgaveStatus.OK).build());
+            assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size(), is(0));
+        });
+    }
 }
+
+
+
