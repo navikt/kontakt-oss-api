@@ -6,6 +6,7 @@ import static org.junit.Assert.assertThat;
 
 import java.time.LocalDateTime;
 
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,11 @@ public class GsakOppgaveRepositoryTest {
     @Autowired
     private GsakOppgaveRepository repository;
 
+    @After
+    public void tearDown() {
+        repository.deleteAll();
+    }
+    
     @Test
     public void skalLagreOgHenteUt() {
         GsakOppgave lagretOppgave = repository.save(GsakOppgave.builder().kontaktskjemaId(2).status(OK).gsakId(5).opprettet(LocalDateTime.now()).build());
