@@ -21,6 +21,9 @@ public class KontaktskjemaRepositoryTest {
     @Autowired
     private KontaktskjemaRepository kontaktskjemaRepository;
 
+    @Autowired
+    private Transactor transactor;
+
     @After
     public void tearDown() {
         kontaktskjemaRepository.deleteAll();
@@ -58,7 +61,9 @@ public class KontaktskjemaRepositoryTest {
 
     @Test
     public void skalHenteSkjemaSomIkkeHarGsakOppgave() {
-        kontaktskjemaRepository.save(lagKontaktskjema());
-        assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size(), is(1));
+        transactor.inTransaction(() -> {
+            kontaktskjemaRepository.save(lagKontaktskjema());
+            assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size(), is(1));
+        });
     }
 }
