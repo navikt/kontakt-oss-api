@@ -1,4 +1,4 @@
-package no.nav.tag.kontaktskjema;
+package no.nav.tag.kontaktskjema.enhetsmapping;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
