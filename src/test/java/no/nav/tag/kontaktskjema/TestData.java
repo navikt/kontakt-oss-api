@@ -11,6 +11,7 @@ public class TestData {
                 "Bodø",
                 "0011",
                 "Flesk og Fisk AS",
+                "123456789",
                 "Ola",
                 "Nordmann",
                 "ola.nordmann@fleskOgFisk.no",

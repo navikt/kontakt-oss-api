@@ -52,6 +52,7 @@ public class UthentingUtils {
                 kontaktskjema.getKommune(),
                 kontaktskjema.getKommunenr(),
                 kontaktskjema.getBedriftsnavn(),
+                kontaktskjema.getBedriftsnr(),
                 kontaktskjema.getFornavn(),
                 kontaktskjema.getEtternavn(),
                 kontaktskjema.getEpost(),
