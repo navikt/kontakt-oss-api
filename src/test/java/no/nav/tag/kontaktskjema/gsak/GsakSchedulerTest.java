@@ -18,7 +18,7 @@ public class GsakSchedulerTest {
     private JdbcTemplate jdbcTemplate;
 
     @Test
-    public void skalFeileVedLagringAvKontaktskjemaMedForhandsdefinertId() throws InterruptedException {
+    public void skalSjekkeAtShedlockTabellErPopulert() throws InterruptedException {
         Thread.sleep(1500);
         assertThat(jdbcTemplate.queryForObject("SELECT COUNT(*) FROM SHEDLOCK", Integer.class), is(1));
     }
