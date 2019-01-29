@@ -3,12 +3,13 @@ package no.nav.tag.kontaktskjema.enhetsmapping;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
+import org.apache.commons.io.IOUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.util.ResourceUtils;
-import org.apache.commons.io.FileUtils;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,9 +29,8 @@ public class EnheterConfiguration {
     }
 
     private String lesEnheterJson() throws IOException {
-        String enheterFilnavn = "classpath:enheter.json";
-        File file = ResourceUtils.getFile(enheterFilnavn);
-        return FileUtils.readFileToString(file, "UTF-8");
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("enheter.json");
+        return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
     }
 
     private Map<String, String> oversettTilMapOverEnheter(String enheterJson) throws IOException {
