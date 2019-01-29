@@ -29,7 +29,7 @@ public class EnheterConfiguration {
     }
 
     private String lesEnheterJson() throws IOException {
-        InputStream inputStream = ClassLoader.getSystemResourceAsStream("enheter.json");
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("enheter.json");
         return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
     }
 
