@@ -56,7 +56,8 @@ public class UthentingUtils {
                 kontaktskjema.getFornavn(),
                 kontaktskjema.getEtternavn(),
                 kontaktskjema.getEpost(),
-                kontaktskjema.getTelefonnr()
+                kontaktskjema.getTelefonnr(),
+                kontaktskjema.getTema()
         );
     }
 }
