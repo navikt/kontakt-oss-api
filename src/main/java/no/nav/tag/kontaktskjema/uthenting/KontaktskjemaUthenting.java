@@ -24,4 +24,5 @@ public class KontaktskjemaUthenting {
     private String etternavn;
     private String epost;
     private String telefonnr;
+    private String tema;
 }

@@ -1,4 +1,9 @@
-spring.profiles.active: dev
+spring:
+  profiles.active: dev
+  h2.console:
+    enabled: false
+    path: /h2
+
 controller.basepath: ${CONTROLLER_BASEPATH:/kontaktskjema}
 feature.toggle.uthentingsendepunkt: ${FEATURE_TOGGLE_UTHENTINGSENDEPUNKT:disabled}
 epostliste: e30=

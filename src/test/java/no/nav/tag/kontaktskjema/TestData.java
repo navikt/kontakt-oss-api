@@ -15,7 +15,8 @@ public class TestData {
                 "Ola",
                 "Nordmann",
                 "ola.nordmann@fleskOgFisk.no",
-                "01234567"
+                "01234567",
+                "Rekruttering"
         );
     }
 }
