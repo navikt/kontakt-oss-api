@@ -11,7 +11,7 @@ spec:
   port: 8080
   secrets: true
   ingresses:
-    - https://arbeidsgiver.nav.no/kontakt-oss-api-api
+    - https://arbeidsgiver.nav.no/kontakt-oss-api
     - https://kontakt-oss-api.nais.oera.no
   liveness:
     path: /kontaktskjema/internal/actuator/info
