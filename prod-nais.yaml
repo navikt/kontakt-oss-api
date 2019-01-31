@@ -1,18 +1,18 @@
 apiVersion: "nais.io/v1alpha1"
 kind: "Application"
 metadata:
-  name: tag-kontaktskjema
+  name: kontakt-oss-api
   namespace: default
   labels:
     team: teamtag
 spec:
-  image: navikt/tag-kontaktskjema:latest
+  image: navikt/kontakt-oss-api:latest
   team: teamtag
   port: 8080
   secrets: true
   ingresses:
-    - https://arbeidsgiver.nav.no/kontaktskjema
-    - https://tag-kontaktskjema.nais.oera.no
+    - https://arbeidsgiver.nav.no/kontakt-oss-api-api
+    - https://kontakt-oss-api.nais.oera.no
   liveness:
     path: /kontaktskjema/internal/actuator/info
     initialDelay: 40
