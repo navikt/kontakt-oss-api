@@ -11,8 +11,7 @@ spec:
   port: 8080
   secrets: true
   ingresses:
-    - https://arbeidsgiver-q.nav.no/kontakt-oss-api/
-    - https://kontakt-oss-api.nais.preprod.local
+    - https://arbeidsgiver.preprod.local/kontakt-oss-api/
   liveness:
     path: /kontakt-oss-api/internal/actuator/info
     initialDelay: 40
@@ -22,8 +21,6 @@ spec:
   env:
     - name: SPRING_PROFILES_ACTIVE
       value: preprod
-    - name: FEATURE_TOGGLE_UTHENTINGSENDEPUNKT
-      value: enabled
 prometheus:
   enabled: true
   path: /kontakt-oss-api/internal/actuator/prometheus
