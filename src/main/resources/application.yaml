@@ -4,7 +4,7 @@ spring:
     enabled: false
     path: /h2
 
-controller.basepath: ${CONTROLLER_BASEPATH:/kontaktskjema}
+controller.basepath: ${CONTROLLER_BASEPATH:/kontakt-oss-api}
 
 management.endpoints.web:
   exposure.include: info, health, metrics, prometheus
