@@ -11,13 +11,13 @@ spec:
   port: 8080
   secrets: true
   ingresses:
-    - https://arbeidsgiver-q.nav.no/kontakt-oss-api
-    - https://kontakt-oss-api.nais.oera-q.local
+    - https://arbeidsgiver-q.nav.no/kontakt-oss-api/
+    - https://kontakt-oss-api.nais.preprod.local
   liveness:
-    path: /kontaktskjema/internal/actuator/info
+    path: /kontakt-oss-api/internal/actuator/info
     initialDelay: 40
   readiness:
-    path: /kontaktskjema/internal/actuator/info
+    path: /kontakt-oss-api/internal/actuator/info
     initialDelay: 40
   env:
     - name: SPRING_PROFILES_ACTIVE
