@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>no.nav.tag</groupId>
-	<artifactId>tag-kontaktskjema</artifactId>
+	<artifactId>kontakt-oss-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>tag-kontaktskjema</name>
+	<name>kontakt-oss-api</name>
 	<description>#TAG - Tjenester til arbeidsgivere</description>
 
 	<parent>
