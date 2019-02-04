@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+// TODO TAG-233 Skal fjernes, er bare for å teste gsak-apiet direkte
 @RestController
 public class GsakController {
 
@@ -19,9 +20,9 @@ public class GsakController {
 
     @PostMapping(value = "${controller.basepath}/gsak")
     public ResponseEntity gsak(
-            @RequestBody GsakOppgave gsakOppgave
+            @RequestBody GsakInnsending gsakInnsending
     ) {
-        gsakKlient.opprettGsakOppgave(gsakOppgave);
+        gsakKlient.opprettGsakOppgave(gsakInnsending);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 }

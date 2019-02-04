@@ -1,10 +1,11 @@
 package no.nav.tag.kontakt.oss.gsak;
 
-import static no.nav.tag.kontakt.oss.gsak.GsakOppgave.OppgaveStatus.DISABLED;
-
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import no.nav.tag.kontakt.oss.DateProvider;
 import no.nav.tag.kontakt.oss.Kontaktskjema;
+import no.nav.tag.kontakt.oss.KontaktskjemaException;
+import no.nav.tag.kontakt.oss.enhetsmapping.EnhetUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,19 +13,24 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.AllArgsConstructor;
 import no.nav.tag.kontakt.oss.gsak.GsakOppgave.OppgaveStatus;
 
+import static no.nav.tag.kontakt.oss.gsak.GsakOppgave.OppgaveStatus.*;
+
 @NoArgsConstructor
 @Component
+@Slf4j
 public class GsakOppgaveForSkjema {
 
     private GsakOppgaveRepository oppgaveRepository;
     private DateProvider dateProvider;
     private GsakKlient gsakKlient;
+    private EnhetUtils enhetUtils;
 
     @Autowired
-    public GsakOppgaveForSkjema(GsakOppgaveRepository oppgaveRepository, DateProvider dateProvider, GsakKlient gsakKlient) {
+    public GsakOppgaveForSkjema(GsakOppgaveRepository oppgaveRepository, DateProvider dateProvider, GsakKlient gsakKlient, EnhetUtils enhetUtils) {
         this.oppgaveRepository = oppgaveRepository;
         this.dateProvider = dateProvider;
         this.gsakKlient = gsakKlient;
+        this.enhetUtils = enhetUtils;
     }
 
     @AllArgsConstructor
@@ -45,10 +51,26 @@ public class GsakOppgaveForSkjema {
     }
 
     private Behandlingsresultat opprettOppgaveIGsak(Kontaktskjema kontaktskjema) {
-        // TODO Implementere reelt kall mot gsak med støtte for OK og FEIL
-        // gsakKlient.opprett();
-        return new Behandlingsresultat(DISABLED, null);
+        String enhetsnr = enhetUtils.mapFraKommunenrTilEnhetsnr(kontaktskjema.getKommunenr());
+        String beskrivelse = "Arbeidsgiver har sendt henvendelse gjennom Kontaktskjema, blabla.";
+        GsakInnsending innsending = new GsakInnsending(
+                enhetsnr,
+                beskrivelse,
+                "ARBD",
+                "OPA",
+                "VURD_HENV",
+                "HOY",
+                dateProvider.now().toString(),
+                dateProvider.now().plusHours(48).toString()
+        );
+
+        try {
+            Integer gsakId = gsakKlient.opprettGsakOppgave(innsending);
+            return new Behandlingsresultat(OK, gsakId);
+        } catch (KontaktskjemaException e) {
+            log.error("Opprettelse av gsak-oppgave feilet.", e);
+            return new Behandlingsresultat(FEILET, null);
+        }
+        // return new Behandlingsresultat(DISABLED, null);
     }
-
-
 }

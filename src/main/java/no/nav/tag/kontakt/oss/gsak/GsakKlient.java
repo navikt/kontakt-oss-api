@@ -22,11 +22,14 @@ public class GsakKlient {
         this.restTemplate = restTemplate;
     }
 
-    public String opprettGsakOppgave(GsakOppgave gsakOppgave) {
-        ResponseEntity<GsakOppgave> respons = restTemplate.postForEntity(gsakUrl, gsakOppgave, GsakOppgave.class);
+    public Integer opprettGsakOppgave(GsakInnsending gsakInnsending) {
+        ResponseEntity<GsakInnsendingRespons> respons = restTemplate.postForEntity(gsakUrl, gsakInnsending, GsakInnsendingRespons.class);
 
-        if (HttpStatus.OK.equals(respons.getStatusCode())) {
-            return respons.getBody().getId().toString();
+        if (HttpStatus.OK.equals(respons.getStatusCode())
+                && (respons.getBody() != null)
+                && "OPPRETTET".equals(respons.getBody().getStatus()) // TODO Er dette riktig? TAG-233
+        ) {
+            return respons.getBody().getId();
         } else {
             log.info(respons.getStatusCode().toString());
             throw new KontaktskjemaException("Kall til Gsak feilet.");
