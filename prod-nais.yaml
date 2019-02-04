@@ -11,7 +11,7 @@ spec:
   port: 8080
   secrets: true
   ingresses:
-    - https://arbeidsgiver.adeo.no/kontakt-oss-api/
+    - https://arbeidsgiver.nais.adeo.no/kontakt-oss-api/
   liveness:
     path: /kontakt-oss-api/internal/actuator/info
     initialDelay: 40
