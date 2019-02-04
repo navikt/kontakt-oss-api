@@ -22,7 +22,7 @@ public class FlywayMigrationConfig implements FlywayMigrationStrategy {
     private DataSource dataSource;
 
     @Value("${NAIS_CLUSTER_NAME}")
-    private static String miljo;
+    private String miljo;
 
     @Override
     public void migrate(Flyway flyway) {

@@ -38,7 +38,7 @@ public class DatabaseConfig {
     private String databaseUrl;
 
     @Value("${NAIS_CLUSTER_NAME}")
-    private static String miljo;
+    private String miljo;
 
     @Bean("adminDataSource")
     public DataSource adminDataSource() {
@@ -76,7 +76,7 @@ public class DatabaseConfig {
         return HikariCPVaultUtil.createHikariDataSourceWithVaultIntegration(config, mountPath, dbRole(user));
     }
 
-    private static String dbRole(String role) {
+    private String dbRole(String role) {
         String databaseNavnProd = "kontakt-oss-prod";
         String databaseNavnPreprod = "kontakt-oss-preprod";
         return miljo.equals("prod-fss")
