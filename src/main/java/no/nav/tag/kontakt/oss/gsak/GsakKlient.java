@@ -4,8 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.tag.kontakt.oss.KontaktskjemaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -23,7 +22,14 @@ public class GsakKlient {
     }
 
     public Integer opprettGsakOppgave(GsakInnsending gsakInnsending) {
-        ResponseEntity<GsakInnsendingRespons> respons = restTemplate.postForEntity(gsakUrl, gsakInnsending, GsakInnsendingRespons.class);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<GsakInnsending> gsakEntity = new HttpEntity<>(gsakInnsending, headers);
+        ResponseEntity<GsakInnsendingRespons> respons = restTemplate.postForEntity(
+                gsakUrl,
+                gsakEntity,
+                GsakInnsendingRespons.class
+        );
 
         if (HttpStatus.OK.equals(respons.getStatusCode())
                 && (respons.getBody() != null)
