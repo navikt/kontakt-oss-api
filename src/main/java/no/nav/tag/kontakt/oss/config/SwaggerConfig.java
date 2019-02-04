@@ -1,4 +1,4 @@
-package no.nav.tag.kontakt.oss;
+package no.nav.tag.kontakt.oss.config;
 
 import static springfox.documentation.builders.RequestHandlerSelectors.withClassAnnotation;
 
