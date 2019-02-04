@@ -85,11 +85,6 @@
 			<artifactId>vault-java-driver</artifactId>
 			<version>3.1.0</version>
 		</dependency>
-		<dependency>
-			<groupId>org.jooq</groupId>
-			<artifactId>jooq</artifactId>
-			<version>3.11.9</version>
-		</dependency>
 
         <!-- Swagger -->
         <dependency>
