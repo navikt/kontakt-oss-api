@@ -24,7 +24,7 @@ public class GsakKlient {
     public Integer opprettGsakOppgave(GsakInnsending gsakInnsending) {
         ResponseEntity<GsakInnsendingRespons> respons = restTemplate.postForEntity(
                 gsakUrl,
-                gsakInnsending,
+                new HttpEntity<>(gsakInnsending),
                 GsakInnsendingRespons.class
         );
 
@@ -39,3 +39,4 @@ public class GsakKlient {
         }
     }
 }
+java
