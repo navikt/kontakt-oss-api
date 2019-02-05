@@ -22,12 +22,9 @@ public class GsakKlient {
     }
 
     public Integer opprettGsakOppgave(GsakInnsending gsakInnsending) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<GsakInnsending> gsakEntity = new HttpEntity<>(gsakInnsending, headers);
         ResponseEntity<GsakInnsendingRespons> respons = restTemplate.postForEntity(
                 gsakUrl,
-                gsakEntity,
+                gsakInnsending,
                 GsakInnsendingRespons.class
         );
 
