@@ -8,6 +8,8 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.UUID;
+
 @Service
 @Slf4j
 public class GsakKlient {
@@ -22,9 +24,13 @@ public class GsakKlient {
     }
 
     public Integer opprettGsakOppgave(GsakInnsending gsakInnsending) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("X-Correlation-ID", UUID.randomUUID().toString());
+        HttpEntity<GsakInnsending> gsakEntity = new HttpEntity<>(gsakInnsending, headers);
+
         ResponseEntity<GsakInnsendingRespons> respons = restTemplate.postForEntity(
                 gsakUrl,
-                new HttpEntity<>(gsakInnsending),
+                gsakEntity,
                 GsakInnsendingRespons.class
         );
 
