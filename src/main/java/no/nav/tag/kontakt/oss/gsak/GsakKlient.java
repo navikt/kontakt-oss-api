@@ -36,6 +36,8 @@ public class GsakKlient {
                 GsakInnsendingRespons.class
         );
 
+        log.info("respons fra gsak: " + respons.toString());
+
         if (HttpStatus.OK.equals(respons.getStatusCode())
                 && (respons.getBody() != null)
                 && "OPPRETTET".equals(respons.getBody().getStatus()) // TODO Er dette riktig? TAG-233
