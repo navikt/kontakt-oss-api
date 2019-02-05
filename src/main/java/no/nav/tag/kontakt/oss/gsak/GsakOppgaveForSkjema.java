@@ -64,8 +64,6 @@ public class GsakOppgaveForSkjema {
                 dateProvider.now().plusHours(48).toString()
         );
 
-        return null;
-        /* TODO Ta dette tilbake
         try {
             Integer gsakId = gsakKlient.opprettGsakOppgave(innsending);
             return new Behandlingsresultat(OK, gsakId);
@@ -73,7 +71,6 @@ public class GsakOppgaveForSkjema {
             log.error("Opprettelse av gsak-oppgave feilet.", e);
             return new Behandlingsresultat(FEILET, null);
         }
-        */
         // return new Behandlingsresultat(DISABLED, null);
     }
 }

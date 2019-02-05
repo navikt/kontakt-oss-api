@@ -23,24 +23,24 @@ public class GsakKlient {
         this.restTemplate = restTemplate;
     }
 
-    public ResponseEntity<String> opprettGsakOppgave(GsakInnsending gsakInnsending) {
+    public Integer opprettGsakOppgave(GsakInnsending gsakInnsending) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-Correlation-ID", UUID.randomUUID().toString());
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
         HttpEntity<GsakInnsending> gsakEntity = new HttpEntity<>(gsakInnsending, headers);
 
-        ResponseEntity<String> respons = restTemplate.postForEntity(
+        ResponseEntity<GsakInnsendingRespons> respons = restTemplate.postForEntity(
                 gsakUrl,
                 gsakEntity,
-                String.class
+                GsakInnsendingRespons.class
         );
-
-        log.info("gsakstring: " + respons);
 
         if (HttpStatus.OK.equals(respons.getStatusCode())
                 && (respons.getBody() != null)
-                // && "OPPRETTET".equals(respons.getBody().getStatus()) // TODO Er dette riktig? TAG-233
+                && "OPPRETTET".equals(respons.getBody().getStatus()) // TODO Er dette riktig? TAG-233
         ) {
-            return respons;
+            return respons.getBody().getId();
         } else {
             log.info(respons.getStatusCode().toString());
             throw new KontaktskjemaException("Kall til Gsak feilet.");
