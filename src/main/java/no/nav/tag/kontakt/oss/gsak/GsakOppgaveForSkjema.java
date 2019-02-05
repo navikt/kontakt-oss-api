@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.AllArgsConstructor;
 import no.nav.tag.kontakt.oss.gsak.GsakOppgave.OppgaveStatus;
 
+import java.time.LocalDate;
+
 import static no.nav.tag.kontakt.oss.gsak.GsakOppgave.OppgaveStatus.*;
 
 @NoArgsConstructor
@@ -53,6 +55,8 @@ public class GsakOppgaveForSkjema {
     private Behandlingsresultat opprettOppgaveIGsak(Kontaktskjema kontaktskjema) {
         String enhetsnr = enhetUtils.mapFraKommunenrTilEnhetsnr(kontaktskjema.getKommunenr());
         String beskrivelse = "Arbeidsgiver har sendt henvendelse gjennom Kontaktskjema, blabla.";
+        LocalDate aktivDato = dateProvider.now().toLocalDate();
+
         GsakInnsending innsending = new GsakInnsending(
                 enhetsnr,
                 beskrivelse,
@@ -60,8 +64,8 @@ public class GsakOppgaveForSkjema {
                 "OPA",
                 "VURD_HENV",
                 "HOY",
-                dateProvider.now().toString(),
-                dateProvider.now().plusHours(48).toString()
+                aktivDato,
+                aktivDato.plusDays(2)
         );
 
         try {

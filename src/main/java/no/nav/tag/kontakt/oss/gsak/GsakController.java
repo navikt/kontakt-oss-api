@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
+
 // TODO TAG-233 Skal fjernes, er bare for å teste gsak-apiet direkte
 @RestController
 public class GsakController {
@@ -19,6 +21,7 @@ public class GsakController {
 
     @GetMapping(value = "${controller.basepath}/gsak")
     public ResponseEntity gsak() {
+        LocalDate aktivDato = new DateProvider().now().toLocalDate();
         GsakInnsending innsending = new GsakInnsending(
                 "0315",
                 "blabla beskrivelse",
@@ -26,8 +29,8 @@ public class GsakController {
                 "OPA",
                 "VURD_HENV",
                 "HOY",
-                "2019-03-10",
-                "2019-03-12"
+                aktivDato,
+                aktivDato.plusDays(2)
         );
         return ResponseEntity.ok(gsakKlient.opprettGsakOppgave(innsending));
     }

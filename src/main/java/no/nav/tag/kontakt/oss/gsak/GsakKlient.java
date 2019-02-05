@@ -1,5 +1,6 @@
 package no.nav.tag.kontakt.oss.gsak;
 
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.tag.kontakt.oss.KontaktskjemaException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +25,10 @@ public class GsakKlient {
     }
 
     public Integer opprettGsakOppgave(GsakInnsending gsakInnsending) {
+        String correlationId = UUID.randomUUID().toString();
+
         HttpHeaders headers = new HttpHeaders();
-        headers.set("X-Correlation-ID", UUID.randomUUID().toString());
+        headers.set("X-Correlation-ID", correlationId);
         HttpEntity<GsakInnsending> gsakEntity = new HttpEntity<>(gsakInnsending, headers);
 
         ResponseEntity<GsakInnsendingRespons> respons = restTemplate.postForEntity(
@@ -35,10 +38,16 @@ public class GsakKlient {
         );
 
         if (HttpStatus.CREATED.equals(respons.getStatusCode()) && (respons.getBody() != null)) {
-            return respons.getBody().getId();
+            Integer id = respons.getBody().getId();
+            log.info("Gsak-oppgave med id={} opprettet. X-Correlation-ID={}", 1, correlationId);
+            return id;
         } else {
-            log.info(respons.getStatusCode().toString());
             throw new KontaktskjemaException("Kall til Gsak feilet.");
         }
+    }
+
+    @Data
+    private static class GsakInnsendingRespons {
+        private Integer id;
     }
 }

@@ -3,6 +3,8 @@ package no.nav.tag.kontakt.oss.gsak;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @AllArgsConstructor
 @Data
 public class GsakInnsending {
@@ -12,6 +14,6 @@ public class GsakInnsending {
     private String tema;
     private String oppgavetype;
     private String prioritet;
-    private String aktivDato;
-    private String fristFerdigstillelse;
+    private LocalDate aktivDato;
+    private LocalDate fristFerdigstillelse;
 }
