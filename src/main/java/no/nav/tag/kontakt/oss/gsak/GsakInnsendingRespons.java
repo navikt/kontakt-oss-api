@@ -17,5 +17,7 @@ public class GsakInnsendingRespons {
     private String opprettetAv;
     private String prioritet;
     private String status;
-    private String metadata;
+    private Metadata metadata;
+
+    public static class Metadata {}
 }
