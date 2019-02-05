@@ -6,7 +6,7 @@ metadata:
   labels:
     team: teamtag
 spec:
-  image: navikt/kontakt-oss-api:latest
+  image: navikt/kontakt-oss-api:TAG-273-koble-til-db_193
   team: teamtag
   port: 8080
   secrets: true
