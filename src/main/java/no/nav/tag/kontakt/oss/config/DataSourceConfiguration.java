@@ -1,4 +1,4 @@
-package no.nav.tag.kontakt.oss;
+package no.nav.tag.kontakt.oss.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
