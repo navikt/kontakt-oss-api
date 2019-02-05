@@ -26,8 +26,6 @@ public class GsakKlient {
     public Integer opprettGsakOppgave(GsakInnsending gsakInnsending) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-Correlation-ID", UUID.randomUUID().toString());
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
         HttpEntity<GsakInnsending> gsakEntity = new HttpEntity<>(gsakInnsending, headers);
 
         ResponseEntity<GsakInnsendingRespons> respons = restTemplate.postForEntity(
@@ -36,12 +34,7 @@ public class GsakKlient {
                 GsakInnsendingRespons.class
         );
 
-        log.info("respons fra gsak: " + respons.toString());
-
-        if (HttpStatus.OK.equals(respons.getStatusCode())
-                && (respons.getBody() != null)
-                && "OPPRETTET".equals(respons.getBody().getStatus()) // TODO Er dette riktig? TAG-233
-        ) {
+        if (HttpStatus.CREATED.equals(respons.getStatusCode()) && (respons.getBody() != null)) {
             return respons.getBody().getId();
         } else {
             log.info(respons.getStatusCode().toString());

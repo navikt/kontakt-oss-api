@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class GsakInnsendingRespons {
     private Integer id;
+    /*
     private String tildeltEnhetsnr;
     private String beskrivelse;
     private String temagruppe;
@@ -20,4 +21,5 @@ public class GsakInnsendingRespons {
     private Metadata metadata;
 
     public static class Metadata {}
+    */
 }
