@@ -43,7 +43,8 @@ public class DatabaseConfig {
 
     @Bean
     public FlywayMigrationStrategy flywayMigrationStrategy() {
-        return flyway -> Flyway.configure().dataSource(dataSource("admin"))
+        return flyway -> Flyway.configure()
+                .dataSource(dataSource("admin"))
                 .initSql(String.format("SET ROLE \"%s\"", dbRole("admin")))
                 .load()
                 .migrate();
