@@ -29,6 +29,7 @@ public class GsakKlient {
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-Correlation-ID", correlationId);
+        headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<GsakInnsending> gsakEntity = new HttpEntity<>(gsakInnsending, headers);
 
         ResponseEntity<GsakInnsendingRespons> respons = restTemplate.postForEntity(
