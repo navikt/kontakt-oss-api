@@ -26,8 +26,8 @@ public class GsakController {
                 "OPA",
                 "VURD_HENV",
                 "HOY",
-                new DateProvider().now().toString(),
-                new DateProvider().now().plusHours(48).toString()
+                "2019-03-10",
+                "2019-03-12"
         );
         Integer gsakId = gsakKlient.opprettGsakOppgave(innsending);
         return ResponseEntity.ok(gsakId);
