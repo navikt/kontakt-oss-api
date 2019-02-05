@@ -29,7 +29,6 @@ public class GsakController {
                 "2019-03-10",
                 "2019-03-12"
         );
-        Integer gsakId = gsakKlient.opprettGsakOppgave(innsending);
-        return ResponseEntity.ok(gsakId);
+        return ResponseEntity.ok(gsakKlient.opprettGsakOppgave(innsending));
     }
 }
