@@ -64,7 +64,21 @@ public class GsakOppgaveForSkjema {
 
     private GsakInnsending lagGsakInnsending(Kontaktskjema kontaktskjema) {
         String enhetsnr = enhetUtils.mapFraKommunenrTilEnhetsnr(kontaktskjema.getKommunenr());
-        String beskrivelse = "Arbeidsgiver har sendt henvendelse gjennom Kontaktskjema, blabla.";
+
+        String beskrivelse = String.format(
+                "Arbeidsgiver har sendt henvendelse gjennom Kontaktskjema; \n" +
+                "Navn: %s \n" +
+                "Nummer: %s \n" +
+                "E-post: %s \n" +
+                "Kommune: %s (kommunenr: %s) \n" +
+                "Kontakt arbeidsgiver for å avklare hva henvendelsen gjelder. Husk å registrere henvendelsen som aktivitetstype «Kontaktskjema» i Arena.",
+                kontaktskjema.getFornavn() + " " + kontaktskjema.getEtternavn(),
+                kontaktskjema.getTelefonnr(),
+                kontaktskjema.getEpost(),
+                kontaktskjema.getKommune(),
+                kontaktskjema.getKommunenr()
+        );
+
         LocalDate aktivDato = dateProvider.now().toLocalDate();
 
         return new GsakInnsending(
