@@ -9,7 +9,7 @@ import org.junit.Test;
 import net.javacrumbs.shedlock.core.LockConfiguration;
 import net.javacrumbs.shedlock.core.LockingTaskExecutor;
 
-public class GsakSchedulerTest {
+public class GsakOppgaveSchedulerTest {
 
     @Test
     public void skalSjekkeAtSceduledMetodeBrukerShedlock() {

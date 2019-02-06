@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import static no.nav.tag.kontakt.oss.gsak.GsakOppgave.OppgaveStatus.OK;
 import static org.mockito.Mockito.*;
 
-public class GsakOppgaveForSkjemaTest {
+public class GsakOppgaveServiceTest {
     @Test
     public void skalOppdatereDatabaseEtterKallTilGsak() {
         LocalDateTime now = LocalDateTime.now();

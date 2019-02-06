@@ -1,17 +1,15 @@
 package no.nav.tag.kontakt.oss.gsak.integrasjon;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Value;
 
-@AllArgsConstructor
-@Data
+@Value
 public class GsakRequest {
-    private String tildeltEnhetsnr;
-    private String beskrivelse;
-    private String temagruppe;
-    private String tema;
-    private String oppgavetype;
-    private String prioritet;
-    private String aktivDato;
-    private String fristFerdigstillelse;
+    private final String tildeltEnhetsnr;
+    private final String beskrivelse;
+    private final String temagruppe;
+    private final String tema;
+    private final String oppgavetype;
+    private final String prioritet;
+    private final String aktivDato;
+    private final String fristFerdigstillelse;
 }
