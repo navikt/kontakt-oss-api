@@ -72,12 +72,14 @@ public class GsakOppgaveService {
         String enhetsnr = enhetUtils.mapFraKommunenrTilEnhetsnr(kontaktskjema.getKommunenr());
 
         String beskrivelse = String.format(
-                "Arbeidsgiver har sendt henvendelse gjennom Kontaktskjema; \n" +
+                "Kontaktskjema: Arbeidsgiver har sendt henvendelse gjennom Kontaktskjema; \n" +
+                "Tema: %s \n" +
                 "Navn: %s \n" +
                 "Nummer: %s \n" +
                 "E-post: %s \n" +
                 "Kommune: %s (kommunenr: %s) \n" +
                 "Kontakt arbeidsgiver for å avklare hva henvendelsen gjelder. Husk å registrere henvendelsen som aktivitetstype «Kontaktskjema» i Arena.",
+                kontaktskjema.getTema(),
                 kontaktskjema.getFornavn() + " " + kontaktskjema.getEtternavn(),
                 kontaktskjema.getTelefonnr(),
                 kontaktskjema.getEpost(),
@@ -90,6 +92,7 @@ public class GsakOppgaveService {
         return new GsakRequest(
                 enhetsnr,
                 "9999",
+                kontaktskjema.getBedriftsnr(),
                 beskrivelse,
                 "ARBD",
                 "OPA",

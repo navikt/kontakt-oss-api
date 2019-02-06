@@ -6,6 +6,7 @@ import lombok.Value;
 public class GsakRequest {
     private final String tildeltEnhetsnr;
     private final String opprettetAvEnhetsnr;
+    private final String orgnr;
     private final String beskrivelse;
     private final String temagruppe;
     private final String tema;

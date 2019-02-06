@@ -9,3 +9,7 @@ controller.basepath: ${CONTROLLER_BASEPATH:/kontakt-oss-api}
 management.endpoints.web:
   exposure.include: info, health, metrics, prometheus
   base-path: ${CONTROLLER_BASEPATH:/kontakt-oss-api}/internal/actuator
+
+logging:
+  pattern:
+    level: "%5p %X{correlationId}"

@@ -29,6 +29,7 @@ public class TestData {
         return new GsakRequest(
                 "0000",
                 "9999",
+                "123456789",
                 "beskrivelse",
                 "ARBD",
                 "OPA",
