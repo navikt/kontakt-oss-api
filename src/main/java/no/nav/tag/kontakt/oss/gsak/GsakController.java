@@ -65,7 +65,7 @@ public class GsakController {
         GsakRequest innsending = new GsakRequest(
                 "0315",
                 "9999",
-                "123456789",
+                "979312059",
                 beskrivelse,
                 "ARBD",
                 "OPA",
