@@ -1,13 +1,11 @@
-package no.nav.tag.kontakt.oss.gsak;
+package no.nav.tag.kontakt.oss.gsak.integrasjon;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.time.LocalDate;
-
 @AllArgsConstructor
 @Data
-public class GsakInnsending {
+public class GsakRequest {
     private String tildeltEnhetsnr;
     private String beskrivelse;
     private String temagruppe;

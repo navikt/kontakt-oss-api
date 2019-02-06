@@ -1,6 +1,8 @@
 package no.nav.tag.kontakt.oss.gsak;
 
 import no.nav.tag.kontakt.oss.DateProvider;
+import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakKlient;
+import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +24,7 @@ public class GsakController {
     @GetMapping(value = "${controller.basepath}/gsak")
     public ResponseEntity gsak() {
         LocalDate aktivDato = new DateProvider().now().toLocalDate();
-        GsakInnsending innsending = new GsakInnsending(
+        GsakRequest innsending = new GsakRequest(
                 "0315",
                 "blabla beskrivelse",
                 "ARBD",

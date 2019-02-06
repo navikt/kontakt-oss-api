@@ -3,6 +3,7 @@ package no.nav.tag.kontakt.oss.gsak;
 import no.nav.tag.kontakt.oss.DateProvider;
 import no.nav.tag.kontakt.oss.Kontaktskjema;
 import no.nav.tag.kontakt.oss.enhetsmapping.EnhetUtils;
+import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakKlient;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
@@ -18,7 +19,7 @@ public class GsakOppgaveForSkjemaTest {
         when(dateProvider.now()).thenReturn(now);
         GsakOppgaveRepository oppgaveRepository = mock(GsakOppgaveRepository.class);
 
-        GsakOppgaveForSkjema gsakOppgaveForSkjema = new GsakOppgaveForSkjema(
+        GsakOppgaveService gsakOppgaveForSkjema = new GsakOppgaveService(
                 oppgaveRepository,
                 dateProvider,
                 mock(GsakKlient.class),

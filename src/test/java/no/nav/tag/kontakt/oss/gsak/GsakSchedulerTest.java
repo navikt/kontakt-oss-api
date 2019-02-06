@@ -13,7 +13,7 @@ public class GsakSchedulerTest {
 
     @Test
     public void skalSjekkeAtSceduledMetodeBrukerShedlock() {
-        GsakScheduler gsakScheduler = new GsakScheduler();
+        GsakOppgaveScheduler gsakScheduler = new GsakOppgaveScheduler();
         gsakScheduler.taskExecutor = mock(LockingTaskExecutor.class);
         
         gsakScheduler.scheduledOpprettOppgaveForSkjemaer();

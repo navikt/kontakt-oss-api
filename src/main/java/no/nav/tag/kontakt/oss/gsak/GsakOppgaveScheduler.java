@@ -16,13 +16,13 @@ import net.javacrumbs.shedlock.core.LockingTaskExecutor;
 
 @Slf4j
 @Component
-public class GsakScheduler {
+public class GsakOppgaveScheduler {
     
     @Autowired
     private KontaktskjemaRepository kontaktskjemaRepository;
     
     @Autowired
-    private GsakOppgaveForSkjema oppgaveForSkjema;    
+    private GsakOppgaveService oppgaveForSkjema;
     
     @Autowired
     LockingTaskExecutor taskExecutor;

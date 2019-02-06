@@ -6,6 +6,9 @@ import no.nav.tag.kontakt.oss.DateProvider;
 import no.nav.tag.kontakt.oss.Kontaktskjema;
 import no.nav.tag.kontakt.oss.KontaktskjemaException;
 import no.nav.tag.kontakt.oss.enhetsmapping.EnhetUtils;
+import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakKlient;
+import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakRequest;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,13 +17,14 @@ import lombok.AllArgsConstructor;
 import no.nav.tag.kontakt.oss.gsak.GsakOppgave.OppgaveStatus;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 import static no.nav.tag.kontakt.oss.gsak.GsakOppgave.OppgaveStatus.*;
 
 @NoArgsConstructor
 @Component
 @Slf4j
-public class GsakOppgaveForSkjema {
+public class GsakOppgaveService {
 
     private GsakOppgaveRepository oppgaveRepository;
     private DateProvider dateProvider;
@@ -28,7 +32,7 @@ public class GsakOppgaveForSkjema {
     private EnhetUtils enhetUtils;
 
     @Autowired
-    public GsakOppgaveForSkjema(GsakOppgaveRepository oppgaveRepository, DateProvider dateProvider, GsakKlient gsakKlient, EnhetUtils enhetUtils) {
+    public GsakOppgaveService(GsakOppgaveRepository oppgaveRepository, DateProvider dateProvider, GsakKlient gsakKlient, EnhetUtils enhetUtils) {
         this.oppgaveRepository = oppgaveRepository;
         this.dateProvider = dateProvider;
         this.gsakKlient = gsakKlient;
@@ -43,6 +47,7 @@ public class GsakOppgaveForSkjema {
 
     @Transactional
     public void opprettOppgaveOgLagreStatus(Kontaktskjema kontaktskjema) {
+        MDC.put("correlationId", UUID.randomUUID().toString());
         Behandlingsresultat behandlingsresultat = opprettOppgaveIGsak(kontaktskjema);
         oppgaveRepository.save(new GsakOppgave.GsakOppgaveBuilder()
                 .kontaktskjemaId(kontaktskjema.getId())
@@ -62,7 +67,7 @@ public class GsakOppgaveForSkjema {
         }
     }
 
-    private GsakInnsending lagGsakInnsending(Kontaktskjema kontaktskjema) {
+    private GsakRequest lagGsakInnsending(Kontaktskjema kontaktskjema) {
         String enhetsnr = enhetUtils.mapFraKommunenrTilEnhetsnr(kontaktskjema.getKommunenr());
 
         String beskrivelse = String.format(
@@ -81,7 +86,7 @@ public class GsakOppgaveForSkjema {
 
         LocalDate aktivDato = dateProvider.now().toLocalDate();
 
-        return new GsakInnsending(
+        return new GsakRequest(
                 enhetsnr,
                 beskrivelse,
                 "ARBD",

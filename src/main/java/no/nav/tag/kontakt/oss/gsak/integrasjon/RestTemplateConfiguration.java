@@ -1,4 +1,4 @@
-package no.nav.tag.kontakt.oss.gsak;
+package no.nav.tag.kontakt.oss.gsak.integrasjon;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -9,10 +9,10 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 public class RestTemplateConfiguration {
 
-    @Value("${GSAK_BRUKERNAVN:}")
+    @Value("${GSAK_BRUKERNAVN:default}")
     private String brukernavn;
 
-    @Value("${GSAK_PASSORD:}")
+    @Value("${GSAK_PASSORD:default}")
     private String passord;
 
     @Bean
