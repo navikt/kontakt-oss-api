@@ -62,8 +62,8 @@ public class GsakOppgaveService {
         try {
             Integer gsakId = gsakKlient.opprettGsakOppgave(lagGsakInnsending(kontaktskjema));
             return new Behandlingsresultat(OK, gsakId);
-        } catch (KontaktskjemaException e) {
-            log.error("Opprettelse av gsak-oppgave feilet.", e);
+        } catch (Exception e) {
+            log.error("Opprettelse av gsak-oppgave feilet for kontaktskjema {}.", kontaktskjema.getId(), e);
             return new Behandlingsresultat(FEILET, null);
         }
     }
