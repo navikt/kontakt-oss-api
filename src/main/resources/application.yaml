@@ -10,6 +10,4 @@ management.endpoints.web:
   exposure.include: info, health, metrics, prometheus
   base-path: ${CONTROLLER_BASEPATH:/kontakt-oss-api}/internal/actuator
 
-logging:
-  pattern:
-    level: "%5p %X{correlationId}"
+logging.pattern.console: "%d{yyyy-MM-dd HH:mm:ss} - %msg %X{correlationId} %n"
