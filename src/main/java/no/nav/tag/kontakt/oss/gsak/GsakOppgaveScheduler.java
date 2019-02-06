@@ -18,15 +18,17 @@ import net.javacrumbs.shedlock.core.LockingTaskExecutor;
 @Component
 public class GsakOppgaveScheduler {
     
+    private final KontaktskjemaRepository kontaktskjemaRepository;
+    private final GsakOppgaveService oppgaveForSkjema;
+    private final LockingTaskExecutor taskExecutor;
+
     @Autowired
-    private KontaktskjemaRepository kontaktskjemaRepository;
-    
-    @Autowired
-    private GsakOppgaveService oppgaveForSkjema;
-    
-    @Autowired
-    LockingTaskExecutor taskExecutor;
-    
+    public GsakOppgaveScheduler(KontaktskjemaRepository kontaktskjemaRepository, GsakOppgaveService oppgaveForSkjema, LockingTaskExecutor taskExecutor) {
+        this.kontaktskjemaRepository = kontaktskjemaRepository;
+        this.oppgaveForSkjema = oppgaveForSkjema;
+        this.taskExecutor = taskExecutor;
+    }
+
     @Scheduled(cron = "* * * * * ?")
     public void scheduledOpprettOppgaveForSkjemaer() {
 

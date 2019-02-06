@@ -32,17 +32,19 @@ public class GsakKlientTest {
     @Captor
     ArgumentCaptor<HttpEntity<GsakRequest>> requestCaptor;
 
+    private GsakKlient gsakKlient;
+
     @Before
     public void setUp() {
         mockReturverdiFraGsak(lagGsakResponseEntity());
         MDC.put("correlationId", "dummy");
+        gsakKlient = new GsakKlient(restTemplate, "");
     }
 
     @Test
     public void opprettGsakOppgave__skal_returnere_id_til_opprettet_gsakoppgave() {
         Integer gsakId = 99;
         mockReturverdiFraGsak(lagGsakResponseEntity(gsakId));
-        GsakKlient gsakKlient = new GsakKlient(restTemplate, "");
 
         Integer opprettetGsakId = gsakKlient.opprettGsakOppgave(lagGsakRequest());
 
@@ -51,8 +53,6 @@ public class GsakKlientTest {
 
     @Test
     public void opprettGsakOppgave__skal_sende_med_riktig_content_type() {
-        GsakKlient gsakKlient = new GsakKlient(restTemplate, "");
-
         gsakKlient.opprettGsakOppgave(lagGsakRequest());
 
         captureGsakRequest();
@@ -63,7 +63,6 @@ public class GsakKlientTest {
     public void opprettGsakOppgave__skal_sende_med_correlation_id() {
         String correlationId = UUID.randomUUID().toString();
         MDC.put("correlationId", correlationId);
-        GsakKlient gsakKlient = new GsakKlient(restTemplate, "");
 
         gsakKlient.opprettGsakOppgave(lagGsakRequest());
 
@@ -75,7 +74,7 @@ public class GsakKlientTest {
     @Test(expected = KontaktskjemaException.class)
     public void opprettGsakOppgave__skal_feile_hvis_correlation_id_ikke_er_satt() {
         MDC.clear();
-        new GsakKlient(restTemplate, "").opprettGsakOppgave(lagGsakRequest());
+        gsakKlient.opprettGsakOppgave(lagGsakRequest());
     }
 
     private void captureGsakRequest() {

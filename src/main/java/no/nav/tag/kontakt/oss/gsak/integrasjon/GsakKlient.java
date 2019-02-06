@@ -28,6 +28,7 @@ public class GsakKlient {
     }
 
     public Integer opprettGsakOppgave(GsakRequest gsakRequest) {
+
         ResponseEntity<GsakRespons> respons = restTemplate.postForEntity(
                 gsakUrl,
                 lagGsakRequestEntity(gsakRequest),
