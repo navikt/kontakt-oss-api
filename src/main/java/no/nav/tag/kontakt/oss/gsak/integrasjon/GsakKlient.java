@@ -1,5 +1,8 @@
 package no.nav.tag.kontakt.oss.gsak.integrasjon;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.tag.kontakt.oss.KontaktskjemaException;
 import org.slf4j.MDC;
@@ -40,6 +43,7 @@ public class GsakKlient {
         }
     }
 
+
     private HttpEntity<GsakRequest> lagGsakRequestEntity(GsakRequest gsakRequest) {
         String correlationId = MDC.get("correlationId");
         if (correlationId == null) {
@@ -52,7 +56,9 @@ public class GsakKlient {
         return new HttpEntity<>(gsakRequest, headers);
     }
 
-    @lombok.Value
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class GsakRespons {
         private Integer id;
     }
