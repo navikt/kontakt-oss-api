@@ -27,24 +27,38 @@ public class GsakKlient {
     public Integer opprettGsakOppgave(GsakInnsending gsakInnsending) {
         String correlationId = UUID.randomUUID().toString();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("X-Correlation-ID", correlationId);
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<GsakInnsending> gsakEntity = new HttpEntity<>(gsakInnsending, headers);
-
         ResponseEntity<GsakInnsendingRespons> respons = restTemplate.postForEntity(
                 gsakUrl,
-                gsakEntity,
+                lagGsakRequestEntity(gsakInnsending, correlationId),
                 GsakInnsendingRespons.class
         );
 
-        if (HttpStatus.CREATED.equals(respons.getStatusCode()) && (respons.getBody() != null)) {
-            Integer id = respons.getBody().getId();
-            log.info("Gsak-oppgave med id={} opprettet. X-Correlation-ID={}", 1, correlationId);
-            return id;
-        } else {
-            throw new KontaktskjemaException("Kall til Gsak feilet.");
+        validerRespons(respons);
+
+        Integer id = respons.getBody().getId();
+        log.info("Gsak-oppgave med id={} opprettet. X-Correlation-ID={}", 1, correlationId);
+        return id;
+    }
+
+    private void validerRespons(ResponseEntity<GsakInnsendingRespons> gsakRespons) {
+        if (!HttpStatus.CREATED.equals(gsakRespons.getStatusCode())) {
+            throw new KontaktskjemaException("Kall til Gsak returnerte ikke 201 CREATED");
         }
+
+        if (gsakRespons.getBody() == null) {
+            throw new KontaktskjemaException("Kall til Gsak returnerte null som body");
+        }
+
+        if (gsakRespons.getBody().getId() == null) {
+            throw new KontaktskjemaException("Kall til Gsak feilet - returnert id er null");
+        }
+    }
+
+    private HttpEntity<GsakInnsending> lagGsakRequestEntity(GsakInnsending gsakInnsending, String correlationId) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("X-Correlation-ID", correlationId);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return new HttpEntity<>(gsakInnsending, headers);
     }
 
     @Data

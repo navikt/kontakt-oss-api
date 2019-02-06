@@ -53,11 +53,21 @@ public class GsakOppgaveForSkjema {
     }
 
     private Behandlingsresultat opprettOppgaveIGsak(Kontaktskjema kontaktskjema) {
+        try {
+            Integer gsakId = gsakKlient.opprettGsakOppgave(lagGsakInnsending(kontaktskjema));
+            return new Behandlingsresultat(OK, gsakId);
+        } catch (KontaktskjemaException e) {
+            log.error("Opprettelse av gsak-oppgave feilet.", e);
+            return new Behandlingsresultat(FEILET, null);
+        }
+    }
+
+    private GsakInnsending lagGsakInnsending(Kontaktskjema kontaktskjema) {
         String enhetsnr = enhetUtils.mapFraKommunenrTilEnhetsnr(kontaktskjema.getKommunenr());
         String beskrivelse = "Arbeidsgiver har sendt henvendelse gjennom Kontaktskjema, blabla.";
         LocalDate aktivDato = dateProvider.now().toLocalDate();
 
-        GsakInnsending innsending = new GsakInnsending(
+        return new GsakInnsending(
                 enhetsnr,
                 beskrivelse,
                 "ARBD",
@@ -67,14 +77,5 @@ public class GsakOppgaveForSkjema {
                 aktivDato.toString(),
                 aktivDato.plusDays(2).toString()
         );
-
-        try {
-            Integer gsakId = gsakKlient.opprettGsakOppgave(innsending);
-            return new Behandlingsresultat(OK, gsakId);
-        } catch (KontaktskjemaException e) {
-            log.error("Opprettelse av gsak-oppgave feilet.", e);
-            return new Behandlingsresultat(FEILET, null);
-        }
-        // return new Behandlingsresultat(DISABLED, null);
     }
 }
