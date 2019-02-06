@@ -14,6 +14,6 @@ public class GsakInnsending {
     private String tema;
     private String oppgavetype;
     private String prioritet;
-    private LocalDate aktivDato;
-    private LocalDate fristFerdigstillelse;
+    private String aktivDato;
+    private String fristFerdigstillelse;
 }

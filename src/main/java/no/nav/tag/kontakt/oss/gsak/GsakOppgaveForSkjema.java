@@ -64,8 +64,8 @@ public class GsakOppgaveForSkjema {
                 "OPA",
                 "VURD_HENV",
                 "HOY",
-                aktivDato,
-                aktivDato.plusDays(2)
+                aktivDato.toString(),
+                aktivDato.plusDays(2).toString()
         );
 
         try {

@@ -29,8 +29,8 @@ public class GsakController {
                 "OPA",
                 "VURD_HENV",
                 "HOY",
-                aktivDato,
-                aktivDato.plusDays(2)
+                aktivDato.toString(),
+                aktivDato.plusDays(2).toString()
         );
         return ResponseEntity.ok(gsakKlient.opprettGsakOppgave(innsending));
     }
