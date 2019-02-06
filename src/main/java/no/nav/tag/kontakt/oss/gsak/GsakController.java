@@ -1,5 +1,6 @@
 package no.nav.tag.kontakt.oss.gsak;
 
+import lombok.extern.slf4j.Slf4j;
 import no.nav.tag.kontakt.oss.DateProvider;
 import no.nav.tag.kontakt.oss.Kontaktskjema;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakKlient;
@@ -16,6 +17,7 @@ import java.util.UUID;
 
 // TODO TAG-233 Skal fjernes, er bare for å teste gsak-apiet direkte
 @RestController
+@Slf4j
 public class GsakController {
 
     private final GsakKlient gsakKlient;
