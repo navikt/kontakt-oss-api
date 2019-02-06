@@ -1,5 +1,6 @@
 package no.nav.tag.kontakt.oss.gsak.integrasjon;
 
+import no.nav.tag.kontakt.oss.KontaktskjemaException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,6 +35,7 @@ public class GsakKlientTest {
     @Before
     public void setUp() {
         mockReturverdiFraGsak(lagGsakResponseEntity());
+        MDC.put("correlationId", "dummy");
     }
 
     @Test
@@ -68,6 +70,12 @@ public class GsakKlientTest {
         captureGsakRequest();
         HttpHeaders headers = requestCaptor.getValue().getHeaders();
         assertThat(headers.get("X-Correlation-ID").get(0)).isEqualTo(correlationId);
+    }
+
+    @Test(expected = KontaktskjemaException.class)
+    public void opprettGsakOppgave__skal_feile_hvis_correlation_id_ikke_er_satt() {
+        MDC.clear();
+        new GsakKlient(restTemplate, "").opprettGsakOppgave(lagGsakRequest());
     }
 
     private void captureGsakRequest() {

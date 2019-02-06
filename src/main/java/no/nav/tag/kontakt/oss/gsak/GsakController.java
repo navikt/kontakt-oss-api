@@ -4,6 +4,7 @@ import no.nav.tag.kontakt.oss.DateProvider;
 import no.nav.tag.kontakt.oss.Kontaktskjema;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakKlient;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakRequest;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 // TODO TAG-233 Skal fjernes, er bare for å teste gsak-apiet direkte
 @RestController
@@ -25,6 +27,7 @@ public class GsakController {
 
     @GetMapping(value = "${controller.basepath}/gsak")
     public ResponseEntity gsak() {
+        MDC.put("correlationId", UUID.randomUUID().toString());
         LocalDate aktivDato = new DateProvider().now().toLocalDate();
         Kontaktskjema kontaktskjema = new Kontaktskjema(
                 null,

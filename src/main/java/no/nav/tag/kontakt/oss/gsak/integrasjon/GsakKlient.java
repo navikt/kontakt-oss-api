@@ -41,8 +41,13 @@ public class GsakKlient {
     }
 
     private HttpEntity<GsakRequest> lagGsakRequestEntity(GsakRequest gsakRequest) {
+        String correlationId = MDC.get("correlationId");
+        if (correlationId == null) {
+            throw new KontaktskjemaException("X-Correlation-ID er ikke satt");
+        }
+
         HttpHeaders headers = new HttpHeaders();
-        headers.set("X-Correlation-ID", MDC.get("correlationId"));
+        headers.set("X-Correlation-ID", correlationId);
         headers.setContentType(MediaType.APPLICATION_JSON);
         return new HttpEntity<>(gsakRequest, headers);
     }
