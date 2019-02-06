@@ -28,6 +28,7 @@ public class TestData {
     public static GsakRequest lagGsakRequest() {
         return new GsakRequest(
                 "0000",
+                "9999",
                 "beskrivelse",
                 "ARBD",
                 "OPA",

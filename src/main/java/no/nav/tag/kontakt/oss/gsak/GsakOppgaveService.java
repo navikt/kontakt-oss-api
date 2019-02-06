@@ -89,6 +89,7 @@ public class GsakOppgaveService {
 
         return new GsakRequest(
                 enhetsnr,
+                "9999",
                 beskrivelse,
                 "ARBD",
                 "OPA",
