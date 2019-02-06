@@ -35,6 +35,14 @@ public class GsakKlient {
                 GsakRespons.class
         );
 
+        ResponseEntity<String> r2 = restTemplate.postForEntity(
+                gsakUrl,
+                lagGsakRequestEntity(gsakRequest),
+                String.class
+        );
+
+        log.info("badaga554 " + r2.getBody());
+
         if (HttpStatus.CREATED.equals(respons.getStatusCode())) {
             Integer id = respons.getBody().getId();
             log.info("Gsak-oppgave med id={} opprettet.", id);
