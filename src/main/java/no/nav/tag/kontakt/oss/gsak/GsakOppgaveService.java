@@ -55,6 +55,7 @@ public class GsakOppgaveService {
                 .opprettet(dateProvider.now())
                 .gsakId(behandlingsresultat.gsakId)
                 .build());
+        MDC.clear();
     }
 
     private Behandlingsresultat opprettOppgaveIGsak(Kontaktskjema kontaktskjema) {

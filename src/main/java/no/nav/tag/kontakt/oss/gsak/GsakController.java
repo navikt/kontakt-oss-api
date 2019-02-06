@@ -30,6 +30,8 @@ public class GsakController {
     @GetMapping(value = "${controller.basepath}/gsak")
     public ResponseEntity gsak() {
         MDC.put("correlationId", UUID.randomUUID().toString());
+        MDC.put("first", "heihei!");
+        log.info("Jeg logger");
         LocalDate aktivDato = new DateProvider().now().toLocalDate();
         Kontaktskjema kontaktskjema = new Kontaktskjema(
                 null,
@@ -70,6 +72,8 @@ public class GsakController {
                 aktivDato.toString(),
                 aktivDato.plusDays(2).toString()
         );
-        return ResponseEntity.ok(gsakKlient.opprettGsakOppgave(innsending));
+        ResponseEntity<Integer> response = ResponseEntity.ok(gsakKlient.opprettGsakOppgave(innsending));
+        MDC.clear();
+        return response;
     }
 }
