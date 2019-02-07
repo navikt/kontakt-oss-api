@@ -37,7 +37,7 @@ public class GsakOppgaveService {
     }
 
     @AllArgsConstructor
-    private class Behandlingsresultat {
+    private static class Behandlingsresultat {
         private OppgaveStatus status;
         private Integer gsakId;
     }
