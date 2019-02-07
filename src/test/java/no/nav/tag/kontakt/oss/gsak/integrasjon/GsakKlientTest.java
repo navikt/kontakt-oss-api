@@ -1,7 +1,11 @@
 package no.nav.tag.kontakt.oss.gsak.integrasjon;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import no.nav.tag.kontakt.oss.Kontaktskjema;
 import no.nav.tag.kontakt.oss.KontaktskjemaException;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -14,6 +18,7 @@ import org.slf4j.MDC;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.util.UUID;
 
 import static no.nav.tag.kontakt.oss.TestData.lagGsakRequest;

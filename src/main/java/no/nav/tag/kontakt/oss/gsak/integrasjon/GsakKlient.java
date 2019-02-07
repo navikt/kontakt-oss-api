@@ -1,5 +1,6 @@
 package no.nav.tag.kontakt.oss.gsak.integrasjon;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -40,15 +41,19 @@ public class GsakKlient {
         );
 
         if (HttpStatus.CREATED.equals(jsonResponse.getStatusCode())) {
-            try {
-                GsakRespons respons = objectMapper.readValue(jsonResponse.getBody(), GsakRespons.class);
-                return respons.getId();
-            } catch (IOException e) {
-                log.error("Returverdi: " + jsonResponse.getBody());
-                throw new KontaktskjemaException("Returverdi fra Gsak er ikke riktig formatert JSON");
-            }
+            return hentIdFraRespons(jsonResponse);
         } else {
             throw new KontaktskjemaException("Kall til Gsak returnerte ikke 201 CREATED. Returverdi: " + jsonResponse.getBody());
+        }
+    }
+
+    private Integer hentIdFraRespons(ResponseEntity<String> respons) {
+        try {
+            JsonNode jsonNode = objectMapper.readTree(respons.getBody());
+            return jsonNode.get("id").asInt();
+        } catch (IOException e) {
+            log.error("Returverdi: " + respons.getBody());
+            throw new KontaktskjemaException("Returverdi fra Gsak er ikke riktig formatert JSON");
         }
     }
 
