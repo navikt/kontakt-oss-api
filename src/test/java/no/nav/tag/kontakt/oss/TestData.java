@@ -1,8 +1,5 @@
 package no.nav.tag.kontakt.oss;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.SneakyThrows;
-import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakKlient;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,8 +7,6 @@ import org.springframework.http.ResponseEntity;
 import java.time.LocalDateTime;
 
 public class TestData {
-    private static ObjectMapper objectMapper = new ObjectMapper();
-
     public static Kontaktskjema lagKontaktskjema() {
         return new Kontaktskjema(
                 null,
@@ -56,9 +51,8 @@ public class TestData {
         return lagGsakResponseEntity(gsakId, HttpStatus.CREATED);
     }
 
-    @SneakyThrows
     public static ResponseEntity<String> lagGsakResponseEntity(Integer gsakId, HttpStatus status) {
-        GsakKlient.GsakRespons respons = new GsakKlient.GsakRespons(gsakId);
-        return new ResponseEntity<>(objectMapper.writeValueAsString(respons), status);
+        String responsBody = String.format("{\"id\": %d}", gsakId);
+        return new ResponseEntity<>(responsBody, status);
     }
 }

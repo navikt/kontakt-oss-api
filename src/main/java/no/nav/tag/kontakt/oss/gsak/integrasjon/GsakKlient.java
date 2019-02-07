@@ -68,11 +68,4 @@ public class GsakKlient {
         headers.setContentType(MediaType.APPLICATION_JSON);
         return new HttpEntity<>(gsakRequest, headers);
     }
-
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class GsakRespons {
-        private Integer id;
-    }
 }
