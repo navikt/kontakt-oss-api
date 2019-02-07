@@ -94,6 +94,14 @@ public class GsakKlientTest {
         gsakKlient.opprettGsakOppgave(lagGsakRequest());
     }
 
+    @Test
+    public void opprettGsakOppgave__skal_parse_json() {
+        String json = "{\"id\":8888669,\"tildeltEnhetsnr\":\"0315\",\"opprettetAvEnhetsnr\":\"9999\",\"orgnr\":\"123456789\",\"beskrivelse\":\"Arbeidsgiver har sendt henvendelse gjennom Kontaktskjema; \\nNavn: Ola Nordmann \\nNummer: 01234567 \\nE-post: ola.nordmann@fleskOgFisk.no \\nKommune: BodÃ¸ (kommunenr: 0011) \\nKontakt arbeidsgiver for Ã¥ avklare hva henvendelsen gjelder. Husk Ã¥ registrere henvendelsen som aktivitetstype Â«KontaktskjemaÂ» i Arena.\",\"temagruppe\":\"ARBD\",\"tema\":\"OPA\",\"oppgavetype\":\"VURD_HENV\",\"versjon\":1,\"fristFerdigstillelse\":\"2019-02-09\",\"aktivDato\":\"2019-02-07\",\"opprettetTidspunkt\":\"2019-02-07T11:56:57.675+01:00\",\"opprettetAv\":\"srvtag-kontaktskjema\",\"prioritet\":\"HOY\",\"status\":\"OPPRETTET\",\"metadata\":{}}";
+        ResponseEntity<String> respons = new ResponseEntity<>(json, HttpStatus.CREATED);
+        mockReturverdiFraGsak(respons);
+        gsakKlient.opprettGsakOppgave(lagGsakRequest());
+    }
+
     private void captureGsakRequest() {
         verify(restTemplate, times(1)).postForEntity(anyString(), requestCaptor.capture(), eq(String.class));
     }
