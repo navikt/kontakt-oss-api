@@ -1,4 +1,4 @@
-package no.nav.tag.kontakt.oss.enhetsmapping;
+package no.nav.tag.kontakt.oss.navenhetsmapping;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @Configuration
-public class EnheterConfiguration {
+public class NavEnheterConfiguration {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @Bean("enheter")

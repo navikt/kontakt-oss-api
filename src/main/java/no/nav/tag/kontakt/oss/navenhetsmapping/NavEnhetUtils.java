@@ -1,4 +1,4 @@
-package no.nav.tag.kontakt.oss.enhetsmapping;
+package no.nav.tag.kontakt.oss.navenhetsmapping;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -6,11 +6,11 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 @Component
-public class EnhetUtils {
+public class NavEnhetUtils {
     private final Map<String, String> enheter;
 
     @Autowired
-    public EnhetUtils(Map<String, String> enheter) {
+    public NavEnhetUtils(Map<String, String> enheter) {
         this.enheter = enheter;
     }
 

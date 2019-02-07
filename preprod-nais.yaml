@@ -6,12 +6,12 @@ metadata:
   labels:
     team: teamtag
 spec:
-  image: navikt/kontakt-oss-api:TAG-273-koble-til-db_193
+  image: navikt/kontakt-oss-api:latest
   team: teamtag
   port: 8080
   secrets: true
   ingresses:
-    - https://arbeidsgiver.preprod.local/kontakt-oss-api/
+    - https://arbeidsgiver.nais.preprod.local/kontakt-oss-api/
   liveness:
     path: /kontakt-oss-api/internal/actuator/info
     initialDelay: 40
@@ -21,6 +21,8 @@ spec:
   env:
     - name: SPRING_PROFILES_ACTIVE
       value: preprod
+    - name: GSAK_URL
+      value: https://oppgave.nais.preprod.local/api/v1/oppgaver
 prometheus:
   enabled: true
   path: /kontakt-oss-api/internal/actuator/prometheus
