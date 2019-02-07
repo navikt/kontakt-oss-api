@@ -1,13 +1,17 @@
 package no.nav.tag.kontakt.oss;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.SneakyThrows;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakKlient;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakRequest;
-import org.slf4j.MDC;
-import org.springframework.http.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
 
 public class TestData {
+    private static ObjectMapper objectMapper = new ObjectMapper();
+
     public static Kontaktskjema lagKontaktskjema() {
         return new Kontaktskjema(
                 null,
@@ -40,16 +44,21 @@ public class TestData {
         );
     }
 
-    public static ResponseEntity<GsakKlient.GsakRespons> lagGsakResponseEntity() {
+    public static ResponseEntity<String> lagGsakResponseEntity() {
         return lagGsakResponseEntity(8);
     }
 
-    public static ResponseEntity<GsakKlient.GsakRespons> lagGsakResponseEntity(Integer gsakId) {
+    public static ResponseEntity<String> lagGsakResponseEntity(HttpStatus status) {
+        return lagGsakResponseEntity(8, status);
+    }
+
+    public static ResponseEntity<String> lagGsakResponseEntity(Integer gsakId) {
         return lagGsakResponseEntity(gsakId, HttpStatus.CREATED);
     }
 
-    public static ResponseEntity<GsakKlient.GsakRespons> lagGsakResponseEntity(Integer gsakId, HttpStatus status) {
+    @SneakyThrows
+    public static ResponseEntity<String> lagGsakResponseEntity(Integer gsakId, HttpStatus status) {
         GsakKlient.GsakRespons respons = new GsakKlient.GsakRespons(gsakId);
-        return new ResponseEntity<>(respons, status);
+        return new ResponseEntity<>(objectMapper.writeValueAsString(respons), status);
     }
 }

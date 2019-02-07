@@ -1,5 +1,6 @@
 package no.nav.tag.kontakt.oss.gsak.integrasjon;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,9 +13,13 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
+
 @Service
 @Slf4j
 public class GsakKlient {
+    private final static ObjectMapper objectMapper = new ObjectMapper();
+
     private final RestTemplate restTemplate;
     private final String gsakUrl;
 
@@ -28,30 +33,23 @@ public class GsakKlient {
     }
 
     public Integer opprettGsakOppgave(GsakRequest gsakRequest) {
-
-        ResponseEntity<GsakRespons> respons = restTemplate.postForEntity(
-                gsakUrl,
-                lagGsakRequestEntity(gsakRequest),
-                GsakRespons.class
-        );
-
-        ResponseEntity<String> r2 = restTemplate.postForEntity(
+        ResponseEntity<String> jsonResponse = restTemplate.postForEntity(
                 gsakUrl,
                 lagGsakRequestEntity(gsakRequest),
                 String.class
         );
 
-        log.info("badaga554 " + r2.getBody());
-
-        if (HttpStatus.CREATED.equals(respons.getStatusCode())) {
-            Integer id = respons.getBody().getId();
-            log.info("Gsak-oppgave med id={} opprettet.", id);
-            return id;
+        if (HttpStatus.CREATED.equals(jsonResponse.getStatusCode())) {
+            try {
+                GsakRespons respons = objectMapper.readValue(jsonResponse.getBody(), GsakRespons.class);
+                return respons.getId();
+            } catch (IOException e) {
+                throw new KontaktskjemaException("Returverdi fra Gsak er ikke riktig formatert JSON");
+            }
         } else {
-            throw new KontaktskjemaException("Kall til Gsak returnerte ikke 201 CREATED");
+            throw new KontaktskjemaException("Kall til Gsak returnerte ikke 201 CREATED. Returverdi: " + jsonResponse.getBody());
         }
     }
-
 
     private HttpEntity<GsakRequest> lagGsakRequestEntity(GsakRequest gsakRequest) {
         String correlationId = MDC.get("correlationId");

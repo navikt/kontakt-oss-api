@@ -1,5 +1,6 @@
 package no.nav.tag.kontakt.oss.gsak.integrasjon;
 
+import no.nav.tag.kontakt.oss.Kontaktskjema;
 import no.nav.tag.kontakt.oss.KontaktskjemaException;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -10,10 +11,7 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.slf4j.MDC;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.UUID;
@@ -24,15 +22,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-// @RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 public class GsakKlientTest {
 
-    /*
     @Mock
     RestTemplate restTemplate;
 
     @Captor
-    ArgumentCaptor<HttpEntity<GsakRequest>> requestCaptor;
+    ArgumentCaptor<HttpEntity<String>> requestCaptor;
 
     private GsakKlient gsakKlient;
 
@@ -43,7 +40,6 @@ public class GsakKlientTest {
         gsakKlient = new GsakKlient(restTemplate, "");
     }
 
-    @Ignore
     @Test
     public void opprettGsakOppgave__skal_returnere_id_til_opprettet_gsakoppgave() {
         Integer gsakId = 99;
@@ -54,7 +50,6 @@ public class GsakKlientTest {
         assertThat(opprettetGsakId).isEqualTo(gsakId);
     }
 
-    @Ignore
     @Test
     public void opprettGsakOppgave__skal_sende_med_riktig_content_type() {
         gsakKlient.opprettGsakOppgave(lagGsakRequest());
@@ -63,7 +58,6 @@ public class GsakKlientTest {
         assertThat(requestCaptor.getValue().getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
     }
 
-    @Ignore
     @Test
     public void opprettGsakOppgave__skal_sende_med_correlation_id() {
         String correlationId = UUID.randomUUID().toString();
@@ -82,12 +76,24 @@ public class GsakKlientTest {
         gsakKlient.opprettGsakOppgave(lagGsakRequest());
     }
 
-    private void captureGsakRequest() {
-        verify(restTemplate, times(1)).postForEntity(anyString(), requestCaptor.capture(), eq(GsakKlient.GsakRespons.class));
+    @Test(expected = KontaktskjemaException.class)
+    public void opprettGsakOppgave__skal_feile_hvis_respons_ikke_returnerer_created() {
+        mockReturverdiFraGsak(lagGsakResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR));
+        gsakKlient.opprettGsakOppgave(lagGsakRequest());
     }
 
-    private void mockReturverdiFraGsak(ResponseEntity<GsakKlient.GsakRespons> gsakEntity) {
-        when(restTemplate.postForEntity(anyString(), any(), eq(GsakKlient.GsakRespons.class))).thenReturn(gsakEntity);
+    @Test(expected = KontaktskjemaException.class)
+    public void opprettGsakOppgave__skal_feile_hvis_respons_ikke_returnerer_gyldig_json() {
+        ResponseEntity<String> respons = new ResponseEntity<>("{ikke gyldig json}", HttpStatus.CREATED);
+        mockReturverdiFraGsak(respons);
+        gsakKlient.opprettGsakOppgave(lagGsakRequest());
     }
-    */
+
+    private void captureGsakRequest() {
+        verify(restTemplate, times(1)).postForEntity(anyString(), requestCaptor.capture(), eq(String.class));
+    }
+
+    private void mockReturverdiFraGsak(ResponseEntity<String> gsakEntity) {
+        when(restTemplate.postForEntity(anyString(), any(), eq(String.class))).thenReturn(gsakEntity);
+    }
 }
