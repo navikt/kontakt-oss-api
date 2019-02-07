@@ -44,6 +44,7 @@ public class GsakKlient {
                 GsakRespons respons = objectMapper.readValue(jsonResponse.getBody(), GsakRespons.class);
                 return respons.getId();
             } catch (IOException e) {
+                log.error("Returverdi: " + jsonResponse.getBody());
                 throw new KontaktskjemaException("Returverdi fra Gsak er ikke riktig formatert JSON");
             }
         } else {
