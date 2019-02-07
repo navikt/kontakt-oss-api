@@ -2,7 +2,7 @@ package no.nav.tag.kontakt.oss.gsak;
 
 import no.nav.tag.kontakt.oss.DateProvider;
 import no.nav.tag.kontakt.oss.Kontaktskjema;
-import no.nav.tag.kontakt.oss.enhetsmapping.EnhetUtils;
+import no.nav.tag.kontakt.oss.navenhetsmapping.NavEnhetUtils;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakKlient;
 import org.junit.Test;
 
@@ -23,11 +23,11 @@ public class GsakOppgaveServiceTest {
                 oppgaveRepository,
                 dateProvider,
                 mock(GsakKlient.class),
-                mock(EnhetUtils.class)
+                mock(NavEnhetUtils.class)
         );
 
-        Kontaktskjema lagKontaktskjema = Kontaktskjema.builder().id(5).build();
-        gsakOppgaveForSkjema.opprettOppgaveOgLagreStatus(lagKontaktskjema);
+        Kontaktskjema kontaktskjema = Kontaktskjema.builder().id(5).build();
+        gsakOppgaveForSkjema.opprettOppgaveOgLagreStatus(kontaktskjema);
 
         verify(oppgaveRepository).save(eq(GsakOppgave.builder().gsakId(0).kontaktskjemaId(5).status(OK).opprettet(dateProvider.now()).build()));
 

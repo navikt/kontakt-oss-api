@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.tag.kontakt.oss.DateProvider;
 import no.nav.tag.kontakt.oss.Kontaktskjema;
-import no.nav.tag.kontakt.oss.enhetsmapping.EnhetUtils;
+import no.nav.tag.kontakt.oss.navenhetsmapping.NavEnhetUtils;
 import no.nav.tag.kontakt.oss.gsak.GsakOppgave.OppgaveStatus;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakKlient;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakRequest;
@@ -26,10 +26,10 @@ public class GsakOppgaveService {
     private final GsakOppgaveRepository oppgaveRepository;
     private final DateProvider dateProvider;
     private final GsakKlient gsakKlient;
-    private final EnhetUtils enhetUtils;
+    private final NavEnhetUtils enhetUtils;
 
     @Autowired
-    public GsakOppgaveService(GsakOppgaveRepository oppgaveRepository, DateProvider dateProvider, GsakKlient gsakKlient, EnhetUtils enhetUtils) {
+    public GsakOppgaveService(GsakOppgaveRepository oppgaveRepository, DateProvider dateProvider, GsakKlient gsakKlient, NavEnhetUtils enhetUtils) {
         this.oppgaveRepository = oppgaveRepository;
         this.dateProvider = dateProvider;
         this.gsakKlient = gsakKlient;

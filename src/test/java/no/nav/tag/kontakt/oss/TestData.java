@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import java.time.LocalDateTime;
 
 public class TestData {
-    public static Kontaktskjema lagKontaktskjema() {
+    public static Kontaktskjema kontaktskjema() {
         return new Kontaktskjema(
                 null,
                 LocalDateTime.now(),
@@ -24,7 +24,7 @@ public class TestData {
         );
     }
 
-    public static GsakRequest lagGsakRequest() {
+    public static GsakRequest gsakRequest() {
         return new GsakRequest(
                 "0000",
                 "9999",
@@ -39,19 +39,19 @@ public class TestData {
         );
     }
 
-    public static ResponseEntity<String> lagGsakResponseEntity() {
-        return lagGsakResponseEntity(8);
+    public static ResponseEntity<String> gsakResponseEntity() {
+        return gsakResponseEntity(8);
     }
 
-    public static ResponseEntity<String> lagGsakResponseEntity(HttpStatus status) {
-        return lagGsakResponseEntity(8, status);
+    public static ResponseEntity<String> gsakResponseEntity(HttpStatus status) {
+        return gsakResponseEntity(8, status);
     }
 
-    public static ResponseEntity<String> lagGsakResponseEntity(Integer gsakId) {
-        return lagGsakResponseEntity(gsakId, HttpStatus.CREATED);
+    public static ResponseEntity<String> gsakResponseEntity(Integer gsakId) {
+        return gsakResponseEntity(gsakId, HttpStatus.CREATED);
     }
 
-    public static ResponseEntity<String> lagGsakResponseEntity(Integer gsakId, HttpStatus status) {
+    public static ResponseEntity<String> gsakResponseEntity(Integer gsakId, HttpStatus status) {
         String responsBody = String.format("{\"id\": %d}", gsakId);
         return new ResponseEntity<>(responsBody, status);
     }
