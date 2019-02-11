@@ -52,7 +52,7 @@ public class GsakOppgaveService {
                 .opprettet(dateProvider.now())
                 .gsakId(behandlingsresultat.gsakId)
                 .build());
-        MDC.clear();
+        MDC.remove("correlationId");
     }
 
     private Behandlingsresultat opprettOppgaveIGsak(Kontaktskjema kontaktskjema) {
