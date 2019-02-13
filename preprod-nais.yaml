@@ -23,6 +23,8 @@ spec:
       value: preprod
     - name: GSAK_URL
       value: https://oppgave.nais.preprod.local/api/v1/oppgaver
+    - name: ENABLE_GSAK
+      value: true
 prometheus:
   enabled: true
   path: /kontakt-oss-api/internal/actuator/prometheus

@@ -1,5 +1,6 @@
 package no.nav.tag.kontakt.oss;
 
+import no.nav.tag.kontakt.oss.featureToggles.FeatureToggles;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.tag.kontakt.oss.DateProvider;
 import no.nav.tag.kontakt.oss.Kontaktskjema;
+import no.nav.tag.kontakt.oss.featureToggles.FeatureToggles;
 import no.nav.tag.kontakt.oss.navenhetsmapping.NavEnhetUtils;
 import no.nav.tag.kontakt.oss.gsak.GsakOppgave.OppgaveStatus;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakKlient;
@@ -17,8 +18,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 import static no.bekk.bekkopen.org.OrganisasjonsnummerValidator.isValid;
-import static no.nav.tag.kontakt.oss.gsak.GsakOppgave.OppgaveStatus.FEILET;
-import static no.nav.tag.kontakt.oss.gsak.GsakOppgave.OppgaveStatus.OK;
+import static no.nav.tag.kontakt.oss.gsak.GsakOppgave.OppgaveStatus.*;
 
 @Component
 @Slf4j
@@ -28,13 +28,20 @@ public class GsakOppgaveService {
     private final DateProvider dateProvider;
     private final GsakKlient gsakKlient;
     private final NavEnhetUtils enhetUtils;
+    private final FeatureToggles featureToggles;
 
     @Autowired
-    public GsakOppgaveService(GsakOppgaveRepository oppgaveRepository, DateProvider dateProvider, GsakKlient gsakKlient, NavEnhetUtils enhetUtils) {
+    public GsakOppgaveService(
+            GsakOppgaveRepository oppgaveRepository,
+            DateProvider dateProvider,
+            GsakKlient gsakKlient,
+            NavEnhetUtils enhetUtils,
+            FeatureToggles featureToggles) {
         this.oppgaveRepository = oppgaveRepository;
         this.dateProvider = dateProvider;
         this.gsakKlient = gsakKlient;
         this.enhetUtils = enhetUtils;
+        this.featureToggles = featureToggles;
     }
 
     @AllArgsConstructor
@@ -57,6 +64,9 @@ public class GsakOppgaveService {
     }
 
     private Behandlingsresultat opprettOppgaveIGsak(Kontaktskjema kontaktskjema) {
+        if (!this.featureToggles.isEnabled("gsak")) {
+            return new Behandlingsresultat(DISABLED, null);
+        }
         try {
             Integer gsakId = gsakKlient.opprettGsakOppgave(lagGsakInnsending(kontaktskjema));
             return new Behandlingsresultat(OK, gsakId);
