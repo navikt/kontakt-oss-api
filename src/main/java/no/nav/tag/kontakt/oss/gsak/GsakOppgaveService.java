@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import static no.bekk.bekkopen.org.OrganisasjonsnummerValidator.isValid;
 import static no.nav.tag.kontakt.oss.gsak.GsakOppgave.OppgaveStatus.*;
 
 @Component
@@ -75,14 +76,14 @@ public class GsakOppgaveService {
         }
     }
 
-    private GsakRequest lagGsakInnsending(Kontaktskjema kontaktskjema) {
+    GsakRequest lagGsakInnsending(Kontaktskjema kontaktskjema) {
         String enhetsnr = enhetUtils.mapFraKommunenrTilEnhetsnr(kontaktskjema.getKommunenr());
         LocalDate aktivDato = dateProvider.now().toLocalDate();
 
         return new GsakRequest(
                 enhetsnr,
                 "9999",
-                kontaktskjema.getBedriftsnr(),
+                isValid(kontaktskjema.getBedriftsnr()) ? kontaktskjema.getBedriftsnr() : "",
                 lagBeskrivelse(kontaktskjema),
                 "ARBD",
                 "OPA",
