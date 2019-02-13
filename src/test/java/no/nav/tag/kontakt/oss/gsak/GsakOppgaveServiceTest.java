@@ -23,10 +23,12 @@ public class GsakOppgaveServiceTest {
 
     private GsakOppgaveRepository oppgaveRepository = mock(GsakOppgaveRepository.class);
     private DateProvider dateProvider = mock(DateProvider.class);
+    private FeatureToggles featureToggles = mock(FeatureToggles.class);
     
     @Before
     public void setUp() {
         when(dateProvider.now()).thenReturn(LocalDateTime.now());
+        when(featureToggles.isEnabled(anyString())).thenReturn(true);
     }
 
     @Test
@@ -37,7 +39,7 @@ public class GsakOppgaveServiceTest {
                 dateProvider,
                 mock(GsakKlient.class),
                 mock(NavEnhetUtils.class),
-                altErEnabled()
+                featureToggles
         );
 
         Kontaktskjema kontaktskjema = Kontaktskjema.builder().id(5).build();
@@ -55,7 +57,7 @@ public class GsakOppgaveServiceTest {
                 dateProvider,
                 mock(GsakKlient.class),
                 mock(NavEnhetUtils.class),
-                altErEnabled()
+                featureToggles
         );
         String orgnr = OrganisasjonsnummerCalculator.getOrganisasjonsnummerList(1).get(0).getValue();
         GsakRequest gsakRequest = gsakOppgaveForSkjema.lagGsakInnsending(new Kontaktskjema(1, null, null, "Kommune", "1234", "bedriftsnavn", orgnr, "fornavn", "etternavn", "epost", "123", "tema"));
@@ -64,14 +66,13 @@ public class GsakOppgaveServiceTest {
     
     @Test
     public void lagInnsendingSkalFjerneOrgnrHvisUgyldig() {
-        when(dateProvider.now()).thenReturn(LocalDateTime.now());
 
         GsakOppgaveService gsakOppgaveForSkjema = new GsakOppgaveService(
                 oppgaveRepository,
                 dateProvider,
                 mock(GsakKlient.class),
                 mock(NavEnhetUtils.class),
-                altErEnabled()
+                featureToggles
         );
         
         GsakRequest gsakRequest = gsakOppgaveForSkjema.lagGsakInnsending(new Kontaktskjema(1, null, null, "Kommune", "1234", "bedriftsnavn", "123", "fornavn", "etternavn", "epost", "123", "tema"));
@@ -80,8 +81,6 @@ public class GsakOppgaveServiceTest {
 
     @Test
     public void skalReturnereDisabledHvisGsakToggleErAv() {
-        GsakOppgaveRepository oppgaveRepository = mock(GsakOppgaveRepository.class);
-        FeatureToggles featureToggles = mock(FeatureToggles.class);
         when(featureToggles.isEnabled(eq("gsak"))).thenReturn(false);
 
         GsakOppgaveService gsakOppgaveForSkjema = new GsakOppgaveService(
@@ -96,10 +95,5 @@ public class GsakOppgaveServiceTest {
         verify(oppgaveRepository).save(eq(GsakOppgave.builder().gsakId(null).status(DISABLED).build()));
 
     }
-
-    private FeatureToggles altErEnabled() {
-        FeatureToggles featureToggles = mock(FeatureToggles.class);
-        when(featureToggles.isEnabled(anyString())).thenReturn(true);
-        return featureToggles;
-    }
+    
 }
