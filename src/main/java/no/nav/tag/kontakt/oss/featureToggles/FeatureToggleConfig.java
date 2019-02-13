@@ -10,10 +10,10 @@ import java.util.Collections;
 public class FeatureToggleConfig {
 
     @Value("${ENABLE_GSAK:false}")
-    private boolean gsak;
+    private String gsak;
 
     @Bean
     public FeatureToggles featureToggles() {
-        return new FeatureToggles(Collections.singletonMap("gsak", gsak));
+        return new FeatureToggles(Collections.singletonMap("gsak", "true".equals(gsak)));
     }
 }
