@@ -17,7 +17,7 @@ public class MetricsConfig {
     @Autowired
     public MetricsConfig(MeterRegistry meterRegistry) {
         this.meterRegistry = meterRegistry;
-        this.testCounter = meterRegistry.counter("test.test", "hei1", "yo1");
+        this.testCounter = meterRegistry.counter("test_test", "hei1", "yo1");
     }
 
     @Bean
