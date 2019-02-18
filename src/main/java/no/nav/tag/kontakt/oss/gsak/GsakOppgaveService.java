@@ -99,7 +99,7 @@ public class GsakOppgaveService {
                 "Kontaktskjema: Arbeidsgiver har sendt henvendelse gjennom Kontaktskjema; \n" +
                         "Tema: %s \n" +
                         "Navn: %s \n" +
-                        "Nummer: %s \n" +
+                        "Telefonnr: %s \n" +
                         "E-post: %s \n" +
                         "Kommune: %s (kommunenr: %s) \n" +
                         "Kontakt arbeidsgiver for å avklare hva henvendelsen gjelder. Husk å registrere henvendelsen som aktivitetstype «Kontaktskjema» i Arena.",
