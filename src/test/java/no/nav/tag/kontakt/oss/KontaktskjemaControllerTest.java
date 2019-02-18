@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class KontaktskjemaControllerTest {
 
     private KontaktskjemaRepository repository = Mockito.mock(KontaktskjemaRepository.class);
-    private KontaktskjemaController kontaktskjemaController = new KontaktskjemaController(repository);
+    private KontaktskjemaController kontaktskjemaController = new KontaktskjemaController(repository, metrics);
 
     @Test
     public void skalLagreKontaktskjemaOk() {

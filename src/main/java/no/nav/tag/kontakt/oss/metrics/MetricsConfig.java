@@ -1,6 +1,5 @@
 package no.nav.tag.kontakt.oss.metrics;
 
-import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,17 +10,20 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 public class MetricsConfig {
 
-    private final MeterRegistry meterRegistry;
-    private final Counter testCounter;
+    private final Metrics metrics;
 
     @Autowired
     public MetricsConfig(MeterRegistry meterRegistry) {
-        this.meterRegistry = meterRegistry;
-        this.testCounter = meterRegistry.counter("test_test", "hei1", "yo1");
+        this.metrics = new Metrics(
+                meterRegistry.counter("mottatt_kontaktskjema_success"),
+                meterRegistry.counter("mottatt_kontaktskjema_fail"),
+                meterRegistry.counter("sendt_gsakoppgave_success"),
+                meterRegistry.counter("sendt_gsakoppgave_fail")
+        );
     }
 
     @Bean
-    public Counter testCounter() {
-        return testCounter;
+    public Metrics metrics() {
+        return this.metrics;
     }
 }

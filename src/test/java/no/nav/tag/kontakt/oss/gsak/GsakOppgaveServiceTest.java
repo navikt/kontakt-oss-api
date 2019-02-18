@@ -39,8 +39,8 @@ public class GsakOppgaveServiceTest {
                 dateProvider,
                 mock(GsakKlient.class),
                 mock(NavEnhetUtils.class),
-                featureToggles
-        );
+                featureToggles,
+                metrics);
 
         Kontaktskjema kontaktskjema = Kontaktskjema.builder().id(5).build();
         gsakOppgaveForSkjema.opprettOppgaveOgLagreStatus(kontaktskjema);
@@ -57,8 +57,8 @@ public class GsakOppgaveServiceTest {
                 dateProvider,
                 mock(GsakKlient.class),
                 mock(NavEnhetUtils.class),
-                featureToggles
-        );
+                featureToggles,
+                metrics);
         String orgnr = OrganisasjonsnummerCalculator.getOrganisasjonsnummerList(1).get(0).getValue();
         GsakRequest gsakRequest = gsakOppgaveForSkjema.lagGsakInnsending(new Kontaktskjema(1, null, null, "Kommune", "1234", "bedriftsnavn", orgnr, "fornavn", "etternavn", "epost", "123", "tema"));
         assertThat(gsakRequest.getOrgnr(), equalTo(orgnr));
@@ -72,8 +72,8 @@ public class GsakOppgaveServiceTest {
                 dateProvider,
                 mock(GsakKlient.class),
                 mock(NavEnhetUtils.class),
-                featureToggles
-        );
+                featureToggles,
+                metrics);
         
         GsakRequest gsakRequest = gsakOppgaveForSkjema.lagGsakInnsending(new Kontaktskjema(1, null, null, "Kommune", "1234", "bedriftsnavn", "123", "fornavn", "etternavn", "epost", "123", "tema"));
         assertThat(gsakRequest.getOrgnr(), equalTo(""));
@@ -88,8 +88,8 @@ public class GsakOppgaveServiceTest {
                 mock(DateProvider.class),
                 mock(GsakKlient.class),
                 mock(NavEnhetUtils.class),
-                featureToggles
-        );
+                featureToggles,
+                metrics);
 
         gsakOppgaveForSkjema.opprettOppgaveOgLagreStatus(Kontaktskjema.builder().build());
         verify(oppgaveRepository).save(eq(GsakOppgave.builder().gsakId(null).status(DISABLED).build()));
