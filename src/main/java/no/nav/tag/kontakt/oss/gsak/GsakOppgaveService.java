@@ -83,7 +83,7 @@ public class GsakOppgaveService {
         return new GsakRequest(
                 enhetsnr,
                 "9999",
-                isValid(kontaktskjema.getBedriftsnr()) ? kontaktskjema.getBedriftsnr() : "",
+                isValid(kontaktskjema.getOrgnr()) ? kontaktskjema.getOrgnr() : "",
                 lagBeskrivelse(kontaktskjema),
                 "ARBD",
                 "OPA",
@@ -98,12 +98,14 @@ public class GsakOppgaveService {
         return String.format(
                 "Kontaktskjema: Arbeidsgiver har sendt henvendelse gjennom Kontaktskjema; \n" +
                         "Tema: %s \n" +
+                        "Bedriftsnavn: %s \n" +
                         "Navn: %s \n" +
-                        "Nummer: %s \n" +
+                        "Telefonnr: %s \n" +
                         "E-post: %s \n" +
                         "Kommune: %s (kommunenr: %s) \n" +
                         "Kontakt arbeidsgiver for å avklare hva henvendelsen gjelder. Husk å registrere henvendelsen som aktivitetstype «Kontaktskjema» i Arena.",
                 kontaktskjema.getTema(),
+                kontaktskjema.getBedriftsnavn(),
                 kontaktskjema.getFornavn() + " " + kontaktskjema.getEtternavn(),
                 kontaktskjema.getTelefonnr(),
                 kontaktskjema.getEpost(),
