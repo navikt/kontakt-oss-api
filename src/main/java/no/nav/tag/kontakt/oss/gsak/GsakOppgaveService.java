@@ -83,7 +83,7 @@ public class GsakOppgaveService {
         return new GsakRequest(
                 enhetsnr,
                 "9999",
-                isValid(kontaktskjema.getBedriftsnr()) ? kontaktskjema.getBedriftsnr() : "",
+                isValid(kontaktskjema.getOrgnr()) ? kontaktskjema.getOrgnr() : "",
                 lagBeskrivelse(kontaktskjema),
                 "ARBD",
                 "OPA",
