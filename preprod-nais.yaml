@@ -27,4 +27,4 @@ spec:
       value: "true"
 prometheus:
   enabled: true
-  path: /kontakt-oss-api/internal/actuator/prometheus
+  path: /kontakt-oss-api/internal/actuator/metrics
