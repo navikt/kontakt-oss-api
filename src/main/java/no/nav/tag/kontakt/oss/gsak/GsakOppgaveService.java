@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.tag.kontakt.oss.DateProvider;
 import no.nav.tag.kontakt.oss.Kontaktskjema;
 import no.nav.tag.kontakt.oss.featureToggles.FeatureToggles;
+import no.nav.tag.kontakt.oss.metrics.Metrics;
 import no.nav.tag.kontakt.oss.navenhetsmapping.NavEnhetUtils;
 import no.nav.tag.kontakt.oss.gsak.GsakOppgave.OppgaveStatus;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakKlient;
@@ -29,6 +30,7 @@ public class GsakOppgaveService {
     private final GsakKlient gsakKlient;
     private final NavEnhetUtils enhetUtils;
     private final FeatureToggles featureToggles;
+    private final Metrics metrics;
 
     @Autowired
     public GsakOppgaveService(
@@ -36,12 +38,13 @@ public class GsakOppgaveService {
             DateProvider dateProvider,
             GsakKlient gsakKlient,
             NavEnhetUtils enhetUtils,
-            FeatureToggles featureToggles) {
+            FeatureToggles featureToggles, Metrics metrics) {
         this.oppgaveRepository = oppgaveRepository;
         this.dateProvider = dateProvider;
         this.gsakKlient = gsakKlient;
         this.enhetUtils = enhetUtils;
         this.featureToggles = featureToggles;
+        this.metrics = metrics;
     }
 
     @AllArgsConstructor
@@ -65,13 +68,17 @@ public class GsakOppgaveService {
 
     private Behandlingsresultat opprettOppgaveIGsak(Kontaktskjema kontaktskjema) {
         if (!this.featureToggles.isEnabled("gsak")) {
+            log.info("Opprettet ikke ny gsak-oppgave for kontaktskjema {}, tjenesten er togglet av.", kontaktskjema.getId());
             return new Behandlingsresultat(DISABLED, null);
         }
         try {
             Integer gsakId = gsakKlient.opprettGsakOppgave(lagGsakInnsending(kontaktskjema));
+            log.info("Opprettet ny gsak-oppgave med id {}", gsakId);
+            metrics.sendtGsakOppgave(true);
             return new Behandlingsresultat(OK, gsakId);
         } catch (Exception e) {
             log.error("Opprettelse av gsak-oppgave feilet for kontaktskjema {}.", kontaktskjema.getId(), e);
+            metrics.sendtGsakOppgave(false);
             return new Behandlingsresultat(FEILET, null);
         }
     }
