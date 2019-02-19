@@ -68,7 +68,7 @@ public class GsakOppgaveService {
 
     private Behandlingsresultat opprettOppgaveIGsak(Kontaktskjema kontaktskjema) {
         if (!this.featureToggles.isEnabled("gsak")) {
-            log.info("Opprettet ikke ny gsak-oppgave kontaktskjema {}, tjenesten er togglet av.", kontaktskjema.getId());
+            log.info("Opprettet ikke ny gsak-oppgave for kontaktskjema {}, tjenesten er togglet av.", kontaktskjema.getId());
             return new Behandlingsresultat(DISABLED, null);
         }
         try {

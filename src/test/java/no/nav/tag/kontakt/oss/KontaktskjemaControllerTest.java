@@ -49,7 +49,7 @@ public class KontaktskjemaControllerTest {
     }
 
     @Test
-    public void skalSendeMetrikkOmVellykketFeiletKontaktskjema() {
+    public void skalSendeMetrikkOmFeiletKontaktskjema() {
         KontaktskjemaRepository repository = mock(KontaktskjemaRepository.class);
         when(repository.save(any())).thenThrow(KontaktskjemaException.class);
         KontaktskjemaController kontaktskjemaController = new KontaktskjemaController(repository, metrics);
@@ -57,6 +57,4 @@ public class KontaktskjemaControllerTest {
         kontaktskjemaController.meldInteresse(kontaktskjema());
         verify(metrics, times(1)).mottattKontaktskjema(false);
     }
-
-
 }
