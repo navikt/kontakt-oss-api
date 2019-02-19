@@ -14,10 +14,10 @@ spec:
     - https://arbeidsgiver.nais.preprod.local/kontakt-oss-api/
   liveness:
     path: /kontakt-oss-api/internal/actuator/info
-    initialDelay: 40
+    initialDelay: 20
   readiness:
     path: /kontakt-oss-api/internal/actuator/info
-    initialDelay: 40
+    initialDelay: 20
   env:
     - name: SPRING_PROFILES_ACTIVE
       value: preprod
