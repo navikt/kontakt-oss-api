@@ -58,7 +58,7 @@ public class NorgKlient {
 
     public List<NorgOrganisering> hentOrganiseringFraNorg() {
         HttpHeaders headers = new HttpHeaders();
-        headers.set("X-Consumer-ID", "kontakt-oss-api");
+        headers.set("consumerId", "kontakt-oss-api");
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         ResponseEntity<String> jsonResponse = restTemplate.exchange(
