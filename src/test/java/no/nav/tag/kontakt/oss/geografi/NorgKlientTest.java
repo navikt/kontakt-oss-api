@@ -35,7 +35,7 @@ public class NorgKlientTest {
 
     @Test
     public void hentGeografiFraNorg__skal_oversette_til_riktig_objekt() throws JsonProcessingException {
-        NorgKlient.NorgGeografi geografi = new NorgKlient.NorgGeografi("navn", "term");
+        NorgGeografi geografi = new NorgGeografi("navn", "term");
 
         ResponseEntity<String> responseEntity = new ResponseEntity<>(
                 objectMapper.writeValueAsString(Collections.singletonList(geografi)),

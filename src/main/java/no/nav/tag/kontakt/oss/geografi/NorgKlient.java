@@ -2,7 +2,6 @@ package no.nav.tag.kontakt.oss.geografi;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.tag.kontakt.oss.KontaktskjemaException;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,6 +37,7 @@ public class NorgKlient {
 
         if (HttpStatus.OK.equals(jsonResponse.getStatusCode())) {
             return oversettTilNorgGeografi(jsonResponse);
+
         } else {
             throw new KontaktskjemaException("Kall til NORG returnerte ikke 200 OK. Returverdi: " + jsonResponse.getBody());
         }
@@ -51,12 +51,4 @@ public class NorgKlient {
         }
     }
 
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @EqualsAndHashCode
-    public static class NorgGeografi {
-        private String navn;
-        private String term;
-    }
 }
