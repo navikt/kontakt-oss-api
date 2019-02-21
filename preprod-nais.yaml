@@ -6,7 +6,7 @@ metadata:
   labels:
     team: teamtag
 spec:
-  image: navikt/kontakt-oss-api:TAG-297-bruk-norg_283
+  image: navikt/kontakt-oss-api:TAG-305-fylkesenheter_284
   team: teamtag
   port: 8080
   secrets: true

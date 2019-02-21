@@ -61,7 +61,7 @@ public class NorgKlient {
         headers.set("X-Consumer-ID", "kontakt-oss-api");
 
         ResponseEntity<String> jsonResponse = restTemplate.exchange(
-                norgUrl + "/enhet/kontaktinformasjon/organisering/all",
+                norgUrl + "/kodeverk/geografi", // "/enhet/kontaktinformasjon/organisering/all",
                 HttpMethod.GET,
                 new HttpEntity<>(headers),
                 String.class
