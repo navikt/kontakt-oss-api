@@ -1,10 +1,12 @@
 package no.nav.tag.kontakt.oss.geografi;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+@EqualsAndHashCode
 @Getter
 public class Geografi {
     private Map<String, List<KommuneEllerBydel>> geografiMap;
@@ -27,12 +29,14 @@ public class Geografi {
 
     private List<KommuneEllerBydel> hentKommunerOgBydeler(List<NorgGeografi> norgGeografiListe, String fylkesnummer) {
         List<Kommune> kommuner = norgGeografiListe.stream()
+                .filter(this::harIkkeNull)
                 .filter(norgGeo -> erKommunenr(norgGeo.getNavn()))
                 .filter(norgGeo -> norgGeo.getNavn().startsWith(fylkesnummer))
                 .map(norgGeo -> new Kommune(norgGeo.getNavn(), norgGeo.getTerm()))
                 .collect(Collectors.toList());
 
         List<Bydel> bydeler = norgGeografiListe.stream()
+                .filter(this::harIkkeNull)
                 .filter(norgGeo -> erBydelsnr(norgGeo.getNavn()))
                 .filter(norgGeo -> norgGeo.getNavn().startsWith(fylkesnummer))
                 .map(norgGeo -> new Bydel(norgGeo.getNavn(), norgGeo.getTerm()))
@@ -69,7 +73,7 @@ public class Geografi {
     }
 
     private boolean harIkkeNull(NorgGeografi norgGeografi) {
-        return norgGeografi.getNavn() == null || norgGeografi.getTerm() == null;
+        return norgGeografi.getNavn() != null && norgGeografi.getTerm() != null;
     }
 
     private boolean erFylkesnr(String str) {

@@ -4,8 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 public class GeografiController {
 
@@ -17,7 +15,7 @@ public class GeografiController {
     }
 
     @GetMapping(value = "${controller.basepath}/geografi")
-    public List<NorgGeografi> geografi() {
+    public Geografi geografi() {
         // TODO TAG-298 Raffiner denne dataen
         return norgKlient.hentGeografiFraNorg();
     }

@@ -42,7 +42,7 @@ public class NorgKlientTest {
                 HttpStatus.OK
         );
         when(restTemplate.getForEntity(anyString(), eq(String.class))).thenReturn(responseEntity);
-        assertThat(norgKlient.hentGeografiFraNorg()).isEqualTo(Collections.singletonList(geografi));
+        assertThat(norgKlient.hentGeografiFraNorg()).isEqualTo(new Geografi(Collections.singletonList(geografi)));
     }
 
     @Test(expected = KontaktskjemaException.class)
