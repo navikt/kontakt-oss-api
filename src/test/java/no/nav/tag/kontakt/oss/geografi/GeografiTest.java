@@ -111,8 +111,8 @@ public class GeografiTest {
         );
         List<KommuneEllerBydel> kommunerTilhoerendeFylke = new Geografi(norgGeografi).getGeografiMap().get("01");
         assertThat(kommunerTilhoerendeFylke).contains(
-                new Kommune("010101", "kommune–bydel1"),
-                new Kommune("010102", "kommune–bydel2")
+                new Bydel("010101", "kommune–bydel1"),
+                new Bydel("010102", "kommune–bydel2")
         );
     }
 
