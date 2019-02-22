@@ -6,7 +6,7 @@ metadata:
   labels:
     team: teamtag
 spec:
-  image: navikt/kontakt-oss-api:latest
+  image: navikt/kontakt-oss-api:TAG-297-bruk-norg_280
   team: teamtag
   port: 8080
   secrets: true
@@ -23,6 +23,8 @@ spec:
       value: preprod
     - name: GSAK_URL
       value: https://oppgave.nais.preprod.local/api/v1/oppgaver
+    - name: NORG_URL
+      value: https://app-q0.adeo.no/norg2/api/v1
     - name: ENABLE_GSAK
       value: "true"
   prometheus:
