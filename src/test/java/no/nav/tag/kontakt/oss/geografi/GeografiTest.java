@@ -20,8 +20,8 @@ public class GeografiTest {
                 new NorgGeografi("0202", "kommune2.2")
 
         );
-        List<KommuneEllerBydel> kommunerTilhoerendeFylke1 = new Geografi(norgGeografi).getGeografiMap().get("01");
-        List<KommuneEllerBydel> kommunerTilhoerendeFylke2 = new Geografi(norgGeografi).getGeografiMap().get("02");
+        List<KommuneEllerBydel> kommunerTilhoerendeFylke1 = new FylkesinndelingMedNavenheter(norgGeografi).getGeografiMap().get("01");
+        List<KommuneEllerBydel> kommunerTilhoerendeFylke2 = new FylkesinndelingMedNavenheter(norgGeografi).getGeografiMap().get("02");
         assertThat(kommunerTilhoerendeFylke1).contains(
                 new Kommune("0101", "kommune1.1"),
                 new Kommune("0102", "kommune1.2")
@@ -41,7 +41,7 @@ public class GeografiTest {
                 new NorgGeografi("0101", "en kommune"),
                 new NorgGeografi("0201", "en annen kommune")
         );
-        List<KommuneEllerBydel> kommunerTilhoerendeFylke = new Geografi(norgGeografi).getGeografiMap().get("01");
+        List<KommuneEllerBydel> kommunerTilhoerendeFylke = new FylkesinndelingMedNavenheter(norgGeografi).getGeografiMap().get("01");
         assertThat(kommunerTilhoerendeFylke).isEqualTo(Collections.singletonList(new Kommune("0101", "en kommune")));
     }
 
@@ -53,7 +53,7 @@ public class GeografiTest {
                 new NorgGeografi("010101", "bydel1"),
                 new NorgGeografi("020101", "bydel2")
         );
-        List<KommuneEllerBydel> kommunerTilhoerendeFylke = new Geografi(norgGeografi).getGeografiMap().get("01");
+        List<KommuneEllerBydel> kommunerTilhoerendeFylke = new FylkesinndelingMedNavenheter(norgGeografi).getGeografiMap().get("01");
         assertThat(kommunerTilhoerendeFylke).contains(new Bydel("010101", "kommune–bydel1"));
         assertThat(kommunerTilhoerendeFylke).doesNotContain(new Bydel("020101", "kommune–bydel2"));
     }
@@ -66,7 +66,7 @@ public class GeografiTest {
                 new NorgGeografi(null, "blabla"),
                 new NorgGeografi(null, null)
         );
-        List<KommuneEllerBydel> kommunerOgBydeler = hentAlleKommunerOgBydeler(new Geografi(norgGeografi));
+        List<KommuneEllerBydel> kommunerOgBydeler = hentAlleKommunerOgBydeler(new FylkesinndelingMedNavenheter(norgGeografi));
         assertThat(kommunerOgBydeler).isEmpty();
     }
 
@@ -76,7 +76,7 @@ public class GeografiTest {
                 new NorgGeografi("01", "et fylke"),
                 new NorgGeografi("0101a", "kommune")
         );
-        List<KommuneEllerBydel> kommunerOgBydeler = hentAlleKommunerOgBydeler(new Geografi(norgGeografi));
+        List<KommuneEllerBydel> kommunerOgBydeler = hentAlleKommunerOgBydeler(new FylkesinndelingMedNavenheter(norgGeografi));
         assertThat(kommunerOgBydeler).isEmpty();
     }
 
@@ -86,7 +86,7 @@ public class GeografiTest {
                 new NorgGeografi("01", "et fylke"),
                 new NorgGeografi("010", "kommune")
         );
-        List<KommuneEllerBydel> kommunerOgBydeler = hentAlleKommunerOgBydeler(new Geografi(norgGeografi));
+        List<KommuneEllerBydel> kommunerOgBydeler = hentAlleKommunerOgBydeler(new FylkesinndelingMedNavenheter(norgGeografi));
         assertThat(kommunerOgBydeler).isEmpty();
     }
 
@@ -97,7 +97,7 @@ public class GeografiTest {
                 new NorgGeografi("0101", "kommune"),
                 new NorgGeografi("010101", "bydel")
         );
-        List<KommuneEllerBydel> kommunerOgBydeler = hentAlleKommunerOgBydeler(new Geografi(norgGeografi));
+        List<KommuneEllerBydel> kommunerOgBydeler = hentAlleKommunerOgBydeler(new FylkesinndelingMedNavenheter(norgGeografi));
         assertThat(kommunerOgBydeler).doesNotContain(new Kommune("0101", "kommune"));
     }
 
@@ -109,14 +109,14 @@ public class GeografiTest {
                 new NorgGeografi("010101", "bydel1"),
                 new NorgGeografi("010102", "bydel2")
         );
-        List<KommuneEllerBydel> kommunerTilhoerendeFylke = new Geografi(norgGeografi).getGeografiMap().get("01");
+        List<KommuneEllerBydel> kommunerTilhoerendeFylke = new FylkesinndelingMedNavenheter(norgGeografi).getGeografiMap().get("01");
         assertThat(kommunerTilhoerendeFylke).contains(
                 new Bydel("010101", "kommune–bydel1"),
                 new Bydel("010102", "kommune–bydel2")
         );
     }
 
-    private List<KommuneEllerBydel> hentAlleKommunerOgBydeler(Geografi geografi) {
+    private List<KommuneEllerBydel> hentAlleKommunerOgBydeler(FylkesinndelingMedNavenheter geografi) {
         List<KommuneEllerBydel> alleKommunerOgBydeler = new ArrayList<>();
         geografi.getGeografiMap().forEach((fylkesnr, kommunerOgBydeler) -> alleKommunerOgBydeler.addAll(kommunerOgBydeler));
         return alleKommunerOgBydeler;

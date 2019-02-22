@@ -8,10 +8,10 @@ import java.util.stream.Collectors;
 
 @EqualsAndHashCode
 @Getter
-public class Geografi {
+public class FylkesinndelingMedNavenheter {
     private Map<String, List<KommuneEllerBydel>> geografiMap;
 
-    public Geografi(List<NorgGeografi> norgGeografi) {
+    public FylkesinndelingMedNavenheter(List<NorgGeografi> norgGeografi) {
         Map<String, List<KommuneEllerBydel>> geografiMap = new HashMap<>();
         // TODO TAG-305 Første key skal være fylkesenhet, ikke fylkesnr.
         hentFylkesnumre(norgGeografi).forEach(fylkesnummer ->
