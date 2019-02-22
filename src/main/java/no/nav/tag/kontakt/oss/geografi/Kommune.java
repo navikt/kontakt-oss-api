@@ -1,7 +1,13 @@
 package no.nav.tag.kontakt.oss.geografi;
 
-public class Kommune extends KommuneEllerBydel {
-    public Kommune(String nummer, String navn) {
-        super(nummer, navn);
-    }
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+
+@EqualsAndHashCode
+@AllArgsConstructor
+@Getter
+public class Kommune implements KommuneEllerBydel {
+    private String nummer;
+    private String navn;
 }

@@ -17,7 +17,7 @@ public class GeografiController {
     }
 
     @GetMapping(value = "${controller.basepath}/geografi")
-    public Geografi geografi() {
+    public FylkesinndelingMedNavenheter geografi() {
         // TODO TAG-298 Raffiner denne dataen
         return norgKlient.hentGeografiFraNorg();
     }

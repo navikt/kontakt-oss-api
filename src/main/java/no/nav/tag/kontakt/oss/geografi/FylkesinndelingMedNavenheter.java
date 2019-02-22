@@ -8,13 +8,14 @@ import java.util.stream.Collectors;
 
 @EqualsAndHashCode
 @Getter
-public class Geografi {
+public class FylkesinndelingMedNavenheter {
     private Map<String, List<KommuneEllerBydel>> geografiMap;
 
-    public Geografi(List<NorgGeografi> norgGeografi) {
+    public FylkesinndelingMedNavenheter(List<NorgGeografi> norgGeografi) {
         Map<String, List<KommuneEllerBydel>> geografiMap = new HashMap<>();
+        // TODO TAG-305 Første key skal være fylkesenhet, ikke fylkesnr.
         hentFylkesnumre(norgGeografi).forEach(fylkesnummer ->
-                geografiMap.put(fylkesnummer, hentKommunerOgBydeler(norgGeografi, fylkesnummer))
+                geografiMap.put(fylkesnummer, hentKommunerOgBydeler(fylkesnummer, norgGeografi))
         );
         this.geografiMap = geografiMap;
     }
@@ -27,7 +28,7 @@ public class Geografi {
                 .collect(Collectors.toList());
     }
 
-    private List<KommuneEllerBydel> hentKommunerOgBydeler(List<NorgGeografi> norgGeografiListe, String fylkesnummer) {
+    private List<KommuneEllerBydel> hentKommunerOgBydeler(String fylkesnummer, List<NorgGeografi> norgGeografiListe) {
         List<Kommune> kommuner = norgGeografiListe.stream()
                 .filter(this::harIkkeNull)
                 .filter(norgGeo -> erKommunenr(norgGeo.getNavn()))
@@ -51,7 +52,7 @@ public class Geografi {
 
         bydeler.forEach(bydel -> {
             String bydelensKommunenr = bydel.getNummer().substring(0, 4);
-            Optional<Kommune> kommune = finnKommune(kommuner, bydelensKommunenr);
+            Optional<Kommune> kommune = finnKommune(bydelensKommunenr, kommuner);
             if (kommune.isPresent()) {
                 Bydel bydelMedOppdatertNavn = new Bydel(bydel.getNummer(), kommune.get().getNavn() + "–" + bydel.getNavn());
                 kommunerOgBydeler.add(bydelMedOppdatertNavn);
@@ -59,14 +60,15 @@ public class Geografi {
             }
         });
 
-        List<KommuneEllerBydel> kommunerUtenBydeler = new ArrayList<>(kommuner);
-        kommunerSomHarBydeler.forEach(kommunerUtenBydeler::remove);
+        List<KommuneEllerBydel> kommunerUtenBydeler = new ArrayList<>(kommuner).stream()
+                .filter(kommune -> !kommunerSomHarBydeler.contains(kommune))
+                .collect(Collectors.toList());
         kommunerOgBydeler.addAll(kommunerUtenBydeler);
 
         return kommunerOgBydeler;
     }
 
-    private Optional<Kommune> finnKommune(List<Kommune> kommuner, String kommunenummer) {
+    private Optional<Kommune> finnKommune(String kommunenummer, List<Kommune> kommuner) {
         return kommuner.stream()
                 .filter(kommune -> kommune.getNummer().equals(kommunenummer))
                 .findFirst();
