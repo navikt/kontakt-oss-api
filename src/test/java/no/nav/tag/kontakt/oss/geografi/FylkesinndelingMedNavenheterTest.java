@@ -10,8 +10,10 @@ import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class GeografiTest {
+public class FylkesinndelingMedNavenheterTest {
 
+    /*
+    TODO TAG-298 Disse testene er fremdeles relevante, men skal gjøres med fylkesenhet i stedet for geografiske fylker.
     @Test
     public void geografi__skal_handtere_flere_fylker() {
         List<NorgGeografi> norgGeografi = Arrays.asList(
@@ -61,6 +63,7 @@ public class GeografiTest {
         assertThat(kommunerTilhoerendeFylke).contains(new Bydel("010101", "kommune–bydel1"));
         assertThat(kommunerTilhoerendeFylke).doesNotContain(new Bydel("020101", "kommune–bydel2"));
     }
+    */
 
     @Test
     public void geografi__skal_ikke_ta_med_kommuner_med_null() {
@@ -113,7 +116,7 @@ public class GeografiTest {
                 new NorgGeografi("010101", "bydel1"),
                 new NorgGeografi("010102", "bydel2")
         );
-        List<KommuneEllerBydel> kommunerTilhoerendeFylke = new FylkesinndelingMedNavenheter(norgGeografi).getGeografiMap().get("01");
+        List<KommuneEllerBydel> kommunerTilhoerendeFylke = new FylkesinndelingMedNavenheter(norgGeografi).getGeografiMap().get("alle");
         assertThat(kommunerTilhoerendeFylke).contains(
                 new Bydel("010101", "kommune–bydel1"),
                 new Bydel("010102", "kommune–bydel2")
