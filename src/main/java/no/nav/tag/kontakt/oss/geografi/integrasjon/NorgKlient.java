@@ -110,9 +110,13 @@ public class NorgKlient {
         );
 
         if (HttpStatus.OK.equals(jsonResponse.getStatusCode())) {
-            return oversettTilEnhetsnr(jsonResponse);
+            String enhetsnr = oversettTilEnhetsnr(jsonResponse);
+            log.info("Funnet tilhørende enhetsnr {} for kommune/bydel {}", enhetsnr, kommunenrEllerBydelsnr);
+            return enhetsnr;
         } else {
-            throw new KontaktskjemaException("Kall til NORG returnerte ikke 200 OK. Returverdi: " + jsonResponse.getBody());
+            throw new KontaktskjemaException(
+                    "Kall til NORG for bydel/fylke " + kommunenrEllerBydelsnr + " returnerte ikke 200 OK. Returverdi: " + jsonResponse.getBody()
+            );
         }
     }
 
