@@ -6,7 +6,7 @@ metadata:
   labels:
     team: teamtag
 spec:
-  image: navikt/kontakt-oss-api:TAG-305-fylkesenheter_286
+  image: navikt/kontakt-oss-api:latest
   team: teamtag
   port: 8080
   secrets: true
