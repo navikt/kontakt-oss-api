@@ -1,5 +1,9 @@
 package no.nav.tag.kontakt.oss.geografi;
 
+import no.nav.tag.kontakt.oss.geografi.integrasjon.Bydel;
+import no.nav.tag.kontakt.oss.geografi.integrasjon.Kommune;
+import no.nav.tag.kontakt.oss.geografi.integrasjon.KommuneEllerBydel;
+import no.nav.tag.kontakt.oss.geografi.integrasjon.NorgGeografi;
 import org.junit.Test;
 
 import java.util.*;
