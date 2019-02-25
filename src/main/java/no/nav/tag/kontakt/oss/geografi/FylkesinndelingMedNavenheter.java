@@ -2,6 +2,10 @@ package no.nav.tag.kontakt.oss.geografi;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import no.nav.tag.kontakt.oss.geografi.integrasjon.Bydel;
+import no.nav.tag.kontakt.oss.geografi.integrasjon.Kommune;
+import no.nav.tag.kontakt.oss.geografi.integrasjon.KommuneEllerBydel;
+import no.nav.tag.kontakt.oss.geografi.integrasjon.NorgGeografi;
 
 import java.util.*;
 import java.util.stream.Collectors;

@@ -1,9 +1,10 @@
 package no.nav.tag.kontakt.oss.geografi;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import no.nav.tag.kontakt.oss.KontaktskjemaException;
+import no.nav.tag.kontakt.oss.geografi.integrasjon.NorgGeografi;
+import no.nav.tag.kontakt.oss.geografi.integrasjon.NorgKlient;
 import org.apache.commons.io.IOUtils;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;

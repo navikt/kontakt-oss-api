@@ -1,10 +1,11 @@
 package no.nav.tag.kontakt.oss.geografi;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import no.nav.tag.kontakt.oss.geografi.integrasjon.Bydel;
+import no.nav.tag.kontakt.oss.geografi.integrasjon.Kommune;
+import no.nav.tag.kontakt.oss.geografi.integrasjon.KommuneEllerBydel;
+import no.nav.tag.kontakt.oss.geografi.integrasjon.NorgGeografi;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;

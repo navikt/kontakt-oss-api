@@ -1,4 +1,4 @@
-package no.nav.tag.kontakt.oss.geografi;
+package no.nav.tag.kontakt.oss.geografi.integrasjon;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
