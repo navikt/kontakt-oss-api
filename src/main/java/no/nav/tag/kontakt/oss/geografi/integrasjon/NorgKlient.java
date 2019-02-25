@@ -9,10 +9,13 @@ import no.nav.tag.kontakt.oss.geografi.FylkesinndelingMedNavenheter;
 import no.nav.tag.kontakt.oss.geografi.NorgOrganisering;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
+import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +33,7 @@ public class NorgKlient {
             RestTemplate restTemplate,
             @Value("${NORG_URL:default}") String norgUrl
     ) {
+        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
         this.restTemplate = restTemplate;
         this.norgUrl = norgUrl;
     }
@@ -125,6 +129,18 @@ public class NorgKlient {
             return objectMapper.readTree(jsonResponse.getBody()).get("enhetNr").textValue();
         } catch (IOException e) {
             throw new KontaktskjemaException("Returverdi fra NORG er ikke riktig formatert JSON, eller passer ikke med vår modell. Returverdi: " + jsonResponse.getBody());
+        }
+    }
+
+    private static class RestTemplateErrorHandler implements ResponseErrorHandler {
+        @Override
+        public boolean hasError(ClientHttpResponse clientHttpResponse) throws IOException {
+            // Vi håndterer errors direkte i koden foreløpig.
+            return false;
+        }
+
+        @Override
+        public void handleError(ClientHttpResponse clientHttpResponse) throws IOException {
         }
     }
 
