@@ -23,6 +23,7 @@ public class GeografiController {
     }
 
     @GetMapping(value = "${controller.basepath}/organisering")
+    // TODO TAG-298 Raffiner denne dataen
     public List<NorgKlient.NorgOrganisering> organisering() {
         return norgKlient.hentOrganiseringFraNorg();
     }

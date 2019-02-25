@@ -13,7 +13,7 @@ public class FylkesinndelingMedNavenheter {
 
     public FylkesinndelingMedNavenheter(List<NorgGeografi> norgGeografi) {
         Map<String, List<KommuneEllerBydel>> geografiMap = new HashMap<>();
-        // TODO TAG-305 Første key skal være fylkesenhet, ikke fylkesnr.
+        // TODO TAG-298 Første key skal være fylkesenhet, ikke fylkesnr.
         hentFylkesnumre(norgGeografi).forEach(fylkesnummer ->
                 geografiMap.put(fylkesnummer, hentKommunerOgBydeler(fylkesnummer, norgGeografi))
         );
