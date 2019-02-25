@@ -1,8 +1,6 @@
 package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon;
 
-import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.Bydel;
-import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.Kommune;
-import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.KommuneEllerBydel;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.*;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -19,11 +17,16 @@ public class NorgService {
         this.norgKlient = norgKlient;
     }
 
-    public List<NorgOrganisering> hentMapMellomNavenhetOgFylkesenhet() {
-        return norgKlient.hentOrganiseringFraNorg();
+    public Map<NavEnhet, NavFylkesenhet> hentMapMellomNavenhetOgFylkesenhet() {
+        return norgKlient.hentOrganiseringFraNorg().stream()
+                .filter(norgOrganisering -> "Aktiv".equals(norgOrganisering.getStatus()))
+                .collect(Collectors.toMap(
+                        norgOrganisering -> new NavEnhet(norgOrganisering.getEnhetNr()),
+                        norgOrganisering -> new NavFylkesenhet(norgOrganisering.getOverordnetEnhet())
+                ));
     }
 
-    public Map<KommuneEllerBydel, String> hentMapFraKommuneEllerBydelTilNavenhet(
+    public Map<KommuneEllerBydel, NavEnhet> hentMapFraKommuneEllerBydelTilNavenhet(
             List<KommuneEllerBydel> kommunerOgBydeler
     ) {
         return norgKlient.hentMapFraKommuneEllerBydelTilNavenhet(kommunerOgBydeler);

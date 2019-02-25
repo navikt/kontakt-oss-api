@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.tag.kontakt.oss.KontaktskjemaException;
 import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.KommuneEllerBydel;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.NavEnhet;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.http.client.ClientHttpResponse;
@@ -93,18 +94,18 @@ public class NorgKlient {
         }
     }
 
-    public Map<KommuneEllerBydel, String> hentMapFraKommuneEllerBydelTilNavenhet(List<KommuneEllerBydel> kommunerOgBydeler) {
-        Map<KommuneEllerBydel, String> map = new HashMap<>();
+    public Map<KommuneEllerBydel, NavEnhet> hentMapFraKommuneEllerBydelTilNavenhet(List<KommuneEllerBydel> kommunerOgBydeler) {
+        Map<KommuneEllerBydel, NavEnhet> map = new HashMap<>();
 
         for (KommuneEllerBydel kommuneEllerBydel : kommunerOgBydeler) {
-            Optional<String> enhetsnrOptional = hentTilhoerendeNavenhet(kommuneEllerBydel.getNummer());
+            Optional<NavEnhet> enhetsnrOptional = hentTilhoerendeNavenhet(kommuneEllerBydel.getNummer());
             enhetsnrOptional.ifPresent(enhetsnr -> map.put(kommuneEllerBydel, enhetsnr));
         }
 
         return map;
     }
 
-    public Optional<String> hentTilhoerendeNavenhet(String kommunenrEllerBydelsnr) {
+    public Optional<NavEnhet> hentTilhoerendeNavenhet(String kommunenrEllerBydelsnr) {
         ResponseEntity<String> jsonResponse = restTemplate.getForEntity(
                 norgUrl + "/enhet/navkontor/" + kommunenrEllerBydelsnr,
                 String.class
@@ -114,7 +115,7 @@ public class NorgKlient {
             case OK:
                 String enhetsnr = oversettTilEnhetsnr(jsonResponse);
                 log.info("Funnet tilhørende enhetsnr {} for kommune/bydel {}", enhetsnr, kommunenrEllerBydelsnr);
-                return Optional.of(enhetsnr);
+                return Optional.of(new NavEnhet(enhetsnr));
             case NOT_FOUND:
                 log.info("Fant ikke tilhørende enhetsnr for kommune/bydel {}", kommunenrEllerBydelsnr);
                 return Optional.empty();

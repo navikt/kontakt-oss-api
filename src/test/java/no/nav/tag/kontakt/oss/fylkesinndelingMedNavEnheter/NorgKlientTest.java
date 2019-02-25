@@ -120,7 +120,7 @@ public class NorgKlientTest {
         String jsonResponse = "{\"enhetNr\": \"4444\"}";
         ResponseEntity<String> responseEntity = new ResponseEntity<>(jsonResponse, HttpStatus.OK);
         when(restTemplate.getForEntity(anyString(), eq(String.class))).thenReturn(responseEntity);
-        assertThat(norgKlient.hentTilhoerendeNavenhet("1111").get()).isEqualTo("4444");
+        assertThat(norgKlient.hentTilhoerendeNavenhet("1111").get()).isEqualTo(new NavEnhet("4444"));
     }
 
     @Test
