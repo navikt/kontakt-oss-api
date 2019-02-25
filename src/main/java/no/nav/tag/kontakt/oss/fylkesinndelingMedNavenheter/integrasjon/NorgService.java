@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -13,6 +14,16 @@ public class NorgService {
 
     public NorgService(NorgKlient norgKlient) {
         this.norgKlient = norgKlient;
+    }
+
+    public List<NorgOrganisering> hentMapMellomNavenhetOgFylkesenhet() {
+        return norgKlient.hentOrganiseringFraNorg();
+    }
+
+    public Map<KommuneEllerBydel, String> hentMapFraKommuneEllerBydelTilNavenhet(
+            List<KommuneEllerBydel> kommunerOgBydeler
+    ) {
+        return norgKlient.hentMapFraKommuneEllerBydelTilNavenhet(kommunerOgBydeler);
     }
 
     public List<KommuneEllerBydel> hentListeOverAlleKommunerOgBydeler() {
