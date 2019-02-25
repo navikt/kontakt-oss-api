@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.tag.kontakt.oss.KontaktskjemaException;
 import no.nav.tag.kontakt.oss.geografi.FylkesinndelingMedNavenheter;
-import no.nav.tag.kontakt.oss.geografi.NorgOrganisering;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.http.client.ClientHttpResponse;
@@ -15,9 +14,7 @@ import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service

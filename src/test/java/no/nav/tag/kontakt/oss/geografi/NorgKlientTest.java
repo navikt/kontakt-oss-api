@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import no.nav.tag.kontakt.oss.KontaktskjemaException;
 import no.nav.tag.kontakt.oss.geografi.integrasjon.NorgGeografi;
 import no.nav.tag.kontakt.oss.geografi.integrasjon.NorgKlient;
+import no.nav.tag.kontakt.oss.geografi.integrasjon.NorgOrganisering;
 import org.apache.commons.io.IOUtils;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;

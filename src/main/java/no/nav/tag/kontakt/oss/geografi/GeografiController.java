@@ -2,6 +2,7 @@ package no.nav.tag.kontakt.oss.geografi;
 
 import no.nav.tag.kontakt.oss.geografi.integrasjon.KommuneEllerBydel;
 import no.nav.tag.kontakt.oss.geografi.integrasjon.NorgKlient;
+import no.nav.tag.kontakt.oss.geografi.integrasjon.NorgOrganisering;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
