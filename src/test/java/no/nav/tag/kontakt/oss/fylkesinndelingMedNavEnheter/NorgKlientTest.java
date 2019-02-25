@@ -1,11 +1,11 @@
-package no.nav.tag.kontakt.oss.fylkesinndelingMedNavenheter;
+package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import no.nav.tag.kontakt.oss.KontaktskjemaException;
-import no.nav.tag.kontakt.oss.fylkesinndelingMedNavenheter.integrasjon.NorgGeografi;
-import no.nav.tag.kontakt.oss.fylkesinndelingMedNavenheter.integrasjon.NorgKlient;
-import no.nav.tag.kontakt.oss.fylkesinndelingMedNavenheter.integrasjon.NorgOrganisering;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.NorgGeografi;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.NorgKlient;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.NorgOrganisering;
 import org.apache.commons.io.IOUtils;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;

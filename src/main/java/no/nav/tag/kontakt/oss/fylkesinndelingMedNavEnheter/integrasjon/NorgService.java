@@ -1,5 +1,8 @@
-package no.nav.tag.kontakt.oss.fylkesinndelingMedNavenheter.integrasjon;
+package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon;
 
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.Bydel;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.Kommune;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.KommuneEllerBydel;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

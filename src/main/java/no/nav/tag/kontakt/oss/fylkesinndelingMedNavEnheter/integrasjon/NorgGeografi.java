@@ -1,4 +1,4 @@
-package no.nav.tag.kontakt.oss.fylkesinndelingMedNavenheter.integrasjon;
+package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,6 +1,6 @@
-package no.nav.tag.kontakt.oss.fylkesinndelingMedNavenheter;
+package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter;
 
-import no.nav.tag.kontakt.oss.fylkesinndelingMedNavenheter.integrasjon.NorgService;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.NorgService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 

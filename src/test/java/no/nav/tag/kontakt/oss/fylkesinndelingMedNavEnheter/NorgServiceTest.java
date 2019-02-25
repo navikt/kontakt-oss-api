@@ -1,6 +1,6 @@
-package no.nav.tag.kontakt.oss.fylkesinndelingMedNavenheter;
+package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter;
 
-import no.nav.tag.kontakt.oss.fylkesinndelingMedNavenheter.integrasjon.*;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
