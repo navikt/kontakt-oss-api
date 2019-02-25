@@ -1,4 +1,4 @@
-package no.nav.tag.kontakt.oss.geografi.integrasjon;
+package no.nav.tag.kontakt.oss.fylkesinndelingMedNavenheter.integrasjon;
 
 public interface KommuneEllerBydel {
     String getNummer();

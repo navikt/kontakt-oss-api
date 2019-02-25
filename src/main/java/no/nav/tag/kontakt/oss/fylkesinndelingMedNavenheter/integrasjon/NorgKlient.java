@@ -1,11 +1,10 @@
-package no.nav.tag.kontakt.oss.geografi.integrasjon;
+package no.nav.tag.kontakt.oss.fylkesinndelingMedNavenheter.integrasjon;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.tag.kontakt.oss.KontaktskjemaException;
-import no.nav.tag.kontakt.oss.geografi.FylkesinndelingMedNavenheter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.http.client.ClientHttpResponse;
@@ -33,14 +32,14 @@ public class NorgKlient {
         this.norgUrl = norgUrl;
     }
 
-    public FylkesinndelingMedNavenheter hentGeografiFraNorg() {
+    public NorgService hentGeografiFraNorg() {
         ResponseEntity<String> jsonResponse = restTemplate.getForEntity(
                 norgUrl + "/kodeverk/geografi",
                 String.class
         );
 
         if (HttpStatus.OK.equals(jsonResponse.getStatusCode())) {
-            return new FylkesinndelingMedNavenheter(oversettTilNorgGeografi(jsonResponse));
+            return new NorgService(oversettTilNorgGeografi(jsonResponse));
         } else {
             throw new KontaktskjemaException("Kall til NORG returnerte ikke 200 OK. Returverdi: " + jsonResponse.getBody());
         }

@@ -1,11 +1,12 @@
-package no.nav.tag.kontakt.oss.geografi;
+package no.nav.tag.kontakt.oss.fylkesinndelingMedNavenheter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import no.nav.tag.kontakt.oss.KontaktskjemaException;
-import no.nav.tag.kontakt.oss.geografi.integrasjon.NorgGeografi;
-import no.nav.tag.kontakt.oss.geografi.integrasjon.NorgKlient;
-import no.nav.tag.kontakt.oss.geografi.integrasjon.NorgOrganisering;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavenheter.integrasjon.NorgGeografi;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavenheter.integrasjon.NorgKlient;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavenheter.integrasjon.NorgOrganisering;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavenheter.integrasjon.NorgService;
 import org.apache.commons.io.IOUtils;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
@@ -55,7 +56,7 @@ public class NorgKlientTest {
                 HttpStatus.OK
         );
         when(restTemplate.getForEntity(anyString(), eq(String.class))).thenReturn(responseEntity);
-        assertThat(norgKlient.hentGeografiFraNorg()).isEqualTo(new FylkesinndelingMedNavenheter(Collections.singletonList(geografi)));
+        assertThat(norgKlient.hentGeografiFraNorg()).isEqualTo(new NorgService(Collections.singletonList(geografi)));
     }
 
     @Test(expected = KontaktskjemaException.class)

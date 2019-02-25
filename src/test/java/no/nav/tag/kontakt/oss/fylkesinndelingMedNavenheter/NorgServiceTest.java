@@ -1,16 +1,13 @@
-package no.nav.tag.kontakt.oss.geografi;
+package no.nav.tag.kontakt.oss.fylkesinndelingMedNavenheter;
 
-import no.nav.tag.kontakt.oss.geografi.integrasjon.Bydel;
-import no.nav.tag.kontakt.oss.geografi.integrasjon.Kommune;
-import no.nav.tag.kontakt.oss.geografi.integrasjon.KommuneEllerBydel;
-import no.nav.tag.kontakt.oss.geografi.integrasjon.NorgGeografi;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavenheter.integrasjon.*;
 import org.junit.Test;
 
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class FylkesinndelingMedNavenheterTest {
+public class NorgServiceTest {
 
     /*
     TODO TAG-298 Disse testene er fremdeles relevante, men skal gjøres med fylkesenhet i stedet for geografiske fylker.
@@ -73,7 +70,7 @@ public class FylkesinndelingMedNavenheterTest {
                 new NorgGeografi(null, "blabla"),
                 new NorgGeografi(null, null)
         );
-        List<KommuneEllerBydel> kommunerOgBydeler = hentAlleKommunerOgBydeler(new FylkesinndelingMedNavenheter(norgGeografi));
+        List<KommuneEllerBydel> kommunerOgBydeler = hentAlleKommunerOgBydeler(new NorgService(norgGeografi));
         assertThat(kommunerOgBydeler).isEmpty();
     }
 
@@ -83,7 +80,7 @@ public class FylkesinndelingMedNavenheterTest {
                 new NorgGeografi("01", "et fylke"),
                 new NorgGeografi("0101a", "kommune")
         );
-        List<KommuneEllerBydel> kommunerOgBydeler = hentAlleKommunerOgBydeler(new FylkesinndelingMedNavenheter(norgGeografi));
+        List<KommuneEllerBydel> kommunerOgBydeler = hentAlleKommunerOgBydeler(new NorgService(norgGeografi));
         assertThat(kommunerOgBydeler).isEmpty();
     }
 
@@ -93,7 +90,7 @@ public class FylkesinndelingMedNavenheterTest {
                 new NorgGeografi("01", "et fylke"),
                 new NorgGeografi("010", "kommune")
         );
-        List<KommuneEllerBydel> kommunerOgBydeler = hentAlleKommunerOgBydeler(new FylkesinndelingMedNavenheter(norgGeografi));
+        List<KommuneEllerBydel> kommunerOgBydeler = hentAlleKommunerOgBydeler(new NorgService(norgGeografi));
         assertThat(kommunerOgBydeler).isEmpty();
     }
 
@@ -104,7 +101,7 @@ public class FylkesinndelingMedNavenheterTest {
                 new NorgGeografi("0101", "kommune"),
                 new NorgGeografi("010101", "bydel")
         );
-        List<KommuneEllerBydel> kommunerOgBydeler = hentAlleKommunerOgBydeler(new FylkesinndelingMedNavenheter(norgGeografi));
+        List<KommuneEllerBydel> kommunerOgBydeler = hentAlleKommunerOgBydeler(new NorgService(norgGeografi));
         assertThat(kommunerOgBydeler).doesNotContain(new Kommune("0101", "kommune"));
     }
 
@@ -116,14 +113,14 @@ public class FylkesinndelingMedNavenheterTest {
                 new NorgGeografi("010101", "bydel1"),
                 new NorgGeografi("010102", "bydel2")
         );
-        List<KommuneEllerBydel> kommunerTilhoerendeFylke = new FylkesinndelingMedNavenheter(norgGeografi).getGeografiMap().get("alle");
+        List<KommuneEllerBydel> kommunerTilhoerendeFylke = new NorgService(norgGeografi).getGeografiMap().get("alle");
         assertThat(kommunerTilhoerendeFylke).contains(
                 new Bydel("010101", "kommune–bydel1"),
                 new Bydel("010102", "kommune–bydel2")
         );
     }
 
-    private List<KommuneEllerBydel> hentAlleKommunerOgBydeler(FylkesinndelingMedNavenheter geografi) {
+    private List<KommuneEllerBydel> hentAlleKommunerOgBydeler(NorgService geografi) {
         List<KommuneEllerBydel> alleKommunerOgBydeler = new ArrayList<>();
         geografi.getGeografiMap().forEach((fylkesnr, kommunerOgBydeler) -> alleKommunerOgBydeler.addAll(kommunerOgBydeler));
         return alleKommunerOgBydeler;

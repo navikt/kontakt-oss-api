@@ -1,8 +1,9 @@
-package no.nav.tag.kontakt.oss.geografi;
+package no.nav.tag.kontakt.oss.fylkesinndelingMedNavenheter;
 
-import no.nav.tag.kontakt.oss.geografi.integrasjon.KommuneEllerBydel;
-import no.nav.tag.kontakt.oss.geografi.integrasjon.NorgKlient;
-import no.nav.tag.kontakt.oss.geografi.integrasjon.NorgOrganisering;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavenheter.integrasjon.KommuneEllerBydel;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavenheter.integrasjon.NorgKlient;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavenheter.integrasjon.NorgOrganisering;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavenheter.integrasjon.NorgService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,7 +24,7 @@ public class GeografiController {
     }
 
     @GetMapping(value = "${controller.basepath}/geografi")
-    public FylkesinndelingMedNavenheter geografi() {
+    public NorgService geografi() {
         // TODO TAG-298 Raffiner denne dataen
         return norgKlient.hentGeografiFraNorg();
     }
