@@ -1,23 +1,23 @@
 package no.nav.tag.kontakt.oss.fylkesinndelingMedNavenheter.integrasjon;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-@EqualsAndHashCode
-@Getter
+@Component
 public class NorgService {
-    private Map<String, List<KommuneEllerBydel>> geografiMap;
+    private final NorgKlient norgKlient;
 
-    public NorgService(List<NorgGeografi> norgGeografi) {
-        Map<String, List<KommuneEllerBydel>> geografiMap = new HashMap<>();
-        geografiMap.put("alle", hentKommunerOgBydeler(norgGeografi));
-        this.geografiMap = geografiMap;
+    public NorgService(NorgKlient norgKlient) {
+        this.norgKlient = norgKlient;
     }
 
-    private List<KommuneEllerBydel> hentKommunerOgBydeler(List<NorgGeografi> norgGeografiListe) {
+    public List<KommuneEllerBydel> hentListeOverAlleKommunerOgBydeler() {
+        List<NorgGeografi> norgGeografiListe = norgKlient.hentGeografiFraNorg();
+
         List<Kommune> kommuner = norgGeografiListe.stream()
                 .filter(this::harIkkeNull)
                 .filter(norgGeo -> erKommunenr(norgGeo.getNavn()))

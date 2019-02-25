@@ -32,14 +32,14 @@ public class NorgKlient {
         this.norgUrl = norgUrl;
     }
 
-    public NorgService hentGeografiFraNorg() {
+    public List<NorgGeografi> hentGeografiFraNorg() {
         ResponseEntity<String> jsonResponse = restTemplate.getForEntity(
                 norgUrl + "/kodeverk/geografi",
                 String.class
         );
 
         if (HttpStatus.OK.equals(jsonResponse.getStatusCode())) {
-            return new NorgService(oversettTilNorgGeografi(jsonResponse));
+            return oversettTilNorgGeografi(jsonResponse);
         } else {
             throw new KontaktskjemaException("Kall til NORG returnerte ikke 200 OK. Returverdi: " + jsonResponse.getBody());
         }
