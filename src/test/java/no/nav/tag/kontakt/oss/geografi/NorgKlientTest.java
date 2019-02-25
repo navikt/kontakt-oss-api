@@ -114,6 +114,21 @@ public class NorgKlientTest {
         Assertions.assertThat(headers.get("consumerId").get(0)).isEqualTo("kontakt-oss-api");
     }
 
+    @Test
+    public void hentTilhoerendeNavenhet__skal_returnere_enhetsnr_hvis_OK() {
+        String jsonResponse = "{\"enhetNr\": \"4444\"}";
+        ResponseEntity<String> responseEntity = new ResponseEntity<>(jsonResponse, HttpStatus.OK);
+        when(restTemplate.getForEntity(anyString(), eq(String.class))).thenReturn(responseEntity);
+        assertThat(norgKlient.hentTilhoerendeNavenhet("1111").get()).isEqualTo("4444");
+    }
+
+    @Test
+    public void hentTilhoerendeNavenhet__skal_returnere_empty_hvis_NOT_FOUND() {
+        ResponseEntity<String> responseEntity = new ResponseEntity<>("", HttpStatus.NOT_FOUND);
+        when(restTemplate.getForEntity(anyString(), eq(String.class))).thenReturn(responseEntity);
+        assertThat(norgKlient.hentTilhoerendeNavenhet("1111")).isEmpty();
+    }
+
     private void captureNorgExchangeHeaders() {
         verify(restTemplate, times(1)).exchange(anyString(), eq(HttpMethod.GET), requestCaptor.capture(), eq(String.class));
     }
