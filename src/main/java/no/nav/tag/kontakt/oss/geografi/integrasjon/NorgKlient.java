@@ -105,7 +105,7 @@ public class NorgKlient {
 
     public String hentTilhoerendeNavenhet(String kommunenrEllerBydelsnr) {
         ResponseEntity<String> jsonResponse = restTemplate.getForEntity(
-                norgUrl + "enhet/navkontor/" + kommunenrEllerBydelsnr,
+                norgUrl + "/enhet/navkontor/" + kommunenrEllerBydelsnr,
                 String.class
         );
 
