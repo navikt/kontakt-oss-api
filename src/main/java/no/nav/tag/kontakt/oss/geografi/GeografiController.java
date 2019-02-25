@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 public class GeografiController {
@@ -44,6 +45,7 @@ public class GeografiController {
     public String enhetsMap(
             @PathVariable("geografi") String kommuneNrEllerBydelsNr
     ) {
-        return norgKlient.hentTilhoerendeNavenhet(kommuneNrEllerBydelsNr);
+        Optional<String> str = norgKlient.hentTilhoerendeNavenhet(kommuneNrEllerBydelsNr);
+        return str.orElse("Fant ikke tilhørende enhet");
     }
 }

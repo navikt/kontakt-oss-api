@@ -16,9 +16,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -99,28 +97,34 @@ public class NorgKlient {
     }
 
     public Map<KommuneEllerBydel, String> hentMapFraKommuneEllerBydelTilNavenhet(List<KommuneEllerBydel> kommunerOgBydeler) {
-        return kommunerOgBydeler.stream()
-                .collect(Collectors.toMap(
-                        kommuneEllerBydel -> kommuneEllerBydel,
-                        kommuneEllerBydel -> this.hentTilhoerendeNavenhet(kommuneEllerBydel.getNummer())
-                ));
+        Map<KommuneEllerBydel, String> map = new HashMap<>();
 
+        for (KommuneEllerBydel kommuneEllerBydel : kommunerOgBydeler) {
+            Optional<String> enhetsnrOptional = hentTilhoerendeNavenhet(kommuneEllerBydel.getNummer());
+            enhetsnrOptional.ifPresent(enhetsnr -> map.put(kommuneEllerBydel, enhetsnr));
+        }
+
+        return map;
     }
 
-    public String hentTilhoerendeNavenhet(String kommunenrEllerBydelsnr) {
+    public Optional<String> hentTilhoerendeNavenhet(String kommunenrEllerBydelsnr) {
         ResponseEntity<String> jsonResponse = restTemplate.getForEntity(
                 norgUrl + "/enhet/navkontor/" + kommunenrEllerBydelsnr,
                 String.class
         );
 
-        if (HttpStatus.OK.equals(jsonResponse.getStatusCode())) {
-            String enhetsnr = oversettTilEnhetsnr(jsonResponse);
-            log.info("Funnet tilhørende enhetsnr {} for kommune/bydel {}", enhetsnr, kommunenrEllerBydelsnr);
-            return enhetsnr;
-        } else {
-            throw new KontaktskjemaException(
-                    "Kall til NORG for bydel/fylke " + kommunenrEllerBydelsnr + " returnerte ikke 200 OK. Returverdi: " + jsonResponse.getBody()
-            );
+        switch (jsonResponse.getStatusCode()) {
+            case OK:
+                String enhetsnr = oversettTilEnhetsnr(jsonResponse);
+                log.info("Funnet tilhørende enhetsnr {} for kommune/bydel {}", enhetsnr, kommunenrEllerBydelsnr);
+                return Optional.of(enhetsnr);
+            case NOT_FOUND:
+                log.info("Fant ikke tilhørende enhetsnr for kommune/bydel {}", kommunenrEllerBydelsnr);
+                return Optional.empty();
+            default:
+                throw new KontaktskjemaException(
+                        "Kall til NORG for bydel/fylke " + kommunenrEllerBydelsnr + " feilet. Returverdi: " + jsonResponse.getBody()
+                );
         }
     }
 
