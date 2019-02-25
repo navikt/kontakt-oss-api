@@ -15,6 +15,8 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -87,6 +89,36 @@ public class NorgKlient {
             ));
 
             return norgOrganisering;
+        } catch (IOException e) {
+            throw new KontaktskjemaException("Returverdi fra NORG er ikke riktig formatert JSON, eller passer ikke med vår modell. Returverdi: " + jsonResponse.getBody());
+        }
+    }
+
+    public Map<KommuneEllerBydel, String> hentMapFraKommuneEllerBydelTilNavenhet(List<KommuneEllerBydel> kommunerOgBydeler) {
+        return kommunerOgBydeler.stream()
+                .collect(Collectors.toMap(
+                        kommuneEllerBydel -> kommuneEllerBydel,
+                        kommuneEllerBydel -> this.hentTilhoerendeNavenhet(kommuneEllerBydel.getNummer())
+                ));
+
+    }
+
+    public String hentTilhoerendeNavenhet(String kommunenrEllerBydelsnr) {
+        ResponseEntity<String> jsonResponse = restTemplate.getForEntity(
+                norgUrl + "enhet/navkontor/" + kommunenrEllerBydelsnr,
+                String.class
+        );
+
+        if (HttpStatus.OK.equals(jsonResponse.getStatusCode())) {
+            return oversettTilEnhetsnr(jsonResponse);
+        } else {
+            throw new KontaktskjemaException("Kall til NORG returnerte ikke 200 OK. Returverdi: " + jsonResponse.getBody());
+        }
+    }
+
+    private String oversettTilEnhetsnr(ResponseEntity<String> jsonResponse) {
+        try {
+            return objectMapper.readTree(jsonResponse.getBody()).get("enhetNr").textValue();
         } catch (IOException e) {
             throw new KontaktskjemaException("Returverdi fra NORG er ikke riktig formatert JSON, eller passer ikke med vår modell. Returverdi: " + jsonResponse.getBody());
         }
