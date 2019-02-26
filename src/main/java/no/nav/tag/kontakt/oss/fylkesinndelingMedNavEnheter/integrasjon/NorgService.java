@@ -20,6 +20,7 @@ public class NorgService {
     public Map<NavEnhet, NavFylkesenhet> hentMapFraNavenhetTilFylkesenhet() {
         return norgKlient.hentOrganiseringFraNorg().stream()
                 .filter(norgOrganisering -> "Aktiv".equals(norgOrganisering.getStatus()))
+                .filter(norgOrganisering -> norgOrganisering.getOverordnetEnhet() != null)
                 .collect(Collectors.toMap(
                         norgOrganisering -> new NavEnhet(norgOrganisering.getEnhetNr()),
                         norgOrganisering -> new NavFylkesenhet(norgOrganisering.getOverordnetEnhet())

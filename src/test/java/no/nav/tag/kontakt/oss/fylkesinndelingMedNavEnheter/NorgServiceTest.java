@@ -96,6 +96,14 @@ public class NorgServiceTest {
     }
 
     @Test
+    public void hentMapFraNavenhetOgFylkesenhet__skal_ikke_ta_med_fylkesenheter_som_er_null() {
+        when(norgKlient.hentOrganiseringFraNorg()).thenReturn(Collections.singletonList(
+                new NorgOrganisering("1111", "Aktiv", null)
+        ));
+        assertThat(norgService.hentMapFraNavenhetTilFylkesenhet()).isEmpty();
+    }
+
+    @Test
     public void hentMapFraNavenhetOgFylkesenhet__skal_ikke_ta_med_navEnheter_som_ikke_er_aktive() {
         when(norgKlient.hentOrganiseringFraNorg()).thenReturn(Arrays.asList(
                 new NorgOrganisering("1111", "Nedlagt", "1400"),
