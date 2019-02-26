@@ -17,33 +17,20 @@ public class FylkesinndelingMedNavenheter {
 
     public FylkesinndelingMedNavenheter(List<NorgGeografi> norgGeografi) {
         Map<String, List<KommuneEllerBydel>> geografiMap = new HashMap<>();
-        // TODO TAG-298 Første key skal være fylkesenhet, ikke fylkesnr.
-        hentFylkesnumre(norgGeografi).forEach(fylkesnummer ->
-                geografiMap.put(fylkesnummer, hentKommunerOgBydeler(fylkesnummer, norgGeografi))
-        );
+        geografiMap.put("alle", hentKommunerOgBydeler(norgGeografi));
         this.geografiMap = geografiMap;
     }
 
-    private List<String> hentFylkesnumre(List<NorgGeografi> norgGeografi) {
-        return norgGeografi.stream()
-                .filter(this::harIkkeNull)
-                .map(NorgGeografi::getNavn)
-                .filter(this::erFylkesnr)
-                .collect(Collectors.toList());
-    }
-
-    private List<KommuneEllerBydel> hentKommunerOgBydeler(String fylkesnummer, List<NorgGeografi> norgGeografiListe) {
+    private List<KommuneEllerBydel> hentKommunerOgBydeler(List<NorgGeografi> norgGeografiListe) {
         List<Kommune> kommuner = norgGeografiListe.stream()
                 .filter(this::harIkkeNull)
                 .filter(norgGeo -> erKommunenr(norgGeo.getNavn()))
-                .filter(norgGeo -> norgGeo.getNavn().startsWith(fylkesnummer))
                 .map(norgGeo -> new Kommune(norgGeo.getNavn(), norgGeo.getTerm()))
                 .collect(Collectors.toList());
 
         List<Bydel> bydeler = norgGeografiListe.stream()
                 .filter(this::harIkkeNull)
                 .filter(norgGeo -> erBydelsnr(norgGeo.getNavn()))
-                .filter(norgGeo -> norgGeo.getNavn().startsWith(fylkesnummer))
                 .map(norgGeo -> new Bydel(norgGeo.getNavn(), norgGeo.getTerm()))
                 .collect(Collectors.toList());
 

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import no.nav.tag.kontakt.oss.KontaktskjemaException;
 import no.nav.tag.kontakt.oss.geografi.integrasjon.NorgGeografi;
 import no.nav.tag.kontakt.oss.geografi.integrasjon.NorgKlient;
+import no.nav.tag.kontakt.oss.geografi.integrasjon.NorgOrganisering;
 import org.apache.commons.io.IOUtils;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
@@ -112,6 +113,21 @@ public class NorgKlientTest {
         captureNorgExchangeHeaders();
         HttpHeaders headers = requestCaptor.getValue().getHeaders();
         Assertions.assertThat(headers.get("consumerId").get(0)).isEqualTo("kontakt-oss-api");
+    }
+
+    @Test
+    public void hentTilhoerendeNavenhet__skal_returnere_enhetsnr_hvis_OK() {
+        String jsonResponse = "{\"enhetNr\": \"4444\"}";
+        ResponseEntity<String> responseEntity = new ResponseEntity<>(jsonResponse, HttpStatus.OK);
+        when(restTemplate.getForEntity(anyString(), eq(String.class))).thenReturn(responseEntity);
+        assertThat(norgKlient.hentTilhoerendeNavenhet("1111").get()).isEqualTo("4444");
+    }
+
+    @Test
+    public void hentTilhoerendeNavenhet__skal_returnere_empty_hvis_NOT_FOUND() {
+        ResponseEntity<String> responseEntity = new ResponseEntity<>("", HttpStatus.NOT_FOUND);
+        when(restTemplate.getForEntity(anyString(), eq(String.class))).thenReturn(responseEntity);
+        assertThat(norgKlient.hentTilhoerendeNavenhet("1111")).isEmpty();
     }
 
     private void captureNorgExchangeHeaders() {
