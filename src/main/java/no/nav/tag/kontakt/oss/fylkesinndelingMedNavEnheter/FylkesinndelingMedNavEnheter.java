@@ -1,9 +1,6 @@
 package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class FylkesinndelingMedNavEnheter {
 
@@ -23,7 +20,9 @@ public class FylkesinndelingMedNavEnheter {
 
         for (KommuneEllerBydel kommuneEllerBydel : kommunerOgBydeler) {
             NavFylkesenhet fylkesenhet = finnTilhoerendeFylkesenhet(kommuneEllerBydel);
-            leggTilMappingMellom(kommuneEllerBydel, fylkesenhet);
+            if (fylkesenhet != null) {
+                leggTilMappingMellom(kommuneEllerBydel, fylkesenhet);
+            }
         }
     }
 
@@ -31,9 +30,11 @@ public class FylkesinndelingMedNavEnheter {
         if (this.mapFraFylkesenheterTilKommunerOgBydeler.containsKey(fylkesenhet)) {
             this.mapFraFylkesenheterTilKommunerOgBydeler.get(fylkesenhet).add(kommuneEllerBydel);
         } else {
+            List<KommuneEllerBydel> list = new ArrayList<>();
+            list.add(kommuneEllerBydel);
             this.mapFraFylkesenheterTilKommunerOgBydeler.put(
                     fylkesenhet,
-                    Collections.singletonList(kommuneEllerBydel)
+                    list
             );
         }
     }
@@ -49,8 +50,8 @@ public class FylkesinndelingMedNavEnheter {
         return navEnhetTilFylkesenhet.get(navEnhet);
     }
 
-    public Map<NavEnhet, NavFylkesenhet> getNavEnhetTilFylkesenhet() {
-        return navEnhetTilFylkesenhet;
+    public Map<NavFylkesenhet, List<KommuneEllerBydel>> getMapFraFylkesenheterTilKommunerOgBydeler() {
+        return mapFraFylkesenheterTilKommunerOgBydeler;
     }
 
 }

@@ -1,6 +1,9 @@
 package no.nav.tag.kontakt.oss;
 
 import no.nav.tag.kontakt.oss.featureToggles.FeatureToggles;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.Kommune;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.NavEnhet;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.NavFylkesenhet;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -55,5 +58,17 @@ public class TestData {
     public static ResponseEntity<String> gsakResponseEntity(Integer gsakId, HttpStatus status) {
         String responsBody = String.format("{\"id\": %d}", gsakId);
         return new ResponseEntity<>(responsBody, status);
+    }
+
+    public static Kommune kommune(Integer id) {
+        return new Kommune(id.toString(), id.toString());
+    }
+
+    public static NavFylkesenhet fylkesenhet(Integer id) {
+        return new NavFylkesenhet(id.toString());
+    }
+
+    public static NavEnhet navEnhet(Integer id) {
+        return new NavEnhet(id.toString());
     }
 }

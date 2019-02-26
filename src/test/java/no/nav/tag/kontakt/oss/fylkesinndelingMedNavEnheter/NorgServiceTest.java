@@ -15,59 +15,6 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class NorgServiceTest {
 
-    /*
-    TODO TAG-298 Disse testene er fremdeles relevante, men skal gjøres med fylkesenhet i stedet for geografiske fylker.
-    @Test
-    public void geografi__skal_handtere_flere_fylker() {
-        List<NorgGeografi> norgGeografi = Arrays.asList(
-                new NorgGeografi("01", "fylke1"),
-                new NorgGeografi("0101", "kommune1.1"),
-                new NorgGeografi("0102", "kommune1.2"),
-
-                new NorgGeografi("02", "fylke2"),
-                new NorgGeografi("0201", "kommune2.1"),
-                new NorgGeografi("0202", "kommune2.2")
-
-        );
-        List<KommuneEllerBydel> kommunerTilhoerendeFylke1 = new FylkesinndelingMedNavenheter(norgGeografi).getGeografiMap().get("01");
-        List<KommuneEllerBydel> kommunerTilhoerendeFylke2 = new FylkesinndelingMedNavenheter(norgGeografi).getGeografiMap().get("02");
-        assertThat(kommunerTilhoerendeFylke1).contains(
-                new Kommune("0101", "kommune1.1"),
-                new Kommune("0102", "kommune1.2")
-        );
-        assertThat(kommunerTilhoerendeFylke2).contains(
-                new Kommune("0201", "kommune2.1"),
-                new Kommune("0202", "kommune2.2")
-        );
-        assertThat(kommunerTilhoerendeFylke1).hasSize(2);
-        assertThat(kommunerTilhoerendeFylke2).hasSize(2);
-    }
-
-    @Test
-    public void geografi__fylke_skal_ha_tilhoerende_kommuner_og_ikke_flere() {
-        List<NorgGeografi> norgGeografi = Arrays.asList(
-                new NorgGeografi("01", "et fylke"),
-                new NorgGeografi("0101", "en kommune"),
-                new NorgGeografi("0201", "en annen kommune")
-        );
-        List<KommuneEllerBydel> kommunerTilhoerendeFylke = new FylkesinndelingMedNavenheter(norgGeografi).getGeografiMap().get("01");
-        assertThat(kommunerTilhoerendeFylke).isEqualTo(Collections.singletonList(new Kommune("0101", "en kommune")));
-    }
-
-    @Test
-    public void geografi__fylke_skal_ha_tilhoerende_bydeler_og_ikke_flere() {
-        List<NorgGeografi> norgGeografi = Arrays.asList(
-                new NorgGeografi("01", "fylke"),
-                new NorgGeografi("0101", "kommune"),
-                new NorgGeografi("010101", "bydel1"),
-                new NorgGeografi("020101", "bydel2")
-        );
-        List<KommuneEllerBydel> kommunerTilhoerendeFylke = new FylkesinndelingMedNavenheter(norgGeografi).getGeografiMap().get("01");
-        assertThat(kommunerTilhoerendeFylke).contains(new Bydel("010101", "kommune–bydel1"));
-        assertThat(kommunerTilhoerendeFylke).doesNotContain(new Bydel("020101", "kommune–bydel2"));
-    }
-    */
-
     @Mock
     private NorgKlient norgKlient;
 
