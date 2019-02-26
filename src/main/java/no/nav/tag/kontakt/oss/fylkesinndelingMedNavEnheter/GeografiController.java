@@ -4,6 +4,8 @@ import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.NorgServi
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 public class GeografiController {
 
@@ -15,6 +17,11 @@ public class GeografiController {
 
     @GetMapping(value = "${controller.basepath}/geografi")
     public Object geografi() {
-        return norgService.hentListeOverAlleKommunerOgBydeler();
+        List<KommuneEllerBydel> kommunerOgBydeler = norgService.hentListeOverAlleKommunerOgBydeler();
+        return new FylkesinndelingMedNavEnheter(
+                norgService.hentMapFraNavenhetOgFylkesenhet(),
+                norgService.hentMapFraKommuneEllerBydelTilNavenhet(kommunerOgBydeler),
+                kommunerOgBydeler
+        );
     }
 }
