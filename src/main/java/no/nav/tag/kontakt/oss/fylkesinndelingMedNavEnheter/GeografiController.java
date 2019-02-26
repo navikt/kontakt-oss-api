@@ -15,8 +15,9 @@ public class GeografiController {
         this.norgService = norgService;
     }
 
-    @GetMapping(value = "${controller.basepath}/geografi")
+    @GetMapping(value = "${controller.basepath}/fylkerOgKommuner")
     public FylkesinndelingMedNavEnheter geografi() {
+        // TODO TAG-309 Før dette endepunktet kan tas i bruk i frontend, må NORG-kallene caches.
         List<KommuneEllerBydel> kommunerOgBydeler = norgService.hentListeOverAlleKommunerOgBydeler();
         return new FylkesinndelingMedNavEnheter(
                 norgService.hentMapFraNavenhetTilFylkesenhet(),
