@@ -83,6 +83,30 @@ public class NorgServiceTest {
         );
     }
 
+    @Test
+    public void hentMapFraNavenhetOgFylkesenhet__skal_returnere_map_med_data() {
+        when(norgKlient.hentOrganiseringFraNorg()).thenReturn(Arrays.asList(
+                new NorgOrganisering("1111", "Aktiv", "1400"),
+                new NorgOrganisering("2222", "Aktiv", "1500")
+        ));
+        assertThat(norgService.hentMapFraNavenhetTilFylkesenhet()).isEqualTo(new HashMap<>(){{
+            put(new NavEnhet("1111"), new NavFylkesenhet("1400"));
+            put(new NavEnhet("2222"), new NavFylkesenhet("1500"));
+        }});
+    }
+
+    @Test
+    public void hentMapFraNavenhetOgFylkesenhet__skal_ikke_ta_med_navEnheter_som_ikke_er_aktive() {
+        when(norgKlient.hentOrganiseringFraNorg()).thenReturn(Arrays.asList(
+                new NorgOrganisering("1111", "Nedlagt", "1400"),
+                new NorgOrganisering("2222", "Blabla", "1500")
+        ));
+        assertThat(norgService.hentMapFraNavenhetTilFylkesenhet().keySet()).doesNotContain(
+                new NavEnhet("1111"),
+                new NavEnhet("2222")
+        );
+    }
+
     private void mockResponsFraNorgKlient(NorgGeografi ... norgGeografi) {
         when(norgKlient.hentGeografiFraNorg()).thenReturn(Arrays.asList(norgGeografi));
     }

@@ -19,7 +19,7 @@ public class GeografiController {
     public Object geografi() {
         List<KommuneEllerBydel> kommunerOgBydeler = norgService.hentListeOverAlleKommunerOgBydeler();
         return new FylkesinndelingMedNavEnheter(
-                norgService.hentMapFraNavenhetOgFylkesenhet(),
+                norgService.hentMapFraNavenhetTilFylkesenhet(),
                 norgService.hentMapFraKommuneEllerBydelTilNavenhet(kommunerOgBydeler),
                 kommunerOgBydeler
         );
