@@ -1,7 +1,6 @@
 package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter;
 
 import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.NorgKlient;
-import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.NorgOrganisering;
 import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.NorgService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,7 +29,7 @@ public class GeografiController {
     }
 
     @GetMapping(value = "${controller.basepath}/organisering")
-    public List<NorgOrganisering> organisering() {
-        return norgKlient.hentOrganiseringFraNorg();
+    public String organisering() {
+        return norgKlient.organisering();
     }
 }

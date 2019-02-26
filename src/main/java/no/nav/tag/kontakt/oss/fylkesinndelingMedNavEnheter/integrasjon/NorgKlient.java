@@ -55,6 +55,25 @@ public class NorgKlient {
         }
     }
 
+    public String organisering() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("consumerId", "kontakt-oss-api");
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        ResponseEntity<String> jsonResponse = restTemplate.exchange(
+                norgUrl + "/enhet/kontaktinformasjon/organisering/all",
+                HttpMethod.GET,
+                new HttpEntity<>(headers),
+                String.class
+        );
+
+        if (HttpStatus.OK.equals(jsonResponse.getStatusCode())) {
+            return jsonResponse.getBody();
+        } else {
+            throw new KontaktskjemaException("Kall til NORG returnerte ikke 200 OK. Returverdi: " + jsonResponse.getBody());
+        }
+    }
+
     public List<NorgOrganisering> hentOrganiseringFraNorg() {
         HttpHeaders headers = new HttpHeaders();
         headers.set("consumerId", "kontakt-oss-api");
