@@ -7,17 +7,17 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-public class GeografiController {
+public class FylkesinndelingController {
 
     private final NorgService norgService;
 
-    public GeografiController(NorgService norgService) {
+    public FylkesinndelingController(NorgService norgService) {
         this.norgService = norgService;
     }
 
     @GetMapping(value = "${controller.basepath}/fylkerOgKommuner")
-    public FylkesinndelingMedNavEnheter geografi() {
-        // TODO TAG-309 Før dette endepunktet kan tas i bruk i frontend, må NORG-kallene caches.
+    public FylkesinndelingMedNavEnheter hentFylkerOgKommuner() {
+        // TODO TAG-311 Før dette endepunktet kan tas i bruk i frontend, må NORG-kallene caches.
         List<KommuneEllerBydel> kommunerOgBydeler = norgService.hentListeOverAlleKommunerOgBydeler();
         return new FylkesinndelingMedNavEnheter(
                 norgService.hentMapFraNavenhetTilFylkesenhet(),

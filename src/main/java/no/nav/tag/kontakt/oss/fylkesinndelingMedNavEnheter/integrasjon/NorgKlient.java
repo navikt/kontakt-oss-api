@@ -61,7 +61,7 @@ public class NorgKlient {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         ResponseEntity<String> jsonResponse = restTemplate.exchange(
-                norgUrl + "/enhet/kontaktinformasjon/organisering/all",
+                norgUrl + "/enhet/kontaktinformasjon/organisering/AKTIV",
                 HttpMethod.GET,
                 new HttpEntity<>(headers),
                 String.class
