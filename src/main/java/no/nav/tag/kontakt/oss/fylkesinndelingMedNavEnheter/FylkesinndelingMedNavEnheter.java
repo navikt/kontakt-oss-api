@@ -4,7 +4,7 @@ import java.util.*;
 
 public class FylkesinndelingMedNavEnheter {
 
-    private Map<NavFylkesenhet, List<KommuneEllerBydel>> mapFraFylkesenheterTilKommunerOgBydeler;
+    private Map<String, List<KommuneEllerBydel>> mapFraFylkesenheterTilKommunerOgBydeler;
     private Map<NavEnhet, NavFylkesenhet> navEnhetTilFylkesenhet;
     private Map<KommuneEllerBydel, NavEnhet> kommuneEllerBydelTilNavenhet;
 
@@ -27,13 +27,14 @@ public class FylkesinndelingMedNavEnheter {
     }
 
     private void leggTilMappingMellom(KommuneEllerBydel kommuneEllerBydel, NavFylkesenhet fylkesenhet) {
-        if (this.mapFraFylkesenheterTilKommunerOgBydeler.containsKey(fylkesenhet)) {
-            this.mapFraFylkesenheterTilKommunerOgBydeler.get(fylkesenhet).add(kommuneEllerBydel);
+        String fylkesenhetsNr = fylkesenhet.getEnhetNr();
+        if (this.mapFraFylkesenheterTilKommunerOgBydeler.containsKey(fylkesenhetsNr)) {
+            this.mapFraFylkesenheterTilKommunerOgBydeler.get(fylkesenhetsNr).add(kommuneEllerBydel);
         } else {
             List<KommuneEllerBydel> list = new ArrayList<>();
             list.add(kommuneEllerBydel);
             this.mapFraFylkesenheterTilKommunerOgBydeler.put(
-                    fylkesenhet,
+                    fylkesenhetsNr,
                     list
             );
         }
@@ -50,7 +51,7 @@ public class FylkesinndelingMedNavEnheter {
         return navEnhetTilFylkesenhet.get(navEnhet);
     }
 
-    public Map<NavFylkesenhet, List<KommuneEllerBydel>> getMapFraFylkesenheterTilKommunerOgBydeler() {
+    public Map<String, List<KommuneEllerBydel>> getMapFraFylkesenheterTilKommunerOgBydeler() {
         return mapFraFylkesenheterTilKommunerOgBydeler;
     }
 

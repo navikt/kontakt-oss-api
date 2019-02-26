@@ -29,7 +29,7 @@ public class GeografiController {
         );
     }
 
-    @GetMapping(value = "${controller.basepath}/geografi")
+    @GetMapping(value = "${controller.basepath}/organisering")
     public List<NorgOrganisering> organisering() {
         return norgKlient.hentOrganiseringFraNorg();
     }
