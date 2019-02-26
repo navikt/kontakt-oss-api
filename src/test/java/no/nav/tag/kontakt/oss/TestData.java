@@ -60,15 +60,4 @@ public class TestData {
         return new ResponseEntity<>(responsBody, status);
     }
 
-    public static Kommune kommune(Integer id) {
-        return new Kommune(id.toString(), id.toString());
-    }
-
-    public static NavFylkesenhet fylkesenhet(Integer id) {
-        return new NavFylkesenhet(id.toString());
-    }
-
-    public static NavEnhet navEnhet(Integer id) {
-        return new NavEnhet(id.toString());
-    }
 }
