@@ -10,9 +10,11 @@ import java.util.List;
 public class FylkesinndelingController {
 
     private final NorgService norgService;
+    private final FylkesinndelingRepository fylkesinndelingRepository;
 
-    public FylkesinndelingController(NorgService norgService) {
+    public FylkesinndelingController(NorgService norgService, FylkesinndelingRepository fylkesinndelingRepository) {
         this.norgService = norgService;
+        this.fylkesinndelingRepository = fylkesinndelingRepository;
     }
 
     @GetMapping(value = "${controller.basepath}/fylkerOgKommuner")

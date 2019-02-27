@@ -1,12 +1,19 @@
 package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter;
 
+import lombok.NoArgsConstructor;
+
 import java.util.*;
 
+@NoArgsConstructor
 public class FylkesinndelingMedNavEnheter {
 
     private Map<String, List<KommuneEllerBydel>> mapFraFylkesenheterTilKommunerOgBydeler;
     private Map<NavEnhet, NavFylkesenhet> navEnhetTilFylkesenhet;
     private Map<KommuneEllerBydel, NavEnhet> kommuneEllerBydelTilNavenhet;
+
+    public FylkesinndelingMedNavEnheter(Map<String, List<KommuneEllerBydel>> mapFraFylkesenheterTilKommunerOgBydeler) {
+        this.mapFraFylkesenheterTilKommunerOgBydeler = mapFraFylkesenheterTilKommunerOgBydeler;
+    }
 
     public FylkesinndelingMedNavEnheter(
             Map<NavEnhet, NavFylkesenhet> navEnhetTilFylkesenhet,

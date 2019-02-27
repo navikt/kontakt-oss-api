@@ -1,10 +1,11 @@
 package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter;
 
-import lombok.EqualsAndHashCode;
-import lombok.Value;
+import lombok.*;
 
 @EqualsAndHashCode
-@Value
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class NavEnhet {
     private String enhetNr;
 }
