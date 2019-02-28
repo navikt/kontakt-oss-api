@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 import static no.nav.tag.kontakt.oss.TestData.*;
@@ -31,6 +32,12 @@ public class FylkesinndelingRepositoryTest {
         assertThat(repository.hentFylkesinndeling().getMapFraFylkesenheterTilKommunerOgBydeler())
                 .isEqualTo(fraFylkesenheterTilKommuner.getMapFraFylkesenheterTilKommunerOgBydeler());
         assertThat(repository.hentKommuneNrEllerBydelNrTilNavEnhet()).isEqualTo(fraKommuneNrTilNavEnhet);
+    }
+
+    @Test
+    public void repository__skal_sette_sistOppdatert() {
+        repository.oppdaterInformasjonFraNorg(fraFylkesenheterTilKommuner(), fraKommuneNrTilNavEnhet());
+        assertThat(repository.hentSistOppdatert()).isAfter(LocalDateTime.now().minusSeconds(10));
     }
 
 }
