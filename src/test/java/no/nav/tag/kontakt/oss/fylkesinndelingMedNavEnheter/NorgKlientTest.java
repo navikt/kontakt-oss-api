@@ -1,11 +1,11 @@
-package no.nav.tag.kontakt.oss.geografi;
+package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import no.nav.tag.kontakt.oss.KontaktskjemaException;
-import no.nav.tag.kontakt.oss.geografi.integrasjon.NorgGeografi;
-import no.nav.tag.kontakt.oss.geografi.integrasjon.NorgKlient;
-import no.nav.tag.kontakt.oss.geografi.integrasjon.NorgOrganisering;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.NorgGeografi;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.NorgKlient;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.NorgOrganisering;
 import org.apache.commons.io.IOUtils;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
@@ -55,7 +55,7 @@ public class NorgKlientTest {
                 HttpStatus.OK
         );
         when(restTemplate.getForEntity(anyString(), eq(String.class))).thenReturn(responseEntity);
-        assertThat(norgKlient.hentGeografiFraNorg()).isEqualTo(new FylkesinndelingMedNavenheter(Collections.singletonList(geografi)));
+        assertThat(norgKlient.hentGeografiFraNorg()).isEqualTo(Collections.singletonList(geografi));
     }
 
     @Test(expected = KontaktskjemaException.class)
@@ -120,7 +120,7 @@ public class NorgKlientTest {
         String jsonResponse = "{\"enhetNr\": \"4444\"}";
         ResponseEntity<String> responseEntity = new ResponseEntity<>(jsonResponse, HttpStatus.OK);
         when(restTemplate.getForEntity(anyString(), eq(String.class))).thenReturn(responseEntity);
-        assertThat(norgKlient.hentTilhoerendeNavenhet("1111").get()).isEqualTo("4444");
+        assertThat(norgKlient.hentTilhoerendeNavenhet("1111").get()).isEqualTo(new NavEnhet("4444"));
     }
 
     @Test

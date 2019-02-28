@@ -1,27 +1,41 @@
-package no.nav.tag.kontakt.oss.geografi;
+package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import no.nav.tag.kontakt.oss.geografi.integrasjon.Bydel;
-import no.nav.tag.kontakt.oss.geografi.integrasjon.Kommune;
-import no.nav.tag.kontakt.oss.geografi.integrasjon.KommuneEllerBydel;
-import no.nav.tag.kontakt.oss.geografi.integrasjon.NorgGeografi;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.*;
+import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-@EqualsAndHashCode
-@Getter
-public class FylkesinndelingMedNavenheter {
-    private Map<String, List<KommuneEllerBydel>> geografiMap;
+@Component
+public class NorgService {
+    private final NorgKlient norgKlient;
 
-    public FylkesinndelingMedNavenheter(List<NorgGeografi> norgGeografi) {
-        Map<String, List<KommuneEllerBydel>> geografiMap = new HashMap<>();
-        geografiMap.put("alle", hentKommunerOgBydeler(norgGeografi));
-        this.geografiMap = geografiMap;
+    public NorgService(NorgKlient norgKlient) {
+        this.norgKlient = norgKlient;
     }
 
-    private List<KommuneEllerBydel> hentKommunerOgBydeler(List<NorgGeografi> norgGeografiListe) {
+    public Map<NavEnhet, NavFylkesenhet> hentMapFraNavenhetTilFylkesenhet() {
+        return norgKlient.hentOrganiseringFraNorg().stream()
+                .filter(norgOrganisering -> "Aktiv".equals(norgOrganisering.getStatus()))
+                .filter(norgOrganisering -> norgOrganisering.getOverordnetEnhet() != null)
+                .collect(Collectors.toMap(
+                        norgOrganisering -> new NavEnhet(norgOrganisering.getEnhetNr()),
+                        norgOrganisering -> new NavFylkesenhet(norgOrganisering.getOverordnetEnhet())
+                ));
+    }
+
+    public Map<KommuneEllerBydel, NavEnhet> hentMapFraKommuneEllerBydelTilNavenhet(
+            List<KommuneEllerBydel> kommunerOgBydeler
+    ) {
+        return norgKlient.hentMapFraKommuneEllerBydelTilNavenhet(kommunerOgBydeler);
+    }
+
+    public List<KommuneEllerBydel> hentListeOverAlleKommunerOgBydeler() {
+        List<NorgGeografi> norgGeografiListe = norgKlient.hentGeografiFraNorg();
+
         List<Kommune> kommuner = norgGeografiListe.stream()
                 .filter(this::harIkkeNull)
                 .filter(norgGeo -> erKommunenr(norgGeo.getNavn()))
