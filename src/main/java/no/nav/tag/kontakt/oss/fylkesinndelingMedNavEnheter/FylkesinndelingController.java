@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class FylkesinndelingController {
@@ -15,14 +16,14 @@ public class FylkesinndelingController {
         this.norgService = norgService;
     }
 
-    @GetMapping(value = "${controller.basepath}/fylkerOgKommuner")
-    public FylkesinndelingMedNavEnheter hentFylkerOgKommuner() {
+    @GetMapping(value = "${controller.basepath}/kommunerOgBydeler")
+    public Map<String, List<KommuneEllerBydel>> hentFylkerOgKommuner() {
         // TODO TAG-311 Før dette endepunktet kan tas i bruk i frontend, må NORG-kallene caches.
         List<KommuneEllerBydel> kommunerOgBydeler = norgService.hentListeOverAlleKommunerOgBydeler();
         return new FylkesinndelingMedNavEnheter(
                 norgService.hentMapFraNavenhetTilFylkesenhet(),
                 norgService.hentMapFraKommuneEllerBydelTilNavenhet(kommunerOgBydeler),
                 kommunerOgBydeler
-        );
+        ).getFylkeTilKommuneEllerBydel();
     }
 }
