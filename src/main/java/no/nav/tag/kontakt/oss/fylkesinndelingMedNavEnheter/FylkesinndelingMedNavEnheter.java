@@ -11,8 +11,8 @@ public class FylkesinndelingMedNavEnheter {
     private Map<NavEnhet, NavFylkesenhet> navEnhetTilFylkesenhet;
     private Map<KommuneEllerBydel, NavEnhet> kommuneEllerBydelTilNavenhet;
 
-    public FylkesinndelingMedNavEnheter(Map<String, List<KommuneEllerBydel>> mapFraFylkesenheterTilKommunerOgBydeler) {
-        this.mapFraFylkesenheterTilKommunerOgBydeler = mapFraFylkesenheterTilKommunerOgBydeler;
+    public FylkesinndelingMedNavEnheter(Map<String, List<KommuneEllerBydel>> fylkeTilKommuneEllerBydel) {
+        this.fylkeTilKommuneEllerBydel = fylkeTilKommuneEllerBydel;
     }
 
     public FylkesinndelingMedNavEnheter(

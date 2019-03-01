@@ -44,7 +44,7 @@ public class FylkesinndelingRepository {
         jdbcTemplate.update(
                 "UPDATE norg_mapping SET sistOppdatert=?, mapFraFylkesenheterTilKommunerOgBydeler=?, mapFraKommunerOgBydelerTilNavEnheter=?",
                 LocalDateTime.now(),
-                objectMapper.writeValueAsString(fylkesinndeling.getMapFraFylkesenheterTilKommunerOgBydeler()),
+                objectMapper.writeValueAsString(fylkesinndeling.getFylkeTilKommuneEllerBydel()),
                 objectMapper.writeValueAsString(kommuneNrEllerBydelNrTilNavEnhet)
         );
     }

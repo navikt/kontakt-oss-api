@@ -29,8 +29,8 @@ public class FylkesinndelingRepositoryTest {
                 fraKommuneNrTilNavEnhet
         );
 
-        assertThat(repository.hentFylkesinndeling().getMapFraFylkesenheterTilKommunerOgBydeler())
-                .isEqualTo(fraFylkesenheterTilKommuner.getMapFraFylkesenheterTilKommunerOgBydeler());
+        assertThat(repository.hentFylkesinndeling().getFylkeTilKommuneEllerBydel())
+                .isEqualTo(fraFylkesenheterTilKommuner.getFylkeTilKommuneEllerBydel());
         assertThat(repository.hentKommuneNrEllerBydelNrTilNavEnhet()).isEqualTo(fraKommuneNrTilNavEnhet);
     }
 
