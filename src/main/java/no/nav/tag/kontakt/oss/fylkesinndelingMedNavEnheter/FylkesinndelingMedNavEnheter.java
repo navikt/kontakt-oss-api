@@ -7,7 +7,7 @@ import java.util.*;
 @NoArgsConstructor
 public class FylkesinndelingMedNavEnheter {
 
-    private Map<String, List<KommuneEllerBydel>> mapFraFylkesenheterTilKommunerOgBydeler;
+    private Map<String, List<KommuneEllerBydel>> fylkeTilKommuneEllerBydel;
     private Map<NavEnhet, NavFylkesenhet> navEnhetTilFylkesenhet;
     private Map<KommuneEllerBydel, NavEnhet> kommuneEllerBydelTilNavenhet;
 
@@ -23,7 +23,7 @@ public class FylkesinndelingMedNavEnheter {
         this.navEnhetTilFylkesenhet = navEnhetTilFylkesenhet;
         this.kommuneEllerBydelTilNavenhet = kommuneEllerBydelTilNavenhet;
 
-        this.mapFraFylkesenheterTilKommunerOgBydeler = new HashMap<>();
+        this.fylkeTilKommuneEllerBydel = new HashMap<>();
 
         for (KommuneEllerBydel kommuneEllerBydel : kommunerOgBydeler) {
             NavFylkesenhet fylkesenhet = finnTilhoerendeFylkesenhet(kommuneEllerBydel);
@@ -35,12 +35,14 @@ public class FylkesinndelingMedNavEnheter {
 
     private void leggTilMappingMellom(KommuneEllerBydel kommuneEllerBydel, NavFylkesenhet fylkesenhet) {
         String fylkesenhetsNr = fylkesenhet.getEnhetNr();
-        if (this.mapFraFylkesenheterTilKommunerOgBydeler.containsKey(fylkesenhetsNr)) {
-            this.mapFraFylkesenheterTilKommunerOgBydeler.get(fylkesenhetsNr).add(kommuneEllerBydel);
+        boolean mapInneholderEnhet = this.fylkeTilKommuneEllerBydel.containsKey(fylkesenhetsNr);
+        if (mapInneholderEnhet) {
+            List<KommuneEllerBydel> fylketsKommunerOgBydeler = this.fylkeTilKommuneEllerBydel.get(fylkesenhetsNr);
+            fylketsKommunerOgBydeler.add(kommuneEllerBydel);
         } else {
             List<KommuneEllerBydel> list = new ArrayList<>();
             list.add(kommuneEllerBydel);
-            this.mapFraFylkesenheterTilKommunerOgBydeler.put(
+            this.fylkeTilKommuneEllerBydel.put(
                     fylkesenhetsNr,
                     list
             );
@@ -58,8 +60,8 @@ public class FylkesinndelingMedNavEnheter {
         return navEnhetTilFylkesenhet.get(navEnhet);
     }
 
-    public Map<String, List<KommuneEllerBydel>> getMapFraFylkesenheterTilKommunerOgBydeler() {
-        return mapFraFylkesenheterTilKommunerOgBydeler;
+    public Map<String, List<KommuneEllerBydel>> getFylkeTilKommuneEllerBydel() {
+        return fylkeTilKommuneEllerBydel;
     }
 
 }

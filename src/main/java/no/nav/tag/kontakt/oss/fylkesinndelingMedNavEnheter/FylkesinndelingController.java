@@ -3,6 +3,9 @@ package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 public class FylkesinndelingController {
 
@@ -13,7 +16,7 @@ public class FylkesinndelingController {
     }
 
     @GetMapping(value = "${controller.basepath}/fylkerOgKommuner")
-    public FylkesinndelingMedNavEnheter hentFylkerOgKommuner() {
-        return fylkesinndelingRepository.hentFylkesinndeling();
+    public Map<String, List<KommuneEllerBydel>> hentFylkerOgKommuner() {
+        return fylkesinndelingRepository.hentFylkesinndeling().getFylkeTilKommuneEllerBydel();
     }
 }

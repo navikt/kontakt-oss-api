@@ -31,7 +31,7 @@ public class FylkesinndelingMedNavEnheterTest {
                 Collections.singletonList(kommune_1)
         );
 
-        assertThat(fylkesinndeling.getMapFraFylkesenheterTilKommunerOgBydeler().get(fylkesenhet_1.getEnhetNr())).contains(kommune_1);
+        assertThat(fylkesinndeling.getFylkeTilKommuneEllerBydel().get(fylkesenhet_1.getEnhetNr())).contains(kommune_1);
     }
 
     @Test
@@ -48,7 +48,7 @@ public class FylkesinndelingMedNavEnheterTest {
                 Arrays.asList(kommune_1, kommune_2)
         );
 
-        Map<String, List<KommuneEllerBydel>> resultat = fylkesinndeling.getMapFraFylkesenheterTilKommunerOgBydeler();
+        Map<String, List<KommuneEllerBydel>> resultat = fylkesinndeling.getFylkeTilKommuneEllerBydel();
 
         assertThat(resultat.get(fylkesenhet_1.getEnhetNr())).isEqualTo(Collections.singletonList(kommune_1));
         assertThat(resultat.get(fylkesenhet_2.getEnhetNr())).isEqualTo(Collections.singletonList(kommune_2));
@@ -69,7 +69,7 @@ public class FylkesinndelingMedNavEnheterTest {
                 Arrays.asList(kommune_1, kommune_2, bydel_1, bydel_2)
         );
 
-        Map<String, List<KommuneEllerBydel>> resultat = fylkesinndeling.getMapFraFylkesenheterTilKommunerOgBydeler();
+        Map<String, List<KommuneEllerBydel>> resultat = fylkesinndeling.getFylkeTilKommuneEllerBydel();
 
         assertThat(resultat.get(fylkesenhet_1.getEnhetNr())).isEqualTo(Arrays.asList(kommune_1, kommune_2, bydel_1, bydel_2));
     }
@@ -103,7 +103,7 @@ public class FylkesinndelingMedNavEnheterTest {
 
     private List<KommuneEllerBydel> hentAlleKommunerOgBydeler() {
         return fylkesinndeling
-                .getMapFraFylkesenheterTilKommunerOgBydeler()
+                .getFylkeTilKommuneEllerBydel()
                 .values()
                 .stream()
                 .flatMap(List::stream)
