@@ -23,7 +23,7 @@ public class FylkesinndelingScheduler {
         this.norgService = norgService;
     }
 
-    @Scheduled(cron = "* * * * * ?")
+    @Scheduled(cron = "0 0 * * * ? *")
     public void scheduledOppdaterInformasjonFraNorg() {
 
         int hourInSeconds = 60 * 60;
