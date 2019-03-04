@@ -1,6 +1,12 @@
 package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter;
 
-public interface KommuneEllerBydel {
-    String getNummer();
-    String getNavn();
+import lombok.*;
+
+@EqualsAndHashCode
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+public class KommuneEllerBydel {
+    private String nummer;
+    private String navn;
 }

@@ -27,7 +27,7 @@ public class NorgService {
                 ));
     }
 
-    public Map<KommuneEllerBydel, NavEnhet> hentMapFraKommuneEllerBydelTilNavenhet(
+    public Map<KommuneEllerBydel, NavEnhet> hentMapFraKommuneEllerBydelTilNavEnhet(
             List<KommuneEllerBydel> kommunerOgBydeler
     ) {
         return norgKlient.hentMapFraKommuneEllerBydelTilNavenhet(kommunerOgBydeler);
