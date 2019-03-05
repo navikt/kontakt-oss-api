@@ -11,3 +11,5 @@ management.endpoints.web:
   base-path: ${CONTROLLER_BASEPATH:/kontakt-oss-api}/internal/actuator
 
 ENABLE_GSAK: true
+
+NORG_URL: http://localhost:7070/norg
