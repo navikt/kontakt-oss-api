@@ -12,8 +12,8 @@ public class HealthcheckController {
         this.repository = repository;
     }
 
-    @GetMapping(value = "${controller.basepath}/internal/healthcheck/database")
-    public String databaseHealthcheck() {
+    @GetMapping(value = "${controller.basepath}/internal/healthcheck")
+    public String healthcheck() {
         return repository.healthcheck();
     }
 }

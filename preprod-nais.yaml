@@ -13,10 +13,10 @@ spec:
   ingresses:
     - https://arbeidsgiver.nais.preprod.local/kontakt-oss-api/
   liveness:
-    path: /kontakt-oss-api/internal/actuator/info
+    path: /kontakt-oss-api/internal/healthcheck
     initialDelay: 20
   readiness:
-    path: /kontakt-oss-api/internal/actuator/info
+    path: /kontakt-oss-api/internal/healthcheck
     initialDelay: 20
   env:
     - name: SPRING_PROFILES_ACTIVE
