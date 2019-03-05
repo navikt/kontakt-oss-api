@@ -14,5 +14,7 @@ public interface KontaktskjemaRepository extends CrudRepository<Kontaktskjema, I
     
     @Query("SELECT k.* FROM Kontaktskjema k WHERE NOT EXISTS (SELECT g.id FROM GSAK_OPPGAVE g WHERE k.id = g.kontaktskjema_id AND g.status <> 'FEILET')")
     public Collection<Kontaktskjema> findAllWithNoGsakOppgave();
-    
+
+    @Query("SELECT 'ok'")
+    public String healthcheck();
 }
