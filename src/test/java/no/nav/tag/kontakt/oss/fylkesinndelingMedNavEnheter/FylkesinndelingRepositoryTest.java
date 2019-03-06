@@ -1,5 +1,6 @@
 package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter;
 
+import no.nav.tag.kontakt.oss.KontaktskjemaApplication;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import static no.nav.tag.kontakt.oss.TestData.fraKommuneNrTilNavEnhet;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = KontaktskjemaApplication.class)
 public class FylkesinndelingRepositoryTest {
 
     @Autowired FylkesinndelingRepository repository;
