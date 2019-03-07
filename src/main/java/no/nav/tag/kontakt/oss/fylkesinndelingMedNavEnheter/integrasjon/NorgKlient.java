@@ -8,6 +8,7 @@ import no.nav.tag.kontakt.oss.KontaktskjemaException;
 import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.KommuneEllerBydel;
 import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.NavEnhet;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.*;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class NorgKlient {
 
     public NorgKlient(
             RestTemplate restTemplate,
-            @Value("${NORG_URL:default}") String norgUrl
+            @Value("${norg.url}") String norgUrl
     ) {
         restTemplate.setErrorHandler(new RestTemplateErrorHandler());
         this.restTemplate = restTemplate;

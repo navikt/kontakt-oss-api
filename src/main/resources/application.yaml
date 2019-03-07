@@ -1,12 +1,29 @@
-spring:
-  h2.console:
-    enabled: false
-    path: /h2
-
 controller.basepath: ${CONTROLLER_BASEPATH:/kontakt-oss-api}
 
 management.endpoints.web:
   exposure.include: info, health, metrics, prometheus
   base-path: ${CONTROLLER_BASEPATH:/kontakt-oss-api}/internal/actuator
 
+---
+spring:
+  profiles: dev
+  h2.console:
+    enabled: true
+    path: /h2
+
+gsak.url: ""
+norg.url: ""
+
 ENABLE_GSAK: true
+
+---
+spring:
+  profiles: preprod
+gsak.url: https://oppgave.nais.preprod.local/api/v1/oppgaver
+norg.url: https://app-q0.adeo.no/norg2/api/v1
+
+---
+spring:
+  profiles: prod
+gsak.url: https://oppgave.nais.adeo.no/api/v1/oppgaver
+norg.url: https://app.adeo.no/norg2/api/v1
