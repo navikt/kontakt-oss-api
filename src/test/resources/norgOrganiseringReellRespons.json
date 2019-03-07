@@ -1,0 +1,119 @@
+[
+  {
+    "enhet": {
+      "enhetNr": "9999",
+      "status": "Inaktiv"
+    },
+    "overordnetEnhet": "1500"
+  },
+  {
+    "enhet": {
+      "enhetId": 100000290,
+      "navn": "NAV Høyanger",
+      "enhetNr": "1416",
+      "antallRessurser": 0,
+      "status": "Aktiv",
+      "orgNivaa": "EN",
+      "type": "LOKAL",
+      "organisasjonsnummer": "991366032",
+      "underEtableringDato": "1970-01-01",
+      "aktiveringsdato": "1970-01-01",
+      "underAvviklingDato": null,
+      "nedleggelsesdato": null,
+      "oppgavebehandler": true,
+      "versjon": 2,
+      "sosialeTjenester": "Eksempeltekst"
+    },
+    "overordnetEnhet": "1400",
+    "habilitetskontor": [
+      "1430"
+    ],
+    "kontaktinformasjon": {
+      "id": 100000914,
+      "enhetNr": "1416",
+      "telefonnummer": "55553333",
+      "telefonnummerKommentar": "kl. 08.00¿15.30",
+      "faksnummer": "57015601",
+      "epost": null,
+      "postadresse": {
+        "type": "postboksadresse",
+        "postnummer": "6991",
+        "poststed": "Høyanger",
+        "postboksnummer": "123",
+        "postboksanlegg": null
+      },
+      "besoeksadresse": {
+        "type": "stedsadresse",
+        "postnummer": "6993",
+        "poststed": "Høyanger",
+        "gatenavn": "Storgata",
+        "husnummer": "8",
+        "husbokstav": null,
+        "adresseTilleggsnavn": null
+      },
+      "spesielleOpplysninger": null,
+      "publikumsmottak": [
+        {
+          "id": 100000745,
+          "besoeksadresse": {
+            "type": "stedsadresse",
+            "postnummer": "6993",
+            "poststed": "Høyanger",
+            "gatenavn": "Storgata",
+            "husnummer": "8",
+            "husbokstav": null,
+            "adresseTilleggsnavn": null
+          },
+          "aapningstider": [
+            {
+              "id": 100002593,
+              "dag": "Mandag",
+              "dato": null,
+              "fra": "10:00",
+              "til": "14:00",
+              "kommentar": null,
+              "stengt": false
+            },
+            {
+              "id": 100002594,
+              "dag": "Onsdag",
+              "dato": null,
+              "fra": "10:00",
+              "til": "14:00",
+              "kommentar": null,
+              "stengt": false
+            },
+            {
+              "id": 100002595,
+              "dag": "Fredag",
+              "dato": null,
+              "fra": "10:00",
+              "til": "14:00",
+              "kommentar": null,
+              "stengt": false
+            },
+            {
+              "id": 100003736,
+              "dag": "Tirsdag",
+              "dato": null,
+              "fra": null,
+              "til": null,
+              "kommentar": "Ope for timeavtalar.",
+              "stengt": true
+            },
+            {
+              "id": 100003737,
+              "dag": "Torsdag",
+              "dato": null,
+              "fra": null,
+              "til": null,
+              "kommentar": "Ope for timeavtalar.",
+              "stengt": true
+            }
+          ],
+          "stedsbeskrivelse": null
+        }
+      ]
+    }
+  }
+]

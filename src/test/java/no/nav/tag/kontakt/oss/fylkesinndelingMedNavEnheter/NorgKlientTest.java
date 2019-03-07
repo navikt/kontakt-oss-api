@@ -1,7 +1,9 @@
 package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import no.nav.tag.kontakt.oss.KontaktskjemaException;
 import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.NorgGeografi;
 import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.NorgKlient;
@@ -75,7 +77,7 @@ public class NorgKlientTest {
     @Test
     public void hentOrganiseringFraNorg__skal_oversette_til_riktig_objekt() throws IOException {
         String organiseringJson = IOUtils.toString(
-                this.getClass().getClassLoader().getResourceAsStream("norgOrganisering.json"),
+                this.getClass().getClassLoader().getResourceAsStream("norgOrganiseringReellRespons.json"),
                 UTF_8
         );
         ResponseEntity<String> responseEntity = new ResponseEntity<>(organiseringJson, HttpStatus.OK);
@@ -113,6 +115,21 @@ public class NorgKlientTest {
         captureNorgExchangeHeaders();
         HttpHeaders headers = requestCaptor.getValue().getHeaders();
         Assertions.assertThat(headers.get("consumerId").get(0)).isEqualTo("kontakt-oss-api");
+    }
+
+    @Test
+    public void skal__handtere_at_overordnetEnhet_er_null() {
+        String jsonResponse = "[{" +
+                "\"enhet\": { \"enhetNr\": \"4280\", \"status\": \"Aktiv\" }," +
+                "\"overordnetEnhet\": null" +
+        "}]";
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<>(jsonResponse, HttpStatus.OK);
+        when(restTemplate.exchange(anyString(), eq(HttpMethod.GET), any(), eq(String.class))).thenReturn(responseEntity);
+
+        assertThat(norgKlient.hentOrganiseringFraNorg()).isEqualTo(Collections.singletonList(
+                new NorgOrganisering("4280", "Aktiv", null))
+        );
     }
 
     @Test
