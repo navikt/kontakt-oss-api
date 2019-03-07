@@ -26,6 +26,11 @@ public class MockServer {
     MockServer(
             @Value("${NORG_URL}") String norgUrl
     ) {
+        boolean SKAL_MOCKE = false;
+        if (!SKAL_MOCKE) {
+            return;
+        }
+
         log.info("STARTING MOCK SERVER");
 
         this.server =  new WireMockServer(7070);

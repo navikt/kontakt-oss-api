@@ -1,6 +1,5 @@
 package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter;
 
-import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.NorgGeografi;
 import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.NorgKlient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,7 +24,7 @@ public class FylkesinndelingController {
     }
 
     @GetMapping(value = "${controller.basepath}/geografi")
-    public List<NorgGeografi> testHentGeografi() {
-        return norgKlient.hentGeografiFraNorg();
+    public Map<String, NavEnhet> testHentGeografi() {
+        return fylkesinndelingRepository.hentKommuneNrEllerBydelNrTilNavEnhet();
     }
 }
