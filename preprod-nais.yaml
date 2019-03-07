@@ -21,10 +21,6 @@ spec:
   env:
     - name: SPRING_PROFILES_ACTIVE
       value: preprod
-    - name: GSAK_URL
-      value: https://oppgave.nais.preprod.local/api/v1/oppgaver
-    - name: NORG_URL
-      value: https://app-q0.adeo.no/norg2/api/v1
     - name: ENABLE_GSAK
       value: "true"
   prometheus:

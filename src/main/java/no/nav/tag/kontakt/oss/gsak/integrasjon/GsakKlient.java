@@ -27,7 +27,7 @@ public class GsakKlient {
     @Autowired
     public GsakKlient(
             RestTemplate restTemplate,
-            @Value("${GSAK_URL:default}") String gsakUrl
+            @Value("${gsak.url}") String gsakUrl
     ) {
         this.restTemplate = restTemplate;
         this.gsakUrl = gsakUrl;
