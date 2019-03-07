@@ -3,6 +3,7 @@ package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter;
 import net.javacrumbs.shedlock.core.LockConfiguration;
 import net.javacrumbs.shedlock.core.LockingTaskExecutor;
 import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.NorgService;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -23,9 +24,8 @@ public class FylkesinndelingScheduler {
         this.norgService = norgService;
     }
 
-    @Scheduled(cron = "0 0 * * * ?")
+    @Scheduled(cron = "${NORG_CRON}")
     public void scheduledOppdaterInformasjonFraNorg() {
-
         int hourInSeconds = 60 * 60;
 
         Instant lockAtMostUntil = Instant.now().plusSeconds(28 * hourInSeconds);
@@ -35,7 +35,6 @@ public class FylkesinndelingScheduler {
                 (Runnable)this::oppdaterInformasjonFraNorg,
                 new LockConfiguration("oppdaterInformasjonFraNorg", lockAtMostUntil, lockAtLeastUntil)
         );
-
     }
 
     private void oppdaterInformasjonFraNorg() {

@@ -25,6 +25,8 @@ spec:
       value: https://oppgave.nais.adeo.no/api/v1/oppgaver
     - name: NORG_URL
       value: https://app.adeo.no/norg2/api/v1
+    - name: NORG_CRON
+      value: "0 0 * * * ?" # Hver time
     - name: ENABLE_GSAK
       value: "true"
   prometheus:

@@ -12,3 +12,4 @@ management.endpoints.web:
 ENABLE_GSAK: true
 
 NORG_URL: http://localhost:7070/norg
+NORG_CRON: "* * * * * ?" # Hvert sekund. Overskrives i .yaml-filene.
