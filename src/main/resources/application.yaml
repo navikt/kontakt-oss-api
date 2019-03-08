@@ -1,4 +1,4 @@
-controller.basepath: ${CONTROLLER_BASEPATH:/kontakt-oss-api}
+server.servlet.context-path: /kontakt-oss-api
 
 management.endpoints.web:
   exposure.include: info, health, metrics, prometheus
@@ -10,6 +10,8 @@ spring:
   h2.console:
     enabled: true
     path: /h2
+
+server.servlet.context-path: ""
 
 mock.port: 8081
 
