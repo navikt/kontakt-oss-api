@@ -4,8 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class TestApp {
+public class MockedKontaktskjemaApplication {
     public static void main(String[] args) {
-        SpringApplication.run(TestApp.class, args);
+        SpringApplication.run(MockedKontaktskjemaApplication.class, args);
     }
 }

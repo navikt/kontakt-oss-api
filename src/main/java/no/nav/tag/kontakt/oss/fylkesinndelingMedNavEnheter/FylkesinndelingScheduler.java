@@ -24,7 +24,7 @@ public class FylkesinndelingScheduler {
         this.norgService = norgService;
     }
 
-    @Scheduled(cron = "${NORG_CRON}")
+    @Scheduled(cron = "${norg.cron}")
     public void scheduledOppdaterInformasjonFraNorg() {
         int hourInSeconds = 60 * 60;
 

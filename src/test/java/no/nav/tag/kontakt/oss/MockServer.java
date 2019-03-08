@@ -29,16 +29,12 @@ public class MockServer {
     @SneakyThrows
     @Autowired
     MockServer(
-            @Value("${NORG_URL}") String norgUrl
+            @Value("${norg.url}") String norgUrl,
+            @Value("${mock.port}") Integer port
     ) {
-        boolean SKAL_MOCKE = true;
-        if (!SKAL_MOCKE) {
-            return;
-        }
-
         log.info("STARTING MOCK SERVER");
 
-        this.server =  new WireMockServer(7070);
+        this.server =  new WireMockServer(port);
         String norgPath = new URL(norgUrl).getPath();
 
         mockNorgGeografi(norgPath);
@@ -49,7 +45,13 @@ public class MockServer {
                 .willReturn(aResponse().withBody("hello world!"))
         );
 
-        server.start();
+        try {
+            server.start();
+        } catch (Exception e) {
+            if (!server.isRunning()) {
+                log.error("Startet ikke mock-server", e);
+            }
+        }
     }
 
     @SneakyThrows

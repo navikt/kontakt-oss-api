@@ -11,9 +11,12 @@ spring:
     enabled: true
     path: /h2
 
-gsak.url: ""
-norg.url: ""
-NORG_CRON: "* * * * * ?" # Hvert sekund. Overskrives i .yaml-filene.
+mock.port: 8081
+
+gsak.url: http://localhost:${mock.port}/gsak
+norg:
+  url: http://localhost:${mock.port}/norg
+  cron: "* * * * * ?" # Hvert sekund, for å hente opp NORG-data med én gang appen startet
 
 ENABLE_GSAK: true
 
@@ -21,10 +24,14 @@ ENABLE_GSAK: true
 spring:
   profiles: preprod
 gsak.url: https://oppgave.nais.preprod.local/api/v1/oppgaver
-norg.url: https://app-q0.adeo.no/norg2/api/v1
+norg:
+  url: https://app-q0.adeo.no/norg2/api/v1
+  cron: "0 0 * * * ?" # Hver time
 
 ---
 spring:
   profiles: prod
 gsak.url: https://oppgave.nais.adeo.no/api/v1/oppgaver
-norg.url: https://app.adeo.no/norg2/api/v1
+norg:
+  url: https://app.adeo.no/norg2/api/v1
+  cron: "0 0 * * * ?" # Hver time

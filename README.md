@@ -2,6 +2,8 @@
 ===========================
 [![CircleCI](https://circleci.com/gh/navikt/tiltaksgjennomforing.svg?style=svg)](https://circleci.com/gh/navikt/tiltaksgjennomforing)
 
+### Oppsett
+
 Bygg image
 `docker build -t kontakt-oss-api .`
 
@@ -13,6 +15,10 @@ Kjør container
 Hvis localhost ikke fungerer, prøv med IP-en du finner med følgende kommando:
 
 `docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' container_name_or_id`
+
+### Lokal kjøring
+
+For å kjøre lokalt med mocking mot NORG, kjør `MockedKontaktskjemaApplication`.
 
 ### Feature toggling
 Toggle av/på GSAK-innsending ved å apply-e appen med 
