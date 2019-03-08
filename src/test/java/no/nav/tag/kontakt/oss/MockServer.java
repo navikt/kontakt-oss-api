@@ -32,7 +32,7 @@ public class MockServer {
             @Value("${norg.url}") String norgUrl,
             @Value("${mock.port}") Integer port
     ) {
-        log.info("STARTING MOCK SERVER");
+        log.info("Starter mock-server");
 
         this.server =  new WireMockServer(port);
         String norgPath = new URL(norgUrl).getPath();
@@ -41,15 +41,11 @@ public class MockServer {
         mockNorgOrganisering(norgPath);
         mockNorgsMappingFraGeografiTilNavEnhet(norgPath);
 
-        server.stubFor(get(urlEqualTo("/hello"))
-                .willReturn(aResponse().withBody("hello world!"))
-        );
-
         try {
             server.start();
         } catch (Exception e) {
             if (!server.isRunning()) {
-                log.error("Startet ikke mock-server", e);
+                log.info("Fikk ikke startet mock-server", e);
             }
         }
     }
