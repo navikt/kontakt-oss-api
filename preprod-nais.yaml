@@ -6,7 +6,7 @@ metadata:
   labels:
     team: teamtag
 spec:
-  image: navikt/kontakt-oss-api:TAG-332-mocking_346
+  image: navikt/kontakt-oss-api:latest
   team: teamtag
   port: 8080
   secrets: true
@@ -25,4 +25,4 @@ spec:
       value: "true"
   prometheus:
     enabled: true
-    path: /kontakt-oss-api/internal/actuator/prometheus
+    path: /internal/actuator/prometheus
