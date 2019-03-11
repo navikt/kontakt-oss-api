@@ -43,7 +43,20 @@ public class MockServer {
         mockNorgOrganisering(norgPath);
         mockNorgsMappingFraGeografiTilNavEnhet(norgPath);
 
+        String kodeverkPath = "/api/v1";
+        mockKall(kodeverkPath + "/kodeverk/Kommuner/koder/betydninger", "kommuner.json");
+        mockKall(kodeverkPath + "/kodeverk/Bydeler/koder/betydninger", "bydeler.json");
+
         server.start();
+    }
+
+    private void mockKall(String path, String filnavn) {
+        server.stubFor(
+                WireMock.get(WireMock.urlPathEqualTo(path)).willReturn(WireMock.aResponse()
+                        .withStatus(HttpStatus.OK.value())
+                        .withBody(hentStringFraFil(filnavn))
+                )
+        );
     }
 
     @SneakyThrows

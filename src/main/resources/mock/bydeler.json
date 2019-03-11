@@ -1,0 +1,441 @@
+{
+  "betydninger": {
+    "110301": [
+      {
+        "gyldigFra": "2017-05-01",
+        "gyldigTil": "9999-12-31",
+        "beskrivelser": {
+          "nb": {
+            "term": "Hundvåg",
+            "tekst": "Hundvåg"
+          }
+        }
+      }
+    ],
+    "110302": [
+      {
+        "gyldigFra": "2017-05-01",
+        "gyldigTil": "9999-12-31",
+        "beskrivelser": {
+          "nb": {
+            "term": "Tasta",
+            "tekst": "Tasta"
+          }
+        }
+      }
+    ],
+    "110303": [
+      {
+        "gyldigFra": "2017-05-01",
+        "gyldigTil": "9999-12-31",
+        "beskrivelser": {
+          "nb": {
+            "term": "Eiganes og Våland",
+            "tekst": "Eiganes og Våland"
+          }
+        }
+      }
+    ],
+    "110304": [
+      {
+        "gyldigFra": "2017-05-01",
+        "gyldigTil": "9999-12-31",
+        "beskrivelser": {
+          "nb": {
+            "term": "Madla",
+            "tekst": "Madla"
+          }
+        }
+      }
+    ],
+    "110305": [
+      {
+        "gyldigFra": "2017-05-01",
+        "gyldigTil": "9999-12-31",
+        "beskrivelser": {
+          "nb": {
+            "term": "Storhaug",
+            "tekst": "Storhaug"
+          }
+        }
+      }
+    ],
+    "110306": [
+      {
+        "gyldigFra": "2017-05-01",
+        "gyldigTil": "9999-12-31",
+        "beskrivelser": {
+          "nb": {
+            "term": "Hillevåg",
+            "tekst": "Hillevåg"
+          }
+        }
+      }
+    ],
+    "110307": [
+      {
+        "gyldigFra": "2017-05-01",
+        "gyldigTil": "9999-12-31",
+        "beskrivelser": {
+          "nb": {
+            "term": "Hinna",
+            "tekst": "Hinna"
+          }
+        }
+      }
+    ],
+    "110308": [],
+    "120101": [
+      {
+        "gyldigFra": "2017-05-01",
+        "gyldigTil": "9999-12-31",
+        "beskrivelser": {
+          "nb": {
+            "term": "Arna",
+            "tekst": "Arna"
+          }
+        }
+      }
+    ],
+    "120102": [
+      {
+        "gyldigFra": "2017-05-01",
+        "gyldigTil": "9999-12-31",
+        "beskrivelser": {
+          "nb": {
+            "term": "Bergenhus",
+            "tekst": "Bergenhus"
+          }
+        }
+      }
+    ],
+    "120103": [
+      {
+        "gyldigFra": "2017-05-01",
+        "gyldigTil": "9999-12-31",
+        "beskrivelser": {
+          "nb": {
+            "term": "Fana",
+            "tekst": "Fana"
+          }
+        }
+      }
+    ],
+    "120104": [
+      {
+        "gyldigFra": "2017-05-01",
+        "gyldigTil": "9999-12-31",
+        "beskrivelser": {
+          "nb": {
+            "term": "Fyllingsdalen",
+            "tekst": "Fyllingsdalen"
+          }
+        }
+      }
+    ],
+    "120105": [
+      {
+        "gyldigFra": "2017-05-01",
+        "gyldigTil": "9999-12-31",
+        "beskrivelser": {
+          "nb": {
+            "term": "Laksevåg",
+            "tekst": "Laksevåg"
+          }
+        }
+      }
+    ],
+    "120106": [
+      {
+        "gyldigFra": "2017-05-01",
+        "gyldigTil": "9999-12-31",
+        "beskrivelser": {
+          "nb": {
+            "term": "Ytrebygda",
+            "tekst": "Ytrebygda"
+          }
+        }
+      }
+    ],
+    "120107": [
+      {
+        "gyldigFra": "2017-05-01",
+        "gyldigTil": "9999-12-31",
+        "beskrivelser": {
+          "nb": {
+            "term": "Årstad",
+            "tekst": "Årstad"
+          }
+        }
+      }
+    ],
+    "120108": [
+      {
+        "gyldigFra": "2017-05-01",
+        "gyldigTil": "9999-12-31",
+        "beskrivelser": {
+          "nb": {
+            "term": "Åsane",
+            "tekst": "Åsane"
+          }
+        }
+      }
+    ],
+    "160101": [],
+    "160102": [],
+    "160103": [],
+    "160104": [],
+    "500101": [
+      {
+        "gyldigFra": "2018-01-01",
+        "gyldigTil": "9999-12-31",
+        "beskrivelser": {
+          "nb": {
+            "term": "Midtbyen",
+            "tekst": "Midtbyen"
+          }
+        }
+      }
+    ],
+    "500102": [
+      {
+        "gyldigFra": "2018-01-01",
+        "gyldigTil": "9999-12-31",
+        "beskrivelser": {
+          "nb": {
+            "term": "Østbyen",
+            "tekst": "Østbyen"
+          }
+        }
+      }
+    ],
+    "500103": [
+      {
+        "gyldigFra": "2018-01-01",
+        "gyldigTil": "9999-12-31",
+        "beskrivelser": {
+          "nb": {
+            "term": "Lerkendal",
+            "tekst": "Lerkendal"
+          }
+        }
+      }
+    ],
+    "500104": [
+      {
+        "gyldigFra": "2018-01-01",
+        "gyldigTil": "9999-12-31",
+        "beskrivelser": {
+          "nb": {
+            "term": "Heimdal",
+            "tekst": "Heimdal"
+          }
+        }
+      }
+    ],
+    "030109": [
+      {
+        "gyldigFra": "2017-05-01",
+        "gyldigTil": "9999-12-31",
+        "beskrivelser": {
+          "nb": {
+            "term": "Bjerke",
+            "tekst": "Bjerke"
+          }
+        }
+      }
+    ],
+    "030108": [
+      {
+        "gyldigFra": "2017-05-01",
+        "gyldigTil": "9999-12-31",
+        "beskrivelser": {
+          "nb": {
+            "term": "Nordre Aker",
+            "tekst": "Nordre Aker"
+          }
+        }
+      }
+    ],
+    "030105": [
+      {
+        "gyldigFra": "2017-05-01",
+        "gyldigTil": "9999-12-31",
+        "beskrivelser": {
+          "nb": {
+            "term": "Frogner",
+            "tekst": "Frogner"
+          }
+        }
+      }
+    ],
+    "030104": [
+      {
+        "gyldigFra": "2017-05-01",
+        "gyldigTil": "9999-12-31",
+        "beskrivelser": {
+          "nb": {
+            "term": "St.Hanshaugen",
+            "tekst": "St.Hanshaugen"
+          }
+        }
+      }
+    ],
+    "030107": [
+      {
+        "gyldigFra": "2017-05-01",
+        "gyldigTil": "9999-12-31",
+        "beskrivelser": {
+          "nb": {
+            "term": "Vestre Aker",
+            "tekst": "Vestre Aker"
+          }
+        }
+      }
+    ],
+    "030106": [
+      {
+        "gyldigFra": "2017-05-01",
+        "gyldigTil": "9999-12-31",
+        "beskrivelser": {
+          "nb": {
+            "term": "Ullern",
+            "tekst": "Ullern"
+          }
+        }
+      }
+    ],
+    "030101": [
+      {
+        "gyldigFra": "2017-05-01",
+        "gyldigTil": "9999-12-31",
+        "beskrivelser": {
+          "nb": {
+            "term": "Gamle Oslo",
+            "tekst": "Gamle Oslo"
+          }
+        }
+      }
+    ],
+    "030103": [
+      {
+        "gyldigFra": "2017-05-01",
+        "gyldigTil": "9999-12-31",
+        "beskrivelser": {
+          "nb": {
+            "term": "Sagene",
+            "tekst": "Sagene"
+          }
+        }
+      }
+    ],
+    "030102": [
+      {
+        "gyldigFra": "2017-05-01",
+        "gyldigTil": "9999-12-31",
+        "beskrivelser": {
+          "nb": {
+            "term": "Grünerløkka",
+            "tekst": "Grünerløkka"
+          }
+        }
+      }
+    ],
+    "030116": [
+      {
+        "gyldigFra": "2017-05-01",
+        "gyldigTil": "9999-12-31",
+        "beskrivelser": {
+          "nb": {
+            "term": "Sentrum",
+            "tekst": "Sentrum"
+          }
+        }
+      }
+    ],
+    "030115": [
+      {
+        "gyldigFra": "2017-05-01",
+        "gyldigTil": "9999-12-31",
+        "beskrivelser": {
+          "nb": {
+            "term": "Søndre Nordstrand",
+            "tekst": "Søndre Nordstrand"
+          }
+        }
+      }
+    ],
+    "030117": [
+      {
+        "gyldigFra": "2017-05-01",
+        "gyldigTil": "9999-12-31",
+        "beskrivelser": {
+          "nb": {
+            "term": "Marka",
+            "tekst": "Marka"
+          }
+        }
+      }
+    ],
+    "030112": [
+      {
+        "gyldigFra": "2017-05-01",
+        "gyldigTil": "9999-12-31",
+        "beskrivelser": {
+          "nb": {
+            "term": "Alna",
+            "tekst": "Alna"
+          }
+        }
+      }
+    ],
+    "030111": [
+      {
+        "gyldigFra": "2017-05-01",
+        "gyldigTil": "9999-12-31",
+        "beskrivelser": {
+          "nb": {
+            "term": "Stovner",
+            "tekst": "Stovner"
+          }
+        }
+      }
+    ],
+    "030114": [
+      {
+        "gyldigFra": "2017-05-01",
+        "gyldigTil": "9999-12-31",
+        "beskrivelser": {
+          "nb": {
+            "term": "Nordstrand",
+            "tekst": "Nordstrand"
+          }
+        }
+      }
+    ],
+    "030113": [
+      {
+        "gyldigFra": "2017-05-01",
+        "gyldigTil": "9999-12-31",
+        "beskrivelser": {
+          "nb": {
+            "term": "Østensjø",
+            "tekst": "Østensjø"
+          }
+        }
+      }
+    ],
+    "030110": [
+      {
+        "gyldigFra": "2017-05-01",
+        "gyldigTil": "9999-12-31",
+        "beskrivelser": {
+          "nb": {
+            "term": "Grorud",
+            "tekst": "Grorud"
+          }
+        }
+      }
+    ]
+  }
+}
