@@ -30,7 +30,7 @@ public class NorgKlient {
             RestTemplate restTemplate,
             @Value("${norg.url}") String norgUrl
     ) {
-        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+        restTemplate.setErrorHandler(new IgnoreAllErrors());
         this.restTemplate = restTemplate;
         this.norgUrl = norgUrl;
     }
@@ -133,17 +133,4 @@ public class NorgKlient {
             throw new KontaktskjemaException("Returverdi fra NORG er ikke riktig formatert JSON, eller passer ikke med vår modell. Returverdi: " + jsonResponse.getBody());
         }
     }
-
-    private static class RestTemplateErrorHandler implements ResponseErrorHandler {
-        @Override
-        public boolean hasError(ClientHttpResponse clientHttpResponse) throws IOException {
-            // Vi håndterer errors direkte i koden foreløpig.
-            return false;
-        }
-
-        @Override
-        public void handleError(ClientHttpResponse clientHttpResponse) throws IOException {
-        }
-    }
-
 }

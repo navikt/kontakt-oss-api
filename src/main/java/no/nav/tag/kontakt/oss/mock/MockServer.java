@@ -43,7 +43,7 @@ public class MockServer {
         mockNorgOrganisering(norgPath);
         mockNorgsMappingFraGeografiTilNavEnhet(norgPath);
 
-        String kodeverkPath = "/api/v1";
+        String kodeverkPath = "/kodeverk";
         mockKall(kodeverkPath + "/kodeverk/Kommuner/koder/betydninger", "kommuner.json");
         mockKall(kodeverkPath + "/kodeverk/Bydeler/koder/betydninger", "bydeler.json");
 
