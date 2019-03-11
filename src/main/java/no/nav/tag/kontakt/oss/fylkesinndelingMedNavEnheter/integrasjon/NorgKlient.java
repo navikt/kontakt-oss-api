@@ -85,7 +85,6 @@ public class NorgKlient {
                             organisering.get("enhet").get("enhetNr").textValue(),
                             organisering.get("enhet").get("status").textValue(),
                             organisering.get("overordnetEnhet").textValue()
-
                     )
             ));
 

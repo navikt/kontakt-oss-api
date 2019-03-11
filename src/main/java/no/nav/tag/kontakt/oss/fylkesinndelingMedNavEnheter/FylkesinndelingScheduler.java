@@ -1,5 +1,6 @@
 package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter;
 
+import lombok.extern.slf4j.Slf4j;
 import net.javacrumbs.shedlock.core.LockConfiguration;
 import net.javacrumbs.shedlock.core.LockingTaskExecutor;
 import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.NorgService;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 public class FylkesinndelingScheduler {
     private final FylkesinndelingRepository fylkesinndelingRepository;
@@ -23,8 +25,9 @@ public class FylkesinndelingScheduler {
         this.norgService = norgService;
     }
 
-    @Scheduled(cron = "0 0 * * * ?")
+    @Scheduled(fixedRateString = "${norg.fixed-rate}")
     public void scheduledOppdaterInformasjonFraNorg() {
+        log.info("Sjekker shedlock for NORG-oppdatering");
 
         int hourInSeconds = 60 * 60;
 
@@ -35,10 +38,11 @@ public class FylkesinndelingScheduler {
                 (Runnable)this::oppdaterInformasjonFraNorg,
                 new LockConfiguration("oppdaterInformasjonFraNorg", lockAtMostUntil, lockAtLeastUntil)
         );
-
     }
 
     private void oppdaterInformasjonFraNorg() {
+        log.info("Oppdaterer informasjon fra NORG");
+
         List<KommuneEllerBydel> kommunerOgBydeler = norgService.hentListeOverAlleKommunerOgBydeler();
         Map<KommuneEllerBydel, NavEnhet> fraKommuneEllerBydelTilNavEnhet = norgService.hentMapFraKommuneEllerBydelTilNavEnhet(kommunerOgBydeler);
         FylkesinndelingMedNavEnheter fylkesinndeling = new FylkesinndelingMedNavEnheter(

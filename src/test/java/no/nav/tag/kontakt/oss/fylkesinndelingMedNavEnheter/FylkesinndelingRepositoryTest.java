@@ -1,9 +1,11 @@
 package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter;
 
+import no.nav.tag.kontakt.oss.KontaktskjemaApplication;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
@@ -15,6 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@TestPropertySource(properties = {"mock.enabled=false"})
 public class FylkesinndelingRepositoryTest {
 
     @Autowired FylkesinndelingRepository repository;

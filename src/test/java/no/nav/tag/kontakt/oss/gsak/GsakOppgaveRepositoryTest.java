@@ -6,15 +6,18 @@ import static org.junit.Assert.assertThat;
 
 import java.time.LocalDateTime;
 
+import no.nav.tag.kontakt.oss.KontaktskjemaApplication;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@TestPropertySource(properties = {"mock.enabled=false"})
 public class GsakOppgaveRepositoryTest {
 
     @Autowired

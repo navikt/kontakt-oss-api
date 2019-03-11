@@ -2,6 +2,8 @@
 ===========================
 [![CircleCI](https://circleci.com/gh/navikt/tiltaksgjennomforing.svg?style=svg)](https://circleci.com/gh/navikt/tiltaksgjennomforing)
 
+### Oppsett
+
 Bygg image
 `docker build -t kontakt-oss-api .`
 

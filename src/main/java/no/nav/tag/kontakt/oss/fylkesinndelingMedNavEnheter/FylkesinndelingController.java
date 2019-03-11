@@ -15,7 +15,7 @@ public class FylkesinndelingController {
         this.fylkesinndelingRepository = fylkesinndelingRepository;
     }
 
-    @GetMapping(value = "${controller.basepath}/fylkerOgKommuner")
+    @GetMapping(value = "/fylkerOgKommuner")
     public Map<String, List<KommuneEllerBydel>> hentFylkerOgKommuner() {
         return fylkesinndelingRepository.hentFylkesinndeling().getFylkeTilKommuneEllerBydel();
     }

@@ -1,18 +1,26 @@
-controller.basepath: ${CONTROLLER_BASEPATH:/kontakt-oss-api}
+server.servlet.context-path: /kontakt-oss-api
 
 management.endpoints.web:
   exposure.include: info, health, metrics, prometheus
   base-path: ${CONTROLLER_BASEPATH:/kontakt-oss-api}/internal/actuator
 
+norg.fixed-rate: 3600000 # Hver time i millisekunder: 1000 * 60 * 60 = 3600000
+
 ---
 spring:
   profiles: dev
   h2.console:
-    enabled: true
+    enabled: false
     path: /h2
 
-gsak.url: ""
-norg.url: ""
+server.servlet.context-path: ""
+
+mock:
+  enabled: true
+  port: 8081
+
+gsak.url: http://localhost:${mock.port}/gsak
+norg.url: http://localhost:${mock.port}/norg
 
 ENABLE_GSAK: true
 

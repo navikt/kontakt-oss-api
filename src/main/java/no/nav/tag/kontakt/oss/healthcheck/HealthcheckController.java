@@ -12,7 +12,7 @@ public class HealthcheckController {
         this.repository = repository;
     }
 
-    @GetMapping(value = "${controller.basepath}/internal/healthcheck")
+    @GetMapping(value = "/internal/healthcheck")
     public String healthcheck() {
         return repository.healthcheck();
     }

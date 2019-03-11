@@ -25,7 +25,7 @@ public class KontaktskjemaController {
         this.metrics = metrics;
     }
 
-    @PostMapping(value = "${controller.basepath}/meldInteresse")
+    @PostMapping(value = "/meldInteresse")
     public ResponseEntity meldInteresse(
             @RequestBody Kontaktskjema kontaktskjema
     ) {
