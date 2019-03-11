@@ -15,7 +15,7 @@ import static no.nav.tag.kontakt.oss.TestData.fraKommuneNrTilNavEnhet;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = KontaktskjemaApplication.class)
+@SpringBootTest
 public class FylkesinndelingRepositoryTest {
 
     @Autowired FylkesinndelingRepository repository;

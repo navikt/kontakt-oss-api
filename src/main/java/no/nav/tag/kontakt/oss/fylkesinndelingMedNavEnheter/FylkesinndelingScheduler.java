@@ -26,7 +26,7 @@ public class FylkesinndelingScheduler {
         this.norgService = norgService;
     }
 
-    @Scheduled(cron = "${norg.cron}")
+    @Scheduled(fixedRateString = "${norg.fixed-rate}")
     public void scheduledOppdaterInformasjonFraNorg() {
         log.info("Sjekker shedlock for NORG-oppdatering");
 

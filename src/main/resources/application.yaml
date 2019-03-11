@@ -4,6 +4,8 @@ management.endpoints.web:
   exposure.include: info, health, metrics, prometheus
   base-path: ${CONTROLLER_BASEPATH:/kontakt-oss-api}/internal/actuator
 
+norg.fixed-rate: 3600000 # Hver time i millisekunder: 1000 * 60 * 60 = 3600000
+
 ---
 spring:
   profiles: dev
@@ -11,14 +13,12 @@ spring:
     enabled: true
     path: /h2
 
-# server.servlet.context-path: ""
+server.servlet.context-path: ""
 
 mock.port: 8081
 
 gsak.url: http://localhost:${mock.port}/gsak
-norg:
-  url: http://localhost:${mock.port}/norg
-  cron: "* * * * * ?" # Hvert sekund, for å hente opp NORG-data med én gang appen startet
+norg.url: http://localhost:${mock.port}/norg
 
 ENABLE_GSAK: true
 
@@ -26,14 +26,10 @@ ENABLE_GSAK: true
 spring:
   profiles: preprod
 gsak.url: https://oppgave.nais.preprod.local/api/v1/oppgaver
-norg:
-  url: https://app-q0.adeo.no/norg2/api/v1
-  cron: "0 0 * * * ?" # Hver time
+norg.url: https://app-q0.adeo.no/norg2/api/v1
 
 ---
 spring:
   profiles: prod
 gsak.url: https://oppgave.nais.adeo.no/api/v1/oppgaver
-norg:
-  url: https://app.adeo.no/norg2/api/v1
-  cron: "0 0 * * * ?" # Hver time
+norg.url: https://app.adeo.no/norg2/api/v1

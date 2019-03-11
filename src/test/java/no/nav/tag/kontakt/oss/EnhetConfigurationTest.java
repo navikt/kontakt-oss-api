@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
 
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = KontaktskjemaApplication.class)
+@SpringBootTest
 public class EnhetConfigurationTest {
     @Autowired
     private Map<String, String> enheter;

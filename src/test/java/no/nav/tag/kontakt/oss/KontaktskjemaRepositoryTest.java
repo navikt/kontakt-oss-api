@@ -18,7 +18,7 @@ import no.nav.tag.kontakt.oss.gsak.GsakOppgaveRepository;
 import no.nav.tag.kontakt.oss.gsak.GsakOppgave.OppgaveStatus;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = KontaktskjemaApplication.class)
+@SpringBootTest
 public class KontaktskjemaRepositoryTest {
 
     @Autowired

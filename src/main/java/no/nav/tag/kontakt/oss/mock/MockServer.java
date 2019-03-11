@@ -32,6 +32,7 @@ public class MockServer {
             @Value("${norg.url}") String norgUrl,
             @Value("${mock.port}") Integer port
     ) {
+        if (true) { return; }
         log.info("Starter mock-server");
 
         this.server =  new WireMockServer(port);
