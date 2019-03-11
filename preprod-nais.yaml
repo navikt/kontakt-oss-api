@@ -25,4 +25,4 @@ spec:
       value: "true"
   prometheus:
     enabled: true
-    path: /internal/actuator/prometheus
+    path: /kontakt-oss-api/internal/actuator/prometheus

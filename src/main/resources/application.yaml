@@ -2,7 +2,7 @@ server.servlet.context-path: /kontakt-oss-api
 
 management.endpoints.web:
   exposure.include: info, health, metrics, prometheus
-  base-path: ${CONTROLLER_BASEPATH:/kontakt-oss-api}/internal/actuator
+  base-path: /internal/actuator
 
 norg.fixed-rate: 3600000 # Hver time i millisekunder: 1000 * 60 * 60 = 3600000
 
