@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.relational.core.conversion.DbActionExecutionException;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import no.nav.tag.kontakt.oss.gsak.GsakOppgave;
@@ -19,6 +20,7 @@ import no.nav.tag.kontakt.oss.gsak.GsakOppgave.OppgaveStatus;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@TestPropertySource(properties = {"mock.enabled=false"})
 public class KontaktskjemaRepositoryTest {
 
     @Autowired

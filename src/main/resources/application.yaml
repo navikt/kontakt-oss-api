@@ -10,12 +10,14 @@ norg.fixed-rate: 3600000 # Hver time i millisekunder: 1000 * 60 * 60 = 3600000
 spring:
   profiles: dev
   h2.console:
-    enabled: true
+    enabled: false
     path: /h2
 
 server.servlet.context-path: ""
 
-mock.port: 8081
+mock:
+  enabled: true
+  port: 8081
 
 gsak.url: http://localhost:${mock.port}/gsak
 norg.url: http://localhost:${mock.port}/norg

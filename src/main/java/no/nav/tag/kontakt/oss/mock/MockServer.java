@@ -10,7 +10,7 @@ import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.NavEnhet;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.bind.BindException;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -23,6 +23,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 @Slf4j
 @Component
 @Profile("dev")
+@ConditionalOnProperty(prefix = "mock", name = "enabled", havingValue = "true")
 public class MockServer {
     private WireMockServer server;
     private static ObjectMapper objectMapper = new ObjectMapper();
@@ -42,15 +43,7 @@ public class MockServer {
         mockNorgOrganisering(norgPath);
         mockNorgsMappingFraGeografiTilNavEnhet(norgPath);
 
-        startHvisIkkeKjorer();
-    }
-
-    private void startHvisIkkeKjorer() {
-        try {
-            server.start();
-        } catch (BindException e) {
-            log.info("Port allerede i bruk", e);
-        }
+        server.start();
     }
 
     @SneakyThrows
