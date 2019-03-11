@@ -16,10 +16,6 @@ Hvis localhost ikke fungerer, prøv med IP-en du finner med følgende kommando:
 
 `docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' container_name_or_id`
 
-### Lokal kjøring
-
-For å kjøre lokalt med mocking mot NORG, kjør `MockedKontaktskjemaApplication`.
-
 ### Feature toggling
 Toggle av/på GSAK-innsending ved å apply-e appen med 
 ```

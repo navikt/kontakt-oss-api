@@ -1,8 +1,9 @@
-package no.nav.tag.kontakt.oss;
+package no.nav.tag.kontakt.oss.mock;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.client.WireMock;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.NavEnhet;
@@ -16,7 +17,6 @@ import org.springframework.stereotype.Component;
 import java.net.URL;
 import java.util.Map;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Slf4j
@@ -64,7 +64,7 @@ public class MockServer {
             navEnhet = fraKommuneEllerBydelTilNavEnhet.get(kommuneNrEllerBydelNr);
             navEnhetJson = objectMapper.writeValueAsString(navEnhet);
             server.stubFor(
-                    get(urlPathEqualTo(norgPath + "/enhet/navkontor/" + kommuneNrEllerBydelNr)).willReturn(aResponse()
+                    WireMock.get(WireMock.urlPathEqualTo(norgPath + "/enhet/navkontor/" + kommuneNrEllerBydelNr)).willReturn(WireMock.aResponse()
                             .withStatus(HttpStatus.OK.value())
                             .withBody(navEnhetJson)
                     )
@@ -74,7 +74,7 @@ public class MockServer {
 
     private void mockNorgOrganisering(String norgPath) {
         server.stubFor(
-                get(urlPathEqualTo(norgPath + "/enhet/kontaktinformasjon/organisering/AKTIV")).willReturn(aResponse()
+                WireMock.get(WireMock.urlPathEqualTo(norgPath + "/enhet/kontaktinformasjon/organisering/AKTIV")).willReturn(WireMock.aResponse()
                         .withStatus(HttpStatus.OK.value())
                         .withBody(hentStringFraFil("norgOrganisering.json"))
                 )
@@ -84,7 +84,7 @@ public class MockServer {
 
     private void mockNorgGeografi(String norgPath) {
         server.stubFor(
-                get(urlPathEqualTo(norgPath + "/kodeverk/geografi")).willReturn(aResponse()
+                WireMock.get(WireMock.urlPathEqualTo(norgPath + "/kodeverk/geografi")).willReturn(WireMock.aResponse()
                         .withStatus(HttpStatus.OK.value())
                         .withBody(hentStringFraFil("norgGeografi.json"))
                 )
@@ -93,6 +93,6 @@ public class MockServer {
 
     @SneakyThrows
     private String hentStringFraFil(String filnavn) {
-        return IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream(filnavn), UTF_8);
+        return IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("mock/" + filnavn), UTF_8);
     }
 }
