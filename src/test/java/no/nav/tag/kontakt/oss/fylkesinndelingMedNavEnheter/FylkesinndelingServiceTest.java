@@ -53,8 +53,8 @@ public class FylkesinndelingServiceTest {
 
         List<KommuneEllerBydel> kommunerTilhoerendeFylke = fylkesinndelingService.hentListeOverAlleKommunerOgBydeler();
         assertThat(kommunerTilhoerendeFylke).contains(
-                new Bydel("010101", "kommune–bydel1"),
-                new Bydel("010102", "kommune–bydel2")
+                new Bydel("010101", "kommune - bydel1"),
+                new Bydel("010102", "kommune - bydel2")
         );
     }
 

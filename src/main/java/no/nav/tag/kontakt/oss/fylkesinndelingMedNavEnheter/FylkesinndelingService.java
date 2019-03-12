@@ -51,7 +51,7 @@ public class FylkesinndelingService {
             String bydelensKommunenr = bydel.getNummer().substring(0, 4);
             Optional<Kommune> kommune = finnKommune(bydelensKommunenr, kommuner);
             if (kommune.isPresent()) {
-                Bydel bydelMedOppdatertNavn = new Bydel(bydel.getNummer(), kommune.get().getNavn() + "–" + bydel.getNavn());
+                Bydel bydelMedOppdatertNavn = new Bydel(bydel.getNummer(), kommune.get().getNavn() + " - " + bydel.getNavn());
                 kommunerOgBydeler.add(bydelMedOppdatertNavn);
                 kommunerSomHarBydeler.add(kommune.get());
             }

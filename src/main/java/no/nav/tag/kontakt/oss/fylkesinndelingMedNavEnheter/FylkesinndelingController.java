@@ -1,6 +1,5 @@
 package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter;
 
-import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.KodeverkKlient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,11 +10,9 @@ import java.util.Map;
 public class FylkesinndelingController {
 
     private final FylkesinndelingRepository fylkesinndelingRepository;
-    private final KodeverkKlient kodeverkKlient;
 
-    public FylkesinndelingController(FylkesinndelingRepository fylkesinndelingRepository, KodeverkKlient kodeverkKlient) {
+    public FylkesinndelingController(FylkesinndelingRepository fylkesinndelingRepository) {
         this.fylkesinndelingRepository = fylkesinndelingRepository;
-        this.kodeverkKlient = kodeverkKlient;
     }
 
     @GetMapping(value = "/fylkerOgKommuner")

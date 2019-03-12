@@ -1,6 +1,7 @@
-package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter;
+package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon;
 
 import no.nav.tag.kontakt.oss.KontaktskjemaException;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.NavEnhet;
 import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.NorgKlient;
 import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.NorgOrganisering;
 import org.assertj.core.api.Assertions;
