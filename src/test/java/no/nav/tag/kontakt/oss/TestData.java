@@ -1,7 +1,9 @@
 package no.nav.tag.kontakt.oss;
 
+import lombok.SneakyThrows;
 import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.*;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakRequest;
+import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -10,6 +12,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class TestData {
     public static Kontaktskjema kontaktskjema() {
@@ -101,5 +105,10 @@ public class TestData {
 
     public static Bydel bydel(String id) {
         return new Bydel(id, id);
+    }
+
+    @SneakyThrows
+    public static String lesFil(String filnavn) {
+        return IOUtils.toString(TestData.class.getClassLoader().getResourceAsStream(filnavn), UTF_8);
     }
 }

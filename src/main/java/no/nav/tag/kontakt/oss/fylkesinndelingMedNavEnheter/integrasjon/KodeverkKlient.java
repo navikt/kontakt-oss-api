@@ -11,9 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -54,22 +52,40 @@ public class KodeverkKlient {
     }
 
     private List<Kommune> oversettTilKommuner(ResponseEntity<String> jsonResponse) {
+        List<Kommune> kommuner = new ArrayList<>();
+
+        hentMapFraKodeTilTerm(jsonResponse).forEach((kommuneNr, navn) -> kommuner.add(
+                new Kommune(kommuneNr, navn)
+        ));
+
+        return kommuner;
+    }
+
+    private Map<String, String> hentMapFraKodeTilTerm(ResponseEntity<String> jsonResponse) {
         try {
-            List<Kommune> kommuner = new ArrayList<>();
             JsonNode jsonNode = objectMapper.readTree(jsonResponse.getBody());
-
-
-            jsonNode.get("betydninger").fields().forEachRemaining(betydning -> {
-                if (!betydning.getValue().isNull()) {
-                    kommuner.add(new Kommune(
-                            betydning.getKey(),
-                            betydning.getValue().get("beskrivelser").get("nb").get("term").textValue()
-                    ));
-                }
-            });
-            return kommuner;
+            return hentMapFraKodeTilTerm(jsonNode);
         } catch (IOException e) {
             throw new KontaktskjemaException("Returverdi fra Felles Kodeverk er ikke riktig formatert JSON, eller passer ikke med vår modell. Returverdi: " + jsonResponse.getBody());
         }
+    }
+
+    private Map<String, String> hentMapFraKodeTilTerm(JsonNode jsonNode) {
+        JsonNode betydninger = jsonNode.get("betydninger");
+
+        Map<String, String> map = new TreeMap<>();
+
+        List<String> koder = new ArrayList<>();
+        betydninger.fieldNames().forEachRemaining(koder::add);
+
+        koder.forEach(kode -> {
+            JsonNode betydning = betydninger.get(kode).get(0);
+            if (betydning != null) {
+                String term = betydning.get("beskrivelser").get("nb").get("term").textValue();
+                map.put(kode, term);
+            }
+        });
+
+        return map;
     }
 }
