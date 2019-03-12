@@ -1,6 +1,8 @@
-package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon;
+package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter;
 
-import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.*;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.KodeverkKlient;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.NorgGeografi;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.NorgKlient;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -10,11 +12,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
-public class NorgService {
+public class FylkesinndelingService {
     private final NorgKlient norgKlient;
+    private final KodeverkKlient kodeverkKlient;
 
-    public NorgService(NorgKlient norgKlient) {
+    public FylkesinndelingService(NorgKlient norgKlient, KodeverkKlient kodeverkKlient) {
         this.norgKlient = norgKlient;
+        this.kodeverkKlient = kodeverkKlient;
     }
 
     public Map<NavEnhet, NavFylkesenhet> hentMapFraNavenhetTilFylkesenhet() {
@@ -34,21 +38,10 @@ public class NorgService {
     }
 
     public List<KommuneEllerBydel> hentListeOverAlleKommunerOgBydeler() {
-        List<NorgGeografi> norgGeografiListe = norgKlient.hentGeografiFraNorg();
-
-        List<Kommune> kommuner = norgGeografiListe.stream()
-                .filter(this::harIkkeNull)
-                .filter(norgGeo -> erKommunenr(norgGeo.getNavn()))
-                .map(norgGeo -> new Kommune(norgGeo.getNavn(), norgGeo.getTerm()))
-                .collect(Collectors.toList());
-
-        List<Bydel> bydeler = norgGeografiListe.stream()
-                .filter(this::harIkkeNull)
-                .filter(norgGeo -> erBydelsnr(norgGeo.getNavn()))
-                .map(norgGeo -> new Bydel(norgGeo.getNavn(), norgGeo.getTerm()))
-                .collect(Collectors.toList());
-
-        return lagNyListeDerKommunerSomHarBydelerBlirErstattetMedBydelene(kommuner, bydeler);
+        return lagNyListeDerKommunerSomHarBydelerBlirErstattetMedBydelene(
+                kodeverkKlient.hentKommuner(),
+                kodeverkKlient.hentBydeler()
+        );
     }
 
     private List<KommuneEllerBydel> lagNyListeDerKommunerSomHarBydelerBlirErstattetMedBydelene(List<Kommune> kommuner, List<Bydel> bydeler) {
@@ -77,25 +70,5 @@ public class NorgService {
         return kommuner.stream()
                 .filter(kommune -> kommune.getNummer().equals(kommunenummer))
                 .findFirst();
-    }
-
-    private boolean harIkkeNull(NorgGeografi norgGeografi) {
-        return norgGeografi.getNavn() != null && norgGeografi.getTerm() != null;
-    }
-
-    private boolean erFylkesnr(String str) {
-        return (str.length() == 2) && inneholderBareTall(str);
-    }
-
-    private boolean erKommunenr(String str) {
-        return (str.length() == 4) && inneholderBareTall(str);
-    }
-
-    private boolean erBydelsnr(String str) {
-        return (str.length() == 6) && inneholderBareTall(str);
-    }
-
-    private boolean inneholderBareTall(String str) {
-        return str.matches("[0-9]+");
     }
 }

@@ -2,7 +2,6 @@ package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter;
 
 import net.javacrumbs.shedlock.core.LockConfiguration;
 import net.javacrumbs.shedlock.core.LockingTaskExecutor;
-import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.NorgService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -16,7 +15,7 @@ public class FylkesinndelingSchedulerTest {
 
     @Mock private FylkesinndelingRepository fylkesinndelingRepository;
     @Mock private LockingTaskExecutor taskExecutor;
-    @Mock private NorgService norgService;
+    @Mock private FylkesinndelingService norgService;
 
     @Test
     public void skalSjekkeAtSceduledMetodeBrukerShedlock() {

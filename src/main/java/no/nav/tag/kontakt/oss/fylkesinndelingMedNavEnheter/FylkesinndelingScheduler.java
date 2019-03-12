@@ -3,7 +3,6 @@ package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter;
 import lombok.extern.slf4j.Slf4j;
 import net.javacrumbs.shedlock.core.LockConfiguration;
 import net.javacrumbs.shedlock.core.LockingTaskExecutor;
-import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.NorgService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -17,9 +16,9 @@ import java.util.stream.Collectors;
 public class FylkesinndelingScheduler {
     private final FylkesinndelingRepository fylkesinndelingRepository;
     private final LockingTaskExecutor taskExecutor;
-    private final NorgService norgService;
+    private final FylkesinndelingService norgService;
 
-    public FylkesinndelingScheduler(FylkesinndelingRepository fylkesinndelingRepository, LockingTaskExecutor taskExecutor, NorgService norgService) {
+    public FylkesinndelingScheduler(FylkesinndelingRepository fylkesinndelingRepository, LockingTaskExecutor taskExecutor, FylkesinndelingService norgService) {
         this.fylkesinndelingRepository = fylkesinndelingRepository;
         this.taskExecutor = taskExecutor;
         this.norgService = norgService;
