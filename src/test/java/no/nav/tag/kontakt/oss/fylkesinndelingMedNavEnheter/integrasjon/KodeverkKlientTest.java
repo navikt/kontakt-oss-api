@@ -2,14 +2,15 @@ package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon;
 
 import no.nav.tag.kontakt.oss.KontaktskjemaException;
 import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.Kommune;
+import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
@@ -17,7 +18,7 @@ import java.util.Arrays;
 import static no.nav.tag.kontakt.oss.TestData.lesFil;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class KodeverkKlientTest {
@@ -25,11 +26,26 @@ public class KodeverkKlientTest {
     @Mock
     private RestTemplate restTemplate;
 
+    @Captor
+    ArgumentCaptor<HttpEntity<String>> requestCaptor;
+
     private KodeverkKlient kodeverkKlient;
 
     @Before
     public void setup() {
         kodeverkKlient = new KodeverkKlient(restTemplate, "kodeverkUrl");
+    }
+
+    @Test
+    public void hentKommuner__skal_sende_med_riktige_headers_til_kodeverk() {
+        mockKommuneRespons(lesFil("kommuner.json"));
+
+        kodeverkKlient.hentKommuner();
+
+        captureKodeverkExchangeHeaders();
+        HttpHeaders headers = requestCaptor.getValue().getHeaders();
+        Assertions.assertThat(headers.get("Nav-Consumer-Id").get(0)).isEqualTo("kontakt-oss-api");
+        Assertions.assertThat(headers.get("Nav-Call-Id").get(0)).isNotNull();
     }
 
     @Test
@@ -52,6 +68,18 @@ public class KodeverkKlientTest {
     public void hentKommuner__skal_feile_hvis_respons_ikke_returnerer_gyldig_json() {
         mockKommuneRespons("ikke gyldig json");
         kodeverkKlient.hentKommuner();
+    }
+
+    @Test
+    public void hentBydeler__skal_sende_med_riktige_headers_til_kodeverk() {
+        mockBydelRespons(lesFil("bydeler.json"));
+
+        kodeverkKlient.hentBydeler();
+
+        captureKodeverkExchangeHeaders();
+        HttpHeaders headers = requestCaptor.getValue().getHeaders();
+        Assertions.assertThat(headers.get("Nav-Consumer-Id").get(0)).isEqualTo("kontakt-oss-api");
+        Assertions.assertThat(headers.get("Nav-Call-Id").get(0)).isNotNull();
     }
 
     @Test
@@ -93,5 +121,9 @@ public class KodeverkKlientTest {
         )).thenReturn(
                 new ResponseEntity<>(jsonResponse, HttpStatus.OK)
         );
+    }
+
+    private void captureKodeverkExchangeHeaders() {
+        verify(restTemplate, times(1)).exchange(anyString(), eq(HttpMethod.GET), requestCaptor.capture(), eq(String.class));
     }
 }
