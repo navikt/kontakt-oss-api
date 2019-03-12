@@ -22,9 +22,4 @@ public class FylkesinndelingController {
     public Map<String, List<KommuneEllerBydel>> hentFylkerOgKommuner() {
         return fylkesinndelingRepository.hentFylkesinndeling().getFylkeTilKommuneEllerBydel();
     }
-
-    @GetMapping(value = "/test")
-    public Object test() {
-        return kodeverkKlient.hentKommuner();
-    }
 }

@@ -29,7 +29,7 @@ public class FylkesinndelingServiceTest {
     }
 
     @Test
-    public void geografi__skal_ikke_legge_til_kommunen_hvis_den_har_bydeler() {
+    public void hentListeOverAlleKommunerOgBydeler__skal_ikke_legge_til_kommunen_hvis_den_har_bydeler() {
         when(kodeverkKlient.hentKommuner()).thenReturn(Arrays.asList(
                 new Kommune("0101", "kommune")
         ));
@@ -41,7 +41,7 @@ public class FylkesinndelingServiceTest {
     }
 
     @Test
-    public void geografi__skal_legge_til_bydeler_med_kommunenavn_lagt_paa() {
+    public void hentListeOverAlleKommunerOgBydeler__skal_legge_til_bydeler_med_kommunenavn_lagt_paa() {
         when(kodeverkKlient.hentKommuner()).thenReturn(Arrays.asList(
                 new Kommune("0101", "kommune")
         ));

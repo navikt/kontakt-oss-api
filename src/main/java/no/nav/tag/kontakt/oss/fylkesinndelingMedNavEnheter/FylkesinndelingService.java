@@ -1,7 +1,6 @@
 package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter;
 
 import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.KodeverkKlient;
-import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.NorgGeografi;
 import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.NorgKlient;
 import org.springframework.stereotype.Component;
 

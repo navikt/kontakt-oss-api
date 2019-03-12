@@ -39,7 +39,6 @@ public class MockServer {
         this.server =  new WireMockServer(port);
         String norgPath = new URL(norgUrl).getPath();
 
-        mockNorgGeografi(norgPath);
         mockNorgOrganisering(norgPath);
         mockNorgsMappingFraGeografiTilNavEnhet(norgPath);
 
@@ -89,15 +88,6 @@ public class MockServer {
                 )
         );
 
-    }
-
-    private void mockNorgGeografi(String norgPath) {
-        server.stubFor(
-                WireMock.get(WireMock.urlPathEqualTo(norgPath + "/kodeverk/geografi")).willReturn(WireMock.aResponse()
-                        .withStatus(HttpStatus.OK.value())
-                        .withBody(hentStringFraFil("norgGeografi.json"))
-                )
-        );
     }
 
     @SneakyThrows
