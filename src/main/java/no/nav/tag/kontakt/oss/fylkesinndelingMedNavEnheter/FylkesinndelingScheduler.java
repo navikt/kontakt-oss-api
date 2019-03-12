@@ -76,7 +76,10 @@ public class FylkesinndelingScheduler {
         Instant lockAtLeastUntil = Instant.now().plusSeconds(5 * 60);
 
         taskExecutor.executeWithLock(
-                (Runnable)this::oppdaterFylkesinndeling,
+                (Runnable)() -> {
+                    log.info("Tvinger oppdatering av fylkesinndeling");
+                    this.oppdaterFylkesinndeling();
+                },
                 new LockConfiguration("opprettOppgaveForSkjemaer-OVERRIDE", lockAtMostUntil, lockAtLeastUntil)
         );
     }
