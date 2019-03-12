@@ -46,8 +46,14 @@ public class KodeverkKlient {
         headers.set("Nav-Consumer-Id", "kontakt-oss-api");
         headers.setContentType(MediaType.APPLICATION_JSON);
 
+        String url = String.format(
+                "%s/kodeverk/%s/koder/betydninger?ekskluderUgyldige=true&spraak=nb",
+                kodeverkUrl,
+                kodeverksnavn
+        );
+
         ResponseEntity<String> jsonResponse = restTemplate.exchange(
-                String.format("%s/kodeverk/%s/koder/betydninger", kodeverkUrl, kodeverksnavn),
+                url,
                 HttpMethod.GET,
                 new HttpEntity<>(headers),
                 String.class

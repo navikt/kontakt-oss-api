@@ -23,9 +23,8 @@ gsak.url: http://localhost:${mock.port}/gsak
 norg.url: http://localhost:${mock.port}/norg
 kodeverk.url: http://localhost:${mock.port}/kodeverk
 
-# Miljøvariabler som ellers settes i nais.yaml
+# Miljøvariabel som ellers settes i nais.yaml
 ENABLE_GSAK: true
-FYLKESINNDELING_TVING_OPPDATERING: false
 
 ---
 spring:
