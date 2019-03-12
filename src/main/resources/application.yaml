@@ -10,7 +10,7 @@ norg.fixed-rate: 3600000 # Hver time i millisekunder: 1000 * 60 * 60 = 3600000
 spring:
   profiles: dev
   h2.console:
-    enabled: false
+    enabled: true
     path: /h2
 
 server.servlet.context-path: ""
@@ -23,7 +23,9 @@ gsak.url: http://localhost:${mock.port}/gsak
 norg.url: http://localhost:${mock.port}/norg
 kodeverk.url: http://localhost:${mock.port}/kodeverk
 
+# Miljøvariabler som ellers settes i nais.yaml
 ENABLE_GSAK: true
+FYLKESINNDELING_TVING_OPPDATERING: false
 
 ---
 spring:

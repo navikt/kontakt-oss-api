@@ -3,6 +3,7 @@ package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter;
 import lombok.extern.slf4j.Slf4j;
 import net.javacrumbs.shedlock.core.LockConfiguration;
 import net.javacrumbs.shedlock.core.LockingTaskExecutor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -18,10 +19,22 @@ public class FylkesinndelingScheduler {
     private final LockingTaskExecutor taskExecutor;
     private final FylkesinndelingService norgService;
 
-    public FylkesinndelingScheduler(FylkesinndelingRepository fylkesinndelingRepository, LockingTaskExecutor taskExecutor, FylkesinndelingService norgService) {
+    public static String NORG_SHEDLOCK_NAVN = "oppdaterInformasjonFraNorg";
+
+    public FylkesinndelingScheduler(
+            FylkesinndelingRepository fylkesinndelingRepository,
+            LockingTaskExecutor taskExecutor,
+            FylkesinndelingService norgService,
+            @Value("${FYLKESINNDELING_TVING_OPPDATERING}") String tvingOppdatering
+    ) {
         this.fylkesinndelingRepository = fylkesinndelingRepository;
         this.taskExecutor = taskExecutor;
         this.norgService = norgService;
+
+        if ("true".equals(tvingOppdatering)) {
+            log.info("Tvinger oppdatering av fylkesinndeling.");
+            fylkesinndelingRepository.fjernShedlock();
+        }
     }
 
     @Scheduled(fixedRateString = "${norg.fixed-rate}")
@@ -35,7 +48,7 @@ public class FylkesinndelingScheduler {
 
         taskExecutor.executeWithLock(
                 (Runnable)this::oppdaterInformasjonFraNorg,
-                new LockConfiguration("oppdaterInformasjonFraNorg", lockAtMostUntil, lockAtLeastUntil)
+                new LockConfiguration(NORG_SHEDLOCK_NAVN, lockAtMostUntil, lockAtLeastUntil)
         );
     }
 

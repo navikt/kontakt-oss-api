@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
+import static no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.FylkesinndelingScheduler.NORG_SHEDLOCK_NAVN;
+
 @Component
 public class FylkesinndelingRepository {
     private final JdbcTemplate jdbcTemplate;
@@ -46,6 +48,15 @@ public class FylkesinndelingRepository {
                 LocalDateTime.now(),
                 objectMapper.writeValueAsString(fylkesinndeling.getFylkeTilKommuneEllerBydel()),
                 objectMapper.writeValueAsString(kommuneNrEllerBydelNrTilNavEnhet)
+        );
+    }
+
+    public void fjernShedlock() {
+        jdbcTemplate.update(
+                "UPDATE shedlock SET lock_until=?, locked_at=? WHERE name=?",
+                null,
+                null,
+                NORG_SHEDLOCK_NAVN
         );
     }
 }
