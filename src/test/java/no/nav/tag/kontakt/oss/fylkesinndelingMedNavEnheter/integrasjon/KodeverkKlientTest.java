@@ -37,6 +37,12 @@ public class KodeverkKlientTest {
     }
 
     @Test
+    public void hentKommuner__skal_lese_produksjonsrespons_uten_feil() {
+        mockKommuneRespons(lesFil("mock/kommuner.json"));
+        assertThat(kodeverkKlient.hentKommuner().size()).isGreaterThan(400);
+    }
+
+    @Test
     public void hentKommuner__skal_sende_med_riktige_headers_til_kodeverk() {
         mockKommuneRespons(lesFil("kommuner.json"));
 
@@ -68,6 +74,12 @@ public class KodeverkKlientTest {
     public void hentKommuner__skal_feile_hvis_respons_ikke_returnerer_gyldig_json() {
         mockKommuneRespons("ikke gyldig json");
         kodeverkKlient.hentKommuner();
+    }
+
+    @Test
+    public void hentBydeler__skal_lese_produksjonsrespons_uten_feil() {
+        mockBydelRespons(lesFil("mock/bydeler.json"));
+        assertThat(kodeverkKlient.hentBydeler().size()).isGreaterThan(30);
     }
 
     @Test
