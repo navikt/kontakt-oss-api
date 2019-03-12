@@ -72,8 +72,8 @@ public class FylkesinndelingScheduler {
     }
 
     private void oppdaterFylkesinndelingUtenomSchedule() {
-        Instant lockAtMostUntil = Instant.now().plusSeconds(5 * 60);
-        Instant lockAtLeastUntil = Instant.now().plusSeconds(10 * 60);
+        Instant lockAtMostUntil = Instant.now().plusSeconds(10 * 60);
+        Instant lockAtLeastUntil = Instant.now().plusSeconds(5 * 60);
 
         taskExecutor.executeWithLock(
                 (Runnable)this::oppdaterFylkesinndeling,
