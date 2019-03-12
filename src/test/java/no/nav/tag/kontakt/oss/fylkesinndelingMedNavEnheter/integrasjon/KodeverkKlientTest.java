@@ -34,7 +34,7 @@ public class KodeverkKlientTest {
 
     @Test
     public void hentKommuner__skal_hente_kommuner_fra_json() {
-        mockResponsFraKodeverk(lesFil("kommuner.json"));
+        mockKommuneRespons(lesFil("kommuner.json"));
 
         assertThat(kodeverkKlient.hentKommuner()).isEqualTo(Arrays.asList(
                 new Kommune("1001", "Kristiansand"),
@@ -44,19 +44,49 @@ public class KodeverkKlientTest {
 
     @Test
     public void hentKommuner__skal_ikke_ta_med_kommuner_uten_beskrivelse() {
-        mockResponsFraKodeverk("{ \"betydninger\": { \"1001\": [] } }");
+        mockKommuneRespons("{ \"betydninger\": { \"1001\": [] } }");
         assertThat(kodeverkKlient.hentKommuner()).isEmpty();
     }
 
     @Test(expected = KontaktskjemaException.class)
     public void hentKommuner__skal_feile_hvis_respons_ikke_returnerer_gyldig_json() {
-        mockResponsFraKodeverk("ikke gyldig json");
+        mockKommuneRespons("ikke gyldig json");
         kodeverkKlient.hentKommuner();
     }
 
-    private void mockResponsFraKodeverk(String jsonResponse) {
+    @Test
+    public void hentBydeler__skal_hente_kommuner_fra_json() {
+        mockBydelRespons(lesFil("bydeler.json"));
+
+        assertThat(kodeverkKlient.hentBydeler()).isEqualTo(Arrays.asList(
+                new Kommune("110301", "Hundvåg"),
+                new Kommune("110302", "Tasta")
+        ));
+    }
+
+    @Test
+    public void hentBydeler__skal_ikke_ta_med_kommuner_uten_beskrivelse() {
+        mockBydelRespons("{ \"betydninger\": { \"1001\": [] } }");
+        assertThat(kodeverkKlient.hentBydeler()).isEmpty();
+    }
+
+    @Test(expected = KontaktskjemaException.class)
+    public void hentBydeler__skal_feile_hvis_respons_ikke_returnerer_gyldig_json() {
+        mockBydelRespons("ikke gyldig json");
+        kodeverkKlient.hentBydeler();
+    }
+
+    private void mockKommuneRespons(String jsonResponse) {
+        mockResponsFraKodeverk(jsonResponse, ".*Kommuner.*");
+    }
+
+    private void mockBydelRespons(String jsonResponse) {
+        mockResponsFraKodeverk(jsonResponse, ".*Bydeler.*");
+    }
+
+    private void mockResponsFraKodeverk(String jsonResponse, String pathMatch) {
         when(restTemplate.exchange(
-                anyString(),
+                matches(pathMatch),
                 eq(HttpMethod.GET),
                 any(),
                 eq(String.class)

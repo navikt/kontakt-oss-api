@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static no.nav.tag.kontakt.oss.TestData.lesFil;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -74,11 +75,7 @@ public class NorgKlientTest {
 
     @Test
     public void hentOrganiseringFraNorg__skal_oversette_til_riktig_objekt() throws IOException {
-        String organiseringJson = IOUtils.toString(
-                this.getClass().getClassLoader().getResourceAsStream("norgOrganiseringReellRespons.json"),
-                UTF_8
-        );
-        ResponseEntity<String> responseEntity = new ResponseEntity<>(organiseringJson, HttpStatus.OK);
+        ResponseEntity<String> responseEntity = new ResponseEntity<>(lesFil("norgOrganiseringReellRespons.json"), HttpStatus.OK);
         when(restTemplate.exchange(anyString(), eq(HttpMethod.GET), any(), eq(String.class))).thenReturn(responseEntity);
 
         List<NorgOrganisering> organisering = norgKlient.hentOrganiseringFraNorg();

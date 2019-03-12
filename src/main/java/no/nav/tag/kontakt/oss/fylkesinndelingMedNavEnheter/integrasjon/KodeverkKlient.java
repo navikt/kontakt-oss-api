@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.tag.kontakt.oss.KontaktskjemaException;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.Bydel;
 import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.Kommune;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -32,23 +33,32 @@ public class KodeverkKlient {
     }
 
     public List<Kommune> hentKommuner() {
+        return oversettTilKommuner(hentKodeverkBetydninger("Kommuner"));
+    }
+
+    public List<Bydel> hentBydeler() {
+        return oversettTilBydeler(hentKodeverkBetydninger("Bydeler"));
+    }
+
+    private ResponseEntity<String> hentKodeverkBetydninger(String kodeverksnavn) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Nav-Call-Id", UUID.randomUUID().toString());
         headers.set("Nav-Consumer-Id", "kontakt-oss-api");
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         ResponseEntity<String> jsonResponse = restTemplate.exchange(
-                this.kodeverkUrl + "/kodeverk/Kommuner/koder/betydninger",
+                String.format("%s/kodeverk/%s/koder/betydninger", kodeverkUrl, kodeverksnavn),
                 HttpMethod.GET,
                 new HttpEntity<>(headers),
                 String.class
         );
 
         if (HttpStatus.OK.equals(jsonResponse.getStatusCode())) {
-            return oversettTilKommuner(jsonResponse);
+            return jsonResponse;
         } else {
             throw new KontaktskjemaException("Kall til NORG returnerte ikke 200 OK. Returverdi: " + jsonResponse.getBody());
         }
+
     }
 
     private List<Kommune> oversettTilKommuner(ResponseEntity<String> jsonResponse) {
@@ -56,6 +66,16 @@ public class KodeverkKlient {
 
         hentMapFraKodeTilTerm(jsonResponse).forEach((kommuneNr, navn) -> kommuner.add(
                 new Kommune(kommuneNr, navn)
+        ));
+
+        return kommuner;
+    }
+
+    private List<Bydel> oversettTilBydeler(ResponseEntity<String> jsonResponse) {
+        List<Bydel> kommuner = new ArrayList<>();
+
+        hentMapFraKodeTilTerm(jsonResponse).forEach((bydelNr, navn) -> kommuner.add(
+                new Bydel(bydelNr, navn)
         ));
 
         return kommuner;
