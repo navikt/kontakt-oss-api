@@ -1,0 +1,28 @@
+{
+  "betydninger": {
+    "110301": [
+      {
+        "gyldigFra": "2017-05-01",
+        "gyldigTil": "9999-12-31",
+        "beskrivelser": {
+          "nb": {
+            "term": "Hundvåg",
+            "tekst": "Hundvåg"
+          }
+        }
+      }
+    ],
+    "110302": [
+      {
+        "gyldigFra": "2017-05-01",
+        "gyldigTil": "9999-12-31",
+        "beskrivelser": {
+          "nb": {
+            "term": "Tasta",
+            "tekst": "Tasta"
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,12 +1,9 @@
-package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter;
+package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import no.nav.tag.kontakt.oss.KontaktskjemaException;
-import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.NorgGeografi;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.NavEnhet;
 import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.NorgKlient;
 import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.NorgOrganisering;
-import org.apache.commons.io.IOUtils;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,20 +15,17 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
+import static no.nav.tag.kontakt.oss.TestData.lesFil;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class NorgKlientTest {
-
-    private ObjectMapper objectMapper = new ObjectMapper();
 
     @Mock
     private RestTemplate restTemplate;
@@ -47,38 +41,8 @@ public class NorgKlientTest {
     }
 
     @Test
-    public void hentGeografiFraNorg__skal_oversette_til_riktig_objekt() throws JsonProcessingException {
-        NorgGeografi geografi = new NorgGeografi("navn", "term");
-
-        ResponseEntity<String> responseEntity = new ResponseEntity<>(
-                objectMapper.writeValueAsString(Collections.singletonList(geografi)),
-                HttpStatus.OK
-        );
-        when(restTemplate.getForEntity(anyString(), eq(String.class))).thenReturn(responseEntity);
-        assertThat(norgKlient.hentGeografiFraNorg()).isEqualTo(Collections.singletonList(geografi));
-    }
-
-    @Test(expected = KontaktskjemaException.class)
-    public void hentGeografiFraNorg__skal_feile_hvis_respons_ikke_returnerer_ok() {
-        ResponseEntity responseEntity = new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-        when(restTemplate.getForEntity(anyString(), eq(String.class))).thenReturn(responseEntity);
-        norgKlient.hentGeografiFraNorg();
-    }
-
-    @Test(expected = KontaktskjemaException.class)
-    public void hentGeografiFraNorg__skal_feile_hvis_respons_ikke_returnerer_gyldig_json() {
-        ResponseEntity<String> responseEntity = new ResponseEntity<>("{ikke gyldig json}", HttpStatus.OK);
-        when(restTemplate.getForEntity(anyString(), eq(String.class))).thenReturn(responseEntity);
-        norgKlient.hentGeografiFraNorg();
-    }
-
-    @Test
-    public void hentOrganiseringFraNorg__skal_oversette_til_riktig_objekt() throws IOException {
-        String organiseringJson = IOUtils.toString(
-                this.getClass().getClassLoader().getResourceAsStream("norgOrganiseringReellRespons.json"),
-                UTF_8
-        );
-        ResponseEntity<String> responseEntity = new ResponseEntity<>(organiseringJson, HttpStatus.OK);
+    public void hentOrganiseringFraNorg__skal_oversette_til_riktig_objekt() {
+        ResponseEntity<String> responseEntity = new ResponseEntity<>(lesFil("norgOrganiseringReellRespons.json"), HttpStatus.OK);
         when(restTemplate.exchange(anyString(), eq(HttpMethod.GET), any(), eq(String.class))).thenReturn(responseEntity);
 
         List<NorgOrganisering> organisering = norgKlient.hentOrganiseringFraNorg();
@@ -135,14 +99,14 @@ public class NorgKlientTest {
         String jsonResponse = "{\"enhetNr\": \"4444\"}";
         ResponseEntity<String> responseEntity = new ResponseEntity<>(jsonResponse, HttpStatus.OK);
         when(restTemplate.getForEntity(anyString(), eq(String.class))).thenReturn(responseEntity);
-        assertThat(norgKlient.hentTilhoerendeNavenhet("1111").get()).isEqualTo(new NavEnhet("4444"));
+        assertThat(norgKlient.hentTilhoerendeNavEnhet("1111").get()).isEqualTo(new NavEnhet("4444"));
     }
 
     @Test
     public void hentTilhoerendeNavenhet__skal_returnere_empty_hvis_NOT_FOUND() {
         ResponseEntity<String> responseEntity = new ResponseEntity<>("", HttpStatus.NOT_FOUND);
         when(restTemplate.getForEntity(anyString(), eq(String.class))).thenReturn(responseEntity);
-        assertThat(norgKlient.hentTilhoerendeNavenhet("1111")).isEmpty();
+        assertThat(norgKlient.hentTilhoerendeNavEnhet("1111")).isEmpty();
     }
 
     private void captureNorgExchangeHeaders() {

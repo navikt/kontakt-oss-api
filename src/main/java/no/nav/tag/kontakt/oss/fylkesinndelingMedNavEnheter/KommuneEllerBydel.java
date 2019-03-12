@@ -6,6 +6,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@ToString
 public class KommuneEllerBydel {
     private String nummer;
     private String navn;

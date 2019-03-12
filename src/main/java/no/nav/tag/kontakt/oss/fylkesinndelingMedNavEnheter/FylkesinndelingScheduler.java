@@ -3,7 +3,7 @@ package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter;
 import lombok.extern.slf4j.Slf4j;
 import net.javacrumbs.shedlock.core.LockConfiguration;
 import net.javacrumbs.shedlock.core.LockingTaskExecutor;
-import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.NorgService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -17,12 +17,23 @@ import java.util.stream.Collectors;
 public class FylkesinndelingScheduler {
     private final FylkesinndelingRepository fylkesinndelingRepository;
     private final LockingTaskExecutor taskExecutor;
-    private final NorgService norgService;
+    private final FylkesinndelingService norgService;
 
-    public FylkesinndelingScheduler(FylkesinndelingRepository fylkesinndelingRepository, LockingTaskExecutor taskExecutor, NorgService norgService) {
+    public static String NORG_SHEDLOCK_NAVN = "oppdaterFylkesinndeling";
+
+    public FylkesinndelingScheduler(
+            FylkesinndelingRepository fylkesinndelingRepository,
+            LockingTaskExecutor taskExecutor,
+            FylkesinndelingService norgService,
+            @Value("${FYLKESINNDELING_TVING_OPPDATERING:false}") String tvingOppdatering
+    ) {
         this.fylkesinndelingRepository = fylkesinndelingRepository;
         this.taskExecutor = taskExecutor;
         this.norgService = norgService;
+
+        if ("true".equals(tvingOppdatering)) {
+            oppdaterFylkesinndelingUtenomSchedule();
+        }
     }
 
     @Scheduled(fixedRateString = "${norg.fixed-rate}")
@@ -35,12 +46,12 @@ public class FylkesinndelingScheduler {
         Instant lockAtLeastUntil = Instant.now().plusSeconds(24 * hourInSeconds);
 
         taskExecutor.executeWithLock(
-                (Runnable)this::oppdaterInformasjonFraNorg,
-                new LockConfiguration("oppdaterInformasjonFraNorg", lockAtMostUntil, lockAtLeastUntil)
+                (Runnable)this::oppdaterFylkesinndeling,
+                new LockConfiguration(NORG_SHEDLOCK_NAVN, lockAtMostUntil, lockAtLeastUntil)
         );
     }
 
-    private void oppdaterInformasjonFraNorg() {
+    private void oppdaterFylkesinndeling() {
         log.info("Oppdaterer informasjon fra NORG");
 
         List<KommuneEllerBydel> kommunerOgBydeler = norgService.hentListeOverAlleKommunerOgBydeler();
@@ -57,6 +68,19 @@ public class FylkesinndelingScheduler {
                         KommuneEllerBydel::getNummer,
                         kommunerEllerBydel -> fraKommuneEllerBydelTilNavEnhet.get(kommunerEllerBydel)
                 ))
+        );
+    }
+
+    private void oppdaterFylkesinndelingUtenomSchedule() {
+        Instant lockAtMostUntil = Instant.now().plusSeconds(10 * 60);
+        Instant lockAtLeastUntil = Instant.now().plusSeconds(5 * 60);
+
+        taskExecutor.executeWithLock(
+                (Runnable)() -> {
+                    log.info("Tvinger oppdatering av fylkesinndeling");
+                    this.oppdaterFylkesinndeling();
+                },
+                new LockConfiguration("opprettOppgaveForSkjemaer-OVERRIDE", lockAtMostUntil, lockAtLeastUntil)
         );
     }
 }

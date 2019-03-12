@@ -1,6 +1,5 @@
 package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -8,11 +7,8 @@ import no.nav.tag.kontakt.oss.KontaktskjemaException;
 import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.KommuneEllerBydel;
 import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.NavEnhet;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.*;
-import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -30,30 +26,9 @@ public class NorgKlient {
             RestTemplate restTemplate,
             @Value("${norg.url}") String norgUrl
     ) {
-        restTemplate.setErrorHandler(new RestTemplateErrorHandler());
+        restTemplate.setErrorHandler(new IgnoreAllErrors());
         this.restTemplate = restTemplate;
         this.norgUrl = norgUrl;
-    }
-
-    public List<NorgGeografi> hentGeografiFraNorg() {
-        ResponseEntity<String> jsonResponse = restTemplate.getForEntity(
-                norgUrl + "/kodeverk/geografi",
-                String.class
-        );
-
-        if (HttpStatus.OK.equals(jsonResponse.getStatusCode())) {
-            return oversettTilNorgGeografi(jsonResponse);
-        } else {
-            throw new KontaktskjemaException("Kall til NORG returnerte ikke 200 OK. Returverdi: " + jsonResponse.getBody());
-        }
-    }
-
-    private List<NorgGeografi> oversettTilNorgGeografi(ResponseEntity<String> jsonResponse) {
-        try {
-            return objectMapper.readValue(jsonResponse.getBody(), new TypeReference<List<NorgGeografi>>() {});
-        } catch (IOException e) {
-            throw new KontaktskjemaException("Returverdi fra NORG er ikke riktig formatert JSON, eller passer ikke med vår modell. Returverdi: " + jsonResponse.getBody());
-        }
     }
 
     public List<NorgOrganisering> hentOrganiseringFraNorg() {
@@ -98,14 +73,14 @@ public class NorgKlient {
         Map<KommuneEllerBydel, NavEnhet> map = new HashMap<>();
 
         for (KommuneEllerBydel kommuneEllerBydel : kommunerOgBydeler) {
-            Optional<NavEnhet> enhetsnrOptional = hentTilhoerendeNavenhet(kommuneEllerBydel.getNummer());
+            Optional<NavEnhet> enhetsnrOptional = hentTilhoerendeNavEnhet(kommuneEllerBydel.getNummer());
             enhetsnrOptional.ifPresent(enhetsnr -> map.put(kommuneEllerBydel, enhetsnr));
         }
 
         return map;
     }
 
-    public Optional<NavEnhet> hentTilhoerendeNavenhet(String kommunenrEllerBydelsnr) {
+    public Optional<NavEnhet> hentTilhoerendeNavEnhet(String kommunenrEllerBydelsnr) {
         ResponseEntity<String> jsonResponse = restTemplate.getForEntity(
                 norgUrl + "/enhet/navkontor/" + kommunenrEllerBydelsnr,
                 String.class
@@ -133,17 +108,4 @@ public class NorgKlient {
             throw new KontaktskjemaException("Returverdi fra NORG er ikke riktig formatert JSON, eller passer ikke med vår modell. Returverdi: " + jsonResponse.getBody());
         }
     }
-
-    private static class RestTemplateErrorHandler implements ResponseErrorHandler {
-        @Override
-        public boolean hasError(ClientHttpResponse clientHttpResponse) throws IOException {
-            // Vi håndterer errors direkte i koden foreløpig.
-            return false;
-        }
-
-        @Override
-        public void handleError(ClientHttpResponse clientHttpResponse) throws IOException {
-        }
-    }
-
 }

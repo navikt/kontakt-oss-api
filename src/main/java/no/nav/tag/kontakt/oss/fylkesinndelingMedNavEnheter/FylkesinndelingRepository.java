@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
+import static no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.FylkesinndelingScheduler.NORG_SHEDLOCK_NAVN;
+
 @Component
 public class FylkesinndelingRepository {
     private final JdbcTemplate jdbcTemplate;
