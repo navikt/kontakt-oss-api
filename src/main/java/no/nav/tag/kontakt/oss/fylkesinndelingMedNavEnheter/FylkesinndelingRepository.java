@@ -50,13 +50,4 @@ public class FylkesinndelingRepository {
                 objectMapper.writeValueAsString(kommuneNrEllerBydelNrTilNavEnhet)
         );
     }
-
-    public void fjernShedlock() {
-        jdbcTemplate.update(
-                "UPDATE shedlock SET lock_until=?, locked_at=? WHERE name=?",
-                null,
-                null,
-                NORG_SHEDLOCK_NAVN
-        );
-    }
 }

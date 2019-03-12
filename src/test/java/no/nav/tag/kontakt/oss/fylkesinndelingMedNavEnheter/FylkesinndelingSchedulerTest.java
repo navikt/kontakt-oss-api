@@ -31,26 +31,4 @@ public class FylkesinndelingSchedulerTest {
 
         verify(taskExecutor).executeWithLock(any(Runnable.class), any(LockConfiguration.class));
     }
-
-    @Test
-    public void konstruktor__skal_fjerne_shedlock_hvis_tvingOppdatering_er_true() {
-        new FylkesinndelingScheduler(
-                fylkesinndelingRepository,
-                taskExecutor,
-                norgService,
-                "true"
-        );
-        verify(fylkesinndelingRepository, times(1)).fjernShedlock();
-    }
-
-    @Test
-    public void konstruktor__skal_IKKE_fjerne_shedlock_hvis_tvingOppdatering_er_false() {
-        new FylkesinndelingScheduler(
-                fylkesinndelingRepository,
-                taskExecutor,
-                norgService,
-                "false"
-        );
-        verify(fylkesinndelingRepository, times(0)).fjernShedlock();
-    }
 }

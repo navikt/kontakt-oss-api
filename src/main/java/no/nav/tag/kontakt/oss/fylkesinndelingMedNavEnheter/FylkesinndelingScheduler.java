@@ -19,7 +19,7 @@ public class FylkesinndelingScheduler {
     private final LockingTaskExecutor taskExecutor;
     private final FylkesinndelingService norgService;
 
-    public static String NORG_SHEDLOCK_NAVN = "oppdaterInformasjonFraNorg";
+    public static String NORG_SHEDLOCK_NAVN = "oppdaterFylkesinndeling";
 
     public FylkesinndelingScheduler(
             FylkesinndelingRepository fylkesinndelingRepository,
@@ -32,8 +32,7 @@ public class FylkesinndelingScheduler {
         this.norgService = norgService;
 
         if ("true".equals(tvingOppdatering)) {
-            log.info("Tvinger oppdatering av fylkesinndeling.");
-            fylkesinndelingRepository.fjernShedlock();
+            oppdaterFylkesinndelingUtenomSchedule();
         }
     }
 
@@ -47,12 +46,12 @@ public class FylkesinndelingScheduler {
         Instant lockAtLeastUntil = Instant.now().plusSeconds(24 * hourInSeconds);
 
         taskExecutor.executeWithLock(
-                (Runnable)this::oppdaterInformasjonFraNorg,
+                (Runnable)this::oppdaterFylkesinndeling,
                 new LockConfiguration(NORG_SHEDLOCK_NAVN, lockAtMostUntil, lockAtLeastUntil)
         );
     }
 
-    private void oppdaterInformasjonFraNorg() {
+    private void oppdaterFylkesinndeling() {
         log.info("Oppdaterer informasjon fra NORG");
 
         List<KommuneEllerBydel> kommunerOgBydeler = norgService.hentListeOverAlleKommunerOgBydeler();
@@ -69,6 +68,16 @@ public class FylkesinndelingScheduler {
                         KommuneEllerBydel::getNummer,
                         kommunerEllerBydel -> fraKommuneEllerBydelTilNavEnhet.get(kommunerEllerBydel)
                 ))
+        );
+    }
+
+    private void oppdaterFylkesinndelingUtenomSchedule() {
+        Instant lockAtMostUntil = Instant.now().plusSeconds(5 * 60);
+        Instant lockAtLeastUntil = Instant.now().plusSeconds(10 * 60);
+
+        taskExecutor.executeWithLock(
+                (Runnable)this::oppdaterFylkesinndeling,
+                new LockConfiguration("opprettOppgaveForSkjemaer-OVERRIDE", lockAtMostUntil, lockAtLeastUntil)
         );
     }
 }
