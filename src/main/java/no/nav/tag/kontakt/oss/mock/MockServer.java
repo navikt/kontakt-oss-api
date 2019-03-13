@@ -56,6 +56,7 @@ public class MockServer {
     private void mockKall(String path, String body) {
         server.stubFor(
                 WireMock.get(WireMock.urlPathEqualTo(path)).willReturn(WireMock.aResponse()
+                        .withHeader("Content-Type", "application/json")
                         .withStatus(HttpStatus.OK.value())
                         .withBody(body)
                 )
