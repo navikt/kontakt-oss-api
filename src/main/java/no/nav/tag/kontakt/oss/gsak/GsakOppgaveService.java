@@ -6,7 +6,7 @@ import no.nav.tag.kontakt.oss.DateProvider;
 import no.nav.tag.kontakt.oss.Kontaktskjema;
 import no.nav.tag.kontakt.oss.featureToggles.FeatureToggles;
 import no.nav.tag.kontakt.oss.metrics.Metrics;
-import no.nav.tag.kontakt.oss.navenhetsmapping.NavEnhetUtils;
+import no.nav.tag.kontakt.oss.navenhetsmapping.NavEnhetService;
 import no.nav.tag.kontakt.oss.gsak.GsakOppgave.OppgaveStatus;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakKlient;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakRequest;
@@ -28,7 +28,7 @@ public class GsakOppgaveService {
     private final GsakOppgaveRepository oppgaveRepository;
     private final DateProvider dateProvider;
     private final GsakKlient gsakKlient;
-    private final NavEnhetUtils enhetUtils;
+    private final NavEnhetService enhetUtils;
     private final FeatureToggles featureToggles;
     private final Metrics metrics;
 
@@ -37,7 +37,7 @@ public class GsakOppgaveService {
             GsakOppgaveRepository oppgaveRepository,
             DateProvider dateProvider,
             GsakKlient gsakKlient,
-            NavEnhetUtils enhetUtils,
+            NavEnhetService enhetUtils,
             FeatureToggles featureToggles, Metrics metrics) {
         this.oppgaveRepository = oppgaveRepository;
         this.dateProvider = dateProvider;

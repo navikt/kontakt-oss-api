@@ -6,7 +6,7 @@ import no.nav.tag.kontakt.oss.Kontaktskjema;
 import no.nav.tag.kontakt.oss.KontaktskjemaException;
 import no.nav.tag.kontakt.oss.featureToggles.FeatureToggles;
 import no.nav.tag.kontakt.oss.metrics.Metrics;
-import no.nav.tag.kontakt.oss.navenhetsmapping.NavEnhetUtils;
+import no.nav.tag.kontakt.oss.navenhetsmapping.NavEnhetService;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakKlient;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakRequest;
 
@@ -38,7 +38,7 @@ public class GsakOppgaveServiceTest {
                 oppgaveRepository,
                 dateProvider,
                 mock(GsakKlient.class),
-                mock(NavEnhetUtils.class),
+                mock(NavEnhetService.class),
                 featureToggles,
                 metrics
         );
@@ -74,7 +74,7 @@ public class GsakOppgaveServiceTest {
                 oppgaveRepository,
                 mock(DateProvider.class),
                 mock(GsakKlient.class),
-                mock(NavEnhetUtils.class),
+                mock(NavEnhetService.class),
                 featureToggles,
                 metrics);
 
@@ -98,7 +98,7 @@ public class GsakOppgaveServiceTest {
                 oppgaveRepository,
                 dateProvider,
                 gsakKlient,
-                mock(NavEnhetUtils.class),
+                mock(NavEnhetService.class),
                 featureToggles,
                 metrics
         );
