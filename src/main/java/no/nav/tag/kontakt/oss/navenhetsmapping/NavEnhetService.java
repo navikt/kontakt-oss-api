@@ -7,11 +7,11 @@ import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.NavEnhet;
 import org.springframework.stereotype.Component;
 
 @Component
-public class NavEnhetUtils {
+public class NavEnhetService {
 
     private final FylkesinndelingRepository fylkesinndelingRepository;
 
-    public NavEnhetUtils(FylkesinndelingRepository fylkesinndelingRepository) {
+    public NavEnhetService(FylkesinndelingRepository fylkesinndelingRepository) {
         this.fylkesinndelingRepository = fylkesinndelingRepository;
     }
 
