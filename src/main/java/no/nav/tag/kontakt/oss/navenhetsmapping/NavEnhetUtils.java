@@ -1,21 +1,28 @@
 package no.nav.tag.kontakt.oss.navenhetsmapping;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import no.nav.tag.kontakt.oss.KontaktskjemaException;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.FylkesinndelingRepository;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.KommuneEllerBydel;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.NavEnhet;
 import org.springframework.stereotype.Component;
-
-import java.util.Map;
 
 @Component
 public class NavEnhetUtils {
-    private final Map<String, String> enheter;
 
-    @Autowired
-    public NavEnhetUtils(Map<String, String> enheter) {
-        this.enheter = enheter;
+    private final FylkesinndelingRepository fylkesinndelingRepository;
+
+    public NavEnhetUtils(FylkesinndelingRepository fylkesinndelingRepository) {
+        this.fylkesinndelingRepository = fylkesinndelingRepository;
     }
 
     public String mapFraKommunenrTilEnhetsnr(String kommunenr) {
-        return enheter.get(kommunenr);
+        NavEnhet navEnhet = fylkesinndelingRepository
+                .hentKommuneNrEllerBydelNrTilNavEnhet()
+                .get(kommunenr);
+        if (navEnhet != null) {
+                return navEnhet.getEnhetNr();
+        } else {
+            throw new KontaktskjemaException("Finner ingen NAV-enhet tilhørende kommune " + kommunenr);
+        }
     }
-
 }
