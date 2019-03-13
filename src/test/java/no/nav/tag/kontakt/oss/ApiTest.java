@@ -1,5 +1,18 @@
 package no.nav.tag.kontakt.oss;
 
+import static java.net.http.HttpClient.newBuilder;
+import static java.net.http.HttpResponse.BodyHandlers.ofString;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpRequest.BodyPublishers;
+import java.net.http.HttpResponse;
+
+import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -8,16 +21,7 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpRequest.BodyPublishers;
-import java.net.http.HttpResponse;
-
-import static java.net.http.HttpClient.newBuilder;
-import static java.net.http.HttpResponse.BodyHandlers.ofString;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import lombok.SneakyThrows;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
@@ -27,20 +31,18 @@ public class ApiTest {
     @LocalServerPort
     private String port;
 
-    private static final String OK_KONTAKTSKJEMA_JSON = "{ " +
-        "\"bedriftsnavn\": \"testbedrift\"," +
-        "\"epost\": \"test@testesen.no\"," +
-        "\"etternavn\": \"testesen\"," +
-        "\"fornavn\": \"test\"," +
-        "\"fylke\": \"agder\"," +
-        "\"kommune\": \"Audnedal\"," +
-        "\"kommunenr\": \"1027\"," +
-        "\"telefonnr\": \"1234\"" +
-        "}";
+    private static final String OK_KONTAKTSKJEMA_JSON = lesFil("kontaktskjema_ok.json");
+
+    @SneakyThrows
+    private static String lesFil(String name) {
+        return IOUtils.toString(
+                ApiTest.class.getClassLoader().getResourceAsStream(name),
+                UTF_8
+        );
+    }
 
     @Test
     public void postKontaktskjema_OK() throws Exception {
-
         HttpResponse<?> response = newBuilder().build().send(createRequest(OK_KONTAKTSKJEMA_JSON), ofString());
         assertThat(response.statusCode(), is(200));
         assertThat(response.body(), is("\"OK\""));
@@ -61,7 +63,7 @@ public class ApiTest {
     @Test
     public void postKontaktskjema_feil_kommunenr() throws Exception {
 
-        String bodyMedForLangtKommunenr = OK_KONTAKTSKJEMA_JSON.replaceFirst("1027", "10127");
+        String bodyMedForLangtKommunenr = OK_KONTAKTSKJEMA_JSON.replaceFirst("1841", "10841");
 
         HttpResponse<?> response = HttpClient.newBuilder().build().send(createRequest(bodyMedForLangtKommunenr), ofString());
         assertThat(response.statusCode(), is(500));
