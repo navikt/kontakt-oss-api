@@ -29,6 +29,9 @@ ENABLE_GSAK: true
 ---
 spring:
   profiles: preprod
+  datasource:
+    hikari:
+      max-lifetime: 300000 # 5 minutter
 gsak.url: https://oppgave.nais.preprod.local/api/v1/oppgaver
 norg.url: https://app-q0.adeo.no/norg2/api/v1
 kodeverk.url: https://kodeverk.nais.preprod.local/api/v1
@@ -36,6 +39,9 @@ kodeverk.url: https://kodeverk.nais.preprod.local/api/v1
 ---
 spring:
   profiles: prod
+  datasource:
+    hikari:
+      max-lifetime: 300000 # 5 minutter
 gsak.url: https://oppgave.nais.adeo.no/api/v1/oppgaver
 norg.url: https://app.adeo.no/norg2/api/v1
 kodeverk.url: https://kodeverk.nais.adeo.no/api/v1
