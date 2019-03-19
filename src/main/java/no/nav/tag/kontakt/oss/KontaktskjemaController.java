@@ -36,12 +36,12 @@ public class KontaktskjemaController {
             }
             repository.save(kontaktskjema);
             log.info("Vellykket innsending.");
-            metrics.mottattKontaktskjema(true);
+            metrics.mottattKontaktskjema(true, kontaktskjema);
 
             return ResponseEntity.ok(HttpStatus.OK);
         } catch (Exception e) {
             log.error("Feil ved innsending av skjema", e);
-            metrics.mottattKontaktskjema(false);
+            metrics.mottattKontaktskjema(false, kontaktskjema);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

@@ -21,15 +21,14 @@ spring:
     enabled: true
     path: /h2
 
-server.servlet.context-path: ""
-
 mock:
   enabled: true
   port: 8081
+  baseUrl: http://localhost:${mock.port}/${server.servlet.context-path}
 
-gsak.url: http://localhost:${mock.port}/gsak
-norg.url: http://localhost:${mock.port}/norg
-kodeverk.url: http://localhost:${mock.port}/kodeverk
+gsak.url: ${mock.baseUrl}/gsak
+norg.url: ${mock.baseUrl}/norg
+kodeverk.url: ${mock.baseUrl}/kodeverk
 
 # Miljøvariabel som ellers settes i nais.yaml
 ENABLE_GSAK: true

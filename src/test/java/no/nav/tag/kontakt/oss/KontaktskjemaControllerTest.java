@@ -44,8 +44,9 @@ public class KontaktskjemaControllerTest {
 
     @Test
     public void skalSendeMetrikkOmVellykketMottattKontaktskjema() {
-        kontaktskjemaController.meldInteresse(kontaktskjema());
-        verify(metrics, times(1)).mottattKontaktskjema(true);
+        Kontaktskjema kontaktskjema = kontaktskjema();
+        kontaktskjemaController.meldInteresse(kontaktskjema);
+        verify(metrics, times(1)).mottattKontaktskjema(eq(true), eq(kontaktskjema));
     }
 
     @Test
@@ -53,8 +54,9 @@ public class KontaktskjemaControllerTest {
         KontaktskjemaRepository repository = mock(KontaktskjemaRepository.class);
         when(repository.save(any())).thenThrow(KontaktskjemaException.class);
         KontaktskjemaController kontaktskjemaController = new KontaktskjemaController(repository, metrics);
+        Kontaktskjema kontaktskjema = kontaktskjema();
 
-        kontaktskjemaController.meldInteresse(kontaktskjema());
-        verify(metrics, times(1)).mottattKontaktskjema(false);
+        kontaktskjemaController.meldInteresse(kontaktskjema);
+        verify(metrics, times(1)).mottattKontaktskjema(eq(false), eq(kontaktskjema));
     }
 }
