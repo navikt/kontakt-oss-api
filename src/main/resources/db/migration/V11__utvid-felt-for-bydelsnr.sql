@@ -1,0 +1,1 @@
+ALTER TABLE kontaktskjema ALTER COLUMN kommunenr TYPE VARCHAR(6);
