@@ -63,7 +63,7 @@ public class ApiTest {
     @Test
     public void postKontaktskjema_feil_kommunenr() throws Exception {
 
-        String bodyMedForLangtKommunenr = OK_KONTAKTSKJEMA_JSON.replaceFirst("1841", "10841");
+        String bodyMedForLangtKommunenr = OK_KONTAKTSKJEMA_JSON.replaceFirst("1841", "1084109");
 
         HttpResponse<?> response = HttpClient.newBuilder().build().send(createRequest(bodyMedForLangtKommunenr), ofString());
         assertThat(response.statusCode(), is(500));

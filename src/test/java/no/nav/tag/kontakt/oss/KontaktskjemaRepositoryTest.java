@@ -48,7 +48,14 @@ public class KontaktskjemaRepositoryTest {
     @Test(expected=DbActionExecutionException.class)
     public void skalFeileHvisKommuneErForLang() {
         Kontaktskjema kontaktskjema = TestData.kontaktskjema();
-        kontaktskjema.setKommunenr("12345");
+        kontaktskjema.setKommunenr("1234567");
+        kontaktskjemaRepository.save(kontaktskjema);
+    }
+
+    @Test
+    public void skalKunneLagreSkjemaMedBydelsnr() {
+        Kontaktskjema kontaktskjema = TestData.kontaktskjema();
+        kontaktskjema.setKommunenr("123456");
         kontaktskjemaRepository.save(kontaktskjema);
     }
     
