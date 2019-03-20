@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -42,8 +43,12 @@ public class GsakKlient {
 
         if (HttpStatus.CREATED.equals(jsonResponse.getStatusCode())) {
             return hentIdFraRespons(jsonResponse);
+
+        } else if (HttpStatus.BAD_REQUEST.equals(jsonResponse.getStatusCode())) {
+            throw new BadRequestException("Gsak returnerte 400 BAD REQUEST. Returverdi: " + jsonResponse.getBody());
+
         } else {
-            throw new KontaktskjemaException("Kall til Gsak returnerte ikke 201 CREATED. Returverdi: " + jsonResponse.getBody());
+            throw new KontaktskjemaException("Kall til Gsak returnerte ikke 201 CREATED. Statuskode: " + jsonResponse.getStatusCode() + ". Returverdi: " + jsonResponse.getBody());
         }
     }
 
