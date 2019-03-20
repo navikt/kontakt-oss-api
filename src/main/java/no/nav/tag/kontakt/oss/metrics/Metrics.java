@@ -25,10 +25,10 @@ public class Metrics {
     }
 
     public void sendtGsakOppgave(boolean success) {
-        if (success) {
-            meterRegistry.counter("sendt_gsakoppgave_success").increment();
-        } else {
-            meterRegistry.counter("sendt_gsakoppgave_fail").increment();
-        }
+        String counterName = success ? "sendt.gsakoppgave.success" : "sendt.gsakoppgave.fail";
+
+        Counter.builder(counterName)
+                .register(meterRegistry)
+                .increment();
     }
 }
