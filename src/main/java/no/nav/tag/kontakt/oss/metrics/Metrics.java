@@ -1,5 +1,6 @@
 package no.nav.tag.kontakt.oss.metrics;
 
+import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import no.nav.tag.kontakt.oss.Kontaktskjema;
 import org.springframework.stereotype.Component;
@@ -13,13 +14,14 @@ public class Metrics {
     }
 
     public void mottattKontaktskjema(boolean success, Kontaktskjema kontaktskjema) {
-        String counterName = success ? "mottatt_kontaktskjema_success" : "mottatt_kontaktskjema_fail";
-        meterRegistry.counter(
-                counterName,
-                "fylke", kontaktskjema.getFylke(),
-                "kommune", kontaktskjema.getKommunenr(),
-                "tema", kontaktskjema.getTema()
-        ).increment();
+        String counterName = success ? "mottatt.kontaktskjema.success" : "mottatt.kontaktskjema.fail";
+
+        Counter.builder(counterName)
+                .tag("fylke", kontaktskjema.getFylke())
+                .tag("kommune", kontaktskjema.getKommunenr())
+                .tag("tema", kontaktskjema.getTema())
+                .register(meterRegistry)
+                .increment();
     }
 
     public void sendtGsakOppgave(boolean success) {
