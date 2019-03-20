@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.tag.kontakt.oss.DateProvider;
 import no.nav.tag.kontakt.oss.Kontaktskjema;
 import no.nav.tag.kontakt.oss.featureToggles.FeatureToggles;
+import no.nav.tag.kontakt.oss.gsak.integrasjon.BadRequestException;
 import no.nav.tag.kontakt.oss.metrics.Metrics;
 import no.nav.tag.kontakt.oss.navenhetsmapping.NavEnhetService;
 import no.nav.tag.kontakt.oss.gsak.GsakOppgave.OppgaveStatus;
@@ -71,16 +72,37 @@ public class GsakOppgaveService {
             log.info("Opprettet ikke ny gsak-oppgave for kontaktskjema {}, tjenesten er togglet av.", kontaktskjema.getId());
             return new Behandlingsresultat(DISABLED, null);
         }
+
         try {
-            Integer gsakId = gsakKlient.opprettGsakOppgave(lagGsakInnsending(kontaktskjema));
-            log.info("Opprettet ny gsak-oppgave med id {}", gsakId);
-            metrics.sendtGsakOppgave(true);
-            return new Behandlingsresultat(OK, gsakId);
+            return sendInnGsakOppgaveOgProvPaNyttUtenOrgnrHvisBadRequest(kontaktskjema);
+
         } catch (Exception e) {
             log.error("Opprettelse av gsak-oppgave feilet for kontaktskjema {}.", kontaktskjema.getId(), e);
             metrics.sendtGsakOppgave(false);
             return new Behandlingsresultat(FEILET, null);
         }
+    }
+
+    private Behandlingsresultat sendInnGsakOppgaveOgProvPaNyttUtenOrgnrHvisBadRequest(Kontaktskjema kontaktskjema) {
+        try {
+            return sendGsakRequest(kontaktskjema);
+
+        } catch (BadRequestException e) {
+            // BadRequest kan tyde på at orgnr blir feilvalidert i GSAK.
+            // Vi har forskjellig validering av orgnr enn GSAK.
+            log.error(e.getMessage(), e);
+            log.warn("Prøver å opprette GSAK oppgave igjen uten orgnr for kontaktskjema med id: {}", kontaktskjema.getId());
+            kontaktskjema.setOrgnr("");
+            return sendGsakRequest(kontaktskjema);
+        }
+    }
+
+
+    private Behandlingsresultat sendGsakRequest(Kontaktskjema kontaktskjema) {
+        Integer gsakId = gsakKlient.opprettGsakOppgave(lagGsakInnsending(kontaktskjema));
+        log.info("Opprettet ny gsak-oppgave med id {}", gsakId);
+        metrics.sendtGsakOppgave(true);
+        return new Behandlingsresultat(OK, gsakId);
     }
 
     GsakRequest lagGsakInnsending(Kontaktskjema kontaktskjema) {
