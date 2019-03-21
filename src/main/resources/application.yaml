@@ -15,7 +15,7 @@ spring:
       minimum-idle: 1
 
 kontaktskjema:
-  max-requests-per-10-min: 1000 # approved by spring champion
+  max-requests-per-10-min: 1000
 
 ---
 spring:
