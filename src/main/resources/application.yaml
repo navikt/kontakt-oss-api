@@ -14,6 +14,9 @@ spring:
       maximum-pool-size: 5
       minimum-idle: 1
 
+kontaktskjema:
+  max-requests-per-10-min: 1000 # approved by spring champion
+
 ---
 spring:
   profiles: dev
@@ -46,3 +49,6 @@ spring:
 gsak.url: https://oppgave.nais.adeo.no/api/v1/oppgaver
 norg.url: https://app.adeo.no/norg2/api/v1
 kodeverk.url: https://kodeverk.nais.adeo.no/api/v1
+
+kontaktskjema:
+  max-requests-per-10-min: 10

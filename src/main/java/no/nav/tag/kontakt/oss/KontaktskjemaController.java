@@ -3,6 +3,7 @@ package no.nav.tag.kontakt.oss;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.tag.kontakt.oss.metrics.Metrics;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,14 +16,19 @@ import java.time.LocalDateTime;
 @Slf4j
 public class KontaktskjemaController {
 
-    static final int MAX_INNSENDINGER_PR_TI_MIN = 10;
     private final KontaktskjemaRepository repository;
     private final Metrics metrics;
+    private final int maksInnsendingerPerTiMin;
 
     @Autowired
-    public KontaktskjemaController(KontaktskjemaRepository repository, Metrics metrics) {
+    public KontaktskjemaController(
+            KontaktskjemaRepository repository,
+            Metrics metrics,
+            @Value("${kontaktskjema.max-requests-per-10-min}") Integer maksInnsendingerPerTiMin
+    ) {
         this.repository = repository;
         this.metrics = metrics;
+        this.maksInnsendingerPerTiMin = maksInnsendingerPerTiMin;
     }
 
     @PostMapping(value = "/meldInteresse")
@@ -31,7 +37,7 @@ public class KontaktskjemaController {
     ) {
         try {
             kontaktskjema.setOpprettet(LocalDateTime.now());
-            if(repository.findAllNewerThan(LocalDateTime.now().minusMinutes(10)).size() >= MAX_INNSENDINGER_PR_TI_MIN) {
+            if(repository.findAllNewerThan(LocalDateTime.now().minusMinutes(10)).size() >= maksInnsendingerPerTiMin) {
                 return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
             }
             repository.save(kontaktskjema);
