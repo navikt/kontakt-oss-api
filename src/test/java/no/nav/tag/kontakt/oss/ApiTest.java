@@ -50,7 +50,7 @@ public class ApiTest {
 
     private HttpRequest createRequest(String body) {
         return HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:" + port + "/meldInteresse"))
+                .uri(URI.create("http://localhost:" + port + "/kontakt-oss-api/meldInteresse"))
                 .header("Accept", "*/*")
                 .header("Accept-Encoding", "gzip, deflate, br")
                 .header("Accept-Language", "nb-NO,nb;q=0.9,no;q=0.8,nn;q=0.7,en-US;q=0.6,en;q=0.5")

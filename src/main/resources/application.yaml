@@ -14,6 +14,9 @@ spring:
       maximum-pool-size: 5
       minimum-idle: 1
 
+kontaktskjema:
+  max-requests-per-10-min: 1000
+
 ---
 spring:
   profiles: dev
@@ -21,15 +24,14 @@ spring:
     enabled: true
     path: /h2
 
-server.servlet.context-path: ""
-
 mock:
   enabled: true
   port: 8081
+  baseUrl: http://localhost:${mock.port}/${server.servlet.context-path}
 
-gsak.url: http://localhost:${mock.port}/gsak
-norg.url: http://localhost:${mock.port}/norg
-kodeverk.url: http://localhost:${mock.port}/kodeverk
+gsak.url: ${mock.baseUrl}/gsak
+norg.url: ${mock.baseUrl}/norg
+kodeverk.url: ${mock.baseUrl}/kodeverk
 
 # Miljøvariabel som ellers settes i nais.yaml
 ENABLE_GSAK: true
@@ -47,3 +49,6 @@ spring:
 gsak.url: https://oppgave.nais.adeo.no/api/v1/oppgaver
 norg.url: https://app.adeo.no/norg2/api/v1
 kodeverk.url: https://kodeverk.nais.adeo.no/api/v1
+
+kontaktskjema:
+  max-requests-per-10-min: 10
