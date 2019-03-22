@@ -27,7 +27,7 @@ spring:
 mock:
   enabled: true
   port: 8081
-  baseUrl: http://localhost:${mock.port}/${server.servlet.context-path}
+  baseUrl: http://localhost:${mock.port}${server.servlet.context-path}
 
 gsak.url: ${mock.baseUrl}/gsak
 norg.url: ${mock.baseUrl}/norg
