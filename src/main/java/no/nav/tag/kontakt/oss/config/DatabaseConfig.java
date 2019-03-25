@@ -23,7 +23,7 @@ public class DatabaseConfig {
     @Value("${database.navn}")
     private String databaseNavn;
 
-    @Value("${vault.mountpath}")
+    @Value("${vault.mount-path}")
     private String mountPath;
 
     @Bean

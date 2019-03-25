@@ -38,10 +38,8 @@ gsak.url: https://oppgave.nais.preprod.local/api/v1/oppgaver
 norg.url: https://app-q0.adeo.no/norg2/api/v1
 kodeverk.url: https://kodeverk.nais.preprod.local/api/v1
 
-database:
-  navn: kontakt-oss-preprod
-vault:
-  mountPath: postgresql/preprod-fss
+database.navn: kontakt-oss-preprod
+vault.mount-path: postgresql/preprod-fss
 
 ---
 spring:
@@ -53,7 +51,5 @@ kodeverk.url: https://kodeverk.nais.adeo.no/api/v1
 kontaktskjema:
   max-requests-per-10-min: 10
 
-database:
-  navn: kontakt-oss-prod
-vault:
-  mountpath: postgresql/prod-fss
+database.navn: kontakt-oss-prod
+vault.mount-path: postgresql/prod-fss
