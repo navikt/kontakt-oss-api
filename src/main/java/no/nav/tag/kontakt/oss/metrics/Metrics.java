@@ -31,4 +31,12 @@ public class Metrics {
                 .register(meterRegistry)
                 .increment();
     }
+
+    public void oppdatertFylkesinndeling(boolean success) {
+        String counterName = success ? "hentet.fylkesinndeling.success" : "hentet.fylkesinndeling.fail";
+
+        Counter.builder(counterName)
+                .register(meterRegistry)
+                .increment();
+    }
 }
