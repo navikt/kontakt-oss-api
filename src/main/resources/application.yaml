@@ -6,14 +6,7 @@ management.endpoints.web:
 
 norg.fixed-rate: 3600000 # Hver time i millisekunder: 1000 * 60 * 60 = 3600000
 
-spring:
-  profiles.active: dev
-  datasource:
-    hikari:
-      max-lifetime: 300000 # 5 minutter
-      idle-timeout: 150000
-      maximum-pool-size: 5
-      minimum-idle: 1
+spring.profiles.active: dev
 
 kontaktskjema:
   max-requests-per-10-min: 1000

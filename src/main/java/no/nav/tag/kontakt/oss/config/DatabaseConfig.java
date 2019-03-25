@@ -35,8 +35,10 @@ public class DatabaseConfig {
     private HikariDataSource dataSource(String user) {
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl(databaseUrl);
-        config.setMaximumPoolSize(3);
+        config.setMaximumPoolSize(5);
         config.setMinimumIdle(1);
+        config.setMaxLifetime(300000);
+        config.setIdleTimeout(150000);
         return HikariCPVaultUtil.createHikariDataSourceWithVaultIntegration(config, mountPath, dbRole(user));
     }
 
