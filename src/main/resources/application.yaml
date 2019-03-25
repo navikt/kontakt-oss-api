@@ -6,13 +6,7 @@ management.endpoints.web:
 
 norg.fixed-rate: 3600000 # Hver time i millisekunder: 1000 * 60 * 60 = 3600000
 
-spring:
-  datasource:
-    hikari:
-      max-lifetime: 300000 # 5 minutter
-      idle-timeout: 150000
-      maximum-pool-size: 5
-      minimum-idle: 1
+spring.profiles.active: dev
 
 kontaktskjema:
   max-requests-per-10-min: 1000
@@ -23,6 +17,7 @@ spring:
   h2.console:
     enabled: true
     path: /h2
+
 
 mock:
   enabled: true
@@ -43,6 +38,9 @@ gsak.url: https://oppgave.nais.preprod.local/api/v1/oppgaver
 norg.url: https://app-q0.adeo.no/norg2/api/v1
 kodeverk.url: https://kodeverk.nais.preprod.local/api/v1
 
+database.navn: kontakt-oss-preprod
+vault.mount-path: postgresql/preprod-fss
+
 ---
 spring:
   profiles: prod
@@ -52,3 +50,6 @@ kodeverk.url: https://kodeverk.nais.adeo.no/api/v1
 
 kontaktskjema:
   max-requests-per-10-min: 10
+
+database.navn: kontakt-oss-prod
+vault.mount-path: postgresql/prod-fss
