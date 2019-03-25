@@ -20,8 +20,11 @@ public class DatabaseConfig {
     @Value("${SPRING_DATASOURCE_URL}")
     private String databaseUrl;
 
-    @Value("${NAIS_CLUSTER_NAME}")
-    private String miljo;
+    @Value("${database.navn}")
+    private String databaseNavn;
+
+    @Value("${vault.mountpath}")
+    private String mountPath;
 
     @Bean
     public DataSource userDataSource() {
@@ -34,9 +37,6 @@ public class DatabaseConfig {
         config.setJdbcUrl(databaseUrl);
         config.setMaximumPoolSize(3);
         config.setMinimumIdle(1);
-        String mountPath = miljo.equals("prod-fss")
-                ? "postgresql/prod-fss"
-                : "postgresql/preprod-fss";
         return HikariCPVaultUtil.createHikariDataSourceWithVaultIntegration(config, mountPath, dbRole(user));
     }
 
@@ -50,10 +50,6 @@ public class DatabaseConfig {
     }
 
     private String dbRole(String role) {
-        String databaseNavnProd = "kontakt-oss-prod";
-        String databaseNavnPreprod = "kontakt-oss-preprod";
-        return miljo.equals("prod-fss")
-                ? String.join("-", databaseNavnProd, role)
-                : String.join("-", databaseNavnPreprod, role);
+        return String.join("-", databaseNavn, role);
     }
 }

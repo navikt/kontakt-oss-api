@@ -25,6 +25,7 @@ spring:
     enabled: true
     path: /h2
 
+
 mock:
   enabled: true
   port: 8081
@@ -44,6 +45,11 @@ gsak.url: https://oppgave.nais.preprod.local/api/v1/oppgaver
 norg.url: https://app-q0.adeo.no/norg2/api/v1
 kodeverk.url: https://kodeverk.nais.preprod.local/api/v1
 
+database:
+  navn: kontakt-oss-preprod
+vault:
+  mountPath: postgresql/preprod-fss
+
 ---
 spring:
   profiles: prod
@@ -53,3 +59,8 @@ kodeverk.url: https://kodeverk.nais.adeo.no/api/v1
 
 kontaktskjema:
   max-requests-per-10-min: 10
+
+database:
+  navn: kontakt-oss-prod
+vault:
+  mountpath: postgresql/prod-fss
