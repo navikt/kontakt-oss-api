@@ -1,7 +1,11 @@
 package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter;
 
+import lombok.extern.slf4j.Slf4j;
+import no.nav.tag.kontakt.oss.KontaktskjemaException;
+import no.nav.tag.kontakt.oss.events.FylkesinndelingOppdatert;
 import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.KodeverkKlient;
 import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.NorgKlient;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -10,14 +14,24 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 public class FylkesinndelingService {
+
     private final NorgKlient norgKlient;
     private final KodeverkKlient kodeverkKlient;
+    private final FylkesinndelingRepository fylkesinndelingRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public FylkesinndelingService(NorgKlient norgKlient, KodeverkKlient kodeverkKlient) {
+    public FylkesinndelingService(
+            NorgKlient norgKlient,
+            KodeverkKlient kodeverkKlient,
+            FylkesinndelingRepository fylkesinndelingRepository,
+            ApplicationEventPublisher eventPublisher) {
         this.norgKlient = norgKlient;
         this.kodeverkKlient = kodeverkKlient;
+        this.fylkesinndelingRepository = fylkesinndelingRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     public Map<NavEnhet, NavFylkesenhet> hentMapFraNavenhetTilFylkesenhet() {
@@ -69,5 +83,36 @@ public class FylkesinndelingService {
         return kommuner.stream()
                 .filter(kommune -> kommune.getNummer().equals(kommunenummer))
                 .findFirst();
+    }
+
+    public void oppdaterFylkesinndeling() {
+        log.info("Oppdaterer informasjon fra NORG og Kodeverk");
+
+        try {
+            List<KommuneEllerBydel> kommunerOgBydeler = hentListeOverAlleKommunerOgBydeler();
+            Map<KommuneEllerBydel, NavEnhet> fraKommuneEllerBydelTilNavEnhet = hentMapFraKommuneEllerBydelTilNavEnhet(kommunerOgBydeler);
+            FylkesinndelingMedNavEnheter fylkesinndeling = new FylkesinndelingMedNavEnheter(
+                    hentMapFraNavenhetTilFylkesenhet(),
+                    fraKommuneEllerBydelTilNavEnhet,
+                    kommunerOgBydeler
+            );
+
+            lagreFylkesinndelingIDatabase(fraKommuneEllerBydelTilNavEnhet, fylkesinndeling);
+            eventPublisher.publishEvent(new FylkesinndelingOppdatert(true));
+
+        } catch (KontaktskjemaException exception) {
+            eventPublisher.publishEvent(new FylkesinndelingOppdatert(false));
+            throw exception;
+        }
+    }
+
+    private void lagreFylkesinndelingIDatabase(Map<KommuneEllerBydel, NavEnhet> fraKommuneEllerBydelTilNavEnhet, FylkesinndelingMedNavEnheter fylkesinndeling) {
+        fylkesinndelingRepository.oppdaterInformasjonFraNorg(
+                fylkesinndeling,
+                fraKommuneEllerBydelTilNavEnhet.keySet().stream().collect(Collectors.toMap(
+                        KommuneEllerBydel::getNummer,
+                        kommunerEllerBydel -> fraKommuneEllerBydelTilNavEnhet.get(kommunerEllerBydel)
+                ))
+        );
     }
 }

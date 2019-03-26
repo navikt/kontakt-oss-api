@@ -1,9 +1,11 @@
 package no.nav.tag.kontakt.oss;
 
 import lombok.extern.slf4j.Slf4j;
-import no.nav.tag.kontakt.oss.metrics.Metrics;
+import no.nav.tag.kontakt.oss.events.BesvarelseMottatt;
+import no.nav.tag.kontakt.oss.metrics.MetricsListeners;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,18 +19,20 @@ import java.time.LocalDateTime;
 public class KontaktskjemaController {
 
     private final KontaktskjemaRepository repository;
-    private final Metrics metrics;
+    private final MetricsListeners metrics;
     private final int maksInnsendingerPerTiMin;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Autowired
     public KontaktskjemaController(
             KontaktskjemaRepository repository,
-            Metrics metrics,
-            @Value("${kontaktskjema.max-requests-per-10-min}") Integer maksInnsendingerPerTiMin
-    ) {
+            MetricsListeners metrics,
+            @Value("${kontaktskjema.max-requests-per-10-min}") Integer maksInnsendingerPerTiMin,
+            ApplicationEventPublisher eventPublisher) {
         this.repository = repository;
         this.metrics = metrics;
         this.maksInnsendingerPerTiMin = maksInnsendingerPerTiMin;
+        this.eventPublisher = eventPublisher;
     }
 
     @PostMapping(value = "/meldInteresse")
@@ -42,12 +46,12 @@ public class KontaktskjemaController {
             }
             repository.save(kontaktskjema);
             log.info("Vellykket innsending.");
-            metrics.mottattKontaktskjema(true, kontaktskjema);
+            eventPublisher.publishEvent(new BesvarelseMottatt(true, kontaktskjema));
 
             return ResponseEntity.ok(HttpStatus.OK);
         } catch (Exception e) {
             log.error("Feil ved innsending av skjema", e);
-            metrics.mottattKontaktskjema(false, kontaktskjema);
+            eventPublisher.publishEvent(new BesvarelseMottatt(false, kontaktskjema));
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
