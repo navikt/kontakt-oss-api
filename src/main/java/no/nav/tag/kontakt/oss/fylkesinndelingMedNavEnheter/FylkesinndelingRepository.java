@@ -10,8 +10,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
-import static no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.FylkesinndelingScheduler.NORG_SHEDLOCK_NAVN;
-
 @Component
 public class FylkesinndelingRepository {
     private final JdbcTemplate jdbcTemplate;
@@ -25,7 +23,7 @@ public class FylkesinndelingRepository {
     public LocalDateTime hentSistOppdatert() {
         return jdbcTemplate.queryForObject("SELECT sistOppdatert FROM norg_mapping", LocalDateTime.class);
     }
-    
+
     @SneakyThrows
     public Map<String, NavEnhet> hentKommuneNrEllerBydelNrTilNavEnhet() {
         String json = jdbcTemplate.queryForObject("SELECT mapFraKommunerOgBydelerTilNavEnheter FROM norg_mapping", String.class);
