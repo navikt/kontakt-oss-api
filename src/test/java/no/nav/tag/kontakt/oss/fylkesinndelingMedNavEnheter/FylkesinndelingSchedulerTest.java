@@ -4,6 +4,8 @@ import net.javacrumbs.shedlock.core.LockConfiguration;
 import net.javacrumbs.shedlock.core.LockingTaskExecutor;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -19,8 +21,11 @@ public class FylkesinndelingSchedulerTest {
     @Mock
     private FylkesinndelingService fylkesinndelingService;
 
+    @Captor
+    private ArgumentCaptor<Runnable> captor;
+
     @Test
-    public void skalSjekkeAtSceduledMetodeBrukerShedlock() {
+    public void scheduledOppdaterInformasjonFraNorg__skal_oppdatere_fylkesinndeling_med_lock() {
         FylkesinndelingScheduler scheduler = new FylkesinndelingScheduler(
                 taskExecutor,
                 fylkesinndelingService,
@@ -28,6 +33,11 @@ public class FylkesinndelingSchedulerTest {
 
         scheduler.scheduledOppdaterInformasjonFraNorg();
 
-        verify(taskExecutor).executeWithLock(any(Runnable.class), any(LockConfiguration.class));
+        verify(taskExecutor).executeWithLock(captor.capture(), any(LockConfiguration.class));
+
+        Runnable oppdaterFylkesinndelingMedLock = captor.getValue();
+        oppdaterFylkesinndelingMedLock.run();
+
+        verify(fylkesinndelingService).oppdaterFylkesinndeling();
     }
 }
