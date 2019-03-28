@@ -2,7 +2,6 @@ package no.nav.tag.kontakt.oss;
 
 import lombok.extern.slf4j.Slf4j;
 import no.nav.tag.kontakt.oss.events.BesvarelseMottatt;
-import no.nav.tag.kontakt.oss.metrics.MetricsListeners;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
@@ -19,18 +18,15 @@ import java.time.LocalDateTime;
 public class KontaktskjemaController {
 
     private final KontaktskjemaRepository repository;
-    private final MetricsListeners metrics;
     private final int maksInnsendingerPerTiMin;
     private final ApplicationEventPublisher eventPublisher;
 
     @Autowired
     public KontaktskjemaController(
             KontaktskjemaRepository repository,
-            MetricsListeners metrics,
             @Value("${kontaktskjema.max-requests-per-10-min}") Integer maksInnsendingerPerTiMin,
             ApplicationEventPublisher eventPublisher) {
         this.repository = repository;
-        this.metrics = metrics;
         this.maksInnsendingerPerTiMin = maksInnsendingerPerTiMin;
         this.eventPublisher = eventPublisher;
     }

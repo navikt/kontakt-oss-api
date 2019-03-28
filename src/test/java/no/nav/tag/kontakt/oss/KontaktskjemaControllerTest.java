@@ -1,7 +1,6 @@
 package no.nav.tag.kontakt.oss;
 
 import no.nav.tag.kontakt.oss.events.BesvarelseMottatt;
-import no.nav.tag.kontakt.oss.metrics.MetricsListeners;
 import org.junit.Test;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
@@ -19,11 +18,9 @@ public class KontaktskjemaControllerTest {
 
     private int maksInnsendingerPerTiMin = 10;
     private KontaktskjemaRepository repository = mock(KontaktskjemaRepository.class);
-    private MetricsListeners metrics = mock(MetricsListeners.class);
     private ApplicationEventPublisher eventPublisher = mock(ApplicationEventPublisher.class);
     private KontaktskjemaController kontaktskjemaController = new KontaktskjemaController(
             repository,
-            metrics,
             maksInnsendingerPerTiMin,
             eventPublisher
     );
@@ -62,7 +59,7 @@ public class KontaktskjemaControllerTest {
     public void skalSendeMetrikkOmFeiletKontaktskjema() {
         KontaktskjemaRepository repository = mock(KontaktskjemaRepository.class);
         when(repository.save(any())).thenThrow(KontaktskjemaException.class);
-        KontaktskjemaController kontaktskjemaController = new KontaktskjemaController(repository, metrics, maksInnsendingerPerTiMin, eventPublisher);
+        KontaktskjemaController kontaktskjemaController = new KontaktskjemaController(repository, maksInnsendingerPerTiMin, eventPublisher);
         Kontaktskjema kontaktskjema = kontaktskjema();
 
         kontaktskjemaController.meldInteresse(kontaktskjema);
