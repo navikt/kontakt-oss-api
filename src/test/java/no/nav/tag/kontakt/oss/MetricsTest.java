@@ -1,46 +1,48 @@
 package no.nav.tag.kontakt.oss;
 
+import io.micrometer.core.instrument.MeterRegistry;
 import no.nav.tag.kontakt.oss.events.BesvarelseMottatt;
 import no.nav.tag.kontakt.oss.events.FylkesinndelingOppdatert;
 import no.nav.tag.kontakt.oss.events.GsakOppgaveSendt;
-import no.nav.tag.kontakt.oss.metrics.MetricsListeners;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static no.nav.tag.kontakt.oss.TestData.kontaktskjema;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.verify;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class MetricsListenersTest {
+public class MetricsTest {
 
     @Autowired
     private ApplicationEventPublisher eventPublisher;
 
-    @MockBean
-    private MetricsListeners metrics;
+    @Autowired
+    private MeterRegistry meterRegistry;
 
     @Test
-    public void besvarelseMottattSkalKalles() {
+    public void besvarelseMottatt__skal_inkrementere_counter() {
         eventPublisher.publishEvent(new BesvarelseMottatt(true, kontaktskjema()));
-        verify(metrics).besvarelseMottatt(any());
+        assertThat(hentCount("mottatt.kontaktskjema.success")).isEqualTo(1.0);
     }
 
     @Test
-    public void gsakOppgaveSendtSkalKalles() {
+    public void gsakOppgaveSendt__skal_inkrementere_counter() {
         eventPublisher.publishEvent(new GsakOppgaveSendt(true));
-        verify(metrics).gsakOppgaveSendt(any());
+        assertThat(hentCount("sendt.gsakoppgave.success")).isEqualTo(1.0);
     }
 
     @Test
-    public void fylkesinndelingOppdatertSkalKalles() {
+    public void fylkesInndelingOppdatert__skal_inkrementere_counter() {
         eventPublisher.publishEvent(new FylkesinndelingOppdatert(true));
-        verify(metrics).fylkesInndelingOppdatert(any());
+        assertThat(hentCount("hentet.fylkesinndeling.success")).isEqualTo(1.0);
+    }
+
+    private double hentCount(String counterName) {
+        return meterRegistry.get(counterName).counter().count();
     }
 }

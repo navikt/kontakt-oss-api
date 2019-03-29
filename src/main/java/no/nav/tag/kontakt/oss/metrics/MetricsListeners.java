@@ -5,6 +5,7 @@ import io.micrometer.core.instrument.MeterRegistry;
 import no.nav.tag.kontakt.oss.events.BesvarelseMottatt;
 import no.nav.tag.kontakt.oss.events.FylkesinndelingOppdatert;
 import no.nav.tag.kontakt.oss.events.GsakOppgaveSendt;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +14,7 @@ public class MetricsListeners {
 
     private final MeterRegistry meterRegistry;
 
+    @Autowired
     public MetricsListeners(MeterRegistry meterRegistry) {
         this.meterRegistry = meterRegistry;
     }
