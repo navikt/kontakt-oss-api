@@ -99,6 +99,7 @@ public class FylkesinndelingService {
 
             lagreFylkesinndelingIDatabase(fraKommuneEllerBydelTilNavEnhet, fylkesinndeling);
             eventPublisher.publishEvent(new FylkesinndelingOppdatert(true));
+            log.info("Informasjon om fylkesinndeling ble oppdatert");
 
         } catch (KontaktskjemaException exception) {
             eventPublisher.publishEvent(new FylkesinndelingOppdatert(false));
