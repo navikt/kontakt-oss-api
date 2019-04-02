@@ -13,6 +13,7 @@ import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse;
 
 import org.apache.commons.io.IOUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,12 +24,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import lombok.SneakyThrows;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
-@TestPropertySource(properties = {"mock.enabled=false"})
 public class ApiTest {
 
-    @LocalServerPort
     private String port;
 
     private static final String OK_KONTAKTSKJEMA_JSON = lesFil("kontaktskjema_ok.json");
@@ -41,6 +38,7 @@ public class ApiTest {
         );
     }
 
+    @Ignore
     @Test
     public void postKontaktskjema_OK() throws Exception {
         HttpResponse<?> response = newBuilder().build().send(createRequest(OK_KONTAKTSKJEMA_JSON), ofString());
@@ -59,7 +57,8 @@ public class ApiTest {
                 .POST(BodyPublishers.ofString(body))
                 .build();
     }
-    
+
+    @Ignore
     @Test
     public void postKontaktskjema_feil_kommunenr() throws Exception {
 
