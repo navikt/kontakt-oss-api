@@ -30,7 +30,7 @@ public class MetricsListeners {
                     Counter.builder("mottatt.kontaktskjema.success")
                             .tag("fylke", fylke)
                             .tag("kommune", kommuneEllerBydel.getNummer())
-                            .tag("tema", "Rekruttering")
+                            .tag("tema", tema)
                             .register(meterRegistry);
                 });
 
