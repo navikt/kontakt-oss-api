@@ -19,15 +19,9 @@ public class MetricsListeners {
         this.meterRegistry = meterRegistry;
 
         Counter.builder("mottatt.kontaktskjema.success")
-                .tag("fylke", "")
-                .tag("kommune", "")
-                .tag("tema", "")
-                .register(meterRegistry);
-
-        Counter.builder("mottatt.kontaktskjema.fail")
-                .tag("fylke", "")
-                .tag("kommune", "")
-                .tag("tema", "")
+                .tag("fylke", "1000")
+                .tag("kommune", "0906")
+                .tag("tema", "Rekruttering")
                 .register(meterRegistry);
     }
 
