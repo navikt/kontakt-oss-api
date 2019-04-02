@@ -5,9 +5,13 @@ import io.micrometer.core.instrument.MeterRegistry;
 import no.nav.tag.kontakt.oss.events.BesvarelseMottatt;
 import no.nav.tag.kontakt.oss.events.FylkesinndelingOppdatert;
 import no.nav.tag.kontakt.oss.events.GsakOppgaveSendt;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.FylkesinndelingMedNavEnheter;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.FylkesinndelingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
 
 @Component
 public class MetricsListeners {
@@ -15,14 +19,23 @@ public class MetricsListeners {
     private final MeterRegistry meterRegistry;
 
     @Autowired
-    public MetricsListeners(MeterRegistry meterRegistry) {
+    public MetricsListeners(MeterRegistry meterRegistry, FylkesinndelingRepository fylkesinndelingRepository) {
         this.meterRegistry = meterRegistry;
 
-        Counter.builder("mottatt.kontaktskjema.success")
-                .tag("fylke", "1000")
-                .tag("kommune", "0906")
-                .tag("tema", "Rekruttering")
-                .register(meterRegistry);
+        FylkesinndelingMedNavEnheter fylkesinndeling = fylkesinndelingRepository.hentFylkesinndeling();
+
+        Arrays.asList("Rekruttering", "Rekruttering med tilrettelegging", "Arbeidstrening", "Oppfølging av en arbeidstaker", "Annet").forEach(tema -> {
+            fylkesinndeling.getFylkeTilKommuneEllerBydel().forEach((fylke, kommuner) -> {
+                kommuner.forEach(kommuneEllerBydel -> {
+                    Counter.builder("mottatt.kontaktskjema.success")
+                            .tag("fylke", fylke)
+                            .tag("kommune", kommuneEllerBydel.getNummer())
+                            .tag("tema", "Rekruttering")
+                            .register(meterRegistry);
+                });
+
+            });
+        });
     }
 
     @EventListener
