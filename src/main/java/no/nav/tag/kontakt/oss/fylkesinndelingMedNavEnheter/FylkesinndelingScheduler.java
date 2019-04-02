@@ -3,33 +3,29 @@ package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter;
 import lombok.extern.slf4j.Slf4j;
 import net.javacrumbs.shedlock.core.LockConfiguration;
 import net.javacrumbs.shedlock.core.LockingTaskExecutor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Component
 public class FylkesinndelingScheduler {
-    private final FylkesinndelingRepository fylkesinndelingRepository;
+
     private final LockingTaskExecutor taskExecutor;
-    private final FylkesinndelingService norgService;
+    private final FylkesinndelingService fylkesinndelingService;
 
-    public static String NORG_SHEDLOCK_NAVN = "oppdaterFylkesinndeling";
+    public static String FYLKESINNDELING_SHEDLOCK_NAVN = "oppdaterFylkesinndeling";
 
+    @Autowired
     public FylkesinndelingScheduler(
-            FylkesinndelingRepository fylkesinndelingRepository,
             LockingTaskExecutor taskExecutor,
-            FylkesinndelingService norgService,
-            @Value("${FYLKESINNDELING_TVING_OPPDATERING:false}") String tvingOppdatering
-    ) {
-        this.fylkesinndelingRepository = fylkesinndelingRepository;
+            FylkesinndelingService fylkesinndelingService,
+            @Value("${FYLKESINNDELING_TVING_OPPDATERING:false}") String tvingOppdatering) {
         this.taskExecutor = taskExecutor;
-        this.norgService = norgService;
+        this.fylkesinndelingService = fylkesinndelingService;
 
         if ("true".equals(tvingOppdatering)) {
             oppdaterFylkesinndelingUtenomSchedule();
@@ -38,7 +34,7 @@ public class FylkesinndelingScheduler {
 
     @Scheduled(fixedRateString = "${norg.fixed-rate}")
     public void scheduledOppdaterInformasjonFraNorg() {
-        log.info("Sjekker shedlock for NORG-oppdatering");
+        log.info("Sjekker shedlock for fylkesinndeling-oppdatering");
 
         int hourInSeconds = 60 * 60;
 
@@ -46,28 +42,8 @@ public class FylkesinndelingScheduler {
         Instant lockAtLeastUntil = Instant.now().plusSeconds(24 * hourInSeconds);
 
         taskExecutor.executeWithLock(
-                (Runnable)this::oppdaterFylkesinndeling,
-                new LockConfiguration(NORG_SHEDLOCK_NAVN, lockAtMostUntil, lockAtLeastUntil)
-        );
-    }
-
-    private void oppdaterFylkesinndeling() {
-        log.info("Oppdaterer informasjon fra NORG");
-
-        List<KommuneEllerBydel> kommunerOgBydeler = norgService.hentListeOverAlleKommunerOgBydeler();
-        Map<KommuneEllerBydel, NavEnhet> fraKommuneEllerBydelTilNavEnhet = norgService.hentMapFraKommuneEllerBydelTilNavEnhet(kommunerOgBydeler);
-        FylkesinndelingMedNavEnheter fylkesinndeling = new FylkesinndelingMedNavEnheter(
-                norgService.hentMapFraNavenhetTilFylkesenhet(),
-                fraKommuneEllerBydelTilNavEnhet,
-                kommunerOgBydeler
-        );
-
-        fylkesinndelingRepository.oppdaterInformasjonFraNorg(
-                fylkesinndeling,
-                fraKommuneEllerBydelTilNavEnhet.keySet().stream().collect(Collectors.toMap(
-                        KommuneEllerBydel::getNummer,
-                        kommunerEllerBydel -> fraKommuneEllerBydelTilNavEnhet.get(kommunerEllerBydel)
-                ))
+                (Runnable) fylkesinndelingService::oppdaterFylkesinndeling,
+                new LockConfiguration(FYLKESINNDELING_SHEDLOCK_NAVN, lockAtMostUntil, lockAtLeastUntil)
         );
     }
 
@@ -78,7 +54,7 @@ public class FylkesinndelingScheduler {
         taskExecutor.executeWithLock(
                 (Runnable)() -> {
                     log.info("Tvinger oppdatering av fylkesinndeling");
-                    this.oppdaterFylkesinndeling();
+                    fylkesinndelingService.oppdaterFylkesinndeling();
                 },
                 new LockConfiguration("opprettOppgaveForSkjemaer-OVERRIDE", lockAtMostUntil, lockAtLeastUntil)
         );

@@ -4,9 +4,9 @@ import no.bekk.bekkopen.org.OrganisasjonsnummerCalculator;
 import no.nav.tag.kontakt.oss.DateProvider;
 import no.nav.tag.kontakt.oss.Kontaktskjema;
 import no.nav.tag.kontakt.oss.KontaktskjemaException;
+import no.nav.tag.kontakt.oss.events.GsakOppgaveSendt;
 import no.nav.tag.kontakt.oss.featureToggles.FeatureToggles;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.BadRequestException;
-import no.nav.tag.kontakt.oss.metrics.Metrics;
 import no.nav.tag.kontakt.oss.navenhetsmapping.NavEnhetService;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakKlient;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakRequest;
@@ -14,6 +14,7 @@ import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakRequest;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.time.LocalDateTime;
 
@@ -29,9 +30,9 @@ public class GsakOppgaveServiceTest {
     private GsakOppgaveRepository oppgaveRepository = mock(GsakOppgaveRepository.class);
     private DateProvider dateProvider = mock(DateProvider.class);
     private FeatureToggles featureToggles = mock(FeatureToggles.class);
-    private Metrics metrics = mock(Metrics.class);
     private GsakOppgaveService gsakOppgaveService;
     private GsakKlient gsakKlient = mock(GsakKlient.class);
+    private ApplicationEventPublisher eventPublisher = mock(ApplicationEventPublisher.class);
 
     @Before
     public void setUp() {
@@ -44,7 +45,7 @@ public class GsakOppgaveServiceTest {
                 gsakKlient,
                 mock(NavEnhetService.class),
                 featureToggles,
-                metrics
+                eventPublisher
         );
     }
 
@@ -80,27 +81,25 @@ public class GsakOppgaveServiceTest {
                 gsakKlient,
                 mock(NavEnhetService.class),
                 featureToggles,
-                metrics);
+                eventPublisher);
 
-        gsakOppgaveService.opprettOppgaveOgLagreStatus(Kontaktskjema.builder().build());
+        gsakOppgaveService.opprettOppgaveOgLagreStatus(kontaktskjema());
         verify(oppgaveRepository).save(eq(GsakOppgave.builder().gsakId(null).status(DISABLED).build()));
     }
 
     @Test
-    public void skalSendeMetrikkOmVellykketInnsending() {
-        gsakOppgaveService.opprettOppgaveOgLagreStatus(Kontaktskjema.builder().build());
-        verify(metrics, times(1)).sendtGsakOppgave(true);
+    public void skalPublisereEventOmVellykketInnsending() {
+        gsakOppgaveService.opprettOppgaveOgLagreStatus(kontaktskjema());
+        verify(eventPublisher, times(1)).publishEvent(new GsakOppgaveSendt(true));
     }
 
     @Test
-    public void skalSendeMetrikkOmFeiletInnsending() {
+    public void skalPublisereEventOmFeiletInnsending() {
         when(gsakKlient.opprettGsakOppgave(any())).thenThrow(KontaktskjemaException.class);
 
-        gsakOppgaveService.opprettOppgaveOgLagreStatus(Kontaktskjema.builder().build());
-        verify(metrics, times(1)).sendtGsakOppgave(false);
+        gsakOppgaveService.opprettOppgaveOgLagreStatus(kontaktskjema());
+        verify(eventPublisher, times(1)).publishEvent(new GsakOppgaveSendt(false));
     }
-
-
 
     @Test
     public void opprettGsakOppgaveSkalKallesToGangerHvisReturnertBadRequest() {

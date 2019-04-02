@@ -1,16 +1,24 @@
 package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter;
 
-import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.*;
+import no.nav.tag.kontakt.oss.KontaktskjemaException;
+import no.nav.tag.kontakt.oss.events.FylkesinndelingOppdatert;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.KodeverkKlient;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.NorgKlient;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.NorgOrganisering;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.context.ApplicationEventPublisher;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FylkesinndelingServiceTest {
@@ -21,11 +29,17 @@ public class FylkesinndelingServiceTest {
     @Mock
     private KodeverkKlient kodeverkKlient;
 
+    @Mock
+    private FylkesinndelingRepository fylkesinndelingRepository;
+
+    @Mock
+    private ApplicationEventPublisher eventPublisher;
+
     private FylkesinndelingService fylkesinndelingService;
 
     @Before
     public void setUp() {
-        fylkesinndelingService = new FylkesinndelingService(norgKlient, kodeverkKlient);
+        fylkesinndelingService = new FylkesinndelingService(norgKlient, kodeverkKlient, fylkesinndelingRepository, eventPublisher);
     }
 
     @Test
@@ -88,6 +102,28 @@ public class FylkesinndelingServiceTest {
                 new NavEnhet("1111"),
                 new NavEnhet("2222")
         );
+    }
+
+    @Test
+    public void oppdaterFylkesinndeling__skal_publisere_fylkesinndeling_oppdatert_hvis_ok() {
+        fylkesinndelingService.oppdaterFylkesinndeling();
+        verify(eventPublisher, times(1)).publishEvent(new FylkesinndelingOppdatert(true));
+    }
+
+    @Test
+    public void oppdaterFylkesinndeling__skal_publisere_fylkesinndeling_oppdatert_feil_hvis_feil() {
+        when(fylkesinndelingService.hentListeOverAlleKommunerOgBydeler()).thenThrow(KontaktskjemaException.class);
+        try {
+            fylkesinndelingService.oppdaterFylkesinndeling();
+        } catch (KontaktskjemaException exception) {
+            verify(eventPublisher, times(1)).publishEvent(new FylkesinndelingOppdatert(false));
+        }
+    }
+
+    @Test(expected = KontaktskjemaException.class)
+    public void oppdaterFylkesinndeling__skal_kaste_kontaktskjema_exception_videre() {
+        when(fylkesinndelingService.hentListeOverAlleKommunerOgBydeler()).thenThrow(KontaktskjemaException.class);
+        fylkesinndelingService.oppdaterFylkesinndeling();
     }
 
 }

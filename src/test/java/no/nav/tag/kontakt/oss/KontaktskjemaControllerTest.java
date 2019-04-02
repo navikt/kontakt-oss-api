@@ -1,8 +1,8 @@
 package no.nav.tag.kontakt.oss;
 
-import no.nav.tag.kontakt.oss.metrics.Metrics;
+import no.nav.tag.kontakt.oss.events.BesvarelseMottatt;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 
 import static java.util.stream.Collectors.toList;
@@ -18,8 +18,12 @@ public class KontaktskjemaControllerTest {
 
     private int maksInnsendingerPerTiMin = 10;
     private KontaktskjemaRepository repository = mock(KontaktskjemaRepository.class);
-    private Metrics metrics = mock(Metrics.class);
-    private KontaktskjemaController kontaktskjemaController = new KontaktskjemaController(repository, metrics, maksInnsendingerPerTiMin);
+    private ApplicationEventPublisher eventPublisher = mock(ApplicationEventPublisher.class);
+    private KontaktskjemaController kontaktskjemaController = new KontaktskjemaController(
+            repository,
+            maksInnsendingerPerTiMin,
+            eventPublisher
+    );
 
     @Test
     public void skalLagreKontaktskjemaOk() {
@@ -37,7 +41,7 @@ public class KontaktskjemaControllerTest {
         when(repository.findAllNewerThan(any(LocalDateTime.class))).thenReturn(generate(() -> kontaktskjema()).limit(maksInnsendingerPerTiMin).collect(toList()));
         assertThat(kontaktskjemaController.meldInteresse(kontaktskjema()).getStatusCode(), is(HttpStatus.TOO_MANY_REQUESTS));
     }
-    
+
     @Test
     public void skalReturnereStatus200DersomOK() {
         assertThat(kontaktskjemaController.meldInteresse(kontaktskjema()).getStatusCode(), is(HttpStatus.OK));
@@ -47,17 +51,19 @@ public class KontaktskjemaControllerTest {
     public void skalSendeMetrikkOmVellykketMottattKontaktskjema() {
         Kontaktskjema kontaktskjema = kontaktskjema();
         kontaktskjemaController.meldInteresse(kontaktskjema);
-        verify(metrics, times(1)).mottattKontaktskjema(eq(true), eq(kontaktskjema));
+
+        verify(eventPublisher, times(1)).publishEvent(new BesvarelseMottatt(true, kontaktskjema));
     }
 
     @Test
     public void skalSendeMetrikkOmFeiletKontaktskjema() {
         KontaktskjemaRepository repository = mock(KontaktskjemaRepository.class);
         when(repository.save(any())).thenThrow(KontaktskjemaException.class);
-        KontaktskjemaController kontaktskjemaController = new KontaktskjemaController(repository, metrics, maksInnsendingerPerTiMin);
+        KontaktskjemaController kontaktskjemaController = new KontaktskjemaController(repository, maksInnsendingerPerTiMin, eventPublisher);
         Kontaktskjema kontaktskjema = kontaktskjema();
 
         kontaktskjemaController.meldInteresse(kontaktskjema);
-        verify(metrics, times(1)).mottattKontaktskjema(eq(false), eq(kontaktskjema));
+
+        verify(eventPublisher, times(1)).publishEvent(new BesvarelseMottatt(false, kontaktskjema));
     }
 }

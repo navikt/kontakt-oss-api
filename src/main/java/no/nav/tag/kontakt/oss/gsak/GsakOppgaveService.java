@@ -4,15 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.tag.kontakt.oss.DateProvider;
 import no.nav.tag.kontakt.oss.Kontaktskjema;
+import no.nav.tag.kontakt.oss.events.GsakOppgaveSendt;
 import no.nav.tag.kontakt.oss.featureToggles.FeatureToggles;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.BadRequestException;
-import no.nav.tag.kontakt.oss.metrics.Metrics;
 import no.nav.tag.kontakt.oss.navenhetsmapping.NavEnhetService;
 import no.nav.tag.kontakt.oss.gsak.GsakOppgave.OppgaveStatus;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakKlient;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakRequest;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +32,7 @@ public class GsakOppgaveService {
     private final GsakKlient gsakKlient;
     private final NavEnhetService enhetUtils;
     private final FeatureToggles featureToggles;
-    private final Metrics metrics;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Autowired
     public GsakOppgaveService(
@@ -39,13 +40,14 @@ public class GsakOppgaveService {
             DateProvider dateProvider,
             GsakKlient gsakKlient,
             NavEnhetService enhetUtils,
-            FeatureToggles featureToggles, Metrics metrics) {
+            FeatureToggles featureToggles,
+            ApplicationEventPublisher eventPublisher) {
         this.oppgaveRepository = oppgaveRepository;
         this.dateProvider = dateProvider;
         this.gsakKlient = gsakKlient;
         this.enhetUtils = enhetUtils;
         this.featureToggles = featureToggles;
-        this.metrics = metrics;
+        this.eventPublisher = eventPublisher;
     }
 
     @AllArgsConstructor
@@ -78,7 +80,7 @@ public class GsakOppgaveService {
 
         } catch (Exception e) {
             log.error("Opprettelse av gsak-oppgave feilet for kontaktskjema {}.", kontaktskjema.getId(), e);
-            metrics.sendtGsakOppgave(false);
+            eventPublisher.publishEvent(new GsakOppgaveSendt(false));
             return new Behandlingsresultat(FEILET, null);
         }
     }
@@ -101,7 +103,7 @@ public class GsakOppgaveService {
     private Behandlingsresultat sendGsakRequest(Kontaktskjema kontaktskjema) {
         Integer gsakId = gsakKlient.opprettGsakOppgave(lagGsakInnsending(kontaktskjema));
         log.info("Opprettet ny gsak-oppgave med id {}", gsakId);
-        metrics.sendtGsakOppgave(true);
+        eventPublisher.publishEvent(new GsakOppgaveSendt(true));
         return new Behandlingsresultat(OK, gsakId);
     }
 
