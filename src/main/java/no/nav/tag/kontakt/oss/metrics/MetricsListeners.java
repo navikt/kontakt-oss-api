@@ -17,6 +17,18 @@ public class MetricsListeners {
     @Autowired
     public MetricsListeners(MeterRegistry meterRegistry) {
         this.meterRegistry = meterRegistry;
+
+        Counter.builder("mottatt.kontaktskjema.success")
+                .tag("fylke", "")
+                .tag("kommune", "")
+                .tag("tema", "")
+                .register(meterRegistry);
+
+        Counter.builder("mottatt.kontaktskjema.fail")
+                .tag("fylke", "")
+                .tag("kommune", "")
+                .tag("tema", "")
+                .register(meterRegistry);
     }
 
     @EventListener
