@@ -5,13 +5,12 @@ import io.micrometer.core.instrument.MeterRegistry;
 import no.nav.tag.kontakt.oss.events.BesvarelseMottatt;
 import no.nav.tag.kontakt.oss.events.FylkesinndelingOppdatert;
 import no.nav.tag.kontakt.oss.events.GsakOppgaveSendt;
-import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.FylkesinndelingMedNavEnheter;
-import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.FylkesinndelingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Component
 public class MetricsListeners {
@@ -19,23 +18,45 @@ public class MetricsListeners {
     private final MeterRegistry meterRegistry;
 
     @Autowired
-    public MetricsListeners(MeterRegistry meterRegistry, FylkesinndelingRepository fylkesinndelingRepository) {
+    public MetricsListeners(MeterRegistry meterRegistry) {
         this.meterRegistry = meterRegistry;
 
-        FylkesinndelingMedNavEnheter fylkesinndeling = fylkesinndelingRepository.hentFylkesinndeling();
+        initierCountersMedFylkerOgTemaer();
+    }
 
-        Arrays.asList("Rekruttering", "Rekruttering med tilrettelegging", "Arbeidstrening", "Oppfølging av en arbeidstaker", "Annet").forEach(tema -> {
-            fylkesinndeling.getFylkeTilKommuneEllerBydel().forEach((fylke, kommuner) -> {
-                kommuner.forEach(kommuneEllerBydel -> {
-                    Counter.builder("mottatt.kontaktskjema.success")
-                            .tag("fylke", fylke)
-                            .tag("kommune", kommuneEllerBydel.getNummer())
-                            .tag("tema", tema)
-                            .register(meterRegistry);
-                });
+    private void initierCountersMedFylkerOgTemaer() {
 
-            });
-        });
+        List<String> fylker = Arrays.asList(
+                "1000",
+                "0400",
+                "1500",
+                "1800",
+                "0300",
+                "1100",
+                "1900",
+                "5700",
+                "0800",
+                "1200",
+                "0600",
+                "0200"
+        );
+
+        List<String> temaer = Arrays.asList(
+                "Rekruttering",
+                "Rekruttering med tilrettelegging",
+                "Arbeidstrening",
+                "Oppfølging av en arbeidstaker",
+                "Annet"
+        );
+
+
+        temaer.forEach(tema ->
+                fylker.forEach(fylke ->
+                        Counter.builder("mottatt.kontaktskjema.success")
+                                .tag("fylke", fylke)
+                                .tag("tema", tema)
+                                .register(meterRegistry)
+        ));
     }
 
     @EventListener
@@ -44,7 +65,6 @@ public class MetricsListeners {
 
         Counter.builder(counterName)
                 .tag("fylke", event.getKontaktskjema().getFylke())
-                .tag("kommune", event.getKontaktskjema().getKommunenr())
                 .tag("tema", event.getKontaktskjema().getTema())
                 .register(meterRegistry)
                 .increment();
