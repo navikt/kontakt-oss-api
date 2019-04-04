@@ -9,9 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-import java.util.List;
-
 @Component
 public class MetricsListeners {
 
@@ -20,43 +17,6 @@ public class MetricsListeners {
     @Autowired
     public MetricsListeners(MeterRegistry meterRegistry) {
         this.meterRegistry = meterRegistry;
-
-        initierCountersMedFylkerOgTemaer();
-    }
-
-    private void initierCountersMedFylkerOgTemaer() {
-
-        List<String> fylker = Arrays.asList(
-                "1000",
-                "0400",
-                "1500",
-                "1800",
-                "0300",
-                "1100",
-                "1900",
-                "5700",
-                "0800",
-                "1200",
-                "0600",
-                "0200"
-        );
-
-        List<String> temaer = Arrays.asList(
-                "Rekruttering",
-                "Rekruttering med tilrettelegging",
-                "Arbeidstrening",
-                "Oppfølging av en arbeidstaker",
-                "Annet"
-        );
-
-
-        temaer.forEach(tema ->
-                fylker.forEach(fylke ->
-                        Counter.builder("mottatt.kontaktskjema.success")
-                                .tag("fylke", fylke)
-                                .tag("tema", tema)
-                                .register(meterRegistry)
-        ));
     }
 
     @EventListener
@@ -65,6 +25,7 @@ public class MetricsListeners {
 
         Counter.builder(counterName)
                 .tag("fylke", event.getKontaktskjema().getFylke())
+                .tag("kommune", event.getKontaktskjema().getKommunenr())
                 .tag("tema", event.getKontaktskjema().getTema())
                 .register(meterRegistry)
                 .increment();

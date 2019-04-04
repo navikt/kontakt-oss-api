@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 
 import no.nav.tag.kontakt.oss.KontaktskjemaApplication;
 import org.junit.After;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,17 +15,19 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest
+@TestPropertySource(properties = {"mock.enabled=false"})
 public class GsakOppgaveRepositoryTest {
 
+    @Autowired
     private GsakOppgaveRepository repository;
 
-    @Ignore
     @After
     public void tearDown() {
         repository.deleteAll();
     }
-
-    @Ignore
+    
     @Test
     public void skalLagreOgHenteUt() {
         GsakOppgave lagretOppgave = repository.save(GsakOppgave.builder().kontaktskjemaId(2).status(OK).gsakId(5).opprettet(LocalDateTime.now()).build());

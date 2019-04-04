@@ -1,7 +1,6 @@
 package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter;
 
 import no.nav.tag.kontakt.oss.KontaktskjemaApplication;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +15,13 @@ import static no.nav.tag.kontakt.oss.TestData.*;
 import static no.nav.tag.kontakt.oss.TestData.fraKommuneNrTilNavEnhet;
 import static org.assertj.core.api.Assertions.assertThat;
 
-// @RunWith(SpringRunner.class)
-// @SpringBootTest
+@RunWith(SpringRunner.class)
+@SpringBootTest
 @TestPropertySource(properties = {"mock.enabled=false"})
 public class FylkesinndelingRepositoryTest {
 
-    FylkesinndelingRepository repository;
+    @Autowired FylkesinndelingRepository repository;
 
-    @Ignore
     @Test
     public void repository__skal_gi_ut_det_som_blir_satt_inn() {
         FylkesinndelingMedNavEnheter fraFylkesenheterTilKommuner = fraFylkesenheterTilKommuner();
@@ -39,7 +37,6 @@ public class FylkesinndelingRepositoryTest {
         assertThat(repository.hentKommuneNrEllerBydelNrTilNavEnhet()).isEqualTo(fraKommuneNrTilNavEnhet);
     }
 
-    @Ignore
     @Test
     public void repository__skal_sette_sistOppdatert() {
         repository.oppdaterInformasjonFraNorg(fraFylkesenheterTilKommuner(), fraKommuneNrTilNavEnhet());
