@@ -17,6 +17,10 @@ public class MetricsListeners {
 
     private final MeterRegistry meterRegistry;
 
+    private final static String KONTAKTSKJEMA_SUCCESS_COUNTER = "mottatt.kontaktskjema.success";
+    private final static String KONTAKTSKJEMA_FAIL_COUNTER = "mottatt.kontaktskjema.fail";
+
+
     @Autowired
     public MetricsListeners(MeterRegistry meterRegistry) {
         this.meterRegistry = meterRegistry;
@@ -49,23 +53,26 @@ public class MetricsListeners {
                 "Annet"
         );
 
+        List<String> counterNames = Arrays.asList(KONTAKTSKJEMA_SUCCESS_COUNTER, KONTAKTSKJEMA_FAIL_COUNTER);
 
-        temaer.forEach(tema ->
-                fylker.forEach(fylke ->
-                        Counter.builder("mottatt.kontaktskjema.success")
-                                .tag("fylke", fylke)
-                                .tag("tema", tema)
-                                .register(meterRegistry)
-                ));
+        counterNames.forEach(counterName ->
+                temaer.forEach(tema ->
+                        fylker.forEach(fylke ->
+                                Counter.builder(counterName)
+                                        .tag("fylke", fylke)
+                                        .tag("tema", tema)
+                                        .register(meterRegistry)
+                        )
+                )
+        );
     }
 
     @EventListener
     public void besvarelseMottatt(BesvarelseMottatt event) {
-        String counterName = event.isSuksess() ? "mottatt.kontaktskjema.success" : "mottatt.kontaktskjema.fail";
+        String counterName = event.isSuksess() ? KONTAKTSKJEMA_SUCCESS_COUNTER : KONTAKTSKJEMA_FAIL_COUNTER;
 
         Counter.builder(counterName)
                 .tag("fylke", event.getKontaktskjema().getFylke())
-                .tag("kommune", event.getKontaktskjema().getKommunenr())
                 .tag("tema", event.getKontaktskjema().getTema())
                 .register(meterRegistry)
                 .increment();
