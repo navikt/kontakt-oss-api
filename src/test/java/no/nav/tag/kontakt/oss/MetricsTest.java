@@ -1,7 +1,6 @@
 package no.nav.tag.kontakt.oss;
 
 import io.micrometer.core.instrument.Counter;
-import io.micrometer.core.instrument.Meter;
 import io.micrometer.core.instrument.MeterRegistry;
 import no.nav.tag.kontakt.oss.events.BesvarelseMottatt;
 import no.nav.tag.kontakt.oss.events.FylkesinndelingOppdatert;
@@ -13,9 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static no.nav.tag.kontakt.oss.TestData.kontaktskjema;
 import static org.assertj.core.api.Assertions.assertThat;
