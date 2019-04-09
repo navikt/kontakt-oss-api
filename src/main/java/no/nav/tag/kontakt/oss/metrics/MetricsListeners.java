@@ -9,23 +9,70 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Component
 public class MetricsListeners {
 
     private final MeterRegistry meterRegistry;
 
+    private final static String KONTAKTSKJEMA_SUCCESS_COUNTER = "mottatt.kontaktskjema.success";
+    private final static String KONTAKTSKJEMA_FAIL_COUNTER = "mottatt.kontaktskjema.fail";
+
+
     @Autowired
     public MetricsListeners(MeterRegistry meterRegistry) {
         this.meterRegistry = meterRegistry;
+
+        initierCountersMedFylkerOgTemaer();
+    }
+
+    private void initierCountersMedFylkerOgTemaer() {
+
+        List<String> fylker = Arrays.asList(
+                "1000",
+                "0400",
+                "1500",
+                "1800",
+                "0300",
+                "1100",
+                "1900",
+                "5700",
+                "0800",
+                "1200",
+                "0600",
+                "0200"
+        );
+
+        List<String> temaer = Arrays.asList(
+                "Rekruttering",
+                "Rekruttering med tilrettelegging",
+                "Arbeidstrening",
+                "Oppfølging av en arbeidstaker",
+                "Annet"
+        );
+
+        List<String> counterNames = Arrays.asList(KONTAKTSKJEMA_SUCCESS_COUNTER, KONTAKTSKJEMA_FAIL_COUNTER);
+
+        counterNames.forEach(counterName ->
+                temaer.forEach(tema ->
+                        fylker.forEach(fylke ->
+                                Counter.builder(counterName)
+                                        .tag("fylke", fylke)
+                                        .tag("tema", tema)
+                                        .register(meterRegistry)
+                        )
+                )
+        );
     }
 
     @EventListener
     public void besvarelseMottatt(BesvarelseMottatt event) {
-        String counterName = event.isSuksess() ? "mottatt.kontaktskjema.success" : "mottatt.kontaktskjema.fail";
+        String counterName = event.isSuksess() ? KONTAKTSKJEMA_SUCCESS_COUNTER : KONTAKTSKJEMA_FAIL_COUNTER;
 
         Counter.builder(counterName)
                 .tag("fylke", event.getKontaktskjema().getFylke())
-                .tag("kommune", event.getKontaktskjema().getKommunenr())
                 .tag("tema", event.getKontaktskjema().getTema())
                 .register(meterRegistry)
                 .increment();
