@@ -7,10 +7,9 @@ import no.nav.tag.kontakt.oss.KontaktskjemaException;
 import no.nav.tag.kontakt.oss.events.GsakOppgaveSendt;
 import no.nav.tag.kontakt.oss.featureToggles.FeatureToggles;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.BadRequestException;
-import no.nav.tag.kontakt.oss.navenhetsmapping.NavEnhetService;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakKlient;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakRequest;
-
+import no.nav.tag.kontakt.oss.navenhetsmapping.NavEnhetService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -21,7 +20,8 @@ import java.time.LocalDateTime;
 import static no.nav.tag.kontakt.oss.TestData.kontaktskjema;
 import static no.nav.tag.kontakt.oss.gsak.GsakOppgave.OppgaveStatus.DISABLED;
 import static no.nav.tag.kontakt.oss.gsak.GsakOppgave.OppgaveStatus.OK;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.isEmptyString;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -61,13 +61,15 @@ public class GsakOppgaveServiceTest {
     @Test
     public void lagInnsendingSkalBeholdeOrgnrHvisGyldig() {
         String orgnr = OrganisasjonsnummerCalculator.getOrganisasjonsnummerList(1).get(0).getValue();
-        GsakRequest gsakRequest = gsakOppgaveService.lagGsakInnsending(new Kontaktskjema(1, null, null, "Kommune", "1234", "bedriftsnavn", orgnr, "fornavn", "etternavn", "epost", "123", "tema"));
+        Kontaktskjema kontaktskjema = Kontaktskjema.builder().orgnr(orgnr).build();
+        GsakRequest gsakRequest = gsakOppgaveService.lagGsakInnsending(kontaktskjema);
         assertThat(gsakRequest.getOrgnr(), equalTo(orgnr));
     }
 
     @Test
     public void lagInnsendingSkalFjerneOrgnrHvisUgyldig() {
-        GsakRequest gsakRequest = gsakOppgaveService.lagGsakInnsending(new Kontaktskjema(1, null, null, "Kommune", "1234", "bedriftsnavn", "123", "fornavn", "etternavn", "epost", "123", "tema"));
+        Kontaktskjema kontaktskjema = Kontaktskjema.builder().orgnr("123").build();
+        GsakRequest gsakRequest = gsakOppgaveService.lagGsakInnsending(kontaktskjema);
         assertThat(gsakRequest.getOrgnr(), equalTo(""));
     }
 

@@ -29,7 +29,8 @@ public class TestData {
                 "Nordmann",
                 "ola.nordmann@fleskOgFisk.no",
                 "01234567",
-                "Rekruttering"
+                "Rekruttering",
+                TemaType.REKRUTTERING
         );
     }
 

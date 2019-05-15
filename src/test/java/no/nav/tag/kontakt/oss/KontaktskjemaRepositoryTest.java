@@ -37,7 +37,12 @@ public class KontaktskjemaRepositoryTest {
         kontaktskjemaRepository.deleteAll();
         oppgaveRepository.deleteAll();
     }
-    
+
+    @Test
+    public void skalLagre() {
+        kontaktskjemaRepository.save(TestData.kontaktskjema());
+    }
+
     @Test
     public void skalLagreOgHenteUt() {
         Kontaktskjema lagretSkjema = kontaktskjemaRepository.save(TestData.kontaktskjema());
