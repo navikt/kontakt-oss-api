@@ -1,11 +1,10 @@
 package no.nav.tag.kontakt.oss;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.time.LocalDateTime;
 
@@ -29,4 +28,5 @@ public class Kontaktskjema {
     private String epost;
     private String telefonnr;
     private String tema;
+    private TemaType temaType;
 }
