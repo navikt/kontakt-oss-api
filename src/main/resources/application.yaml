@@ -18,6 +18,28 @@ spring:
     enabled: true
     path: /h2
 
+#  kafka:
+#    bootstrap-servers: b27apvl00045.preprod.local:8443, b27apvl00046.preprod.local:8443, b27apvl00047.preprod.local:8443
+#    client-id: kontakt-oss-api-preprod
+#    properties:
+#      security.protocol: SASL_SSL
+#      sasl:
+#        mechanism: PLAIN
+#        jaas.config: org.apache.kafka.common.security.plain.PlainLoginModule required username="${SERVICEBRUKER_NAVN}" password="${SERVICEBRUKER_PASSORD}";
+#      ssl.truststore:
+#        location: ${javax.net.ssl.trustStore}
+#        password: ${javax.net.ssl.trustStorePassword}
+#    producer:
+#      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+#    consumer:
+#      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#      group-id: kontakt-oss-api-preprod
+#      max-poll-records: 1
+#      auto-offset-reset: earliest
+#      enable-auto-commit: false
+
 
 mock:
   enabled: true
@@ -34,6 +56,28 @@ ENABLE_GSAK: true
 ---
 spring:
   profiles: preprod
+  kafka:
+    bootstrap-servers: b27apvl00045.preprod.local:8443, b27apvl00046.preprod.local:8443, b27apvl00047.preprod.local:8443
+    client-id: kontakt-oss-api-preprod
+    properties:
+      security.protocol: SASL_SSL
+      sasl:
+        mechanism: PLAIN
+        jaas.config: org.apache.kafka.common.security.plain.PlainLoginModule required username="${SERVICEBRUKER_NAVN}" password="${SERVICEBRUKER_PASSORD}";
+      ssl.truststore:
+        location: ${javax.net.ssl.trustStore}
+        password: ${javax.net.ssl.trustStorePassword}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      group-id: kontakt-oss-api-preprod
+      max-poll-records: 1
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+
 gsak.url: https://oppgave.nais.preprod.local/api/v1/oppgaver
 norg.url: https://app-q0.adeo.no/norg2/api/v1
 kodeverk.url: https://kodeverk.nais.preprod.local/api/v1
