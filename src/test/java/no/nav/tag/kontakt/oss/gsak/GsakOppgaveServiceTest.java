@@ -154,8 +154,7 @@ public class GsakOppgaveServiceTest {
 
         gsakOppgaveService.opprettOppgaveOgLagreStatus(kontaktskjema);
 
-        captureGsakRequest();
-        GsakRequest sendtRequest = gsakRequestArgumentCaptor.getValue();
+        GsakRequest sendtRequest = capturedGsakRequest();
 
         assertThat(sendtRequest.getTema()).isEqualTo(GSAK_TEMA_IA);
         assertThat(sendtRequest.getTemagruppe()).isEqualTo(GSAK_TEMAGRUPPE_ARBD);
@@ -167,8 +166,7 @@ public class GsakOppgaveServiceTest {
 
         gsakOppgaveService.opprettOppgaveOgLagreStatus(kontaktskjema);
 
-        captureGsakRequest();
-        GsakRequest sendtRequest = gsakRequestArgumentCaptor.getValue();
+        GsakRequest sendtRequest = capturedGsakRequest();
 
         assertThat(sendtRequest.getTema()).isEqualTo(GSAK_TEMA_OPA);
         assertThat(sendtRequest.getTemagruppe()).isEqualTo(GSAK_TEMAGRUPPE_ARBD);
@@ -182,8 +180,7 @@ public class GsakOppgaveServiceTest {
         Kontaktskjema kontaktskjema = kontaktskjemaBuilder().temaType(TemaType.FOREBYGGE_SYKEFRAVÆR).build();
         gsakOppgaveService.opprettOppgaveOgLagreStatus(kontaktskjema);
 
-        captureGsakRequest();
-        GsakRequest sendtRequest = gsakRequestArgumentCaptor.getValue();
+        GsakRequest sendtRequest = capturedGsakRequest();
 
         assertThat(sendtRequest.getTildeltEnhetsnr()).isEqualTo(enhetsnrTilArbeidslivssenter);
     }
@@ -196,13 +193,13 @@ public class GsakOppgaveServiceTest {
         Kontaktskjema kontaktskjema = kontaktskjemaBuilder().temaType(TemaType.REKRUTTERING).build();
         gsakOppgaveService.opprettOppgaveOgLagreStatus(kontaktskjema);
 
-        captureGsakRequest();
-        GsakRequest sendtRequest = gsakRequestArgumentCaptor.getValue();
+        GsakRequest sendtRequest = capturedGsakRequest();
 
         assertThat(sendtRequest.getTildeltEnhetsnr()).isEqualTo(enhetsnrTilKommunaltKontor);
     }
 
-    private void captureGsakRequest() {
+    private GsakRequest capturedGsakRequest() {
         verify(gsakKlient, times(1)).opprettGsakOppgave(gsakRequestArgumentCaptor.capture());
+        return gsakRequestArgumentCaptor.getValue();
     }
 }
