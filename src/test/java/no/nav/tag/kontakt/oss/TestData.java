@@ -30,7 +30,8 @@ public class TestData {
                 "ola.nordmann@fleskOgFisk.no",
                 "01234567",
                 "Rekruttering",
-                TemaType.REKRUTTERING
+                TemaType.REKRUTTERING,
+                false
         );
     }
 

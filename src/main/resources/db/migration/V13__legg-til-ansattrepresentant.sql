@@ -1,0 +1,1 @@
+ALTER TABLE kontaktskjema ADD kontakt_med_ansattrepresentant BOOLEAN;
