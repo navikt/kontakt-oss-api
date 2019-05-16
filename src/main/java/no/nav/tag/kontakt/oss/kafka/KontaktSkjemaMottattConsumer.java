@@ -11,14 +11,15 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class KontaktSkjemaMottattConsumer {
 
-    @KafkaListener(topics = "aapen-tag-kontaktskjemaMottatt-q")
-    public void listen(ConsumerRecord<String, String> consumerRecord) {
+    @KafkaListener(topics = "aapen-tag-kontaktskjemaMottatt")
+    public void listen(ConsumerRecord<String, KontaktskjemaForKafka> consumerRecord) {
         log.info(
                 "Mottatt melding med offset {}, id {} og value {}",
                 consumerRecord.offset(),
                 consumerRecord.key(),
                 consumerRecord.value()
         );
+        log.info("Bedriftsnavn: {}", consumerRecord.value().getBedriftsnavn());
     }
 
 }

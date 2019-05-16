@@ -1,5 +1,7 @@
 package no.nav.tag.kontakt.oss.config;
 
+import no.nav.tag.kontakt.oss.Kontaktskjema;
+import no.nav.tag.kontakt.oss.kafka.KontaktskjemaForKafka;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,14 +16,14 @@ import org.springframework.kafka.core.ProducerFactory;
 public class KafkaConfig {
 
     @Bean
-    public KafkaTemplate<String, String> kafkaTemplate(ProducerFactory<String, String> producerFactory) {
+    public KafkaTemplate<String, KontaktskjemaForKafka> kafkaTemplate(ProducerFactory<String, KontaktskjemaForKafka> producerFactory) {
         return new KafkaTemplate<>(producerFactory);
     }
 
     // TODO: Denne skal bare være for preprod/prod. Skal ha en egen embedded kafka config for test
 //    @Profile({"preprod", "prod"})
     @Bean
-    public ProducerFactory<String, String> producerFactory(KafkaProperties properties) {
+    public ProducerFactory<String, KontaktskjemaForKafka> producerFactory(KafkaProperties properties) {
         return new DefaultKafkaProducerFactory<>(properties.buildProducerProperties());
 
         // TODO: Legg til mapper for Kontaktskjema
