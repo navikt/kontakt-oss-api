@@ -163,7 +163,7 @@ public class GsakOppgaveServiceTest {
 
     @Test
     public void opprettOppgaveOgLagreStatus__skal_sette_riktige_gsak_temaer_hvis_tema_IKKE_er_sykefravær() {
-        Kontaktskjema kontaktskjema = kontaktskjemaBuilder().temaType(TemaType.FOREBYGGE_SYKEFRAVÆR).build();
+        Kontaktskjema kontaktskjema = kontaktskjemaBuilder().temaType(TemaType.REKRUTTERING).build();
 
         gsakOppgaveService.opprettOppgaveOgLagreStatus(kontaktskjema);
 
