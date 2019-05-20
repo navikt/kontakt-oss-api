@@ -35,7 +35,7 @@ public class TestData {
                 .telefonnr("01234567")
                 .tema("Rekruttering")
                 .temaType(TemaType.REKRUTTERING)
-                .kontaktMedAnsattrepresentant(false);
+                .harSnakketMedAnsattrepresentant(false);
     }
 
     public static GsakRequest gsakRequest() {

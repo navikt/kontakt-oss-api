@@ -65,7 +65,7 @@ public class NavEnhetService {
             case "0600": // Vest-Viken
                 return "0691";
 
-            default: throw new RuntimeException("fant ikke");
+            default: throw new KontaktskjemaException("Fant ikke arbeidslivssenter tilhørende fylkesenhet " + fylkesenhetNr);
         }
     }
 }

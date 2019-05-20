@@ -146,7 +146,7 @@ public class GsakOppgaveService {
     }
 
     private String lagBeskrivelseForHenvendelseOmSykefravær(Kontaktskjema kontaktskjema) {
-        String harSnakketMedAnsattrepresentant = kontaktskjema.isKontaktMedAnsattrepresentant() ? "Ja" : "Nei";
+        String harSnakketMedAnsattrepresentant = kontaktskjema.isHarSnakketMedAnsattrepresentant() ? "Ja" : "Nei";
 
         return String.format(
                 "Kontaktskjema: Arbeidsgiver har sendt henvendelse gjennom Kontaktskjema; \n" +

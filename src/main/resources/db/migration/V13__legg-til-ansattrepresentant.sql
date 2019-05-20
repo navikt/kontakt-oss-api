@@ -1,1 +1,1 @@
-ALTER TABLE kontaktskjema ADD kontakt_med_ansattrepresentant BOOLEAN;
+ALTER TABLE kontaktskjema ADD har_snakket_med_ansattrepresentant BOOLEAN;
