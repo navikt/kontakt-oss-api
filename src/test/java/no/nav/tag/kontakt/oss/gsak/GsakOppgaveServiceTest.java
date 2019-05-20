@@ -156,8 +156,8 @@ public class GsakOppgaveServiceTest {
 
         GsakRequest sendtRequest = capturedGsakRequest();
 
-        assertThat(sendtRequest.getTema()).isEqualTo(GSAK_TEMA_IA);
-        assertThat(sendtRequest.getTemagruppe()).isEqualTo(GSAK_TEMAGRUPPE_ARBD);
+        assertThat(sendtRequest.getTema()).isEqualTo(GSAK_TEMA_INKLUDERENDE_ARBEIDSLIV);
+        assertThat(sendtRequest.getTemagruppe()).isEqualTo(GSAK_TEMAGRUPPE_ARBEID);
     }
 
     @Test
@@ -168,8 +168,8 @@ public class GsakOppgaveServiceTest {
 
         GsakRequest sendtRequest = capturedGsakRequest();
 
-        assertThat(sendtRequest.getTema()).isEqualTo(GSAK_TEMA_OPA);
-        assertThat(sendtRequest.getTemagruppe()).isEqualTo(GSAK_TEMAGRUPPE_ARBD);
+        assertThat(sendtRequest.getTema()).isEqualTo(GSAK_TEMA_OPPFØLGING_ARBEIDSGIVER);
+        assertThat(sendtRequest.getTemagruppe()).isEqualTo(GSAK_TEMAGRUPPE_ARBEID);
     }
 
     @Test

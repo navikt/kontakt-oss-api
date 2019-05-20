@@ -35,9 +35,9 @@ public class GsakOppgaveService {
     private final FeatureToggles featureToggles;
     private final ApplicationEventPublisher eventPublisher;
 
-    public static final String GSAK_TEMAGRUPPE_ARBD = "ARBD";
-    public static final String GSAK_TEMA_OPA = "OPA";
-    public static final String GSAK_TEMA_IA = "IA";
+    public static final String GSAK_TEMAGRUPPE_ARBEID = "ARBD";
+    public static final String GSAK_TEMA_OPPFØLGING_ARBEIDSGIVER = "OPA";
+    public static final String GSAK_TEMA_INKLUDERENDE_ARBEIDSLIV = "IAR";
 
     @Autowired
     public GsakOppgaveService(
@@ -121,13 +121,13 @@ public class GsakOppgaveService {
 
         if (TemaType.FOREBYGGE_SYKEFRAVÆR.equals(kontaktskjema.getTemaType())) {
             enhetsnr = navEnhetService.mapFraFylkesenhetNrTilArbeidslivssenterEnhetsnr(kontaktskjema.getFylke());
-            temagruppe = GSAK_TEMAGRUPPE_ARBD; // TODO Slå opp dette
-            tema = GSAK_TEMA_IA; // TODO Slå opp dette
+            temagruppe = GSAK_TEMAGRUPPE_ARBEID; // TODO Slå opp dette
+            tema = GSAK_TEMA_INKLUDERENDE_ARBEIDSLIV; // TODO Slå opp dette
             beskrivelse = lagBeskrivelseForHenvendelseOmSykefravær(kontaktskjema);
         } else {
             enhetsnr = navEnhetService.mapFraKommunenrTilEnhetsnr(kontaktskjema.getKommunenr());
-            temagruppe = GSAK_TEMAGRUPPE_ARBD;
-            tema = GSAK_TEMA_OPA;
+            temagruppe = GSAK_TEMAGRUPPE_ARBEID;
+            tema = GSAK_TEMA_OPPFØLGING_ARBEIDSGIVER;
             beskrivelse = lagBeskrivelse(kontaktskjema);
         }
 
