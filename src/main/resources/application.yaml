@@ -47,13 +47,6 @@ spring:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
-    consumer:
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      group-id: kontakt-oss-api-preprod
-      max-poll-records: 1
-      auto-offset-reset: earliest
-      enable-auto-commit: false
 
 gsak.url: https://oppgave.nais.preprod.local/api/v1/oppgaver
 norg.url: https://app-q0.adeo.no/norg2/api/v1
@@ -65,6 +58,21 @@ vault.mount-path: postgresql/preprod-fss
 ---
 spring:
   profiles: prod
+  kafka:
+    bootstrap-servers: a01apvl00145.adeo.no:8443, a01apvl00146.adeo.no:8443, a01apvl00147.adeo.no:8443, a01apvl00148.adeo.no:8443, a01apvl00149.adeo.no:8443, a01apvl00150.adeo.no:8443
+    client-id: kontakt-oss-api-prod
+    properties:
+      security.protocol: SASL_SSL
+      sasl:
+        mechanism: PLAIN
+        jaas.config: org.apache.kafka.common.security.plain.PlainLoginModule required username="${SERVICEBRUKER_NAVN}" password="${SERVICEBRUKER_PASSORD}";
+      ssl.truststore:
+        location: ${javax.net.ssl.trustStore}
+        password: ${javax.net.ssl.trustStorePassword}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
 gsak.url: https://oppgave.nais.adeo.no/api/v1/oppgaver
 norg.url: https://app.adeo.no/norg2/api/v1
 kodeverk.url: https://kodeverk.nais.adeo.no/api/v1
