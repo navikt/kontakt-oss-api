@@ -157,7 +157,7 @@ public class GsakOppgaveServiceTest {
         GsakRequest sendtRequest = capturedGsakRequest();
 
         assertThat(sendtRequest.getTema()).isEqualTo(GSAK_TEMA_INKLUDERENDE_ARBEIDSLIV);
-        assertThat(sendtRequest.getTemagruppe()).isEqualTo(GSAK_TEMAGRUPPE_ARBEID);
+        assertThat(sendtRequest.getTemagruppe()).isEqualTo(null);
     }
 
     @Test

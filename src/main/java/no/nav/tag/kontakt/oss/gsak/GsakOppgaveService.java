@@ -115,18 +115,17 @@ public class GsakOppgaveService {
     GsakRequest lagGsakInnsending(Kontaktskjema kontaktskjema) {
         String enhetsnr;
         LocalDate aktivDato = dateProvider.now().toLocalDate();
-        String temagruppe;
+        String temagruppe = null;
         String tema;
         String beskrivelse;
 
         if (TemaType.FOREBYGGE_SYKEFRAVÆR.equals(kontaktskjema.getTemaType())) {
             enhetsnr = navEnhetService.mapFraFylkesenhetNrTilArbeidslivssenterEnhetsnr(kontaktskjema.getFylke());
-            temagruppe = GSAK_TEMAGRUPPE_ARBEID; // TODO Slå opp dette
-            tema = GSAK_TEMA_INKLUDERENDE_ARBEIDSLIV; // TODO Slå opp dette
+            tema = GSAK_TEMA_INKLUDERENDE_ARBEIDSLIV;
             beskrivelse = lagBeskrivelseForHenvendelseOmSykefravær(kontaktskjema);
         } else {
             enhetsnr = navEnhetService.mapFraKommunenrTilEnhetsnr(kontaktskjema.getKommunenr());
-            temagruppe = GSAK_TEMAGRUPPE_ARBEID;
+            temagruppe = GSAK_TEMAGRUPPE_ARBEID; // TODO Undersøk om denne kan fjernes
             tema = GSAK_TEMA_OPPFØLGING_ARBEIDSGIVER;
             beskrivelse = lagBeskrivelse(kontaktskjema);
         }
