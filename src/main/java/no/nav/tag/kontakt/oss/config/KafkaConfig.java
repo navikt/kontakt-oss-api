@@ -17,8 +17,6 @@ public class KafkaConfig {
         return new KafkaTemplate<>(producerFactory);
     }
 
-    // TODO: Denne skal bare være for preprod/prod. Skal ha en egen embedded kafka config for test
-//    @Profile({"preprod", "prod"})
     @Bean
     public ProducerFactory<String, String> producerFactory(KafkaProperties properties) {
         return new DefaultKafkaProducerFactory<>(properties.buildProducerProperties());
