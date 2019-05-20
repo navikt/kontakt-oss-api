@@ -17,21 +17,25 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class TestData {
     public static Kontaktskjema kontaktskjema() {
-        return new Kontaktskjema(
-                null,
-                LocalDateTime.now(),
-                "nordland",
-                "Bodø",
-                "0011",
-                "Flesk og Fisk AS",
-                "123456789",
-                "Ola",
-                "Nordmann",
-                "ola.nordmann@fleskOgFisk.no",
-                "01234567",
-                "Rekruttering",
-                TemaType.REKRUTTERING
-        );
+        return kontaktskjemaBuilder().build();
+    }
+    
+    public static Kontaktskjema.KontaktskjemaBuilder kontaktskjemaBuilder() {
+        return new Kontaktskjema.KontaktskjemaBuilder()
+                .id(null)
+                .opprettet(LocalDateTime.now())
+                .fylke("nordland")
+                .kommune("Bodø")
+                .kommunenr("0011")
+                .bedriftsnavn("Flesk og Fisk AS")
+                .orgnr("123456789")
+                .fornavn("Ola")
+                .etternavn("Nordmann")
+                .epost("ola.nordmann@fleskOgFisk.no")
+                .telefonnr("01234567")
+                .tema("Rekruttering")
+                .temaType(TemaType.REKRUTTERING)
+                .harSnakketMedAnsattrepresentant(false);
     }
 
     public static GsakRequest gsakRequest() {

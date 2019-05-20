@@ -4,6 +4,7 @@ import no.bekk.bekkopen.org.OrganisasjonsnummerCalculator;
 import no.nav.tag.kontakt.oss.DateProvider;
 import no.nav.tag.kontakt.oss.Kontaktskjema;
 import no.nav.tag.kontakt.oss.KontaktskjemaException;
+import no.nav.tag.kontakt.oss.TemaType;
 import no.nav.tag.kontakt.oss.events.GsakOppgaveSendt;
 import no.nav.tag.kontakt.oss.featureToggles.FeatureToggles;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.BadRequestException;
@@ -12,27 +13,37 @@ import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakRequest;
 import no.nav.tag.kontakt.oss.navenhetsmapping.NavEnhetService;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.context.ApplicationEventPublisher;
 
 import java.time.LocalDateTime;
 
 import static no.nav.tag.kontakt.oss.TestData.kontaktskjema;
+import static no.nav.tag.kontakt.oss.TestData.kontaktskjemaBuilder;
 import static no.nav.tag.kontakt.oss.gsak.GsakOppgave.OppgaveStatus.DISABLED;
 import static no.nav.tag.kontakt.oss.gsak.GsakOppgave.OppgaveStatus.OK;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.isEmptyString;
-import static org.junit.Assert.assertThat;
+import static no.nav.tag.kontakt.oss.gsak.GsakOppgaveService.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
+@RunWith(MockitoJUnitRunner.class)
 public class GsakOppgaveServiceTest {
 
-    private GsakOppgaveRepository oppgaveRepository = mock(GsakOppgaveRepository.class);
-    private DateProvider dateProvider = mock(DateProvider.class);
-    private FeatureToggles featureToggles = mock(FeatureToggles.class);
+    @Mock private GsakOppgaveRepository oppgaveRepository;
+    @Mock private DateProvider dateProvider;
+    @Mock private FeatureToggles featureToggles;
+    @Mock private GsakKlient gsakKlient;
+    @Mock private ApplicationEventPublisher eventPublisher;
+    @Mock private NavEnhetService navEnhetService;
+
     private GsakOppgaveService gsakOppgaveService;
-    private GsakKlient gsakKlient = mock(GsakKlient.class);
-    private ApplicationEventPublisher eventPublisher = mock(ApplicationEventPublisher.class);
+
+    @Captor
+    ArgumentCaptor<GsakRequest> gsakRequestArgumentCaptor;
 
     @Before
     public void setUp() {
@@ -43,7 +54,7 @@ public class GsakOppgaveServiceTest {
                 oppgaveRepository,
                 dateProvider,
                 gsakKlient,
-                mock(NavEnhetService.class),
+                navEnhetService,
                 featureToggles,
                 eventPublisher
         );
@@ -63,14 +74,14 @@ public class GsakOppgaveServiceTest {
         String orgnr = OrganisasjonsnummerCalculator.getOrganisasjonsnummerList(1).get(0).getValue();
         Kontaktskjema kontaktskjema = Kontaktskjema.builder().orgnr(orgnr).build();
         GsakRequest gsakRequest = gsakOppgaveService.lagGsakInnsending(kontaktskjema);
-        assertThat(gsakRequest.getOrgnr(), equalTo(orgnr));
+        assertThat(gsakRequest.getOrgnr()).isEqualTo(orgnr);
     }
 
     @Test
     public void lagInnsendingSkalFjerneOrgnrHvisUgyldig() {
         Kontaktskjema kontaktskjema = Kontaktskjema.builder().orgnr("123").build();
         GsakRequest gsakRequest = gsakOppgaveService.lagGsakInnsending(kontaktskjema);
-        assertThat(gsakRequest.getOrgnr(), equalTo(""));
+        assertThat(gsakRequest.getOrgnr()).isEqualTo("");
     }
 
     @Test
@@ -122,7 +133,7 @@ public class GsakOppgaveServiceTest {
         ArgumentCaptor<GsakRequest> argumentCaptor = ArgumentCaptor.forClass(GsakRequest.class);
         verify(gsakKlient, times(2)).opprettGsakOppgave(argumentCaptor.capture());
         String orgnr = argumentCaptor.getAllValues().get(1).getOrgnr();
-        assertThat(orgnr, isEmptyString());
+        assertThat(orgnr).isEmpty();
     }
 
     @Test
@@ -130,7 +141,6 @@ public class GsakOppgaveServiceTest {
         when(gsakKlient.opprettGsakOppgave(any()))
                 .thenThrow(BadRequestException.class)
                 .thenThrow(BadRequestException.class);
-
         try {
             gsakOppgaveService.opprettOppgaveOgLagreStatus(kontaktskjema());
         } catch (KontaktskjemaException e) {
@@ -138,4 +148,58 @@ public class GsakOppgaveServiceTest {
         }
     }
 
+    @Test
+    public void opprettOppgaveOgLagreStatus__skal_sette_riktige_gsak_temaer_hvis_tema_er_sykefravær() {
+        Kontaktskjema kontaktskjema = kontaktskjemaBuilder().temaType(TemaType.FOREBYGGE_SYKEFRAVÆR).build();
+
+        gsakOppgaveService.opprettOppgaveOgLagreStatus(kontaktskjema);
+
+        GsakRequest sendtRequest = capturedGsakRequest();
+
+        assertThat(sendtRequest.getTema()).isEqualTo(GSAK_TEMA_INKLUDERENDE_ARBEIDSLIV);
+        assertThat(sendtRequest.getTemagruppe()).isEqualTo(null);
+    }
+
+    @Test
+    public void opprettOppgaveOgLagreStatus__skal_sette_riktige_gsak_temaer_hvis_tema_IKKE_er_sykefravær() {
+        Kontaktskjema kontaktskjema = kontaktskjemaBuilder().temaType(TemaType.REKRUTTERING).build();
+
+        gsakOppgaveService.opprettOppgaveOgLagreStatus(kontaktskjema);
+
+        GsakRequest sendtRequest = capturedGsakRequest();
+
+        assertThat(sendtRequest.getTema()).isEqualTo(GSAK_TEMA_OPPFØLGING_ARBEIDSGIVER);
+        assertThat(sendtRequest.getTemagruppe()).isEqualTo(GSAK_TEMAGRUPPE_ARBEID);
+    }
+
+    @Test
+    public void opprettOppgaveOgLagreStatus__skal_bruke_enhetsnr_til_arbeidslivssenteret_hvis_tema_er_sykefravær() {
+        String enhetsnrTilArbeidslivssenter = "1234";
+        when(navEnhetService.mapFraFylkesenhetNrTilArbeidslivssenterEnhetsnr(anyString())).thenReturn(enhetsnrTilArbeidslivssenter);
+
+        Kontaktskjema kontaktskjema = kontaktskjemaBuilder().temaType(TemaType.FOREBYGGE_SYKEFRAVÆR).build();
+        gsakOppgaveService.opprettOppgaveOgLagreStatus(kontaktskjema);
+
+        GsakRequest sendtRequest = capturedGsakRequest();
+
+        assertThat(sendtRequest.getTildeltEnhetsnr()).isEqualTo(enhetsnrTilArbeidslivssenter);
+    }
+
+    @Test
+    public void opprettOppgaveOgLagreStatus__skal_bruke_enhetsnr_til_kommunalt_kontor_hvis_tema_IKKE_er_sykefravær() {
+        String enhetsnrTilKommunaltKontor= "1234";
+        when(navEnhetService.mapFraKommunenrTilEnhetsnr(anyString())).thenReturn(enhetsnrTilKommunaltKontor);
+
+        Kontaktskjema kontaktskjema = kontaktskjemaBuilder().temaType(TemaType.REKRUTTERING).build();
+        gsakOppgaveService.opprettOppgaveOgLagreStatus(kontaktskjema);
+
+        GsakRequest sendtRequest = capturedGsakRequest();
+
+        assertThat(sendtRequest.getTildeltEnhetsnr()).isEqualTo(enhetsnrTilKommunaltKontor);
+    }
+
+    private GsakRequest capturedGsakRequest() {
+        verify(gsakKlient, times(1)).opprettGsakOppgave(gsakRequestArgumentCaptor.capture());
+        return gsakRequestArgumentCaptor.getValue();
+    }
 }

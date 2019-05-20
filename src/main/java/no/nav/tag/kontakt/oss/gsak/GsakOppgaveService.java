@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.tag.kontakt.oss.DateProvider;
 import no.nav.tag.kontakt.oss.Kontaktskjema;
+import no.nav.tag.kontakt.oss.TemaType;
 import no.nav.tag.kontakt.oss.events.GsakOppgaveSendt;
 import no.nav.tag.kontakt.oss.featureToggles.FeatureToggles;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.BadRequestException;
@@ -30,22 +31,26 @@ public class GsakOppgaveService {
     private final GsakOppgaveRepository oppgaveRepository;
     private final DateProvider dateProvider;
     private final GsakKlient gsakKlient;
-    private final NavEnhetService enhetUtils;
+    private final NavEnhetService navEnhetService;
     private final FeatureToggles featureToggles;
     private final ApplicationEventPublisher eventPublisher;
+
+    public static final String GSAK_TEMAGRUPPE_ARBEID = "ARBD";
+    public static final String GSAK_TEMA_OPPFØLGING_ARBEIDSGIVER = "OPA";
+    public static final String GSAK_TEMA_INKLUDERENDE_ARBEIDSLIV = "IAR";
 
     @Autowired
     public GsakOppgaveService(
             GsakOppgaveRepository oppgaveRepository,
             DateProvider dateProvider,
             GsakKlient gsakKlient,
-            NavEnhetService enhetUtils,
+            NavEnhetService navEnhetService,
             FeatureToggles featureToggles,
             ApplicationEventPublisher eventPublisher) {
         this.oppgaveRepository = oppgaveRepository;
         this.dateProvider = dateProvider;
         this.gsakKlient = gsakKlient;
-        this.enhetUtils = enhetUtils;
+        this.navEnhetService = navEnhetService;
         this.featureToggles = featureToggles;
         this.eventPublisher = eventPublisher;
     }
@@ -108,20 +113,58 @@ public class GsakOppgaveService {
     }
 
     GsakRequest lagGsakInnsending(Kontaktskjema kontaktskjema) {
-        String enhetsnr = enhetUtils.mapFraKommunenrTilEnhetsnr(kontaktskjema.getKommunenr());
+        String enhetsnr;
         LocalDate aktivDato = dateProvider.now().toLocalDate();
+        String temagruppe = null;
+        String tema;
+        String beskrivelse;
+
+        if (TemaType.FOREBYGGE_SYKEFRAVÆR.equals(kontaktskjema.getTemaType())) {
+            enhetsnr = navEnhetService.mapFraFylkesenhetNrTilArbeidslivssenterEnhetsnr(kontaktskjema.getFylke());
+            tema = GSAK_TEMA_INKLUDERENDE_ARBEIDSLIV;
+            beskrivelse = lagBeskrivelseForHenvendelseOmSykefravær(kontaktskjema);
+        } else {
+            enhetsnr = navEnhetService.mapFraKommunenrTilEnhetsnr(kontaktskjema.getKommunenr());
+            temagruppe = GSAK_TEMAGRUPPE_ARBEID; // TODO Undersøk om denne kan fjernes
+            tema = GSAK_TEMA_OPPFØLGING_ARBEIDSGIVER;
+            beskrivelse = lagBeskrivelse(kontaktskjema);
+        }
 
         return new GsakRequest(
                 enhetsnr,
                 "9999",
                 isValid(kontaktskjema.getOrgnr()) ? kontaktskjema.getOrgnr() : "",
-                lagBeskrivelse(kontaktskjema),
-                "ARBD",
-                "OPA",
+                beskrivelse,
+                temagruppe,
+                tema,
                 "VURD_HENV",
                 "HOY",
                 aktivDato.toString(),
                 aktivDato.plusDays(2).toString()
+        );
+    }
+
+    private String lagBeskrivelseForHenvendelseOmSykefravær(Kontaktskjema kontaktskjema) {
+        String harSnakketMedAnsattrepresentant = kontaktskjema.isHarSnakketMedAnsattrepresentant() ? "Ja" : "Nei";
+
+        return String.format(
+                "Kontaktskjema: Arbeidsgiver har sendt henvendelse gjennom Kontaktskjema; \n" +
+                        "Tema: %s \n" +
+                        "Snakket med tillitsvalgt eller ansattrepresentant: %s \n" +
+                        "Bedriftsnavn: %s \n" +
+                        "Navn: %s \n" +
+                        "Telefonnr: %s \n" +
+                        "E-post: %s \n" +
+                        "Kommune: %s (kommunenr: %s) \n" +
+                        "Kontakt arbeidsgiver for å avklare hva henvendelsen gjelder. Husk å registrere henvendelsen som aktivitetstype «Kontaktskjema» i Arena.",
+                kontaktskjema.getTema(),
+                harSnakketMedAnsattrepresentant,
+                kontaktskjema.getBedriftsnavn(),
+                kontaktskjema.getFornavn() + " " + kontaktskjema.getEtternavn(),
+                kontaktskjema.getTelefonnr(),
+                kontaktskjema.getEpost(),
+                kontaktskjema.getKommune(),
+                kontaktskjema.getKommunenr()
         );
     }
 
