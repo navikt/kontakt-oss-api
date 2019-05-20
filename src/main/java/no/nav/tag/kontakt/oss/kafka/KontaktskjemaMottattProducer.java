@@ -7,13 +7,13 @@ import no.nav.tag.kontakt.oss.Kontaktskjema;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
-import static java.util.UUID.randomUUID;
 import static no.nav.tag.kontakt.oss.kafka.KontaktskjemaForKafka.kontaktskjemaForKafka;
 
 @Component
 @Slf4j
 public class KontaktskjemaMottattProducer {
 
+    public static final String TOPIC = "aapen-tag-kontaktskjemaMottatt";
     private KafkaTemplate<String, String> kafkaTemplate;
 
     public KontaktskjemaMottattProducer(KafkaTemplate<String, String> kafkaTemplate) {
@@ -27,14 +27,16 @@ public class KontaktskjemaMottattProducer {
             String serialisertKontaktskjema = new ObjectMapper().writeValueAsString(kontaktskjemaForKafka);
 
             kafkaTemplate.send(
-                    "aapen-tag-kontaktskjemaMottatt",
-                    randomUUID().toString(),
-                    serialisertKontaktskjema);
+                    TOPIC,
+                    kontaktskjemaForKafka.getId().toString(),
+                    serialisertKontaktskjema).get();
 
-            log.info("Kontaktskjema med id: {}, er sendt på Kafka topic", kontaktskjemaForKafka.getId());
+            log.info("Kontaktskjema med id {} sendt på Kafka topic", kontaktskjemaForKafka.getId());
 
         } catch (JsonProcessingException e) {
             log.error("Kunne ikke serialisere kontaktskjema", e);
+        } catch (Exception e) {
+            log.error("Kunne ikke sende kontaktskjema på Kafka topic", e);
         }
     }
 }
