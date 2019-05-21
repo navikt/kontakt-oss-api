@@ -9,6 +9,8 @@ import no.nav.tag.kontakt.oss.Kontaktskjema;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.ExecutionException;
+
 import static no.nav.tag.kontakt.oss.kafka.KontaktskjemaForKafka.kontaktskjemaForKafka;
 
 @Component
@@ -35,13 +37,13 @@ public class KontaktskjemaMottattProducer {
             kafkaTemplate.send(
                     TOPIC,
                     kontaktskjemaForKafka.getId().toString(),
-                    serialisertKontaktskjema);
+                    serialisertKontaktskjema).get();
 
             log.info("Kontaktskjema med id {} sendt på Kafka topic", kontaktskjemaForKafka.getId());
 
         } catch (JsonProcessingException e) {
             log.error("Kunne ikke serialisere kontaktskjema", e);
-        } catch (Exception e) {
+        } catch (InterruptedException | ExecutionException e) {
             log.error("Kunne ikke sende kontaktskjema på Kafka topic", e);
         }
     }
