@@ -29,7 +29,7 @@ public class KontaktskjemaMottattProducer {
             kafkaTemplate.send(
                     TOPIC,
                     kontaktskjemaForKafka.getId().toString(),
-                    serialisertKontaktskjema).get();
+                    serialisertKontaktskjema);
 
             log.info("Kontaktskjema med id {} sendt på Kafka topic", kontaktskjemaForKafka.getId());
 

@@ -1,0 +1,22 @@
+# TODO: Hvordan unngå å kopiere config fra dev profil?
+kafka:
+  bootstrap-servers: ${spring.embedded.kafka.brokers}
+spring:
+  kafka:
+    bootstrap-servers: ${spring.embedded.kafka.brokers}
+
+kontaktskjema:
+  max-requests-per-10-min: 1000
+
+server.servlet.context-path: /kontakt-oss-api
+
+mock:
+  enabled: true
+  port: 8081
+  baseUrl: http://localhost:${mock.port}${server.servlet.context-path}
+
+gsak.url: ${mock.baseUrl}/gsak
+norg.url: ${mock.baseUrl}/norg
+kodeverk.url: ${mock.baseUrl}/kodeverk
+
+norg.fixed-rate: 3600000 # Hver time i millisekunder: 1000 * 60 * 60 = 3600000

@@ -5,7 +5,8 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-@Profile({"preprod", "prod"})
+// TODO: Legge til profil for tester
+@Profile({"kafka", "preprod", "prod"})
 @Component
 public class KafkaListeners {
 
