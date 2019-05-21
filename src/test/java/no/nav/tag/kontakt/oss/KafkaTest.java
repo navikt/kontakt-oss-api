@@ -1,12 +1,9 @@
 package no.nav.tag.kontakt.oss;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import no.nav.tag.kontakt.oss.events.BesvarelseMottatt;
-import no.nav.tag.kontakt.oss.kafka.KontaktskjemaForKafka;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,17 +23,15 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Map;
 
 import static no.nav.tag.kontakt.oss.TestData.kontaktskjema;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ActiveProfiles({"kafka", "dev"})
+@ActiveProfiles({"kafka-test", "dev"})
 @TestPropertySource(properties = {"mock.enabled=false"})
 @DirtiesContext
 public class KafkaTest {
