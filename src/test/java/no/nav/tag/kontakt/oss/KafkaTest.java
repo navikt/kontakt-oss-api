@@ -27,6 +27,7 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 import static no.nav.tag.kontakt.oss.TestData.kontaktskjema;
+import static no.nav.tag.kontakt.oss.kafka.KontaktskjemaMottattProducer.TOPIC;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
@@ -35,8 +36,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @TestPropertySource(properties = {"mock.enabled=false"})
 @DirtiesContext
 public class KafkaTest {
-
-    static final String TOPIC = "aapen-tag-kontaktskjemaMottatt";
 
     @Autowired
     private ApplicationEventPublisher eventPublisher;
