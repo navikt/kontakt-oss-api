@@ -2,6 +2,8 @@ package no.nav.tag.kontakt.oss.kafka;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.tag.kontakt.oss.Kontaktskjema;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -24,7 +26,11 @@ public class KontaktskjemaMottattProducer {
         KontaktskjemaForKafka kontaktskjemaForKafka = kontaktskjemaForKafka(kontaktskjema);
 
         try {
-            String serialisertKontaktskjema = new ObjectMapper().writeValueAsString(kontaktskjemaForKafka);
+            ObjectMapper objectMapper = new ObjectMapper()
+                    .registerModule(new JavaTimeModule())
+                    .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+            String serialisertKontaktskjema = objectMapper.writeValueAsString(kontaktskjemaForKafka);
 
             kafkaTemplate.send(
                     TOPIC,
