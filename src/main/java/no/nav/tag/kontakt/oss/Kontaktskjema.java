@@ -29,5 +29,5 @@ public class Kontaktskjema {
     private String telefonnr;
     private String tema;
     private TemaType temaType;
-    private boolean harSnakketMedAnsattrepresentant;
+    private Boolean harSnakketMedAnsattrepresentant;
 }
