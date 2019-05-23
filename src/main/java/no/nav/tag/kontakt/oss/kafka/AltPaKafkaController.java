@@ -2,6 +2,7 @@ package no.nav.tag.kontakt.oss.kafka;
 
 import no.nav.tag.kontakt.oss.KontaktskjemaRepository;
 import no.nav.tag.kontakt.oss.events.GsakOppgaveOpprettet;
+import no.nav.tag.kontakt.oss.gsak.GsakOppgave;
 import no.nav.tag.kontakt.oss.gsak.GsakOppgaveRepository;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +27,8 @@ public class AltPaKafkaController {
     @GetMapping("/internal/altpakafka")
     public ResponseEntity altPaKafka() {
         repository.findAll().forEach(kontaktskjema -> {
-            Integer gsakId = gsakRepository.finnGsakIdMedKontaktskjemaId(kontaktskjema.getId());
-            eventPublisher.publishEvent(new GsakOppgaveOpprettet(gsakId, kontaktskjema));
+            GsakOppgave oppgave = gsakRepository.finnGsakIdMedKontaktskjemaId(kontaktskjema.getId());
+            eventPublisher.publishEvent(new GsakOppgaveOpprettet(oppgave.getGsakId(), kontaktskjema));
         });
         return ResponseEntity.ok().build();
     }
