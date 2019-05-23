@@ -24,8 +24,8 @@ public class KontaktskjemaMottattProducer {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void kontaktskjemaMottatt(Kontaktskjema kontaktskjema) {
-        KontaktskjemaForKafka kontaktskjemaForKafka = kontaktskjemaForKafka(kontaktskjema);
+    public void kontaktskjemaMottatt(Kontaktskjema kontaktskjema, Integer gsakId) {
+        KontaktskjemaForKafka kontaktskjemaForKafka = kontaktskjemaForKafka(kontaktskjema, gsakId);
 
         try {
             ObjectMapper objectMapper = new ObjectMapper()

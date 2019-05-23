@@ -5,6 +5,7 @@ import no.nav.tag.kontakt.oss.DateProvider;
 import no.nav.tag.kontakt.oss.Kontaktskjema;
 import no.nav.tag.kontakt.oss.KontaktskjemaException;
 import no.nav.tag.kontakt.oss.TemaType;
+import no.nav.tag.kontakt.oss.events.GsakOppgaveOpprettet;
 import no.nav.tag.kontakt.oss.events.GsakOppgaveSendt;
 import no.nav.tag.kontakt.oss.featureToggles.FeatureToggles;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.BadRequestException;
@@ -101,9 +102,18 @@ public class GsakOppgaveServiceTest {
     }
 
     @Test
-    public void skalPublisereEventOmVellykketInnsending() {
+    public void skalPublisereGsakOppgaveSendtOmVellykketInnsending() {
         gsakOppgaveService.opprettOppgaveOgLagreStatus(kontaktskjema());
         verify(eventPublisher, times(1)).publishEvent(new GsakOppgaveSendt(true));
+    }
+
+    @Test
+    public void skalPublisereGsakOppgaveOpprettetOmVelykketInnsending() {
+        Kontaktskjema kontaktskjema = kontaktskjema();
+        Integer gsakId = 1;
+        when(gsakKlient.opprettGsakOppgave(any())).thenReturn(gsakId);
+        gsakOppgaveService.opprettOppgaveOgLagreStatus(kontaktskjema);
+        verify(eventPublisher, times(1)).publishEvent(new GsakOppgaveOpprettet(gsakId, kontaktskjema));
     }
 
     @Test
