@@ -1,6 +1,5 @@
 package no.nav.tag.kontakt.oss;
 
-import no.nav.tag.kontakt.oss.events.BesvarelseMottatt;
 import no.nav.tag.kontakt.oss.events.GsakOppgaveOpprettet;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
