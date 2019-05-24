@@ -158,7 +158,7 @@ public class GsakOppgaveService {
                         "Telefonnr: %s \n" +
                         "E-post: %s \n" +
                         "Kommune: %s (kommunenr: %s) \n" +
-                        "Kontakt arbeidsgiver for å avklare hva henvendelsen gjelder. Husk å registrere henvendelsen som aktivitetstype «Kontaktskjema» i Arena.",
+                        "Kontakt arbeidsgiver for å avklare hva henvendelsen gjelder.",
                 kontaktskjema.getTema(),
                 harSnakketMedAnsattrepresentant,
                 kontaktskjema.getBedriftsnavn(),
