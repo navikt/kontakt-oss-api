@@ -1,15 +1,14 @@
 package no.nav.tag.kontakt.oss;
 
 import lombok.extern.slf4j.Slf4j;
+import no.finn.unleash.DefaultUnleash;
 import no.nav.tag.kontakt.oss.events.BesvarelseMottatt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
@@ -20,15 +19,19 @@ public class KontaktskjemaController {
     private final KontaktskjemaRepository repository;
     private final int maksInnsendingerPerTiMin;
     private final ApplicationEventPublisher eventPublisher;
+    private final DefaultUnleash unleash;
 
     @Autowired
     public KontaktskjemaController(
             KontaktskjemaRepository repository,
             @Value("${kontaktskjema.max-requests-per-10-min}") Integer maksInnsendingerPerTiMin,
-            ApplicationEventPublisher eventPublisher) {
+            ApplicationEventPublisher eventPublisher,
+            DefaultUnleash unleash
+    ) {
         this.repository = repository;
         this.maksInnsendingerPerTiMin = maksInnsendingerPerTiMin;
         this.eventPublisher = eventPublisher;
+        this.unleash = unleash;
     }
 
     @PostMapping(value = "/meldInteresse")
@@ -50,5 +53,11 @@ public class KontaktskjemaController {
             eventPublisher.publishEvent(new BesvarelseMottatt(false, kontaktskjema));
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    @GetMapping("/feature/{feature}")
+    public ResponseEntity featureToggle(@PathVariable String feature) {
+        boolean isEnabled = unleash.isEnabled(feature);
+        return ResponseEntity.status(HttpStatus.OK).body(isEnabled);
     }
 }
