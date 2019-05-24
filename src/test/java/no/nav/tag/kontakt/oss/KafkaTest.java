@@ -1,6 +1,6 @@
 package no.nav.tag.kontakt.oss;
 
-import no.nav.tag.kontakt.oss.events.BesvarelseMottatt;
+import no.nav.tag.kontakt.oss.events.GsakOppgaveOpprettet;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -60,12 +60,14 @@ public class KafkaTest {
     public void besvarelseMottatt__skal_sende_kontaktskjema_på_kafka_topic_med_riktige_felter() throws JSONException {
         Kontaktskjema kontaktskjema = kontaktskjema();
         kontaktskjema.setId(1);
-        eventPublisher.publishEvent(new BesvarelseMottatt(true, kontaktskjema));
+        Integer gsakId = 2;
+        eventPublisher.publishEvent(new GsakOppgaveOpprettet(gsakId, kontaktskjema));
 
         ConsumerRecord<String, String> record = KafkaTestUtils.getSingleRecord(consumer, TOPIC);
 
         JSONObject json = new JSONObject(record.value());
         assertThat(json.getInt("id")).isEqualTo(kontaktskjema.getId());
+        assertThat(json.getInt("gsakId")).isEqualTo(gsakId);
 
         LocalDateTime opprettet = LocalDateTime.parse(json.getString("opprettet"));
         assertThat(opprettet).isEqualToIgnoringNanos(kontaktskjema.getOpprettet());

@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.tag.kontakt.oss.DateProvider;
 import no.nav.tag.kontakt.oss.Kontaktskjema;
 import no.nav.tag.kontakt.oss.TemaType;
+import no.nav.tag.kontakt.oss.events.GsakOppgaveOpprettet;
 import no.nav.tag.kontakt.oss.events.GsakOppgaveSendt;
 import no.nav.tag.kontakt.oss.featureToggles.FeatureToggles;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.BadRequestException;
@@ -109,6 +110,7 @@ public class GsakOppgaveService {
         Integer gsakId = gsakKlient.opprettGsakOppgave(lagGsakInnsending(kontaktskjema));
         log.info("Opprettet ny gsak-oppgave med id {}", gsakId);
         eventPublisher.publishEvent(new GsakOppgaveSendt(true));
+        eventPublisher.publishEvent(new GsakOppgaveOpprettet(gsakId, kontaktskjema));
         return new Behandlingsresultat(OK, gsakId);
     }
 
