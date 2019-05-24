@@ -55,7 +55,7 @@ public class KontaktskjemaController {
     }
 
     @GetMapping("/feature/{feature}")
-    public ResponseEntity featureToggle(@PathVariable String feature) {
+    public ResponseEntity feature(@PathVariable String feature) {
         boolean isEnabled = unleash.isEnabled(feature);
         return ResponseEntity.status(HttpStatus.OK).body(isEnabled);
     }
