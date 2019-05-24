@@ -1,6 +1,7 @@
 package no.nav.tag.kontakt.oss;
 
 import no.finn.unleash.DefaultUnleash;
+import no.finn.unleash.Unleash;
 import no.nav.tag.kontakt.oss.events.BesvarelseMottatt;
 import org.junit.Test;
 import org.springframework.context.ApplicationEventPublisher;
@@ -20,7 +21,8 @@ public class KontaktskjemaControllerTest {
     private int maksInnsendingerPerTiMin = 10;
     private KontaktskjemaRepository repository = mock(KontaktskjemaRepository.class);
     private ApplicationEventPublisher eventPublisher = mock(ApplicationEventPublisher.class);
-    private DefaultUnleash unleash = mock(DefaultUnleash.class);
+    private Unleash unleash = mock(Unleash.class);
+
     private KontaktskjemaController kontaktskjemaController = new KontaktskjemaController(
             repository,
             maksInnsendingerPerTiMin,

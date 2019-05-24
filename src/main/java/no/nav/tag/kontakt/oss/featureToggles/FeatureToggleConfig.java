@@ -1,6 +1,7 @@
 package no.nav.tag.kontakt.oss.featureToggles;
 
 import no.finn.unleash.DefaultUnleash;
+import no.finn.unleash.Unleash;
 import no.finn.unleash.util.UnleashConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -11,8 +12,10 @@ import java.util.Collections;
 @Configuration
 public class FeatureToggleConfig {
 
+    private final String APP_NAME = "kontakt-oss-api";
     @Value("${ENABLE_GSAK:false}") private String gsak;
     @Value("${unleash.url}") private String unleashUrl;
+    @Value("${spring.profiles}") private String profile;
 
     @Bean
     public FeatureToggles featureToggles() {
@@ -20,10 +23,10 @@ public class FeatureToggleConfig {
     }
 
     @Bean("unleash")
-    public DefaultUnleash initializeUnleash() {
+    public Unleash initializeUnleash() {
         UnleashConfig config = UnleashConfig.builder()
-                .appName("tag-initializeUnleash")
-                .instanceId("min-instanse")
+                .appName(APP_NAME)
+                .instanceId(APP_NAME + "-" + profile)
                 .unleashAPI(unleashUrl)
                 .build();
 

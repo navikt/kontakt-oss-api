@@ -1,7 +1,7 @@
 package no.nav.tag.kontakt.oss;
 
 import lombok.extern.slf4j.Slf4j;
-import no.finn.unleash.DefaultUnleash;
+import no.finn.unleash.Unleash;
 import no.nav.tag.kontakt.oss.events.BesvarelseMottatt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,15 +19,14 @@ public class KontaktskjemaController {
     private final KontaktskjemaRepository repository;
     private final int maksInnsendingerPerTiMin;
     private final ApplicationEventPublisher eventPublisher;
-    private final DefaultUnleash unleash;
+    private final Unleash unleash;
 
     @Autowired
     public KontaktskjemaController(
             KontaktskjemaRepository repository,
             @Value("${kontaktskjema.max-requests-per-10-min}") Integer maksInnsendingerPerTiMin,
             ApplicationEventPublisher eventPublisher,
-            DefaultUnleash unleash
-    ) {
+            Unleash unleash) {
         this.repository = repository;
         this.maksInnsendingerPerTiMin = maksInnsendingerPerTiMin;
         this.eventPublisher = eventPublisher;
