@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 public class KontaktskjemaForKafka {
 
     private Integer id;
+    private Integer gsakId;
     private LocalDateTime opprettet;
     private String fylke;
     private String kommune;
@@ -23,10 +24,10 @@ public class KontaktskjemaForKafka {
     private String tema;
     private TemaType temaType;
 
-
-    public static KontaktskjemaForKafka kontaktskjemaForKafka(Kontaktskjema kontaktskjema) {
+    public static KontaktskjemaForKafka kontaktskjemaForKafka(Kontaktskjema kontaktskjema, Integer gsakId) {
         return KontaktskjemaForKafka.builder()
                 .id(kontaktskjema.getId())
+                .gsakId(gsakId)
                 .opprettet(kontaktskjema.getOpprettet())
                 .fylke(kontaktskjema.getFylke())
                 .kommune(kontaktskjema.getKommune())
