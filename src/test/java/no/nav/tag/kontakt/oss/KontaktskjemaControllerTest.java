@@ -1,13 +1,9 @@
 package no.nav.tag.kontakt.oss;
 
-import no.finn.unleash.DefaultUnleash;
-import no.finn.unleash.FakeUnleash;
-import no.finn.unleash.Unleash;
 import no.nav.tag.kontakt.oss.events.BesvarelseMottatt;
 import org.junit.Test;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.generate;
@@ -23,13 +19,11 @@ public class KontaktskjemaControllerTest {
     private int maksInnsendingerPerTiMin = 10;
     private KontaktskjemaRepository repository = mock(KontaktskjemaRepository.class);
     private ApplicationEventPublisher eventPublisher = mock(ApplicationEventPublisher.class);
-    private Unleash unleash = hentFakeUnleash();
 
     private KontaktskjemaController kontaktskjemaController = new KontaktskjemaController(
             repository,
             maksInnsendingerPerTiMin,
-            eventPublisher,
-            unleash);
+            eventPublisher);
 
     @Test
     public void skalLagreKontaktskjemaOk() {
@@ -65,40 +59,11 @@ public class KontaktskjemaControllerTest {
     public void skalSendeMetrikkOmFeiletKontaktskjema() {
         KontaktskjemaRepository repository = mock(KontaktskjemaRepository.class);
         when(repository.save(any())).thenThrow(KontaktskjemaException.class);
-        KontaktskjemaController kontaktskjemaController = new KontaktskjemaController(repository, maksInnsendingerPerTiMin, eventPublisher, unleash);
+        KontaktskjemaController kontaktskjemaController = new KontaktskjemaController(repository, maksInnsendingerPerTiMin, eventPublisher);
         Kontaktskjema kontaktskjema = kontaktskjema();
 
         kontaktskjemaController.meldInteresse(kontaktskjema);
 
         verify(eventPublisher, times(1)).publishEvent(new BesvarelseMottatt(false, kontaktskjema));
-    }
-
-    private FakeUnleash hentFakeUnleash() {
-        FakeUnleash fakeUnleash = new FakeUnleash();
-        fakeUnleash.enable("darkMode");
-        fakeUnleash.disable("lightMode");
-
-        return fakeUnleash;
-    }
-
-    @Test
-    public void skalReturnereStatus200PåFeature() {
-        assertThat(kontaktskjemaController.feature("darkMode").getStatusCode(), is(HttpStatus.OK));
-        assertThat(kontaktskjemaController.feature("nightMode").getStatusCode(), is(HttpStatus.OK));
-    }
-
-    @Test
-    public void skalReturnereTrueHvisFeatureErPå() {
-        assertThat(kontaktskjemaController.feature("darkMode").getBody(), is(true));
-    }
-
-    @Test
-    public void skalReturnereFalseHvisFeatureErAv() {
-        assertThat(kontaktskjemaController.feature("lightMode").getBody(), is(false));
-    }
-
-    @Test
-    public void skalReturnereFalseDersomFeatureIkkeFinnes() {
-        assertThat(kontaktskjemaController.feature("nightMode").getBody(), is(false));
     }
 }
