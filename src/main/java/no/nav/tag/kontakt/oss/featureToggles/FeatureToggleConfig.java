@@ -23,7 +23,7 @@ public class FeatureToggleConfig {
         return new FeatureToggles(Collections.singletonMap("gsak", "true".equals(gsak)));
     }
 
-    @Bean("unleash")
+    @Bean
     public Unleash initializeUnleash() {
         UnleashConfig config = UnleashConfig.builder()
                 .appName(APP_NAME)
