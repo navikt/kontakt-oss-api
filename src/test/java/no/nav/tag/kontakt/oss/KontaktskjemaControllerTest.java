@@ -19,11 +19,11 @@ public class KontaktskjemaControllerTest {
     private int maksInnsendingerPerTiMin = 10;
     private KontaktskjemaRepository repository = mock(KontaktskjemaRepository.class);
     private ApplicationEventPublisher eventPublisher = mock(ApplicationEventPublisher.class);
+
     private KontaktskjemaController kontaktskjemaController = new KontaktskjemaController(
             repository,
             maksInnsendingerPerTiMin,
-            eventPublisher
-    );
+            eventPublisher);
 
     @Test
     public void skalLagreKontaktskjemaOk() {
