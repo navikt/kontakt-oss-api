@@ -31,6 +31,10 @@ public class FeatureToggleConfig {
                 .unleashAPI(unleashUrl)
                 .build();
 
-        return new DefaultUnleash(config, new GradualRolloutSessionIdStrategy());
+        return new DefaultUnleash(
+                config,
+                new GradualRolloutSessionIdStrategy(),
+                new ByEnvironmentStrategy()
+        );
     }
 }
