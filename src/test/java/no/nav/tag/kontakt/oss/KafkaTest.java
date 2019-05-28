@@ -32,7 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ActiveProfiles({"kafka-test", "dev"})
+@ActiveProfiles({"kafka-test", "local"})
 @TestPropertySource(properties = {"mock.enabled=false"})
 @DirtiesContext
 public class KafkaTest {

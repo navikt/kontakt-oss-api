@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-@Profile({"kafka-test", "preprod", "prod"})
+@Profile({"kafka-test", "dev", "prod"})
 @Component
 public class KafkaListeners {
 

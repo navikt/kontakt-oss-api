@@ -22,7 +22,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Slf4j
 @Component
-@Profile("dev")
+@Profile("local")
 @ConditionalOnProperty(prefix = "mock", name = "enabled", havingValue = "true")
 public class MockServer {
     private WireMockServer server;
