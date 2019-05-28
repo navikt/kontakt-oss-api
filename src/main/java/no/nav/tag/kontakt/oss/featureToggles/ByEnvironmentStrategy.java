@@ -24,10 +24,6 @@ public class ByEnvironmentStrategy implements Strategy {
 
     @Override
     public boolean isEnabled(Map<String, String> parameters) {
-        return isEnabledByEnvironment(parameters);
-    }
-
-    boolean isEnabledByEnvironment(Map<String, String> parameters) {
         if (parameters == null) {
             return false;
         }

@@ -22,17 +22,17 @@ public class ByEnvironmentStrategyTest {
         Map<String, String> parametre = new HashMap<>();
 
         parametre.put("miljø", "prod");
-        assertThat(new ByEnvironmentStrategy("dev").isEnabledByEnvironment(parametre)).isEqualTo(false);
+        assertThat(new ByEnvironmentStrategy("dev").isEnabled(parametre)).isEqualTo(false);
     }
 
     @Test
     public void skalReturnereFalseHvisParametreErNull() {
-        assertThat(new ByEnvironmentStrategy("dev").isEnabledByEnvironment(null)).isEqualTo(false);
+        assertThat(new ByEnvironmentStrategy("dev").isEnabled(null)).isEqualTo(false);
     }
 
     @Test
     public void skalReturnereFalseHvisMiljøIkkeErSatt() {
         Map<String, String> parametre = new HashMap<>();
-        assertThat(new ByEnvironmentStrategy("dev").isEnabledByEnvironment(parametre)).isEqualTo(false);
+        assertThat(new ByEnvironmentStrategy("dev").isEnabled(parametre)).isEqualTo(false);
     }
 }
