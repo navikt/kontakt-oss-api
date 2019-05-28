@@ -3,7 +3,7 @@ package no.nav.tag.kontakt.oss.featureToggles;
 import no.finn.unleash.strategy.Strategy;
 import org.springframework.beans.factory.annotation.Value;
 
-import java.util.List;
+import java.util.Arrays;
 import java.util.Map;
 
 public class ByEnvironmentStrategy implements Strategy {
@@ -19,7 +19,7 @@ public class ByEnvironmentStrategy implements Strategy {
         return isEnabledByEnvironment(parameters, environment);
     }
 
-    public boolean isEnabledByEnvironment(Map<String, String> parameters, String environment) {
+    boolean isEnabledByEnvironment(Map<String, String> parameters, String environment) {
         if (parameters == null) {
             return false;
         }
@@ -29,7 +29,7 @@ public class ByEnvironmentStrategy implements Strategy {
             return false;
         }
 
-        List<String> miljøer = List.of(miljøParameter.split(","));
-        return miljøer.contains(environment);
+        String[] miljøer = miljøParameter.split(",");
+        return Arrays.asList(miljøer).contains(environment);
     }
 }
