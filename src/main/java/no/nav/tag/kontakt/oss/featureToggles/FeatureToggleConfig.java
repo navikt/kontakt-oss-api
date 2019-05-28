@@ -4,6 +4,7 @@ import no.finn.unleash.DefaultUnleash;
 import no.finn.unleash.Unleash;
 import no.finn.unleash.strategy.GradualRolloutSessionIdStrategy;
 import no.finn.unleash.util.UnleashConfig;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,9 +15,16 @@ import java.util.Collections;
 public class FeatureToggleConfig {
 
     private final String APP_NAME = "kontakt-oss-api";
+    private final ByEnvironmentStrategy byEnvironmentStrategy;
+
     @Value("${ENABLE_GSAK:false}") private String gsak;
     @Value("${unleash.url}") private String unleashUrl;
-    @Value("${spring.profiles}") private String profile;
+    @Value("${spring.profiles.active}") private String profile;
+
+    @Autowired
+    public FeatureToggleConfig(ByEnvironmentStrategy byEnvironmentStrategy) {
+        this.byEnvironmentStrategy = byEnvironmentStrategy;
+    }
 
     @Bean
     public FeatureToggles featureToggles() {
@@ -33,8 +41,8 @@ public class FeatureToggleConfig {
 
         return new DefaultUnleash(
                 config,
-                new GradualRolloutSessionIdStrategy(),
-                new ByEnvironmentStrategy()
+                byEnvironmentStrategy,
+                new GradualRolloutSessionIdStrategy()
         );
     }
 }

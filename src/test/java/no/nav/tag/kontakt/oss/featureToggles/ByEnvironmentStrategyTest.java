@@ -1,6 +1,7 @@
 package no.nav.tag.kontakt.oss.featureToggles;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,8 +14,7 @@ public class ByEnvironmentStrategyTest {
         Map<String, String> parametre = new HashMap<>();
 
         parametre.put("miljø", "local,dev");
-        assertThat(new ByEnvironmentStrategy().isEnabledByEnvironment(parametre, "dev")).isEqualTo(true);
-        assertThat(new ByEnvironmentStrategy().isEnabledByEnvironment(parametre, "local")).isEqualTo(true);
+        assertThat(new ByEnvironmentStrategy("local").isEnabled(parametre)).isEqualTo(true);
     }
 
     @Test
@@ -22,17 +22,17 @@ public class ByEnvironmentStrategyTest {
         Map<String, String> parametre = new HashMap<>();
 
         parametre.put("miljø", "prod");
-        assertThat(new ByEnvironmentStrategy().isEnabledByEnvironment(parametre, "dev")).isEqualTo(false);
+        assertThat(new ByEnvironmentStrategy("dev").isEnabledByEnvironment(parametre)).isEqualTo(false);
     }
 
     @Test
     public void skalReturnereFalseHvisParametreErNull() {
-        assertThat(new ByEnvironmentStrategy().isEnabledByEnvironment(null, "dev")).isEqualTo(false);
+        assertThat(new ByEnvironmentStrategy("dev").isEnabledByEnvironment(null)).isEqualTo(false);
     }
 
     @Test
     public void skalReturnereFalseHvisMiljøIkkeErSatt() {
         Map<String, String> parametre = new HashMap<>();
-        assertThat(new ByEnvironmentStrategy().isEnabledByEnvironment(parametre, "dev")).isEqualTo(false);
+        assertThat(new ByEnvironmentStrategy("dev").isEnabledByEnvironment(parametre)).isEqualTo(false);
     }
 }

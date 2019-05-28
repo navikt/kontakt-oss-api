@@ -2,12 +2,20 @@ package no.nav.tag.kontakt.oss.featureToggles;
 
 import no.finn.unleash.strategy.Strategy;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.Map;
 
+@Component
 public class ByEnvironmentStrategy implements Strategy {
-    @Value("${spring.profiles") String environment;
+    private final String environment;
+
+    public ByEnvironmentStrategy(
+            @Value("${spring.profiles.active}") String environment
+    ) {
+        this.environment = environment;
+    }
 
     @Override
     public String getName() {
@@ -16,26 +24,20 @@ public class ByEnvironmentStrategy implements Strategy {
 
     @Override
     public boolean isEnabled(Map<String, String> parameters) {
-        return isEnabledByEnvironment(parameters, environment);
+        return isEnabledByEnvironment(parameters);
     }
 
-    boolean isEnabledByEnvironment(Map<String, String> parameters, String environment) {
-        System.out.println("Parameters: " + parameters);
-
+    boolean isEnabledByEnvironment(Map<String, String> parameters) {
         if (parameters == null) {
             return false;
         }
 
         String miljøParameter = parameters.get("miljø");
-        System.out.println("MiljøParameter: " + miljøParameter);
         if (miljøParameter == null) {
             return false;
         }
 
         String[] miljøer = miljøParameter.split(",");
-        System.out.println("Miljøer: " + miljøer);
-        System.out.println("Feature: " + Arrays.asList(miljøer).contains(environment));
-
         return Arrays.asList(miljøer).contains(environment);
     }
 }
