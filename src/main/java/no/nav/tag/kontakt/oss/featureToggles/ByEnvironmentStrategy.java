@@ -20,16 +20,22 @@ public class ByEnvironmentStrategy implements Strategy {
     }
 
     boolean isEnabledByEnvironment(Map<String, String> parameters, String environment) {
+        System.out.println("Parameters: " + parameters);
+
         if (parameters == null) {
             return false;
         }
 
         String miljøParameter = parameters.get("miljø");
+        System.out.println("MiljøParameter: " + miljøParameter);
         if (miljøParameter == null) {
             return false;
         }
 
         String[] miljøer = miljøParameter.split(",");
+        System.out.println("Miljøer: " + miljøer);
+        System.out.println("Feature: " + Arrays.asList(miljøer).contains(environment));
+
         return Arrays.asList(miljøer).contains(environment);
     }
 }
