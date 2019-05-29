@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 import java.util.Map;
 
-@Component("byEnvironmentStrategy")
+@Component
 public class ByEnvironmentStrategy implements Strategy {
     private final String environment;
 
