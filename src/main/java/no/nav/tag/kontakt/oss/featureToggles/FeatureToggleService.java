@@ -5,9 +5,9 @@ import no.finn.unleash.UnleashContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class FeatureToggleService {
@@ -21,10 +21,10 @@ public class FeatureToggleService {
     public Map<String, Boolean> hentFeatureToggles(List<String> features, String sessionId) {
         UnleashContext unleashContext = UnleashContext.builder().sessionId(sessionId).build();
 
-        Map<String, Boolean> toggles = new HashMap<>();
-        features.forEach(feature -> toggles.put(feature, unleash.isEnabled(feature, unleashContext)));
-
-        return toggles;
+        return features.stream().collect(Collectors.toMap(
+                feature -> feature,
+                feature -> unleash.isEnabled(feature, unleashContext)
+        ));
     }
 
     @Deprecated // TODO: Fjern når frontend tar i bruk metoden over
