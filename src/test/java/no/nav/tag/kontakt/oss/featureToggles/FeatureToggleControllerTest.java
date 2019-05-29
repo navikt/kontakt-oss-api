@@ -66,21 +66,4 @@ public class FeatureToggleControllerTest {
 
         assertThat(resultat).isEqualTo(toggles);
     }
-
-    /* TODO Flytt disse testene til service
-    @Test
-    public void skalReturnereTrueHvisFeatureErPå() {
-        assertThat(featureToggleController.feature("darkMode", null, response).getBody()).isEqualTo(true);
-    }
-
-    @Test
-    public void skalReturnereFalseHvisFeatureErAv() {
-        assertThat(featureToggleController.feature("lightMode", null, response).getBody()).isEqualTo(false);
-    }
-
-    @Test
-    public void skalReturnereFalseDersomFeatureIkkeFinnes() {
-        assertThat(featureToggleController.feature("nightMode", null, response).getBody()).isEqualTo(false);
-    }
-     */
 }
