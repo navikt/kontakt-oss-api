@@ -98,7 +98,7 @@ public class MetricsListeners {
 
     @EventListener
     public void gsakOppgaveSendt(GsakOppgaveSendt event) {
-        log.info("gsakoppgave sendt, success={}", event.isSuksess());
+        log.info("event=gsakoppgave.sendt, success={}", event.isSuksess());
 
         // TODO: Fjern koden under når Kibana-boardet er oppe
         String counterName = event.isSuksess() ? "sendt.gsakoppgave.success" : "sendt.gsakoppgave.fail";
@@ -110,7 +110,7 @@ public class MetricsListeners {
 
     @EventListener
     public void fylkesInndelingOppdatert(FylkesinndelingOppdatert event) {
-        log.info("fylkesinndeling oppdatert, success={}", event.isSuksess());
+        log.info("event=fylkesinndeling.oppdatert, success={}", event.isSuksess());
 
         // TODO: Fjern koden under når Kibana-boardet er oppe
         String counterName = event.isSuksess() ? "hentet.fylkesinndeling.success" : "hentet.fylkesinndeling.fail";
