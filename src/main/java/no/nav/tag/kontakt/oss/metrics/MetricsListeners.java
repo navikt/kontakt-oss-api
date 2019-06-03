@@ -77,13 +77,13 @@ public class MetricsListeners {
 
         log.info(
                 "event=kontaktskjema.mottatt"
-                + "success=" + event.isSuksess()
-                + "fylke=" + kontaktskjema.getFylke()
-                + "kommunenr=" + kontaktskjema.getKommunenr()
-                + "kommune=" + kontaktskjema.getKommune()
-                + "orgnr=" + kontaktskjema.getOrgnr()
-                + "temaType=" + kontaktskjema.getTemaType()
-                + "harSnakketMedAnsattrepresentant=" + kontaktskjema.getHarSnakketMedAnsattrepresentant()
+                + ",success=" + event.isSuksess()
+                + ",fylke=" + kontaktskjema.getFylke()
+                + ",kommunenr=" + kontaktskjema.getKommunenr()
+                + ",kommune=" + kontaktskjema.getKommune()
+                + ",orgnr=" + kontaktskjema.getOrgnr()
+                + ",temaType=" + kontaktskjema.getTemaType()
+                + ",harSnakketMedAnsattrepresentant=" + kontaktskjema.getHarSnakketMedAnsattrepresentant()
         );
 
         // TODO: Fjern koden under når Kibana-boardet er oppe
