@@ -1,5 +1,8 @@
 package no.nav.tag.kontakt.oss.metrics;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.JsonNodeCreator;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +20,8 @@ import java.util.List;
 @Slf4j
 @Component
 public class MetricsListeners {
+
+    private final static ObjectMapper objectMapper = new ObjectMapper();
 
     private final MeterRegistry meterRegistry;
 
@@ -74,22 +79,19 @@ public class MetricsListeners {
     @EventListener
     public void besvarelseMottatt(BesvarelseMottatt event) {
         Kontaktskjema kontaktskjema = event.getKontaktskjema();
-        log.info("event: kontaktskjema mottatt, " +
-                "success={}, " +
-                "fylke={}, " +
-                "kommunenr={}, " +
-                "kommune={}, " +
-                "orgnr={}, " +
-                "temaType={}, " +
-                "harSnakketMedAnsattrepresentant={}",
-                event.isSuksess(),
-                kontaktskjema.getFylke(),
-                kontaktskjema.getKommunenr(),
-                kontaktskjema.getKommune(),
-                kontaktskjema.getOrgnr(),
-                kontaktskjema.getTemaType(),
-                kontaktskjema.getHarSnakketMedAnsattrepresentant()
-        );
+
+        ObjectNode json = objectMapper.createObjectNode();
+
+        json.put("event", "kontaktskjema.mottatt");
+        json.put("success", event.isSuksess());
+        json.put("fylke", kontaktskjema.getFylke());
+        json.put("kommunenr", kontaktskjema.getKommunenr());
+        json.put("kommune", kontaktskjema.getKommune());
+        json.put("orgnr", kontaktskjema.getOrgnr());
+        json.put("temaType", kontaktskjema.getTemaType().name());
+        json.put("harSnakketMedAnsattrepresentant", kontaktskjema.getHarSnakketMedAnsattrepresentant());
+
+        log.info(json.toString());
 
         // TODO: Fjern koden under når Kibana-boardet er oppe
         String counterName = event.isSuksess() ? KONTAKTSKJEMA_SUCCESS_COUNTER : KONTAKTSKJEMA_FAIL_COUNTER;
