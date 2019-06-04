@@ -84,7 +84,11 @@ public class MetricsListeners {
                 + ",orgnr=" + kontaktskjema.getOrgnr()
                 + ",temaType=" + kontaktskjema.getTemaType()
                 + ",harSnakketMedAnsattrepresentant=" + kontaktskjema.getHarSnakketMedAnsattrepresentant()
+                + ","
         );
+
+        // Setter komma til slutt for å skille mellom verdier som starter likt,
+        // f.eks. REKRUTTERING og REKRUTTERING_MED_TILRETTELEGGING.
 
         // TODO: Fjern koden under når Kibana-boardet er oppe
         String counterName = event.isSuksess() ? KONTAKTSKJEMA_SUCCESS_COUNTER : KONTAKTSKJEMA_FAIL_COUNTER;
@@ -98,7 +102,7 @@ public class MetricsListeners {
 
     @EventListener
     public void gsakOppgaveSendt(GsakOppgaveSendt event) {
-        log.info("event=gsakoppgave.sendt, success={}", event.isSuksess());
+        log.info("event=gsakoppgave.sendt, success={},", event.isSuksess());
 
         // TODO: Fjern koden under når Kibana-boardet er oppe
         String counterName = event.isSuksess() ? "sendt.gsakoppgave.success" : "sendt.gsakoppgave.fail";
@@ -110,7 +114,7 @@ public class MetricsListeners {
 
     @EventListener
     public void fylkesInndelingOppdatert(FylkesinndelingOppdatert event) {
-        log.info("event=fylkesinndeling.oppdatert, success={}", event.isSuksess());
+        log.info("event=fylkesinndeling.oppdatert, success={},", event.isSuksess());
 
         // TODO: Fjern koden under når Kibana-boardet er oppe
         String counterName = event.isSuksess() ? "hentet.fylkesinndeling.success" : "hentet.fylkesinndeling.fail";
