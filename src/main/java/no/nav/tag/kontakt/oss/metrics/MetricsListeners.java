@@ -2,6 +2,8 @@ package no.nav.tag.kontakt.oss.metrics;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
+import lombok.extern.slf4j.Slf4j;
+import no.nav.tag.kontakt.oss.Kontaktskjema;
 import no.nav.tag.kontakt.oss.events.BesvarelseMottatt;
 import no.nav.tag.kontakt.oss.events.FylkesinndelingOppdatert;
 import no.nav.tag.kontakt.oss.events.GsakOppgaveSendt;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 import java.util.List;
 
+@Slf4j
 @Component
 public class MetricsListeners {
 
@@ -20,15 +23,16 @@ public class MetricsListeners {
     private final static String KONTAKTSKJEMA_SUCCESS_COUNTER = "mottatt.kontaktskjema.success";
     private final static String KONTAKTSKJEMA_FAIL_COUNTER = "mottatt.kontaktskjema.fail";
 
-
     @Autowired
     public MetricsListeners(MeterRegistry meterRegistry) {
         this.meterRegistry = meterRegistry;
 
+        // TODO: Fjern koden under når Kibana-boardet er oppe
         initierCountersMedFylkerOgTemaer();
     }
 
     private void initierCountersMedFylkerOgTemaer() {
+        // TODO: Fjern koden under når Kibana-boardet er oppe
 
         List<String> fylker = Arrays.asList(
                 "1000",
@@ -69,6 +73,24 @@ public class MetricsListeners {
 
     @EventListener
     public void besvarelseMottatt(BesvarelseMottatt event) {
+        Kontaktskjema kontaktskjema = event.getKontaktskjema();
+
+        log.info(
+                "event=kontaktskjema.mottatt"
+                + ",success=" + event.isSuksess()
+                + ",fylke=" + kontaktskjema.getFylke()
+                + ",kommunenr=" + kontaktskjema.getKommunenr()
+                + ",kommune=" + kontaktskjema.getKommune()
+                + ",orgnr=" + kontaktskjema.getOrgnr()
+                + ",temaType=" + kontaktskjema.getTemaType()
+                + ",harSnakketMedAnsattrepresentant=" + kontaktskjema.getHarSnakketMedAnsattrepresentant()
+                + ","
+        );
+
+        // Setter komma til slutt for å skille mellom verdier som starter likt,
+        // f.eks. REKRUTTERING og REKRUTTERING_MED_TILRETTELEGGING.
+
+        // TODO: Fjern koden under når Kibana-boardet er oppe
         String counterName = event.isSuksess() ? KONTAKTSKJEMA_SUCCESS_COUNTER : KONTAKTSKJEMA_FAIL_COUNTER;
 
         Counter.builder(counterName)
@@ -80,6 +102,9 @@ public class MetricsListeners {
 
     @EventListener
     public void gsakOppgaveSendt(GsakOppgaveSendt event) {
+        log.info("event=gsakoppgave.sendt, success={},", event.isSuksess());
+
+        // TODO: Fjern koden under når Kibana-boardet er oppe
         String counterName = event.isSuksess() ? "sendt.gsakoppgave.success" : "sendt.gsakoppgave.fail";
 
         Counter.builder(counterName)
@@ -89,6 +114,9 @@ public class MetricsListeners {
 
     @EventListener
     public void fylkesInndelingOppdatert(FylkesinndelingOppdatert event) {
+        log.info("event=fylkesinndeling.oppdatert, success={},", event.isSuksess());
+
+        // TODO: Fjern koden under når Kibana-boardet er oppe
         String counterName = event.isSuksess() ? "hentet.fylkesinndeling.success" : "hentet.fylkesinndeling.fail";
 
         Counter.builder(counterName)

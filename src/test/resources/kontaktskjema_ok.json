@@ -8,5 +8,6 @@
     "epost":"epost",
     "telefonnr":"123",
     "kommunenr":"1841",
-    "tema":"Arbeidstrening"
+    "tema":"Arbeidstrening",
+    "temaType": "REKRUTTERING"
 }
