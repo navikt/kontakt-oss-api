@@ -9,7 +9,8 @@ spec:
   image: navikt/kontakt-oss-api:latest
   team: teamtag
   port: 8080
-  secrets: true
+  vault:
+    enabled: true
   ingresses:
     - https://arbeidsgiver.nais.adeo.no/kontakt-oss-api/
   liveness:
