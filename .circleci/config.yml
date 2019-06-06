@@ -20,7 +20,7 @@ jobs:
     - setup_remote_docker
     - run:
         name: Bygger Docker image
-        command: docker build -t "navikt/kontakt-oss-api:$CIRCLE_SHA1"
+        command: docker build -t "navikt/kontakt-oss-api:$CIRCLE_SHA1" .
     - run:
         name: Pusher Docker image
         command: |
