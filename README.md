@@ -16,10 +16,3 @@ Hvis localhost ikke fungerer, prøv med IP-en du finner med følgende kommando:
 
 `docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' container_name_or_id`
 
-### Feature toggling
-Toggle av/på GSAK-innsending ved å apply-e appen med 
-```
-    - name: ENABLE_GSAK
-      value: "true"
-```
-i ønsket riktig miljø.

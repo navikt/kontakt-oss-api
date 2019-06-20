@@ -22,8 +22,6 @@ spec:
   env:
     - name: SPRING_PROFILES_ACTIVE
       value: prod
-    - name: ENABLE_GSAK
-      value: "true"
     - name: FYLKESINNDELING_TVING_OPPDATERING
       value: "false"
   prometheus:
