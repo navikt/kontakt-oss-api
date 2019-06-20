@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.Collections;
 
 @Configuration
 public class FeatureToggleConfig {
@@ -17,7 +16,6 @@ public class FeatureToggleConfig {
     private final String APP_NAME = "kontakt-oss-api";
     private final ByEnvironmentStrategy byEnvironmentStrategy;
 
-    @Value("${ENABLE_GSAK:false}") private String gsak;
     @Value("${unleash.url}") private String unleashUrl;
     @Value("${spring.profiles.active}") private String profile;
 
@@ -26,10 +24,6 @@ public class FeatureToggleConfig {
         this.byEnvironmentStrategy = byEnvironmentStrategy;
     }
 
-    @Bean
-    public FeatureToggles featureToggles() {
-        return new FeatureToggles(Collections.singletonMap("gsak", "true".equals(gsak)));
-    }
 
     @Bean
     public Unleash initializeUnleash() {

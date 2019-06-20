@@ -7,7 +7,6 @@ import no.nav.tag.kontakt.oss.KontaktskjemaException;
 import no.nav.tag.kontakt.oss.TemaType;
 import no.nav.tag.kontakt.oss.events.GsakOppgaveOpprettet;
 import no.nav.tag.kontakt.oss.events.GsakOppgaveSendt;
-import no.nav.tag.kontakt.oss.featureToggles.FeatureToggles;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.BadRequestException;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakKlient;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakRequest;
@@ -25,7 +24,6 @@ import java.time.LocalDateTime;
 
 import static no.nav.tag.kontakt.oss.TestData.kontaktskjema;
 import static no.nav.tag.kontakt.oss.TestData.kontaktskjemaBuilder;
-import static no.nav.tag.kontakt.oss.gsak.GsakOppgave.OppgaveStatus.DISABLED;
 import static no.nav.tag.kontakt.oss.gsak.GsakOppgave.OppgaveStatus.OK;
 import static no.nav.tag.kontakt.oss.gsak.GsakOppgaveService.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -36,7 +34,6 @@ public class GsakOppgaveServiceTest {
 
     @Mock private GsakOppgaveRepository oppgaveRepository;
     @Mock private DateProvider dateProvider;
-    @Mock private FeatureToggles featureToggles;
     @Mock private GsakKlient gsakKlient;
     @Mock private ApplicationEventPublisher eventPublisher;
     @Mock private NavEnhetService navEnhetService;
@@ -49,14 +46,12 @@ public class GsakOppgaveServiceTest {
     @Before
     public void setUp() {
         when(dateProvider.now()).thenReturn(LocalDateTime.now());
-        when(featureToggles.isEnabled(anyString())).thenReturn(true);
 
         gsakOppgaveService = new GsakOppgaveService(
                 oppgaveRepository,
                 dateProvider,
                 gsakKlient,
                 navEnhetService,
-                featureToggles,
                 eventPublisher
         );
     }
@@ -83,22 +78,6 @@ public class GsakOppgaveServiceTest {
         Kontaktskjema kontaktskjema = Kontaktskjema.builder().orgnr("123").build();
         GsakRequest gsakRequest = gsakOppgaveService.lagGsakInnsending(kontaktskjema);
         assertThat(gsakRequest.getOrgnr()).isEqualTo("");
-    }
-
-    @Test
-    public void skalReturnereDisabledHvisGsakToggleErAv() {
-        when(featureToggles.isEnabled(eq("gsak"))).thenReturn(false);
-
-        GsakOppgaveService gsakOppgaveService = new GsakOppgaveService(
-                oppgaveRepository,
-                mock(DateProvider.class),
-                gsakKlient,
-                mock(NavEnhetService.class),
-                featureToggles,
-                eventPublisher);
-
-        gsakOppgaveService.opprettOppgaveOgLagreStatus(kontaktskjema());
-        verify(oppgaveRepository).save(eq(GsakOppgave.builder().gsakId(null).status(DISABLED).build()));
     }
 
     @Test

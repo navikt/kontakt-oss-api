@@ -7,12 +7,11 @@ import no.nav.tag.kontakt.oss.Kontaktskjema;
 import no.nav.tag.kontakt.oss.TemaType;
 import no.nav.tag.kontakt.oss.events.GsakOppgaveOpprettet;
 import no.nav.tag.kontakt.oss.events.GsakOppgaveSendt;
-import no.nav.tag.kontakt.oss.featureToggles.FeatureToggles;
-import no.nav.tag.kontakt.oss.gsak.integrasjon.BadRequestException;
-import no.nav.tag.kontakt.oss.navenhetsmapping.NavEnhetService;
 import no.nav.tag.kontakt.oss.gsak.GsakOppgave.OppgaveStatus;
+import no.nav.tag.kontakt.oss.gsak.integrasjon.BadRequestException;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakKlient;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakRequest;
+import no.nav.tag.kontakt.oss.navenhetsmapping.NavEnhetService;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -23,7 +22,8 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 import static no.bekk.bekkopen.org.OrganisasjonsnummerValidator.isValid;
-import static no.nav.tag.kontakt.oss.gsak.GsakOppgave.OppgaveStatus.*;
+import static no.nav.tag.kontakt.oss.gsak.GsakOppgave.OppgaveStatus.FEILET;
+import static no.nav.tag.kontakt.oss.gsak.GsakOppgave.OppgaveStatus.OK;
 
 @Component
 @Slf4j
@@ -33,7 +33,6 @@ public class GsakOppgaveService {
     private final DateProvider dateProvider;
     private final GsakKlient gsakKlient;
     private final NavEnhetService navEnhetService;
-    private final FeatureToggles featureToggles;
     private final ApplicationEventPublisher eventPublisher;
 
     public static final String GSAK_TEMAGRUPPE_ARBEID = "ARBD";
@@ -46,13 +45,11 @@ public class GsakOppgaveService {
             DateProvider dateProvider,
             GsakKlient gsakKlient,
             NavEnhetService navEnhetService,
-            FeatureToggles featureToggles,
             ApplicationEventPublisher eventPublisher) {
         this.oppgaveRepository = oppgaveRepository;
         this.dateProvider = dateProvider;
         this.gsakKlient = gsakKlient;
         this.navEnhetService = navEnhetService;
-        this.featureToggles = featureToggles;
         this.eventPublisher = eventPublisher;
     }
 
@@ -76,12 +73,8 @@ public class GsakOppgaveService {
     }
 
     private Behandlingsresultat opprettOppgaveIGsak(Kontaktskjema kontaktskjema) {
-        if (!this.featureToggles.isEnabled("gsak")) {
-            log.info("Opprettet ikke ny gsak-oppgave for kontaktskjema {}, tjenesten er togglet av.", kontaktskjema.getId());
-            return new Behandlingsresultat(DISABLED, null);
-        }
-
         try {
+            log.info("Oppretter ny gsak-oppgave for kontaktskjema {}", kontaktskjema.getId());
             return sendInnGsakOppgaveOgProvPaNyttUtenOrgnrHvisBadRequest(kontaktskjema);
 
         } catch (Exception e) {
