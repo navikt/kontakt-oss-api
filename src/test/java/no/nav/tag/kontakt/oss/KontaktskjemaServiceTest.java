@@ -1,6 +1,7 @@
 package no.nav.tag.kontakt.oss;
 
 import no.nav.tag.kontakt.oss.events.BesvarelseMottatt;
+import no.nav.tag.kontakt.oss.navenhetsmapping.NavEnhetService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,6 +31,9 @@ public class KontaktskjemaServiceTest {
     @Mock
     private DateProvider dateProvider;
 
+    @Mock
+    private NavEnhetService navEnhetService;
+
     private KontaktskjemaService kontaktskjemaService;
 
     @Before
@@ -38,7 +42,8 @@ public class KontaktskjemaServiceTest {
                 maksInnsendingerPerTiMin,
                 repository,
                 eventPublisher,
-                dateProvider
+                dateProvider,
+                navEnhetService
         );
     }
 
@@ -89,5 +94,49 @@ public class KontaktskjemaServiceTest {
         } catch (Exception ignored) {}
 
         verify(eventPublisher, times(1)).publishEvent(new BesvarelseMottatt(false, kontaktskjema));
+    }
+
+    @Test(expected = BadRequestException.class)
+    public void lagreKontaktskjema__skal_feile_hvis_tematype_IKKE_er_forebygge_sykefravær_og_kommunenr_er_ugyldig() {
+        when(navEnhetService.mapFraKommunenrTilEnhetsnr("1234")).thenThrow(KontaktskjemaException.class);
+
+        Kontaktskjema kontaktskjema = kontaktskjema();
+        kontaktskjema.setTemaType(TemaType.REKRUTTERING);
+        kontaktskjema.setKommunenr("1234");
+
+        kontaktskjemaService.lagreKontaktskjema(kontaktskjema);
+    }
+
+    @Test
+    public void lagreKontaktskjema__skal_fungere_hvis_tematype_IKKE_er_forebygge_sykefravær_og_kommunenr_er_gyldig() {
+        when(navEnhetService.mapFraKommunenrTilEnhetsnr("1234")).thenReturn("4321");
+
+        Kontaktskjema kontaktskjema = kontaktskjema();
+        kontaktskjema.setTemaType(TemaType.REKRUTTERING);
+        kontaktskjema.setKommunenr("1234");
+
+        kontaktskjemaService.lagreKontaktskjema(kontaktskjema);
+    }
+
+    @Test(expected = BadRequestException.class)
+    public void lagreKontaktskjema__skal_feile_hvis_tematype_er_forebygge_sykefravær_og_fylke_er_ugyldig() {
+        when(navEnhetService.mapFraFylkesenhetNrTilArbeidslivssenterEnhetsnr("1234")).thenThrow(KontaktskjemaException.class);
+
+        Kontaktskjema kontaktskjema = kontaktskjema();
+        kontaktskjema.setTemaType(TemaType.FOREBYGGE_SYKEFRAVÆR);
+        kontaktskjema.setFylke("1234");
+
+        kontaktskjemaService.lagreKontaktskjema(kontaktskjema);
+    }
+
+    @Test
+    public void lagreKontaktskjema__skal_fungere_hvis_tematype_er_forebygge_sykefravær_og_fylke_er_gyldig() {
+        when(navEnhetService.mapFraFylkesenhetNrTilArbeidslivssenterEnhetsnr("1234")).thenReturn("4321");
+
+        Kontaktskjema kontaktskjema = kontaktskjema();
+        kontaktskjema.setTemaType(TemaType.FOREBYGGE_SYKEFRAVÆR);
+        kontaktskjema.setFylke("1234");
+
+        kontaktskjemaService.lagreKontaktskjema(kontaktskjema);
     }
 }
