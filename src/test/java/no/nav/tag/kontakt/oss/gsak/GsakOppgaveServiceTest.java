@@ -22,8 +22,8 @@ import org.springframework.context.ApplicationEventPublisher;
 
 import java.time.LocalDateTime;
 
-import static no.nav.tag.kontakt.oss.TestData.kontaktskjema;
-import static no.nav.tag.kontakt.oss.TestData.kontaktskjemaBuilder;
+import static no.nav.tag.kontakt.oss.testUtils.TestData.kontaktskjema;
+import static no.nav.tag.kontakt.oss.testUtils.TestData.kontaktskjemaBuilder;
 import static no.nav.tag.kontakt.oss.gsak.GsakOppgave.OppgaveStatus.OK;
 import static no.nav.tag.kontakt.oss.gsak.GsakOppgaveService.*;
 import static org.assertj.core.api.Assertions.assertThat;

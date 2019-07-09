@@ -2,7 +2,6 @@ package no.nav.tag.kontakt.oss;
 
 import static java.util.function.Predicate.isEqual;
 import static java.util.stream.Collectors.toList;
-import static no.nav.tag.kontakt.oss.TestData.kontaktskjema;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -14,8 +13,6 @@ import java.util.stream.Stream;
 
 import javax.sql.DataSource;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.SneakyThrows;
 import org.flywaydb.core.Flyway;
 import org.junit.Before;
 import org.junit.Test;

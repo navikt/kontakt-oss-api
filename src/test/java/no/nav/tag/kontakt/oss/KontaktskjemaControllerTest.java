@@ -7,7 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 
-import static no.nav.tag.kontakt.oss.TestData.kontaktskjema;
+import static no.nav.tag.kontakt.oss.testUtils.TestData.kontaktskjema;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.verify;

@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.generate;
-import static no.nav.tag.kontakt.oss.TestData.kontaktskjema;
+import static no.nav.tag.kontakt.oss.testUtils.TestData.kontaktskjema;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
