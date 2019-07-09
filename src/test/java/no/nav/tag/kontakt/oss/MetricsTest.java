@@ -5,6 +5,9 @@ import io.micrometer.core.instrument.MeterRegistry;
 import no.nav.tag.kontakt.oss.events.BesvarelseMottatt;
 import no.nav.tag.kontakt.oss.events.FylkesinndelingOppdatert;
 import no.nav.tag.kontakt.oss.events.GsakOppgaveSendt;
+import no.nav.tag.kontakt.oss.metrics.MetricsListeners;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @TestPropertySource(properties = {"mock.enabled=false"})
 public class MetricsTest {
+
+    Logger log = LogManager.getLogger(MetricsListeners.class);
 
     @Autowired
     private ApplicationEventPublisher eventPublisher;
@@ -55,4 +60,5 @@ public class MetricsTest {
     private double hentCount(String counterName) {
         return meterRegistry.get(counterName).counter().count();
     }
+
 }
