@@ -1,69 +1,46 @@
 package no.nav.tag.kontakt.oss;
 
-import no.nav.tag.kontakt.oss.events.BesvarelseMottatt;
+import org.junit.Before;
 import org.junit.Test;
-import org.springframework.context.ApplicationEventPublisher;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Stream.generate;
 import static no.nav.tag.kontakt.oss.TestData.kontaktskjema;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import java.time.LocalDateTime;
-
+@RunWith(MockitoJUnitRunner.class)
 public class KontaktskjemaControllerTest {
 
-    private int maksInnsendingerPerTiMin = 10;
-    private KontaktskjemaRepository repository = mock(KontaktskjemaRepository.class);
-    private ApplicationEventPublisher eventPublisher = mock(ApplicationEventPublisher.class);
+    @Mock
+    private KontaktskjemaService kontaktskjemaService;
 
-    private KontaktskjemaController kontaktskjemaController = new KontaktskjemaController(
-            repository,
-            maksInnsendingerPerTiMin,
-            eventPublisher);
+    private KontaktskjemaController kontaktskjemaController;
 
-    @Test
-    public void skalLagreKontaktskjemaOk() {
-        kontaktskjemaController.meldInteresse(kontaktskjema());
+    @Before
+    public void setUp() {
+        kontaktskjemaController = new KontaktskjemaController(kontaktskjemaService);
     }
 
     @Test
-    public void skalReturnereStatus500DersomLagringFeiler() {
-        when(repository.save(any(Kontaktskjema.class))).thenThrow(new RuntimeException("Feil ved lagring"));
-        assertThat(kontaktskjemaController.meldInteresse(kontaktskjema()).getStatusCode(), is(HttpStatus.INTERNAL_SERVER_ERROR));
+    public void meldInteresse__skal_kalle_service() {
+        Kontaktskjema kontaktskjema = kontaktskjema();
+        kontaktskjemaController.meldInteresse(kontaktskjema);
+        verify(kontaktskjemaService).lagreKontaktskjema(kontaktskjema);
     }
 
     @Test
-    public void skalReturnere429VedForMangeInnsendinger() {
-        when(repository.findAllNewerThan(any(LocalDateTime.class))).thenReturn(generate(() -> kontaktskjema()).limit(maksInnsendingerPerTiMin).collect(toList()));
+    public void meldInteresse__skal_returnere_429_ved_for_mange_innsendinger() {
+        when(kontaktskjemaService.harMottattForMangeInnsendinger()).thenReturn(true);
         assertThat(kontaktskjemaController.meldInteresse(kontaktskjema()).getStatusCode(), is(HttpStatus.TOO_MANY_REQUESTS));
     }
 
     @Test
-    public void skalReturnereStatus200DersomOK() {
+    public void meldInteresse__skal_returnere_200_dersom_OK() {
         assertThat(kontaktskjemaController.meldInteresse(kontaktskjema()).getStatusCode(), is(HttpStatus.OK));
-    }
-
-    @Test
-    public void skalSendeMetrikkOmVellykketMottattKontaktskjema() {
-        Kontaktskjema kontaktskjema = kontaktskjema();
-        kontaktskjemaController.meldInteresse(kontaktskjema);
-
-        verify(eventPublisher, times(1)).publishEvent(new BesvarelseMottatt(true, kontaktskjema));
-    }
-
-    @Test
-    public void skalSendeMetrikkOmFeiletKontaktskjema() {
-        KontaktskjemaRepository repository = mock(KontaktskjemaRepository.class);
-        when(repository.save(any())).thenThrow(KontaktskjemaException.class);
-        KontaktskjemaController kontaktskjemaController = new KontaktskjemaController(repository, maksInnsendingerPerTiMin, eventPublisher);
-        Kontaktskjema kontaktskjema = kontaktskjema();
-
-        kontaktskjemaController.meldInteresse(kontaktskjema);
-
-        verify(eventPublisher, times(1)).publishEvent(new BesvarelseMottatt(false, kontaktskjema));
     }
 }

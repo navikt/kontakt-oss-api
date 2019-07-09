@@ -1,4 +1,4 @@
-package no.nav.tag.kontakt.oss.gsak.integrasjon;
+package no.nav.tag.kontakt.oss;
 
 public class BadRequestException extends RuntimeException {
     public BadRequestException(String message, Exception e) {

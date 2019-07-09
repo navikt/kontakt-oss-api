@@ -1,5 +1,6 @@
 package no.nav.tag.kontakt.oss.gsak.integrasjon;
 
+import no.nav.tag.kontakt.oss.BadRequestException;
 import no.nav.tag.kontakt.oss.KontaktskjemaException;
 import no.nav.tag.kontakt.oss.TestData;
 import org.junit.Before;
