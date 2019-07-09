@@ -96,6 +96,19 @@ public class KontaktskjemaServiceTest {
         verify(eventPublisher, times(1)).publishEvent(new BesvarelseMottatt(false, kontaktskjema));
     }
 
+    @Test
+    public void lagreKontaktskjema__skal_sende_event_ved_feilvalidering() {
+        when(navEnhetService.mapFraKommunenrTilEnhetsnr(anyString())).thenThrow(KontaktskjemaException.class);
+        Kontaktskjema kontaktskjema = kontaktskjema();
+        kontaktskjema.setTemaType(TemaType.REKRUTTERING);
+
+        try {
+            kontaktskjemaService.lagreKontaktskjema(kontaktskjema);
+        } catch (Exception ignored) {}
+
+        verify(eventPublisher, times(1)).publishEvent(new BesvarelseMottatt(false, kontaktskjema));
+    }
+
     @Test(expected = BadRequestException.class)
     public void lagreKontaktskjema__skal_feile_hvis_tematype_IKKE_er_forebygge_sykefravær_og_kommunenr_er_ugyldig() {
         when(navEnhetService.mapFraKommunenrTilEnhetsnr("1234")).thenThrow(KontaktskjemaException.class);

@@ -32,13 +32,13 @@ public class KontaktskjemaService {
     }
 
     public void lagreKontaktskjema(Kontaktskjema kontaktskjema) {
-        validerKontaktskjema(kontaktskjema);
-        kontaktskjema.setOpprettet(dateProvider.now());
-
         try {
+            validerKontaktskjema(kontaktskjema);
+            kontaktskjema.setOpprettet(dateProvider.now());
             repository.save(kontaktskjema);
         } catch (Exception e) {
             eventPublisher.publishEvent(new BesvarelseMottatt(false, kontaktskjema));
+            log.error("Feil ved lagring av kontaktskjema", e);
             throw e;
         }
         log.info("Vellykket innsending.");
