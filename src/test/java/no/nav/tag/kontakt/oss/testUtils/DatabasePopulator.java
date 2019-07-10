@@ -28,18 +28,13 @@ public class DatabasePopulator {
     }
 
     @SneakyThrows
-    public void populerFylkesinndelingRepositoryHvisTomForÅUnngåNullpointers() {
-        try {
-            fylkesinndelingRepository.hentFylkesinndeling();
-            log.info("FylkesinndelingRepository allerede populert.");
-        } catch (NullPointerException e) {
-            ObjectMapper mapper = new ObjectMapper();
-            Map<String, NavEnhet> norgInfo = mapper.readValue(MAP_FRA_KOMMUNE_TIL_NAVENHET_JSON, new TypeReference<Map<String, NavEnhet>>() {});
-            FylkesinndelingMedNavEnheter fylkesinndeling = new FylkesinndelingMedNavEnheter(
-                    mapper.readValue(FYLKESINNDELING_JSON, new TypeReference<Map<String, List<KommuneEllerBydel>>>() {})
-            );
-            fylkesinndelingRepository.oppdaterInformasjonFraNorg(fylkesinndeling, norgInfo);
-            log.info("FylkesinndelingRepository populert med testdata.");
-        }
+    public void populerFylkesinndelingRepositoryForÅUnngåNullpointers() {
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, NavEnhet> norgInfo = mapper.readValue(MAP_FRA_KOMMUNE_TIL_NAVENHET_JSON, new TypeReference<Map<String, NavEnhet>>() {});
+        FylkesinndelingMedNavEnheter fylkesinndeling = new FylkesinndelingMedNavEnheter(
+                mapper.readValue(FYLKESINNDELING_JSON, new TypeReference<Map<String, List<KommuneEllerBydel>>>() {})
+        );
+        fylkesinndelingRepository.oppdaterInformasjonFraNorg(fylkesinndeling, norgInfo);
+        log.info("FylkesinndelingRepository populert med testdata.");
     }
 }

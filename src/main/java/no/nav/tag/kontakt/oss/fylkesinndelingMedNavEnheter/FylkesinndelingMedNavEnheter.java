@@ -1,9 +1,11 @@
 package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter;
 
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.*;
 
+@ToString
 @NoArgsConstructor
 public class FylkesinndelingMedNavEnheter {
 

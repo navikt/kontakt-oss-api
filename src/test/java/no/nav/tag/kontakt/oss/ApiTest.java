@@ -49,7 +49,7 @@ public class ApiTest {
     @Before
     @SneakyThrows
     public void populerDatabase() {
-        databasePopulator.populerFylkesinndelingRepositoryHvisTomForÅUnngåNullpointers();
+        databasePopulator.populerFylkesinndelingRepositoryForÅUnngåNullpointers();
     }
 
     @Test
