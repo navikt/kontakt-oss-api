@@ -15,7 +15,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
 
-import static no.nav.tag.kontakt.oss.TestData.lesFil;
+import static no.nav.tag.kontakt.oss.testUtils.TestData.lesFil;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;

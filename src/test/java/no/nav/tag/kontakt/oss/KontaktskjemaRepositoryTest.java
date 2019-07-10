@@ -5,6 +5,7 @@ import static org.junit.Assert.assertThat;
 
 import java.time.LocalDateTime;
 
+import no.nav.tag.kontakt.oss.testUtils.TestData;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -32,6 +32,7 @@ public class MockServer {
     @Autowired
     MockServer(
             @Value("${norg.url}") String norgUrl,
+            @Value("${gsak.url}") String gsakUrl,
             @Value("${kodeverk.url}") String kodeverkUrl,
             @Value("${mock.port}") Integer port
     ) {
@@ -40,8 +41,10 @@ public class MockServer {
         this.server =  new WireMockServer(port);
         String norgPath = new URL(norgUrl).getPath();
         String kodeverkPath = new URL(kodeverkUrl).getPath();
+        String gsakPath = new URL(gsakUrl).getPath();
 
         mockNorgsMappingFraGeografiTilNavEnhet(norgPath);
+        mockResponsFraGsak(gsakPath);
         mockKallFraFil(norgPath + "/enhet/kontaktinformasjon/organisering/AKTIV", "norgOrganisering.json");
         mockKallFraFil(kodeverkPath + "/kodeverk/Kommuner/koder/betydninger", "kommuner.json");
         mockKallFraFil(kodeverkPath + "/kodeverk/Bydeler/koder/betydninger", "bydeler.json");
@@ -78,6 +81,16 @@ public class MockServer {
             navEnhetJson = objectMapper.writeValueAsString(navEnhet);
             mockKall(norgPath + "/enhet/navkontor/" + kommuneNrEllerBydelNr, navEnhetJson);
         }
+    }
+
+    private void mockResponsFraGsak(String gsakPath) {
+        server.stubFor(
+                WireMock.post(WireMock.urlPathEqualTo(gsakPath)).willReturn(WireMock.aResponse()
+                        .withHeader("Content-Type", "application/json")
+                        .withStatus(HttpStatus.CREATED.value())
+                        .withBody("{\"id\": 123456}")
+                )
+        );
     }
 
     @SneakyThrows

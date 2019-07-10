@@ -1,6 +1,8 @@
-package no.nav.tag.kontakt.oss;
+package no.nav.tag.kontakt.oss.testUtils;
 
 import lombok.SneakyThrows;
+import no.nav.tag.kontakt.oss.Kontaktskjema;
+import no.nav.tag.kontakt.oss.TemaType;
 import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.*;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakRequest;
 import org.apache.commons.io.IOUtils;
@@ -21,7 +23,7 @@ public class TestData {
     }
     
     public static Kontaktskjema.KontaktskjemaBuilder kontaktskjemaBuilder() {
-        return new Kontaktskjema.KontaktskjemaBuilder()
+        return Kontaktskjema.builder()
                 .id(null)
                 .opprettet(LocalDateTime.now())
                 .fylke("nordland")
