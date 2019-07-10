@@ -16,7 +16,7 @@ import java.util.Map;
 import static no.nav.tag.kontakt.oss.testUtils.TestData.lesFil;
 
 @Slf4j
-@Component("databasePopulator")
+@Component
 public class DatabasePopulator {
     private final FylkesinndelingRepository fylkesinndelingRepository;
 
@@ -28,19 +28,13 @@ public class DatabasePopulator {
     }
 
     @SneakyThrows
-    public void populerFylkesinndelingRepositoryHvisTomForÅUnngåNullpointers() {
-        try {
-            FylkesinndelingMedNavEnheter hei = fylkesinndelingRepository.hentFylkesinndeling();
-            log.info("FylkesinndelingRepository allerede populert.");
-            log.info(hei.toString());
-        } catch (NullPointerException e) {
-            ObjectMapper mapper = new ObjectMapper();
-            Map<String, NavEnhet> norgInfo = mapper.readValue(MAP_FRA_KOMMUNE_TIL_NAVENHET_JSON, new TypeReference<Map<String, NavEnhet>>() {});
-            FylkesinndelingMedNavEnheter fylkesinndeling = new FylkesinndelingMedNavEnheter(
-                    mapper.readValue(FYLKESINNDELING_JSON, new TypeReference<Map<String, List<KommuneEllerBydel>>>() {})
-            );
-            fylkesinndelingRepository.oppdaterInformasjonFraNorg(fylkesinndeling, norgInfo);
-            log.info("FylkesinndelingRepository populert med testdata.");
-        }
+    public void populerFylkesinndelingRepositoryForÅUnngåNullpointers() {
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, NavEnhet> norgInfo = mapper.readValue(MAP_FRA_KOMMUNE_TIL_NAVENHET_JSON, new TypeReference<Map<String, NavEnhet>>() {});
+        FylkesinndelingMedNavEnheter fylkesinndeling = new FylkesinndelingMedNavEnheter(
+                mapper.readValue(FYLKESINNDELING_JSON, new TypeReference<Map<String, List<KommuneEllerBydel>>>() {})
+        );
+        fylkesinndelingRepository.oppdaterInformasjonFraNorg(fylkesinndeling, norgInfo);
+        log.info("FylkesinndelingRepository populert med testdata.");
     }
 }
