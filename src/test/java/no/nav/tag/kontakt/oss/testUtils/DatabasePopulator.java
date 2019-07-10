@@ -16,7 +16,7 @@ import java.util.Map;
 import static no.nav.tag.kontakt.oss.testUtils.TestData.lesFil;
 
 @Slf4j
-@Component
+@Component("databasePopulator")
 public class DatabasePopulator {
     private final FylkesinndelingRepository fylkesinndelingRepository;
 
