@@ -30,8 +30,9 @@ public class DatabasePopulator {
     @SneakyThrows
     public void populerFylkesinndelingRepositoryHvisTomForÅUnngåNullpointers() {
         try {
-            fylkesinndelingRepository.hentFylkesinndeling();
+            FylkesinndelingMedNavEnheter hei = fylkesinndelingRepository.hentFylkesinndeling();
             log.info("FylkesinndelingRepository allerede populert.");
+            log.info(hei.toString());
         } catch (NullPointerException e) {
             ObjectMapper mapper = new ObjectMapper();
             Map<String, NavEnhet> norgInfo = mapper.readValue(MAP_FRA_KOMMUNE_TIL_NAVENHET_JSON, new TypeReference<Map<String, NavEnhet>>() {});
