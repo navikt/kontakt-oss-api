@@ -7,7 +7,7 @@ import no.nav.tag.kontakt.oss.KontaktskjemaException;
 import no.nav.tag.kontakt.oss.TemaType;
 import no.nav.tag.kontakt.oss.events.GsakOppgaveOpprettet;
 import no.nav.tag.kontakt.oss.events.GsakOppgaveSendt;
-import no.nav.tag.kontakt.oss.gsak.integrasjon.BadRequestException;
+import no.nav.tag.kontakt.oss.BadRequestException;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakKlient;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakRequest;
 import no.nav.tag.kontakt.oss.navenhetsmapping.NavEnhetService;
@@ -22,8 +22,8 @@ import org.springframework.context.ApplicationEventPublisher;
 
 import java.time.LocalDateTime;
 
-import static no.nav.tag.kontakt.oss.TestData.kontaktskjema;
-import static no.nav.tag.kontakt.oss.TestData.kontaktskjemaBuilder;
+import static no.nav.tag.kontakt.oss.testUtils.TestData.kontaktskjema;
+import static no.nav.tag.kontakt.oss.testUtils.TestData.kontaktskjemaBuilder;
 import static no.nav.tag.kontakt.oss.gsak.GsakOppgave.OppgaveStatus.OK;
 import static no.nav.tag.kontakt.oss.gsak.GsakOppgaveService.*;
 import static org.assertj.core.api.Assertions.assertThat;

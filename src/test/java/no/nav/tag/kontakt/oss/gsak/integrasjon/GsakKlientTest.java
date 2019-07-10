@@ -1,7 +1,8 @@
 package no.nav.tag.kontakt.oss.gsak.integrasjon;
 
+import no.nav.tag.kontakt.oss.BadRequestException;
 import no.nav.tag.kontakt.oss.KontaktskjemaException;
-import no.nav.tag.kontakt.oss.TestData;
+import no.nav.tag.kontakt.oss.testUtils.TestData;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,8 +16,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.UUID;
 
-import static no.nav.tag.kontakt.oss.TestData.gsakRequest;
-import static no.nav.tag.kontakt.oss.TestData.gsakResponseEntity;
+import static no.nav.tag.kontakt.oss.testUtils.TestData.gsakRequest;
+import static no.nav.tag.kontakt.oss.testUtils.TestData.gsakResponseEntity;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;

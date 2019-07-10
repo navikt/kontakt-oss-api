@@ -13,7 +13,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static no.nav.tag.kontakt.oss.TestData.kontaktskjema;
+import static no.nav.tag.kontakt.oss.testUtils.TestData.kontaktskjema;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)

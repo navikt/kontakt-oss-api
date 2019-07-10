@@ -8,7 +8,7 @@ import no.nav.tag.kontakt.oss.TemaType;
 import no.nav.tag.kontakt.oss.events.GsakOppgaveOpprettet;
 import no.nav.tag.kontakt.oss.events.GsakOppgaveSendt;
 import no.nav.tag.kontakt.oss.gsak.GsakOppgave.OppgaveStatus;
-import no.nav.tag.kontakt.oss.gsak.integrasjon.BadRequestException;
+import no.nav.tag.kontakt.oss.BadRequestException;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakKlient;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakRequest;
 import no.nav.tag.kontakt.oss.navenhetsmapping.NavEnhetService;

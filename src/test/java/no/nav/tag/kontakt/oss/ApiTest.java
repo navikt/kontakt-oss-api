@@ -1,10 +1,17 @@
 package no.nav.tag.kontakt.oss;
 
-import static java.net.http.HttpClient.newBuilder;
-import static java.net.http.HttpResponse.BodyHandlers.ofString;
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import lombok.SneakyThrows;
+import no.nav.tag.kontakt.oss.testUtils.DatabasePopulator;
+import org.apache.commons.io.IOUtils;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -12,16 +19,11 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse;
 
-import org.apache.commons.io.IOUtils;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
-
-import lombok.SneakyThrows;
+import static java.net.http.HttpClient.newBuilder;
+import static java.net.http.HttpResponse.BodyHandlers.ofString;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
@@ -33,12 +35,21 @@ public class ApiTest {
 
     private static final String OK_KONTAKTSKJEMA_JSON = lesFil("kontaktskjema_ok.json");
 
+    @Autowired
+    private DatabasePopulator databasePopulator;
+
     @SneakyThrows
     private static String lesFil(String name) {
         return IOUtils.toString(
                 ApiTest.class.getClassLoader().getResourceAsStream(name),
                 UTF_8
         );
+    }
+
+    @Before
+    @SneakyThrows
+    public void populerDatabase() {
+        databasePopulator.populerFylkesinndelingRepositoryHvisTomForÅUnngåNullpointers();
     }
 
     @Test
@@ -66,8 +77,7 @@ public class ApiTest {
         String bodyMedForLangtKommunenr = OK_KONTAKTSKJEMA_JSON.replaceFirst("1841", "1084109");
 
         HttpResponse<?> response = HttpClient.newBuilder().build().send(createRequest(bodyMedForLangtKommunenr), ofString());
-        assertThat(response.statusCode(), is(500));
-        assertThat(response.body(), is(""));
+        assertThat(response.statusCode(), is(400));
     }
 
 }

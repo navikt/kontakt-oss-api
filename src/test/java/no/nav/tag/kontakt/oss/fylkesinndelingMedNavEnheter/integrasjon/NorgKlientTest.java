@@ -2,8 +2,6 @@ package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon;
 
 import no.nav.tag.kontakt.oss.KontaktskjemaException;
 import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.NavEnhet;
-import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.NorgKlient;
-import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.NorgOrganisering;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,7 +17,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static no.nav.tag.kontakt.oss.TestData.lesFil;
+import static no.nav.tag.kontakt.oss.testUtils.TestData.lesFil;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;

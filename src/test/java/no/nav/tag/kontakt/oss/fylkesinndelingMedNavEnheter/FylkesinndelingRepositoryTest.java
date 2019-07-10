@@ -1,6 +1,5 @@
 package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter;
 
-import no.nav.tag.kontakt.oss.KontaktskjemaApplication;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +10,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.time.LocalDateTime;
 import java.util.Map;
 
-import static no.nav.tag.kontakt.oss.TestData.*;
-import static no.nav.tag.kontakt.oss.TestData.fraKommuneNrTilNavEnhet;
+import static no.nav.tag.kontakt.oss.testUtils.TestData.*;
+import static no.nav.tag.kontakt.oss.testUtils.TestData.fraKommuneNrTilNavEnhet;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
