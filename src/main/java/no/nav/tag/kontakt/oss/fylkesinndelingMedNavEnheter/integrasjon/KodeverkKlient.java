@@ -2,7 +2,6 @@ package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
 import no.nav.tag.kontakt.oss.KontaktskjemaException;
 import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.Bydel;
 import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.Kommune;
@@ -14,7 +13,6 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.util.*;
 
-@Slf4j
 @Service
 public class KodeverkKlient {
 

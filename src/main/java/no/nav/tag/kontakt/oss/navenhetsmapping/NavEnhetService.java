@@ -2,7 +2,6 @@ package no.nav.tag.kontakt.oss.navenhetsmapping;
 
 import no.nav.tag.kontakt.oss.KontaktskjemaException;
 import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.FylkesinndelingRepository;
-import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.KommuneEllerBydel;
 import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.NavEnhet;
 import org.springframework.stereotype.Component;
 

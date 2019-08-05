@@ -1,7 +1,6 @@
 package no.nav.tag.kontakt.oss.gsak;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import no.nav.tag.kontakt.oss.KontaktskjemaRepository;
