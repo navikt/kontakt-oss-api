@@ -41,7 +41,6 @@ public class KontaktskjemaService {
             log.error("Feil ved lagring av kontaktskjema", e);
             throw e;
         }
-        log.info("Vellykket innsending.");
         eventPublisher.publishEvent(new BesvarelseMottatt(true, kontaktskjema));
     }
 
