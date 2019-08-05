@@ -5,6 +5,9 @@ import no.nav.tag.kontakt.oss.Kontaktskjema;
 import no.nav.tag.kontakt.oss.events.BesvarelseMottatt;
 import no.nav.tag.kontakt.oss.events.FylkesinndelingOppdatert;
 import no.nav.tag.kontakt.oss.events.GsakOppgaveSendt;
+import no.nav.tag.kontakt.oss.gsak.GsakOppgave.OppgaveStatus;
+import no.nav.tag.kontakt.oss.gsak.GsakOppgaveService.Behandlingsresultat;
+
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
@@ -33,7 +36,8 @@ public class MetricsListeners {
 
     @EventListener
     public void gsakOppgaveSendt(GsakOppgaveSendt event) {
-        log.info("event=gsakoppgave.sendt, success={},", event.isSuksess());
+        Behandlingsresultat resultat = event.getBehandlingsresultat();
+        log.info("event=gsakoppgave.sendt, success={}, gsakId={}, gsakRequest={},", OppgaveStatus.FEILET != resultat.getStatus(), resultat.getGsakId(), event.getGsakRequest());
     }
 
     @EventListener
