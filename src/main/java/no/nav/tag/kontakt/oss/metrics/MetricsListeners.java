@@ -8,6 +8,7 @@ import no.nav.tag.kontakt.oss.events.GsakOppgaveSendt;
 import no.nav.tag.kontakt.oss.gsak.GsakOppgave.OppgaveStatus;
 import no.nav.tag.kontakt.oss.gsak.GsakOppgaveService.Behandlingsresultat;
 
+import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakRequest;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
@@ -21,8 +22,7 @@ public class MetricsListeners {
 
         // Setter komma til slutt for å skille mellom verdier som starter likt,
         // f.eks. REKRUTTERING og REKRUTTERING_MED_TILRETTELEGGING.
-        log.info(
-                "event=kontaktskjema.mottatt"
+        log.info("event=kontaktskjema.mottatt"
                 + ",success=" + event.isSuksess()
                 + ",fylke=" + kontaktskjema.getFylke()
                 + ",kommunenr=" + kontaktskjema.getKommunenr()
@@ -37,7 +37,14 @@ public class MetricsListeners {
     @EventListener
     public void gsakOppgaveSendt(GsakOppgaveSendt event) {
         Behandlingsresultat resultat = event.getBehandlingsresultat();
-        log.info("event=gsakoppgave.sendt, success={}, gsakId={}, gsakRequest={},", OppgaveStatus.FEILET != resultat.getStatus(), resultat.getGsakId(), event.getGsakRequest());
+        GsakRequest gsakRequest = event.getGsakRequest();
+        log.info(
+                "event=gsakoppgave.sendt, success={}, gsakId={}, orgnr={}, tildeltEnhetsnr={}",
+                OppgaveStatus.FEILET != resultat.getStatus(),
+                resultat.getGsakId(),
+                gsakRequest.getOrgnr(),
+                gsakRequest.getTildeltEnhetsnr()
+        );
     }
 
     @EventListener
