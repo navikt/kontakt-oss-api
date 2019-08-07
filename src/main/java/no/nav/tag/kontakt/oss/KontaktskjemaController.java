@@ -23,7 +23,7 @@ public class KontaktskjemaController {
 
     @PostMapping(value = "/meldInteresse")
     public ResponseEntity meldInteresse(
-            @Valid  @RequestBody Kontaktskjema kontaktskjema
+            @RequestBody Kontaktskjema kontaktskjema
     ) {
         if (kontaktskjemaService.harMottattForMangeInnsendinger()) {
             return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
