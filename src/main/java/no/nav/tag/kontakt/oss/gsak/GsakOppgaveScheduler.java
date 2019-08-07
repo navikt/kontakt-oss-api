@@ -44,7 +44,9 @@ public class GsakOppgaveScheduler {
     
     private void opprettOppgaveForSkjemaer() {
         Collection<Kontaktskjema> skjemaer = kontaktskjemaRepository.findAllWithNoGsakOppgave();
-        log.info("Fant {} skjemaer som ikke har gsak-oppgave", skjemaer.size());
+        if(skjemaer.size() > 0) {
+            log.info("Fant {} skjemaer som ikke har gsak-oppgave", skjemaer.size());
+        }
         skjemaer.forEach(oppgaveForSkjema::opprettOppgaveOgLagreStatus);
     }
 }
