@@ -16,8 +16,10 @@ public class FylkesinndelingScheduler {
 
     private final LockingTaskExecutor taskExecutor;
     private final FylkesinndelingService fylkesinndelingService;
+    private static final int HOUR = 60 * 60;
+    private static final int MINUTE = 60;
 
-    public static String FYLKESINNDELING_SHEDLOCK_NAVN = "oppdaterFylkesinndeling";
+    private static final String FYLKESINNDELING_SHEDLOCK_NAVN = "oppdaterFylkesinndeling";
 
     @Autowired
     public FylkesinndelingScheduler(
@@ -36,10 +38,8 @@ public class FylkesinndelingScheduler {
     public void scheduledOppdaterInformasjonFraNorg() {
         log.info("Sjekker shedlock for fylkesinndeling-oppdatering");
 
-        int hourInSeconds = 60 * 60;
-
-        Instant lockAtMostUntil = Instant.now().plusSeconds(28 * hourInSeconds);
-        Instant lockAtLeastUntil = Instant.now().plusSeconds(24 * hourInSeconds);
+        Instant lockAtMostUntil = Instant.now().plusSeconds(28 * HOUR);
+        Instant lockAtLeastUntil = Instant.now().plusSeconds(24 * HOUR);
 
         taskExecutor.executeWithLock(
                 (Runnable) fylkesinndelingService::oppdaterFylkesinndeling,
@@ -48,15 +48,15 @@ public class FylkesinndelingScheduler {
     }
 
     private void oppdaterFylkesinndelingUtenomSchedule() {
-        Instant lockAtMostUntil = Instant.now().plusSeconds(10 * 60);
-        Instant lockAtLeastUntil = Instant.now().plusSeconds(5 * 60);
+        Instant lockAtMostUntil = Instant.now().plusSeconds(10 * MINUTE);
+        Instant lockAtLeastUntil = Instant.now().plusSeconds(5 * MINUTE);
 
         taskExecutor.executeWithLock(
                 (Runnable)() -> {
                     log.info("Tvinger oppdatering av fylkesinndeling");
                     fylkesinndelingService.oppdaterFylkesinndeling();
                 },
-                new LockConfiguration("opprettOppgaveForSkjemaer-OVERRIDE", lockAtMostUntil, lockAtLeastUntil)
+                new LockConfiguration(FYLKESINNDELING_SHEDLOCK_NAVN + "-OVERRIDE", lockAtMostUntil, lockAtLeastUntil)
         );
     }
 }
