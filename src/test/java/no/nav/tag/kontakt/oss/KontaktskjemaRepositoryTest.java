@@ -100,16 +100,6 @@ public class KontaktskjemaRepositoryTest {
     }
 
     @Test
-    public void skalIkkeHenteSkjemaDersomGsakOppgaveErDisabled() {
-        transactor.inTransaction(() -> {
-            Kontaktskjema lagretSkjema = kontaktskjemaRepository.save(TestData.kontaktskjema());
-            assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size(), is(1));
-            oppgaveRepository.save(GsakOppgave.builder().kontaktskjemaId(lagretSkjema.getId()).status(OppgaveStatus.DISABLED).build());
-            assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size(), is(0));
-        });
-    }
-    
-    @Test
     public void skalHenteSkjemaDersomGsakOppgaveHarFeilet() {
         transactor.inTransaction(() -> {
             Kontaktskjema lagretSkjema = kontaktskjemaRepository.save(TestData.kontaktskjema());

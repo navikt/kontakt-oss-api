@@ -19,7 +19,6 @@ public class GsakOppgave {
     private LocalDateTime opprettet;
     
     public enum OppgaveStatus {
-        DISABLED,
         OK,
         FEILET
     }
