@@ -26,9 +26,4 @@ public class FeatureToggleService {
                 feature -> unleash.isEnabled(feature, unleashContext)
         ));
     }
-
-    @Deprecated // TODO: Fjern når frontend tar i bruk metoden over
-    public boolean isEnabled(String feature, UnleashContext unleashContext) {
-        return unleash.isEnabled(feature, unleashContext);
-    }
 }
