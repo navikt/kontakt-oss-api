@@ -101,7 +101,7 @@ public class GsakOppgaveServiceTest {
         when(gsakKlient.opprettGsakOppgave(any())).thenReturn(gsakId);
         gsakOppgaveService.opprettOppgaveOgLagreStatus(kontaktskjema);
 
-        verify(eventPublisher, times(1)).publishEvent(eq(new GsakOppgaveOpprettet(gsakId, kontaktskjema)));
+        verify(eventPublisher, times(1)).publishEvent(new GsakOppgaveOpprettet(gsakId, kontaktskjema));
     }
 
     @Test
