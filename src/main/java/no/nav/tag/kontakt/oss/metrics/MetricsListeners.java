@@ -9,6 +9,9 @@ import no.nav.tag.kontakt.oss.gsak.GsakOppgave.OppgaveStatus;
 import no.nav.tag.kontakt.oss.gsak.GsakOppgaveService.Behandlingsresultat;
 
 import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakRequest;
+
+import java.util.Optional;
+
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
@@ -37,13 +40,13 @@ public class MetricsListeners {
     @EventListener
     public void gsakOppgaveSendt(GsakOppgaveSendt event) {
         Behandlingsresultat resultat = event.getBehandlingsresultat();
-        GsakRequest gsakRequest = event.getGsakRequest();
+        Optional<GsakRequest> gsakRequest = Optional.ofNullable(event.getGsakRequest());
         log.info(
                 "event=gsakoppgave.sendt, success={}, gsakId={}, orgnr={}, tildeltEnhetsnr={}",
                 OppgaveStatus.FEILET != resultat.getStatus(),
                 resultat.getGsakId(),
-                gsakRequest.getOrgnr(),
-                gsakRequest.getTildeltEnhetsnr()
+                gsakRequest.isEmpty() ? null : gsakRequest.get().getOrgnr(),
+                gsakRequest.isEmpty() ? null : gsakRequest.get().getTildeltEnhetsnr()
         );
     }
 
