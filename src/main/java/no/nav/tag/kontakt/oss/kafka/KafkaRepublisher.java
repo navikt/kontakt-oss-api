@@ -35,6 +35,8 @@ public class KafkaRepublisher {
 
     @PostMapping("/internal/kafka/republish")
     public String republishAlleKontaktskjemaer() {
+        // Endepunktet publiserer alle kontaktskjemaene fra databasen til Kafka-topicet. Brukes bare i spesielle situasjoner.
+
         Iterable<Kontaktskjema> kontaktskjemaer = kontaktskjemaRepository.findAll();
         Map<Integer, Integer> mapFraKontaktskjemaIdTilGsakId = mapFraKontaktskjemaIdTilGsakId();
 
