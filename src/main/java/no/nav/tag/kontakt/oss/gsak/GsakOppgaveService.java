@@ -1,6 +1,6 @@
 package no.nav.tag.kontakt.oss.gsak;
 
-import lombok.AllArgsConstructor;
+import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.tag.kontakt.oss.DateProvider;
 import no.nav.tag.kontakt.oss.Kontaktskjema;
@@ -35,9 +35,10 @@ public class GsakOppgaveService {
     private final NavEnhetService navEnhetService;
     private final ApplicationEventPublisher eventPublisher;
 
-    public static final String GSAK_TEMAGRUPPE_ARBEID = "ARBD";
-    public static final String GSAK_TEMA_OPPFØLGING_ARBEIDSGIVER = "OPA";
-    public static final String GSAK_TEMA_INKLUDERENDE_ARBEIDSLIV = "IAR";
+    static final String GSAK_TEMAGRUPPE_ARBEID = "ARBD";
+    static final String GSAK_TEMA_OPPFØLGING_ARBEIDSGIVER = "OPA";
+    static final String GSAK_TEMA_INKLUDERENDE_ARBEIDSLIV = "IAR";
+    static final String CORRELATION_ID = "correlationId";
 
     @Autowired
     public GsakOppgaveService(
@@ -53,58 +54,59 @@ public class GsakOppgaveService {
         this.eventPublisher = eventPublisher;
     }
 
-    @AllArgsConstructor
-    private static class Behandlingsresultat {
-        private OppgaveStatus status;
-        private Integer gsakId;
+    @Value
+    public static class Behandlingsresultat {
+        private final OppgaveStatus status;
+        private final Integer gsakId;
     }
 
     @Transactional
     public void opprettOppgaveOgLagreStatus(Kontaktskjema kontaktskjema) {
-        MDC.put("correlationId", UUID.randomUUID().toString());
-        Behandlingsresultat behandlingsresultat = opprettOppgaveIGsak(kontaktskjema);
-        oppgaveRepository.save(new GsakOppgave.GsakOppgaveBuilder()
-                .kontaktskjemaId(kontaktskjema.getId())
-                .status(behandlingsresultat.status)
-                .opprettet(dateProvider.now())
-                .gsakId(behandlingsresultat.gsakId)
-                .build());
-        MDC.remove("correlationId");
+        try {
+            MDC.put(CORRELATION_ID, UUID.randomUUID().toString());
+            GsakRequest gsakRequest = lagGsakInnsending(kontaktskjema);
+            Behandlingsresultat behandlingsresultat = opprettOppgaveIGsak(gsakRequest, kontaktskjema);
+            eventPublisher.publishEvent(new GsakOppgaveSendt(behandlingsresultat, gsakRequest));
+            oppgaveRepository.save(new GsakOppgave.GsakOppgaveBuilder()
+                    .kontaktskjemaId(kontaktskjema.getId())
+                    .status(behandlingsresultat.status)
+                    .opprettet(dateProvider.now())
+                    .gsakId(behandlingsresultat.gsakId)
+                    .build());
+        } finally {
+            MDC.remove(CORRELATION_ID);
+        }
     }
 
-    private Behandlingsresultat opprettOppgaveIGsak(Kontaktskjema kontaktskjema) {
+    private Behandlingsresultat opprettOppgaveIGsak(GsakRequest gsakRequest, Kontaktskjema kontaktskjema) {
         try {
             log.info("Oppretter ny gsak-oppgave for kontaktskjema {}", kontaktskjema.getId());
-            return sendInnGsakOppgaveOgProvPaNyttUtenOrgnrHvisBadRequest(kontaktskjema);
+            Behandlingsresultat behandlingsresultat = sendInnGsakOppgaveOgProvPaNyttUtenOrgnrHvisBadRequest(gsakRequest);
+            eventPublisher.publishEvent(new GsakOppgaveOpprettet(behandlingsresultat.gsakId, kontaktskjema));
+            return behandlingsresultat;
 
         } catch (Exception e) {
             log.error("Opprettelse av gsak-oppgave feilet for kontaktskjema {}.", kontaktskjema.getId(), e);
-            eventPublisher.publishEvent(new GsakOppgaveSendt(false));
             return new Behandlingsresultat(FEILET, null);
         }
     }
 
-    private Behandlingsresultat sendInnGsakOppgaveOgProvPaNyttUtenOrgnrHvisBadRequest(Kontaktskjema kontaktskjema) {
+    private Behandlingsresultat sendInnGsakOppgaveOgProvPaNyttUtenOrgnrHvisBadRequest(GsakRequest gsakRequest) {
         try {
-            return sendGsakRequest(kontaktskjema);
+            return sendGsakRequest(gsakRequest);
 
         } catch (BadRequestException e) {
             // BadRequest kan tyde på at orgnr blir feilvalidert i GSAK.
             // Vi har forskjellig validering av orgnr enn GSAK.
             log.error(e.getMessage(), e);
-            log.warn("Prøver å opprette GSAK oppgave igjen uten orgnr for kontaktskjema med id: {}", kontaktskjema.getId());
-            kontaktskjema.setOrgnr("");
-            return sendGsakRequest(kontaktskjema);
+            log.warn("Prøver å opprette GSAK oppgave igjen uten orgnr");
+            gsakRequest.setOrgnr("");
+            return sendGsakRequest(gsakRequest);
         }
     }
 
-
-    private Behandlingsresultat sendGsakRequest(Kontaktskjema kontaktskjema) {
-        Integer gsakId = gsakKlient.opprettGsakOppgave(lagGsakInnsending(kontaktskjema));
-        log.info("Opprettet ny gsak-oppgave med id {}", gsakId);
-        eventPublisher.publishEvent(new GsakOppgaveSendt(true));
-        eventPublisher.publishEvent(new GsakOppgaveOpprettet(gsakId, kontaktskjema));
-        return new Behandlingsresultat(OK, gsakId);
+    private Behandlingsresultat sendGsakRequest(GsakRequest gsakRequest) {
+        return new Behandlingsresultat(OK, gsakKlient.opprettGsakOppgave(gsakRequest));
     }
 
     GsakRequest lagGsakInnsending(Kontaktskjema kontaktskjema) {

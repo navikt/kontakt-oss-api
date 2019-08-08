@@ -11,6 +11,7 @@ import no.nav.tag.kontakt.oss.BadRequestException;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakKlient;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakRequest;
 import no.nav.tag.kontakt.oss.navenhetsmapping.NavEnhetService;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,15 +19,18 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.slf4j.MDC;
 import org.springframework.context.ApplicationEventPublisher;
 
 import java.time.LocalDateTime;
 
 import static no.nav.tag.kontakt.oss.testUtils.TestData.kontaktskjema;
 import static no.nav.tag.kontakt.oss.testUtils.TestData.kontaktskjemaBuilder;
+import static no.nav.tag.kontakt.oss.gsak.GsakOppgave.OppgaveStatus.FEILET;
 import static no.nav.tag.kontakt.oss.gsak.GsakOppgave.OppgaveStatus.OK;
 import static no.nav.tag.kontakt.oss.gsak.GsakOppgaveService.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentCaptor.forClass;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -83,7 +87,11 @@ public class GsakOppgaveServiceTest {
     @Test
     public void skalPublisereGsakOppgaveSendtOmVellykketInnsending() {
         gsakOppgaveService.opprettOppgaveOgLagreStatus(kontaktskjema());
-        verify(eventPublisher, times(1)).publishEvent(new GsakOppgaveSendt(true));
+    
+        ArgumentCaptor<GsakOppgaveSendt> argumentCaptor = forClass(GsakOppgaveSendt.class);
+        //Det publiseres to eventer med ulike argumenter, derfor times(2) selv om vi bare er interessert i den siste.
+        verify(eventPublisher, times(2)).publishEvent(argumentCaptor.capture());
+        assertThat(argumentCaptor.getValue().getBehandlingsresultat().getStatus()).isEqualTo(OK);
     }
 
     @Test
@@ -92,6 +100,7 @@ public class GsakOppgaveServiceTest {
         Integer gsakId = 1;
         when(gsakKlient.opprettGsakOppgave(any())).thenReturn(gsakId);
         gsakOppgaveService.opprettOppgaveOgLagreStatus(kontaktskjema);
+
         verify(eventPublisher, times(1)).publishEvent(new GsakOppgaveOpprettet(gsakId, kontaktskjema));
     }
 
@@ -100,7 +109,10 @@ public class GsakOppgaveServiceTest {
         when(gsakKlient.opprettGsakOppgave(any())).thenThrow(KontaktskjemaException.class);
 
         gsakOppgaveService.opprettOppgaveOgLagreStatus(kontaktskjema());
-        verify(eventPublisher, times(1)).publishEvent(new GsakOppgaveSendt(false));
+        
+        ArgumentCaptor<GsakOppgaveSendt> argumentCaptor = forClass(GsakOppgaveSendt.class);
+        verify(eventPublisher, times(1)).publishEvent(argumentCaptor.capture());
+        assertThat(argumentCaptor.getValue().getBehandlingsresultat().getStatus()).isEqualTo(FEILET);
     }
 
     @Test
@@ -130,11 +142,8 @@ public class GsakOppgaveServiceTest {
         when(gsakKlient.opprettGsakOppgave(any()))
                 .thenThrow(BadRequestException.class)
                 .thenThrow(BadRequestException.class);
-        try {
-            gsakOppgaveService.opprettOppgaveOgLagreStatus(kontaktskjema());
-        } catch (KontaktskjemaException e) {
-            verify(gsakKlient, times(2)).opprettGsakOppgave(any());
-        }
+        gsakOppgaveService.opprettOppgaveOgLagreStatus(kontaktskjema());
+        verify(gsakKlient, times(2)).opprettGsakOppgave(any());
     }
 
     @Test
@@ -190,5 +199,23 @@ public class GsakOppgaveServiceTest {
     private GsakRequest capturedGsakRequest() {
         verify(gsakKlient, times(1)).opprettGsakOppgave(gsakRequestArgumentCaptor.capture());
         return gsakRequestArgumentCaptor.getValue();
+    }
+    
+    @Test
+    public void skal_fjerne_correlationId() {
+        gsakOppgaveService.opprettOppgaveOgLagreStatus(kontaktskjema());
+
+        assertThat(MDC.get(CORRELATION_ID)).isNull();
+    }
+    
+    @Test
+    public void skal_fjerne_correlationId_ved_exception() {
+        doThrow(RuntimeException.class).when(oppgaveRepository).save(any());
+        try {
+            gsakOppgaveService.opprettOppgaveOgLagreStatus(kontaktskjema());
+        } catch (Exception e) {
+        }
+
+        assertThat(MDC.get(CORRELATION_ID)).isNull();
     }
 }
