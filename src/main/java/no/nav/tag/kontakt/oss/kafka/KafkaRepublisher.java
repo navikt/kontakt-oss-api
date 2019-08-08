@@ -7,8 +7,7 @@ import no.nav.tag.kontakt.oss.gsak.GsakOppgave;
 import no.nav.tag.kontakt.oss.gsak.GsakOppgaveRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
@@ -26,42 +25,39 @@ public class KafkaRepublisher {
     @Autowired
     public KafkaRepublisher(
             KontaktskjemaRepository kontaktskjemaRepository,
-            GsakOppgaveRepository gsakOppgaveRepository, KontaktskjemaMottattProducer kontaktskjemaMottattProducer
+            GsakOppgaveRepository gsakOppgaveRepository,
+            KontaktskjemaMottattProducer kontaktskjemaMottattProducer
     ) {
         this.kontaktskjemaRepository = kontaktskjemaRepository;
         this.gsakOppgaveRepository = gsakOppgaveRepository;
         this.kontaktskjemaMottattProducer = kontaktskjemaMottattProducer;
     }
 
-    @GetMapping("/internal/kafka/{passord}")
-    public String republishAlleKontaktskjemaer(
-            @PathVariable String passord
-    ) {
-        if (!"hemmelig".equals(passord)) {
-            return "dette skal du ikke gjøre";
-        }
+    @PostMapping("/internal/kafka/republish")
+    public String republishAlleKontaktskjemaer() {
         Iterable<Kontaktskjema> kontaktskjemaer = kontaktskjemaRepository.findAll();
         Map<Integer, Integer> mapFraKontaktskjemaIdTilGsakId = mapFraKontaktskjemaIdTilGsakId();
-        Integer antall = 1;
 
-        String meldinger = "";
+        int antallSkjemaer = 0;
+        int antallFeil = 0;
+        String melding = "";
 
         for (Kontaktskjema kontaktskjema : kontaktskjemaer) {
+            antallSkjemaer++;
             Integer gsakId = mapFraKontaktskjemaIdTilGsakId.get(kontaktskjema.getId());
-            log.info("Publiserer kontaktskjema nr {} med id={}, gsakid={}", antall, kontaktskjema.getId(), gsakId);
+            log.info("Publiserer kontaktskjema nr {} med id={}, gsakid={}", antallSkjemaer, kontaktskjema.getId(), gsakId);
 
             try {
                 kontaktskjemaMottattProducer.kontaktskjemaMottatt(kontaktskjema, gsakId);
             } catch (Exception e) {
-                log.error("Feilet publisering for kontaktskjema nr {} med id={}, gsakid={}", antall, kontaktskjema.getId(), gsakId, e);
+                log.error("Feilet publisering for kontaktskjema nr {} med id={}, gsakId={}", antallSkjemaer, kontaktskjema.getId(), gsakId, e);
+                antallFeil += 1;
             }
 
-            meldinger += antall + ": kontaktskjemaId=" + kontaktskjema.getId() + ", gsakId=" + gsakId + "\n";
-
-            antall++;
+            melding += antallSkjemaer + ": kontaktskjemaId=" + kontaktskjema.getId() + ", gsakId=" + gsakId + " --- ";
         }
 
-        return meldinger;
+        return "Antall feil: " + antallFeil + " Antall kontaktskjemaer: " +  antallSkjemaer + " --- "+ melding;
     }
 
     private Map<Integer, Integer> mapFraKontaktskjemaIdTilGsakId() {
