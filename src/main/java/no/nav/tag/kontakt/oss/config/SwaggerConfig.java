@@ -1,20 +1,17 @@
 package no.nav.tag.kontakt.oss.config;
 
-import static springfox.documentation.builders.RequestHandlerSelectors.withClassAnnotation;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.RestController;
-
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import static springfox.documentation.builders.RequestHandlerSelectors.withClassAnnotation;
+
 @Configuration
 @EnableSwagger2
-@Profile({"dev", "local"})
 public class SwaggerConfig {
 
     @Bean
