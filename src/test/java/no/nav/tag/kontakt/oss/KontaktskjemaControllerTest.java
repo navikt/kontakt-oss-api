@@ -1,10 +1,5 @@
 package no.nav.tag.kontakt.oss;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.SneakyThrows;
 import org.junit.Before;
 import org.junit.Test;
@@ -64,28 +59,43 @@ public class KontaktskjemaControllerTest {
         assertThat(kontaktskjemaController.meldInteresse(gyldigKontaktskjema).getStatusCode(), is(HttpStatus.OK));
     }
 
-    @Test
     @SneakyThrows
-    public void meldInteresse__skal_returnere_400_ved_ugyldig_skjema() {
+    @Test(expected = BadRequestException.class)
+    public void meldInteresse__skal_returnere_400_ved_ugyldig_bedriftsnavn() {
         Kontaktskjema ugyldigKontaktskjema = kontaktskjemaBuilder()
                 .bedriftsnavn("$jokoladefabrikken")
                 .build();
 
-        Kontaktskjema ugyldigKontaktskjema2 = kontaktskjemaBuilder()
-                .epost("hei@$jokoladefabrikken.no")
-                .build();
+        assertThat(kontaktskjemaController.meldInteresse(ugyldigKontaktskjema).getStatusCode(), is(HttpStatus.BAD_REQUEST));
+    }
 
-        Kontaktskjema ugyldigKontaktskjema3 = kontaktskjemaBuilder()
+    @SneakyThrows
+    @Test(expected = BadRequestException.class)
+    public void meldInteresse__skal_returnere_400_ved_ugyldig_telefonnumer() {
+        Kontaktskjema ugyldigKontaktskjema = kontaktskjemaBuilder()
                 .telefonnr("abcde")
                 .build();
 
-        Kontaktskjema ugyldigKontaktskjema4 = kontaktskjemaBuilder()
+        assertThat(kontaktskjemaController.meldInteresse(ugyldigKontaktskjema).getStatusCode(), is(HttpStatus.BAD_REQUEST));
+    }
+
+    @SneakyThrows
+    @Test(expected = BadRequestException.class)
+    public void meldInteresse__skal_returnere_400_ved_ugyldig_epost() {
+        Kontaktskjema ugyldigKontaktskjema = kontaktskjemaBuilder()
+                .epost("hei@$jokoladefabrikken.no")
+                .build();
+
+        assertThat(kontaktskjemaController.meldInteresse(ugyldigKontaktskjema).getStatusCode(), is(HttpStatus.BAD_REQUEST));
+    }
+
+    @SneakyThrows
+    @Test(expected = BadRequestException.class)
+    public void meldInteresse__skal_returnere_400_ved_ugyldig_orgnummer() {
+        Kontaktskjema ugyldigKontaktskjema = kontaktskjemaBuilder()
                 .orgnr("abcde")
                 .build();
 
         assertThat(kontaktskjemaController.meldInteresse(ugyldigKontaktskjema).getStatusCode(), is(HttpStatus.BAD_REQUEST));
-        assertThat(kontaktskjemaController.meldInteresse(ugyldigKontaktskjema2).getStatusCode(), is(HttpStatus.BAD_REQUEST));
-        assertThat(kontaktskjemaController.meldInteresse(ugyldigKontaktskjema3).getStatusCode(), is(HttpStatus.BAD_REQUEST));
-        assertThat(kontaktskjemaController.meldInteresse(ugyldigKontaktskjema4).getStatusCode(), is(HttpStatus.BAD_REQUEST));
     }
 }

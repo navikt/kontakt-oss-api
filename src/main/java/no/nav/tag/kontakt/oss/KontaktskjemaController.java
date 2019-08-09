@@ -6,13 +6,23 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.regex.Pattern;
 
 @Slf4j
 @RestController
 public class KontaktskjemaController {
     private final KontaktskjemaService kontaktskjemaService;
+
+    private final static String LATIN = "a-zA-Z \\-'";
+    private final static String NORSK = "æøåÆØÅ";
+    private final static String SIFRE = "0-9";
+    private final static String EPOSTTEGN = "\\.@+";
+    private final static String AKSENTER = "ëÿüïöäéúíóáèùìòàêûîôâõãñËŸÜÏÖÄÉÚÍÓÁÈÙÌÒÀÊÛÎÔÂÕÃÑ";
+
+    private final static Pattern RAUS_TEKST = Pattern.compile("^[" + LATIN + NORSK + SIFRE + AKSENTER + "]*$");
+    private final static Pattern EPOST = Pattern.compile("^[" + LATIN + NORSK + SIFRE + AKSENTER + EPOSTTEGN + "]*$");
+    private final static Pattern SIFRE_OG_MELLOMROM = Pattern.compile("^[" + SIFRE + " " + "]*$");
+    private final static Pattern SIFRE_MELLOMROM_OG_PLUSS = Pattern.compile("^[" + SIFRE + "+ " + "]*$");
 
     @Autowired
     public KontaktskjemaController(
@@ -29,42 +39,28 @@ public class KontaktskjemaController {
             return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
         }
 
-        if (!erGyldigKontaktskjema(kontaktskjema)) {
-
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-
+        validerKontaktskjema(kontaktskjema);
         kontaktskjemaService.lagreKontaktskjema(kontaktskjema);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    private boolean erGyldigKontaktskjema(Kontaktskjema kontaktskjema) {
-        String latin = "a-zA-Z \\-'";
-        String norsk = "æøåÆØÅ";
-        String sifre = "0-9";
-        String eposttegn = "\\.@+";
-        String aksenter = "ëÿüïöäéúíóáèùìòàêûîôâõãñËŸÜÏÖÄÉÚÍÓÁÈÙÌÒÀÊÛÎÔÂÕÃÑ";
-
-        String rausTekst = latin + norsk + sifre + aksenter;
-        String epost = latin + norsk + sifre + aksenter + eposttegn;
-
-        return erGyldigFelt(kontaktskjema.getBedriftsnavn(), rausTekst) &&
-                erGyldigFelt(kontaktskjema.getFornavn(), rausTekst) &&
-                erGyldigFelt(kontaktskjema.getEtternavn(), rausTekst) &&
-                erGyldigFelt(kontaktskjema.getFylke(), rausTekst) &&
-                erGyldigFelt(kontaktskjema.getKommune(), rausTekst) &&
-                erGyldigFelt(kontaktskjema.getOrgnr(), sifre + " ") &&
-                erGyldigFelt(kontaktskjema.getTelefonnr(), sifre + "+ ") &&
-                erGyldigFelt(kontaktskjema.getEpost(), epost);
+    private void validerKontaktskjema(Kontaktskjema kontaktskjema) {
+        validerSkjemafelt(kontaktskjema.getBedriftsnavn(), RAUS_TEKST);
+        validerSkjemafelt(kontaktskjema.getFornavn(), RAUS_TEKST);
+        validerSkjemafelt(kontaktskjema.getEtternavn(), RAUS_TEKST);
+        validerSkjemafelt(kontaktskjema.getFylke(), RAUS_TEKST);
+        validerSkjemafelt(kontaktskjema.getKommune(), RAUS_TEKST);
+        validerSkjemafelt(kontaktskjema.getOrgnr(), SIFRE_OG_MELLOMROM);
+        validerSkjemafelt(kontaktskjema.getTelefonnr(), SIFRE_MELLOMROM_OG_PLUSS);
+        validerSkjemafelt(kontaktskjema.getEpost(), EPOST);
     }
 
-    private boolean erGyldigFelt(String felt, String skalBareInneholde) {
-        Pattern pattern = Pattern.compile("^[" + skalBareInneholde + "]*$");
-        if (pattern.matcher(felt).matches()) {
-            return true;
-        } else {
-            log.error("Skjemafelt \"" + felt + "\" må bare inneholde \"" + skalBareInneholde + "\"");
-            return false;
+    private void validerSkjemafelt(String felt, Pattern skalBareInneholde) {
+        if (!skalBareInneholde.matcher(felt).matches()) {
+            String feil = "Skjemafelt \"" + felt + "\" må passe med det regulære uttrykket \"" + skalBareInneholde.pattern() + "\"";
+
+            log.error(feil);
+            throw new BadRequestException(feil);
         }
     }
 }
