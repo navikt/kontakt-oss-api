@@ -14,7 +14,7 @@ public class KontaktskjemaController {
     private final KontaktskjemaService kontaktskjemaService;
 
     private final static String LATIN = "a-zA-Z \\-–'.";
-    private final static String SAMISK = "AaÁáBbCcČčDdĐđEeFfGgHhIiJjKkLlMmNnŊŋOoPpRrSsŠšTtŦŧUuVvZzŽž";
+    private final static String SAMISK = "ÁáČčĐđŊŋŠšŦŧŽž";
     private final static String NORSK = "æøåÆØÅ";
 
     private final static String VANLIGE_BOKSTAVER = LATIN + SAMISK + NORSK;
