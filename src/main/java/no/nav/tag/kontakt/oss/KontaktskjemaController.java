@@ -13,14 +13,17 @@ import java.util.regex.Pattern;
 public class KontaktskjemaController {
     private final KontaktskjemaService kontaktskjemaService;
 
-    private final static String LATIN = "a-zA-Z \\-–'.?";
+    private final static String LATIN = "a-zA-Z \\-–'.";
+    private final static String SAMISK = "AaÁáBbCcČčDdĐđEeFfGgHhIiJjKkLlMmNnŊŋOoPpRrSsŠšTtŦŧUuVvZzŽž";
     private final static String NORSK = "æøåÆØÅ";
+
+    private final static String VANLIGE_BOKSTAVER = LATIN + SAMISK + NORSK;
     private final static String SIFRE = "0-9";
     private final static String EPOSTTEGN = "\\.@+";
-    private final static String AKSENTER = "ëÿüïöäéúíóáèùìòàêûîôâõãñËŸÜÏÖÄÉÚÍÓÁÈÙÌÒÀÊÛÎÔÂÕÃÑš";
+    private final static String AKSENTER = "ëÿüïöäéúíóáèùìòàêûîôâõãñËŸÜÏÖÄÉÚÍÓÁÈÙÌÒÀÊÛÎÔÂÕÃÑ";
 
-    private final static Pattern RAUS_TEKST = Pattern.compile("^[" + LATIN + NORSK + SIFRE + AKSENTER + "]*$");
-    private final static Pattern EPOST = Pattern.compile("^[" + LATIN + NORSK + SIFRE + AKSENTER + EPOSTTEGN + "]*$");
+    private final static Pattern RAUS_TEKST = Pattern.compile("^[" + VANLIGE_BOKSTAVER + SIFRE + AKSENTER + "]*$");
+    private final static Pattern EPOST = Pattern.compile("^[" + VANLIGE_BOKSTAVER + SIFRE + AKSENTER + EPOSTTEGN + "]*$");
     private final static Pattern SIFRE_OG_MELLOMROM = Pattern.compile("^[" + SIFRE + " " + "]*$");
     private final static Pattern SIFRE_MELLOMROM_OG_PLUSS = Pattern.compile("^[" + SIFRE + "+ " + "]*$");
 
