@@ -1,6 +1,10 @@
 package no.nav.tag.kontakt.oss;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.FylkesinndelingMedNavEnheter;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.KommuneEllerBydel;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,8 +12,11 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 
-import static no.nav.tag.kontakt.oss.testUtils.TestData.kontaktskjema;
-import static no.nav.tag.kontakt.oss.testUtils.TestData.kontaktskjemaBuilder;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import static no.nav.tag.kontakt.oss.testUtils.TestData.*;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.verify;
@@ -97,5 +104,28 @@ public class KontaktskjemaControllerTest {
                 .build();
 
         assertThat(kontaktskjemaController.meldInteresse(ugyldigKontaktskjema).getStatusCode(), is(HttpStatus.BAD_REQUEST));
+    }
+
+    @SneakyThrows
+    @Test
+    public void meldInteresse_skal_ta_imot_alle_kommuner() {
+        hentAlleKommunenavnFraMock().forEach(kommune -> {
+            kontaktskjemaController.meldInteresse(kontaktskjemaBuilder().kommune(kommune).build());
+        });
+    }
+
+    @SneakyThrows
+    private List<String> hentAlleKommunenavnFraMock() {
+        String fylkesinndelingJson = lesFil("mock/fylkesinndeling.json");
+        FylkesinndelingMedNavEnheter fylkesinndeling = new FylkesinndelingMedNavEnheter(
+                new ObjectMapper().readValue(fylkesinndelingJson, new TypeReference<Map<String, List<KommuneEllerBydel>>>() {})
+        );
+        return fylkesinndeling
+                .getFylkeTilKommuneEllerBydel()
+                .values()
+                .stream()
+                .flatMap(List::stream)
+                .map(KommuneEllerBydel::getNavn)
+                .collect(Collectors.toList());
     }
 }
