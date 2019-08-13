@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.regex.Pattern;
 
+import static no.bekk.bekkopen.org.OrganisasjonsnummerValidator.isValid;
+
 @Slf4j
 @RestController
 public class KontaktskjemaController {
@@ -24,7 +26,6 @@ public class KontaktskjemaController {
 
     private final static Pattern RAUS_TEKST = Pattern.compile("^[" + VANLIGE_BOKSTAVER + SIFRE + AKSENTER + "]*$");
     private final static Pattern EPOST = Pattern.compile("^[" + VANLIGE_BOKSTAVER + SIFRE + AKSENTER + EPOSTTEGN + "]*$");
-    private final static Pattern SIFRE_OG_MELLOMROM = Pattern.compile("^[" + SIFRE + " " + "]*$");
     private final static Pattern SIFRE_MELLOMROM_OG_PLUSS = Pattern.compile("^[" + SIFRE + "+ " + "]*$");
 
     @Autowired
@@ -53,9 +54,9 @@ public class KontaktskjemaController {
         validerSkjemafelt(kontaktskjema.getEtternavn(), RAUS_TEKST);
         validerSkjemafelt(kontaktskjema.getFylke(), RAUS_TEKST);
         validerSkjemafelt(kontaktskjema.getKommune(), RAUS_TEKST);
-        validerSkjemafelt(kontaktskjema.getOrgnr(), SIFRE_OG_MELLOMROM);
         validerSkjemafelt(kontaktskjema.getTelefonnr(), SIFRE_MELLOMROM_OG_PLUSS);
         validerSkjemafelt(kontaktskjema.getEpost(), EPOST);
+        validerOrgnr(kontaktskjema.getOrgnr());
     }
 
     private void validerSkjemafelt(String felt, Pattern skalBareInneholde) {
@@ -64,6 +65,12 @@ public class KontaktskjemaController {
 
             log.error(feil);
             throw new BadRequestException(feil);
+        }
+    }
+
+    private void validerOrgnr(String orgnr) {
+        if (!isValid(orgnr)) {
+            throw new BadRequestException("Orgnr " + orgnr + " er ugyldig");
         }
     }
 }

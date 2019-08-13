@@ -57,10 +57,12 @@ public class KontaktskjemaControllerTest {
     @SneakyThrows
     public void meldInteresse__skal_returnere_hvis_kontaktskjema_er_gyldig() {
         Kontaktskjema gyldigKontaktskjema = kontaktskjemaBuilder()
+                .fornavn("Per")
+                .etternavn("Persén")
                 .bedriftsnavn("Årvõll Øks3sk4ft")
                 .epost("hei@årvoll.øks3-sk4ft.no")
                 .telefonnr("+47 99 99 99 99")
-                .orgnr("123 456 789")
+                .orgnr("979312059")
                 .build();
 
         assertThat(kontaktskjemaController.meldInteresse(gyldigKontaktskjema).getStatusCode(), is(HttpStatus.OK));
