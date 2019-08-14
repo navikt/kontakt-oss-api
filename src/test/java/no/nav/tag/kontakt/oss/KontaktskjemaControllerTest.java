@@ -119,6 +119,15 @@ public class KontaktskjemaControllerTest {
 
     @SneakyThrows
     @Test
+    public void meldInteresse__skal_akseptere_skråstrek_og_parenteser_i_bedriftsnavn() {
+        Kontaktskjema ugyldigKontaktskjema = kontaktskjemaBuilder()
+                .bedriftsnavn("Mark AS (egen bedrift) / Krok ENK (konas bedrift)")
+                .build();
+        kontaktskjemaController.meldInteresse(ugyldigKontaktskjema);
+    }
+
+    @SneakyThrows
+    @Test
     public void meldInteresse_skal_ta_imot_alle_kommuner() {
         hentAlleKommunenavnFraMock().forEach(kommune -> {
             kontaktskjemaController.meldInteresse(kontaktskjemaBuilder().kommune(kommune).build());

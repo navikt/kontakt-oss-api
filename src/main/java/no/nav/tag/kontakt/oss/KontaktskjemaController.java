@@ -15,7 +15,7 @@ import static no.bekk.bekkopen.org.OrganisasjonsnummerValidator.isValid;
 public class KontaktskjemaController {
     private final KontaktskjemaService kontaktskjemaService;
 
-    private final static String LATIN = "a-zA-Z \\-–'._";
+    private final static String LATIN = "a-zA-Z \\-–'._)(/";
     private final static String SAMISK = "ÁáČčĐđŊŋŠšŦŧŽž";
     private final static String NORSK = "æøåÆØÅ";
 
