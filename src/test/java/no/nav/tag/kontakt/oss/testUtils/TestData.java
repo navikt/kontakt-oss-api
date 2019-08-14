@@ -30,7 +30,7 @@ public class TestData {
                 .kommune("Bodø")
                 .kommunenr("0011")
                 .bedriftsnavn("Flesk og Fisk AS")
-                .orgnr("123456789")
+                .orgnr("979312059")
                 .fornavn("Ola")
                 .etternavn("Nordmann")
                 .epost("ola.nordmann@fleskOgFisk.no")
@@ -44,7 +44,7 @@ public class TestData {
         return new GsakRequest(
                 "0000",
                 "9999",
-                "123456789",
+                "979312059",
                 "beskrivelse",
                 "ARBD",
                 "OPA",
