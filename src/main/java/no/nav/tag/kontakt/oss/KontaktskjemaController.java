@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 public class KontaktskjemaController {
     private final KontaktskjemaService kontaktskjemaService;
 
-    private final static String LATIN = "a-zA-Z \\-–'.";
+    private final static String LATIN = "a-zA-Z \\-–'._";
     private final static String SAMISK = "ÁáČčĐđŊŋŠšŦŧŽž";
     private final static String NORSK = "æøåÆØÅ";
 

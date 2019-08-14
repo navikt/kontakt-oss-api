@@ -108,6 +108,15 @@ public class KontaktskjemaControllerTest {
 
     @SneakyThrows
     @Test
+    public void meldInteresse__skal_akseptere_understrek_i_epost() {
+        Kontaktskjema ugyldigKontaktskjema = kontaktskjemaBuilder()
+                .epost("hei_hei@nav.no")
+                .build();
+        kontaktskjemaController.meldInteresse(ugyldigKontaktskjema);
+    }
+
+    @SneakyThrows
+    @Test
     public void meldInteresse_skal_ta_imot_alle_kommuner() {
         hentAlleKommunenavnFraMock().forEach(kommune -> {
             kontaktskjemaController.meldInteresse(kontaktskjemaBuilder().kommune(kommune).build());
