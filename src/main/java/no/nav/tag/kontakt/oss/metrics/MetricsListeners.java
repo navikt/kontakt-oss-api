@@ -1,5 +1,6 @@
 package no.nav.tag.kontakt.oss.metrics;
 
+import io.micrometer.core.instrument.MeterRegistry;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.tag.kontakt.oss.Kontaktskjema;
 import no.nav.tag.kontakt.oss.events.BesvarelseMottatt;
@@ -19,9 +20,22 @@ import org.springframework.stereotype.Component;
 @Component
 public class MetricsListeners {
 
+    private final static String KONTAKTSKJEMA_FEILET_COUNTER = "kontaktskjema.feilet";
+
+    private final MeterRegistry meterRegistry;
+
+    public MetricsListeners(MeterRegistry meterRegistry) {
+        this.meterRegistry = meterRegistry;
+        meterRegistry.counter(KONTAKTSKJEMA_FEILET_COUNTER);
+    }
+
     @EventListener
     public void besvarelseMottatt(BesvarelseMottatt event) {
         Kontaktskjema kontaktskjema = event.getKontaktskjema();
+
+        if (!event.isSuksess()) {
+            meterRegistry.counter(KONTAKTSKJEMA_FEILET_COUNTER).increment();
+        }
 
         // Setter komma til slutt for å skille mellom verdier som starter likt,
         // f.eks. REKRUTTERING og REKRUTTERING_MED_TILRETTELEGGING.
