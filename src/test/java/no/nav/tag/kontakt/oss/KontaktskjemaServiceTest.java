@@ -1,20 +1,31 @@
 package no.nav.tag.kontakt.oss;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.SneakyThrows;
 import no.nav.tag.kontakt.oss.events.BesvarelseMottatt;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.FylkesinndelingMedNavEnheter;
+import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.KommuneEllerBydel;
 import no.nav.tag.kontakt.oss.navenhetsmapping.NavEnhetService;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.generate;
-import static no.nav.tag.kontakt.oss.testUtils.TestData.kontaktskjema;
+import static no.nav.tag.kontakt.oss.testUtils.TestData.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -151,5 +162,103 @@ public class KontaktskjemaServiceTest {
         kontaktskjema.setFylke("1234");
 
         kontaktskjemaService.lagreKontaktskjema(kontaktskjema);
+    }
+
+
+    @Test
+    @SneakyThrows
+    public void lagreKontaktskjema__skal_returnere_hvis_kontaktskjema_er_gyldig() {
+        Kontaktskjema gyldigKontaktskjema = kontaktskjemaBuilder()
+                .fornavn("Per")
+                .etternavn("Persén")
+                .bedriftsnavn("Årvõll Øks3sk4ft")
+                .epost("hei@årvoll.øks3-sk4ft.no")
+                .telefonnr("+47 99 99 99 99")
+                .orgnr("979312059")
+                .build();
+
+        kontaktskjemaService.lagreKontaktskjema(gyldigKontaktskjema);
+    }
+
+    @SneakyThrows
+    @Test(expected = BadRequestException.class)
+    public void lagreKontaktskjema__skal_feile_ved_ugyldig_bedriftsnavn() {
+        Kontaktskjema ugyldigKontaktskjema = kontaktskjemaBuilder()
+                .bedriftsnavn("$jokoladefabrikken")
+                .build();
+
+        kontaktskjemaService.lagreKontaktskjema(ugyldigKontaktskjema);
+    }
+
+    @SneakyThrows
+    @Test(expected = BadRequestException.class)
+    public void lagreKontaktskjema__skal_feile_ved_ugyldig_telefonnumer() {
+        Kontaktskjema ugyldigKontaktskjema = kontaktskjemaBuilder()
+                .telefonnr("abcde")
+                .build();
+
+        kontaktskjemaService.lagreKontaktskjema(ugyldigKontaktskjema);
+    }
+
+    @SneakyThrows
+    @Test(expected = BadRequestException.class)
+    public void lagreKontaktskjema__skal_feile_ved_ugyldig_epost() {
+        Kontaktskjema ugyldigKontaktskjema = kontaktskjemaBuilder()
+                .epost("hei@$jokoladefabrikken.no")
+                .build();
+
+        kontaktskjemaService.lagreKontaktskjema(ugyldigKontaktskjema);
+    }
+
+    @SneakyThrows
+    @Test(expected = BadRequestException.class)
+    public void lagreKontaktskjema__skal_feile_ved_ugyldig_orgnummer() {
+        Kontaktskjema ugyldigKontaktskjema = kontaktskjemaBuilder()
+                .orgnr("abcde")
+                .build();
+
+        kontaktskjemaService.lagreKontaktskjema(ugyldigKontaktskjema);
+    }
+
+    @SneakyThrows
+    @Test
+    public void lagreKontaktskjema__skal_akseptere_understrek_i_epost() {
+        Kontaktskjema ugyldigKontaktskjema = kontaktskjemaBuilder()
+                .epost("hei_hei@nav.no")
+                .build();
+        kontaktskjemaService.lagreKontaktskjema(ugyldigKontaktskjema);
+    }
+
+    @SneakyThrows
+    @Test
+    public void lagreKontaktskjema__skal_akseptere_skråstrek_og_parenteser_i_bedriftsnavn() {
+        Kontaktskjema ugyldigKontaktskjema = kontaktskjemaBuilder()
+                .bedriftsnavn("Mark AS (egen bedrift) / Krok ENK (konas bedrift)")
+                .build();
+        kontaktskjemaService.lagreKontaktskjema(ugyldigKontaktskjema);
+    }
+
+    @SneakyThrows
+    @Test
+    public void lagreKontaktskjema_skal_ta_imot_alle_kommuner() {
+        hentAlleKommunenavnFraMock()
+                .forEach(kommune -> kontaktskjemaService.lagreKontaktskjema(
+                        kontaktskjemaBuilder().kommune(kommune).build())
+                );
+    }
+
+    @SneakyThrows
+    private List<String> hentAlleKommunenavnFraMock() {
+        String fylkesinndelingJson = lesFil("mock/fylkesinndeling.json");
+        FylkesinndelingMedNavEnheter fylkesinndeling = new FylkesinndelingMedNavEnheter(
+                new ObjectMapper().readValue(fylkesinndelingJson, new TypeReference<Map<String, List<KommuneEllerBydel>>>() {})
+        );
+        return fylkesinndeling
+                .getFylkeTilKommuneEllerBydel()
+                .values()
+                .stream()
+                .flatMap(List::stream)
+                .map(KommuneEllerBydel::getNavn)
+                .collect(Collectors.toList());
     }
 }
