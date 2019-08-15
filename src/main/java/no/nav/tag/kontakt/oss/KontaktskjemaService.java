@@ -96,6 +96,9 @@ public class KontaktskjemaService {
     }
 
     private void validerOrgnr(String orgnr) {
+        if (orgnr == null || "".equals(orgnr)) {
+            return;
+        }
         if (!isValid(orgnr)) {
             throw new BadRequestException("Orgnr " + orgnr + " er ugyldig");
         }

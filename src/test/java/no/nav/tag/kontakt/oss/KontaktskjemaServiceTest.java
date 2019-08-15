@@ -248,6 +248,13 @@ public class KontaktskjemaServiceTest {
     }
 
     @SneakyThrows
+    @Test
+    public void lagreKontaktskjema_skal_ta_imot_kontaktskjema_uten_orgnr() {
+        kontaktskjemaService.lagreKontaktskjema(kontaktskjemaBuilder().orgnr(null).build());
+        kontaktskjemaService.lagreKontaktskjema(kontaktskjemaBuilder().orgnr("").build());
+    }
+
+    @SneakyThrows
     private List<String> hentAlleKommunenavnFraMock() {
         String fylkesinndelingJson = lesFil("mock/fylkesinndeling.json");
         FylkesinndelingMedNavEnheter fylkesinndeling = new FylkesinndelingMedNavEnheter(
