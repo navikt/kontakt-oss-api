@@ -18,3 +18,7 @@ spec:
       expr: (100 * sum(rate(logd_messages_total{log_app="kontakt-oss-api",log_level="Info",kubernetes_namespace="default"}[3m])) / sum(rate(logd_messages_total{log_app="kontakt-oss-api",kubernetes_namespace="default"}[3m]))) < 90
       for: 3m
       action: "Sjekk loggene for å se hvorfor det er så mye feil"
+    - alert: Innsending av kontaktskjema feilet
+      expr: sum(increase(kontaktskjema_feilet_total{app="kontakt-oss-api"}[10m])) > 0
+      for: 1m
+      action: "Gå inn i Kibana (https://logs.adeo.no) og søk etter følgende for de siste 15 minutter: application:kontakt-oss-api AND envclass:q AND level:Error"
