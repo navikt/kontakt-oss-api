@@ -19,12 +19,12 @@ public class NavEnhetService {
                 .hentKommuneNrEllerBydelNrTilNavEnhet()
                 .get(kommunenr);
         if (navEnhet != null) {
-                return navEnhet.getEnhetNr();
+            return navEnhet.getEnhetNr();
         } else {
             throw new KontaktskjemaException("Finner ingen NAV-enhet tilhørende kommune " + kommunenr);
         }
     }
-    
+
     public String mapFraFylkesenhetNrTilArbeidslivssenterEnhetsnr(String fylkesenhetNr) {
         // TODO Manuell mapping foreløpig, fikses i TAG-557
         switch(fylkesenhetNr) {

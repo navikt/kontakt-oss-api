@@ -27,6 +27,7 @@ gsak.url: ${mock.baseUrl}/gsak
 norg.url: ${mock.baseUrl}/norg
 kodeverk.url: ${mock.baseUrl}/kodeverk
 unleash.url: http://unleash.herokuapp.com/api/
+salesforce.url: ${mock.baseUrl}/salesforce
 
 
 ---
