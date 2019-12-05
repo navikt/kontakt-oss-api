@@ -1,6 +1,9 @@
 package no.nav.tag.kontakt.oss.salesforce;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.SneakyThrows;
 import no.nav.tag.kontakt.oss.Kontaktskjema;
+import no.nav.tag.kontakt.oss.TemaType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
@@ -9,6 +12,9 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class SalesforceKlient {
     private final String authUrl = "https://test.salesforce.com/services/oauth2/token";
+    private final String salesforceUrl = "https://cs102.salesforce.com/services/apexrest/ContactForm";
+
+    private final static ObjectMapper objectMapper = new ObjectMapper();
 
     private final RestTemplate restTemplate;
 
@@ -31,9 +37,25 @@ public class SalesforceKlient {
         this.clientId = clientId;
         this.clientSecret = clientSecret;
 
-        hentSalesforceToken();
+        sendKontaktskjemaTilSalesforce(new Kontaktskjema(
+                null,
+                null,
+                null,
+                null,
+                "0403",
+                "LA sin testbedrift",
+                "999263550",
+                "LA",
+                "Etternavn",
+                "lars.andreas.van.woensel.kooy.tveiten@nav.no",
+                "98745619423756432",
+                "Rekruttering med tilrettelegging",
+                TemaType.FOREBYGGE_SYKEFRAVÆR,
+                false
+        ));
     }
 
+    @SneakyThrows
     public void sendKontaktskjemaTilSalesforce(Kontaktskjema kontaktskjema) {
         ContactForm contactForm = new ContactForm(
                 kontaktskjema.getTema(),
@@ -46,7 +68,17 @@ public class SalesforceKlient {
                 kontaktskjema.getTelefonnr()
         );
 
+        SalesforceToken token = hentSalesforceToken();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Authorization", "Bearer " + token.getAccessToken());
 
+        restTemplate.exchange(
+                salesforceUrl,
+                HttpMethod.POST,
+                new HttpEntity<>(objectMapper.writeValueAsString(contactForm), headers),
+                String.class
+        );
     }
 
     private SalesforceToken hentSalesforceToken() {
