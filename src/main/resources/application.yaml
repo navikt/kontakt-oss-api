@@ -28,6 +28,12 @@ norg.url: ${mock.baseUrl}/norg
 kodeverk.url: ${mock.baseUrl}/kodeverk
 unleash.url: http://unleash.herokuapp.com/api/
 
+salesforce:
+  username: user
+  password: pass
+  client:
+    id: blabla
+    secret: sdjhfg
 
 ---
 
