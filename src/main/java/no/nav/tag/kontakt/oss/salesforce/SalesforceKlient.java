@@ -3,7 +3,6 @@ package no.nav.tag.kontakt.oss.salesforce;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import no.nav.tag.kontakt.oss.Kontaktskjema;
-import no.nav.tag.kontakt.oss.TemaType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
@@ -31,28 +30,10 @@ public class SalesforceKlient {
             @Value("${salesforce.client.secret}") String clientSecret
     ) {
         this.restTemplate = restTemplate;
-
         this.username = username;
         this.password = password;
         this.clientId = clientId;
         this.clientSecret = clientSecret;
-
-        sendKontaktskjemaTilSalesforce(new Kontaktskjema(
-                null,
-                null,
-                null,
-                null,
-                "0403",
-                "LA sin testbedrift",
-                "999263550",
-                "LA",
-                "Etternavn",
-                "lars.andreas.van.woensel.kooy.tveiten@nav.no",
-                "98745619423756432",
-                "Rekruttering med tilrettelegging",
-                TemaType.FOREBYGGE_SYKEFRAVÆR,
-                false
-        ));
     }
 
     @SneakyThrows
