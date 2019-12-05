@@ -29,8 +29,8 @@ kodeverk.url: ${mock.baseUrl}/kodeverk
 unleash.url: http://unleash.herokuapp.com/api/
 
 salesforce:
-  auth.url: https://test.salesforce.com/services/oauth2/token
-  contactform.url: https://cs102.salesforce.com/services/apexrest/ContactForm
+  auth.url: ${mock.baseUrl}/salesforce/auth
+  contactform.url: ${mock.baseUrl}/salesforce/contactform
   username: user
   password: pass
   client:

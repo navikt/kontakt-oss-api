@@ -34,6 +34,8 @@ public class MockServer {
             @Value("${norg.url}") String norgUrl,
             @Value("${gsak.url}") String gsakUrl,
             @Value("${kodeverk.url}") String kodeverkUrl,
+            @Value("${salesforce.auth.url}") String salesforceAuthUrl,
+            @Value("${salesforce.contactform.url}") String salesforceApiUrl,
             @Value("${mock.port}") Integer port
     ) {
         log.info("Starter mock-server");
@@ -42,23 +44,37 @@ public class MockServer {
         String norgPath = new URL(norgUrl).getPath();
         String kodeverkPath = new URL(kodeverkUrl).getPath();
         String gsakPath = new URL(gsakUrl).getPath();
+        String salesforceAuthPath = new URL(salesforceAuthUrl).getPath();
+        String salesforceApiPath = new URL(salesforceApiUrl).getPath();
 
         mockNorgsMappingFraGeografiTilNavEnhet(norgPath);
         mockResponsFraGsak(gsakPath);
         mockKallFraFil(norgPath + "/enhet/kontaktinformasjon/organisering/AKTIV", "norgOrganisering.json");
         mockKallFraFil(kodeverkPath + "/kodeverk/Kommuner/koder/betydninger", "kommuner.json");
         mockKallFraFil(kodeverkPath + "/kodeverk/Bydeler/koder/betydninger", "bydeler.json");
+        mockPost(salesforceAuthPath, "{ \"access_token\": \"heisann\" }");
+        mockPost(salesforceApiPath, "{}");
 
         server.start();
     }
 
     private void mockKallFraFil(String path, String filnavn) {
-        mockKall(path, lesFilSomString(filnavn));
+        mockGet(path, lesFilSomString(filnavn));
     }
 
-    private void mockKall(String path, String body) {
+    private void mockGet(String path, String body) {
         server.stubFor(
                 WireMock.get(WireMock.urlPathEqualTo(path)).willReturn(WireMock.aResponse()
+                        .withHeader("Content-Type", "application/json")
+                        .withStatus(HttpStatus.OK.value())
+                        .withBody(body)
+                )
+        );
+    }
+
+    private void mockPost(String path, String body) {
+        server.stubFor(
+                WireMock.post(WireMock.urlPathEqualTo(path)).willReturn(WireMock.aResponse()
                         .withHeader("Content-Type", "application/json")
                         .withStatus(HttpStatus.OK.value())
                         .withBody(body)
@@ -79,7 +95,7 @@ public class MockServer {
         for (String kommuneNrEllerBydelNr : fraKommuneEllerBydelTilNavEnhet.keySet()) {
             navEnhet = fraKommuneEllerBydelTilNavEnhet.get(kommuneNrEllerBydelNr);
             navEnhetJson = objectMapper.writeValueAsString(navEnhet);
-            mockKall(norgPath + "/enhet/navkontor/" + kommuneNrEllerBydelNr, navEnhetJson);
+            mockGet(norgPath + "/enhet/navkontor/" + kommuneNrEllerBydelNr, navEnhetJson);
         }
     }
 

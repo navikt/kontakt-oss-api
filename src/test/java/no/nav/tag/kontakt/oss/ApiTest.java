@@ -27,7 +27,6 @@ import static org.junit.Assert.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
-@TestPropertySource(properties = {"mock.enabled=false"})
 public class ApiTest {
 
     @LocalServerPort
