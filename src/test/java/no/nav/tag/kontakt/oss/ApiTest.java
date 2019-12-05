@@ -26,7 +26,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class ApiTest {
 
     @LocalServerPort
@@ -69,7 +69,7 @@ public class ApiTest {
                 .POST(BodyPublishers.ofString(body))
                 .build();
     }
-    
+
     @Test
     public void postKontaktskjema_feil_kommunenr() throws Exception {
 
