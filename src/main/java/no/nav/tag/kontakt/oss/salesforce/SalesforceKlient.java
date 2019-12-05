@@ -6,6 +6,7 @@ import no.nav.tag.kontakt.oss.Kontaktskjema;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
 @Component
@@ -57,12 +58,16 @@ public class SalesforceKlient {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Authorization", "Bearer " + token.getAccessToken());
 
-        restTemplate.exchange(
-                apiUrl,
-                HttpMethod.POST,
-                new HttpEntity<>(objectMapper.writeValueAsString(contactForm), headers),
-                String.class
-        );
+        try {
+            restTemplate.exchange(
+                    apiUrl,
+                    HttpMethod.POST,
+                    new HttpEntity<>(objectMapper.writeValueAsString(contactForm), headers),
+                    String.class
+            );
+        } catch (RestClientResponseException e) {
+            throw new SalesforceException("Kunne ikke sende kontaktskjema til Salesforce", e);
+        }
     }
 
     private SalesforceToken hentSalesforceToken() {
@@ -75,14 +80,19 @@ public class SalesforceKlient {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-        ResponseEntity<SalesforceToken> response = restTemplate.exchange(
-                authUrl,
-                HttpMethod.POST,
-                new HttpEntity<>(body, headers),
-                SalesforceToken.class
-        );
+        try {
+            ResponseEntity<SalesforceToken> response = restTemplate.exchange(
+                    authUrl,
+                    HttpMethod.POST,
+                    new HttpEntity<>(body, headers),
+                    SalesforceToken.class
+            );
 
-        return response.getBody();
+            return response.getBody();
+        } catch (RestClientResponseException e) {
+            throw new SalesforceException("Kunne ikke hente autorisasjonstoken til Salesforce", e);
+        }
+
     }
 
 }
