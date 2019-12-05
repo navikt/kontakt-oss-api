@@ -41,9 +41,9 @@ public class SalesforceKlient {
     }
 
     @SneakyThrows
-    public void sendKontaktskjemaTilSalesforce(Kontaktskjema kontaktskjema) {
+    public ResponseEntity<String> sendKontaktskjemaTilSalesforce(Kontaktskjema kontaktskjema) {
         ContactForm contactForm = new ContactForm(
-                kontaktskjema.getTema(),
+                kontaktskjema.getTemaType(),
                 kontaktskjema.getKommunenr(),
                 kontaktskjema.getBedriftsnavn(),
                 kontaktskjema.getOrgnr(),
@@ -59,7 +59,7 @@ public class SalesforceKlient {
         headers.set("Authorization", "Bearer " + token.getAccessToken());
 
         try {
-            restTemplate.exchange(
+            return restTemplate.exchange(
                     apiUrl,
                     HttpMethod.POST,
                     new HttpEntity<>(objectMapper.writeValueAsString(contactForm), headers),
