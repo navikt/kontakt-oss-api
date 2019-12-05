@@ -10,13 +10,12 @@ import org.springframework.web.client.RestTemplate;
 
 @Component
 public class SalesforceKlient {
-    private final String authUrl = "https://test.salesforce.com/services/oauth2/token";
-    private final String salesforceUrl = "https://cs102.salesforce.com/services/apexrest/ContactForm";
-
     private final static ObjectMapper objectMapper = new ObjectMapper();
 
     private final RestTemplate restTemplate;
 
+    private final String authUrl;
+    private final String apiUrl;
     private final String username;
     private final String password;
     private final String clientId;
@@ -24,12 +23,16 @@ public class SalesforceKlient {
 
     public SalesforceKlient(
             RestTemplate restTemplate,
+            @Value("${salesforce.auth.url}") String authUrl,
+            @Value("${salesforce.contactform.url}") String apiUrl,
             @Value("${salesforce.username}") String username,
             @Value("${salesforce.password}") String password,
             @Value("${salesforce.client.id}") String clientId,
             @Value("${salesforce.client.secret}") String clientSecret
     ) {
         this.restTemplate = restTemplate;
+        this.authUrl = authUrl;
+        this.apiUrl = apiUrl;
         this.username = username;
         this.password = password;
         this.clientId = clientId;
@@ -55,7 +58,7 @@ public class SalesforceKlient {
         headers.set("Authorization", "Bearer " + token.getAccessToken());
 
         restTemplate.exchange(
-                salesforceUrl,
+                apiUrl,
                 HttpMethod.POST,
                 new HttpEntity<>(objectMapper.writeValueAsString(contactForm), headers),
                 String.class
