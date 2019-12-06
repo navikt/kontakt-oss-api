@@ -27,3 +27,4 @@ spec:
   prometheus:
     enabled: true
     path: /kontakt-oss-api/internal/actuator/prometheus
+  webproxy: true
