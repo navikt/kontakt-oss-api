@@ -5,8 +5,18 @@ import no.nav.tag.kontakt.oss.events.BesvarelseMottatt;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Component
 public class SalesforceEventListener {
+
+    private final static List<String> pilotfylker = Arrays.asList(
+            "0400", // Innlandet
+            "0200", // Øst-Viken
+            "1000", // Agder
+            "0300"  // Oslo
+    );
 
     private final SalesforceKlient salesforceKlient;
 
@@ -25,7 +35,6 @@ public class SalesforceEventListener {
     }
 
     private boolean erPilotfylke(String fylkenr) {
-        // TODO implementer
-        return true;
+        return pilotfylker.contains(fylkenr);
     }
 }
