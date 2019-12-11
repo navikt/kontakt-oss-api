@@ -90,7 +90,12 @@ public class SalesforceKlient {
                     SalesforceToken.class
             );
 
-            log.info(response.toString()); // TODO DELETE
+            log.info(restTemplate.exchange(
+                    authUrl,
+                    HttpMethod.POST,
+                    new HttpEntity<>(body, headers),
+                    String.class
+            ).toString()); // TODO DELETE
 
             return response.getBody();
         } catch (RestClientResponseException e) {
