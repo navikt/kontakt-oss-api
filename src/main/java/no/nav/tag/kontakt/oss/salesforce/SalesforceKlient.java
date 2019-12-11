@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
 @Slf4j
@@ -44,7 +43,7 @@ public class SalesforceKlient {
     }
 
     @SneakyThrows
-    public ResponseEntity<String> sendKontaktskjemaTilSalesforce(Kontaktskjema kontaktskjema) {
+    public void sendKontaktskjemaTilSalesforce(Kontaktskjema kontaktskjema) {
         ContactForm contactForm = new ContactForm(
                 kontaktskjema.getTemaType(),
                 kontaktskjema.getKommunenr(),
@@ -61,15 +60,15 @@ public class SalesforceKlient {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Authorization", "Bearer " + token.getAccessToken());
 
-        try {
-            return restTemplate.exchange(
-                    apiUrl,
-                    HttpMethod.POST,
-                    new HttpEntity<>(objectMapper.writeValueAsString(contactForm), headers),
-                    String.class
-            );
-        } catch (RestClientResponseException e) {
-            throw new SalesforceException("Kunne ikke sende kontaktskjema til Salesforce", e);
+        ResponseEntity<String> response = restTemplate.exchange(
+                apiUrl,
+                HttpMethod.POST,
+                new HttpEntity<>(objectMapper.writeValueAsString(contactForm), headers),
+                String.class
+        );
+
+        if (!HttpStatus.OK.equals(response.getStatusCode())) {
+            throw new SalesforceException("Kunne ikke sende kontaktskjema til Salesforce. Fikk status: " + response.getStatusCode());
         }
     }
 
@@ -83,26 +82,17 @@ public class SalesforceKlient {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-        try {
-            ResponseEntity<SalesforceToken> response = restTemplate.exchange(
-                    authUrl,
-                    HttpMethod.POST,
-                    new HttpEntity<>(body, headers),
-                    SalesforceToken.class
-            );
+        ResponseEntity<SalesforceToken> response = restTemplate.exchange(
+                authUrl,
+                HttpMethod.POST,
+                new HttpEntity<>(body, headers),
+                SalesforceToken.class
+        );
 
-            log.info(restTemplate.exchange(
-                    authUrl,
-                    HttpMethod.POST,
-                    new HttpEntity<>(body, headers),
-                    String.class
-            ).toString());
-
+        if (HttpStatus.OK.equals(response.getStatusCode())) {
             return response.getBody();
-        } catch (RestClientResponseException e) {
-            throw new SalesforceException("Kunne ikke hente autorisasjonstoken til Salesforce", e);
+        } else {
+            throw new SalesforceException("Kunne ikke hente autorisasjonstoken til Salesforce. Fikk status: " + response.getStatusCode());
         }
-
     }
-
 }

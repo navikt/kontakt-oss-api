@@ -3,6 +3,7 @@ package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import no.nav.tag.kontakt.oss.KontaktskjemaException;
+import no.nav.tag.kontakt.oss.config.IgnoreAllErrors;
 import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.Bydel;
 import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.Kommune;
 import org.springframework.beans.factory.annotation.Value;
