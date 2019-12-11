@@ -15,10 +15,10 @@ spec:
     - https://arbeidsgiver.nais.adeo.no/kontakt-oss-api/
   liveness:
     path: /kontakt-oss-api/internal/healthcheck
-    initialDelay: 20
+    initialDelay: 30
   readiness:
     path: /kontakt-oss-api/internal/healthcheck
-    initialDelay: 20
+    initialDelay: 30
   env:
     - name: SPRING_PROFILES_ACTIVE
       value: prod
