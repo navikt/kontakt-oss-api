@@ -57,7 +57,8 @@ spring:
 gsak.url: https://oppgave.nais.preprod.local/api/v1/oppgaver
 norg.url: https://app-q0.adeo.no/norg2/api/v1
 kodeverk.url: https://kodeverk.nais.preprod.local/api/v1
-unleash.url: http://unleashproxy-fss.default.svc.nais.local/api/
+unleash.url: https://unleash.nais.adeo.no/api/
+
 
 database.navn: kontakt-oss-preprod
 vault.mount-path: postgresql/preprod-fss
@@ -83,7 +84,7 @@ spring:
 gsak.url: https://oppgave.nais.adeo.no/api/v1/oppgaver
 norg.url: https://app.adeo.no/norg2/api/v1
 kodeverk.url: https://kodeverk.nais.adeo.no/api/v1
-unleash.url: http://unleash.default.svc.nais.local/api/
+unleash.url: https://unleash.nais.adeo.no/api/
 
 kontaktskjema:
   max-requests-per-10-min: 10
