@@ -1,13 +1,16 @@
 package no.nav.tag.kontakt.oss.salesforce;
 
+import lombok.extern.slf4j.Slf4j;
 import no.nav.tag.kontakt.oss.Kontaktskjema;
 import no.nav.tag.kontakt.oss.events.BesvarelseMottatt;
 import org.springframework.context.event.EventListener;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
 
+@Slf4j
 @Component
 public class SalesforceEventListener {
 
@@ -29,7 +32,9 @@ public class SalesforceEventListener {
         if (event.isSuksess()) {
             Kontaktskjema kontaktskjema = event.getKontaktskjema();
             if (erPilotfylke(kontaktskjema.getFylke())) {
-                salesforceKlient.sendKontaktskjemaTilSalesforce(kontaktskjema);
+                ResponseEntity<String> res = salesforceKlient.sendKontaktskjemaTilSalesforce(kontaktskjema);
+                 // TODO Slett!
+                log.info(res.toString());
             }
         }
     }
