@@ -37,6 +37,8 @@ salesforce:
     id: blabla
     secret: sdjhfg
 
+nais.cluster.name: local
+
 ---
 
 spring:

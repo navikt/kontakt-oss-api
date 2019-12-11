@@ -3,8 +3,8 @@ package no.nav.tag.kontakt.oss.salesforce;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.tag.kontakt.oss.Kontaktskjema;
 import no.nav.tag.kontakt.oss.events.BesvarelseMottatt;
+import no.nav.tag.kontakt.oss.featureToggles.FeatureToggleService;
 import org.springframework.context.event.EventListener;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -22,13 +22,22 @@ public class SalesforceEventListener {
     );
 
     private final SalesforceKlient salesforceKlient;
+    private final FeatureToggleService featureToggleService;
 
-    public SalesforceEventListener(SalesforceKlient salesforceKlient) {
+    public SalesforceEventListener(SalesforceKlient salesforceKlient, FeatureToggleService featureToggleService) {
         this.salesforceKlient = salesforceKlient;
+        this.featureToggleService = featureToggleService;
     }
 
     @EventListener
     public void besvarelseMottatt(BesvarelseMottatt event) {
+        boolean erEnabled = featureToggleService.erEnabled("kontakt-oss-api.send-til-salesforce");
+        if (!erEnabled) {
+            log.info("SALESFORCE IKKE ENABLED!");
+            return;
+        }
+        log.info("SALESFORCE ENABLED!");
+
         if (event.isSuksess()) {
             Kontaktskjema kontaktskjema = event.getKontaktskjema();
             if (erPilotfylke(kontaktskjema.getFylke())) {
