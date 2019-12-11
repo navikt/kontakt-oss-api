@@ -31,11 +31,14 @@ public class SalesforceEventListener {
     public void besvarelseMottatt(BesvarelseMottatt event) {
         if (event.isSuksess()) {
             Kontaktskjema kontaktskjema = event.getKontaktskjema();
+            log.info("Lytter på " + kontaktskjema.toString());
             if (erPilotfylke(kontaktskjema.getFylke())) {
                 ResponseEntity<String> res = salesforceKlient.sendKontaktskjemaTilSalesforce(kontaktskjema);
                  // TODO Slett!
+                log.info("er pilotfylke");
                 log.info(res.toString());
             }
+            log.info("er IKKE pilotfylke");
         }
     }
 
