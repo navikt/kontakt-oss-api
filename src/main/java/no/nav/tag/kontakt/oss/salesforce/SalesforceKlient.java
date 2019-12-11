@@ -72,7 +72,7 @@ public class SalesforceKlient {
         }
     }
 
-    private SalesforceToken hentSalesforceToken() {
+    public SalesforceToken hentSalesforceToken() {
         String body = "grant_type=password"
                 + "&client_id=" + clientId
                 + "&client_secret=" + clientSecret
