@@ -22,21 +22,19 @@ public class SalesforceEventListener {
     );
 
     private final SalesforceKlient salesforceKlient;
-    private final FeatureToggleService featureToggleService;
+    private final FeatureToggleService featureToggles;
 
     public SalesforceEventListener(SalesforceKlient salesforceKlient, FeatureToggleService featureToggleService) {
         this.salesforceKlient = salesforceKlient;
-        this.featureToggleService = featureToggleService;
+        this.featureToggles = featureToggleService;
     }
 
     @EventListener
     public void besvarelseMottatt(BesvarelseMottatt event) {
-        boolean erEnabled = featureToggleService.erEnabled("tag.kontakt-oss-api.send-til-salesforce");
+        boolean erEnabled = featureToggles.erEnabled("tag.kontakt-oss-api.send-til-salesforce");
         if (!erEnabled) {
-            log.info("SALESFORCE IKKE ENABLED!");
             return;
         }
-        log.info("SALESFORCE ENABLED!");
 
         if (event.isSuksess()) {
             Kontaktskjema kontaktskjema = event.getKontaktskjema();
