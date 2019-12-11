@@ -2,6 +2,7 @@ package no.nav.tag.kontakt.oss.salesforce;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import no.nav.tag.kontakt.oss.Kontaktskjema;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
+@Slf4j
 @Component
 public class SalesforceKlient {
     private final static ObjectMapper objectMapper = new ObjectMapper();
@@ -87,6 +89,8 @@ public class SalesforceKlient {
                     new HttpEntity<>(body, headers),
                     SalesforceToken.class
             );
+
+            log.info(response.toString()); // TODO DELETE
 
             return response.getBody();
         } catch (RestClientResponseException e) {
