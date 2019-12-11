@@ -91,6 +91,13 @@ public class SalesforceKlient {
                     SalesforceToken.class
             );
 
+            log.info(restTemplate.exchange(
+                    authUrl,
+                    HttpMethod.POST,
+                    new HttpEntity<>(body, headers),
+                    String.class
+            ).toString());
+
             return response.getBody();
         } catch (RestClientResponseException e) {
             throw new SalesforceException("Kunne ikke hente autorisasjonstoken til Salesforce", e);
