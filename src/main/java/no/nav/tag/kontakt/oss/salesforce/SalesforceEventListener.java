@@ -31,7 +31,7 @@ public class SalesforceEventListener {
 
     @EventListener
     public void besvarelseMottatt(BesvarelseMottatt event) {
-        boolean erEnabled = featureToggleService.erEnabled("kontakt-oss-api.send-til-salesforce");
+        boolean erEnabled = featureToggleService.erEnabled("tag.kontakt-oss-api.send-til-salesforce");
         if (!erEnabled) {
             log.info("SALESFORCE IKKE ENABLED!");
             return;
