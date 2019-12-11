@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.tag.kontakt.oss.Kontaktskjema;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
@@ -25,7 +26,7 @@ public class SalesforceKlient {
     private final String clientSecret;
 
     public SalesforceKlient(
-            RestTemplate restTemplate,
+            @Qualifier("restTemplate") RestTemplate restTemplate,
             @Value("${salesforce.auth.url}") String authUrl,
             @Value("${salesforce.contactform.url}") String apiUrl,
             @Value("${salesforce.username}") String username,
@@ -89,13 +90,6 @@ public class SalesforceKlient {
                     new HttpEntity<>(body, headers),
                     SalesforceToken.class
             );
-
-            log.info(restTemplate.exchange(
-                    authUrl,
-                    HttpMethod.POST,
-                    new HttpEntity<>(body, headers),
-                    String.class
-            ).toString()); // TODO DELETE
 
             return response.getBody();
         } catch (RestClientResponseException e) {

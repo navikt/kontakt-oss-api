@@ -15,8 +15,8 @@ public class RestTemplateConfiguration {
     @Value("${GSAK_PASSORD:default}")
     private String passord;
 
-    @Bean
-    public RestTemplate restTemplate() {
+    @Bean(name = "gsakRestTemplate")
+    public RestTemplate gsakRestTemplate() {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getInterceptors().add(new BasicAuthenticationInterceptor(brukernavn, passord));
         return restTemplate;

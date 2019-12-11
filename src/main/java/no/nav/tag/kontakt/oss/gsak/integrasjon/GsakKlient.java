@@ -7,6 +7,7 @@ import no.nav.tag.kontakt.oss.BadRequestException;
 import no.nav.tag.kontakt.oss.KontaktskjemaException;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class GsakKlient {
 
     @Autowired
     public GsakKlient(
-            RestTemplate restTemplate,
+            @Qualifier("gsakRestTemplate") RestTemplate restTemplate,
             @Value("${gsak.url}") String gsakUrl
     ) {
         this.restTemplate = restTemplate;
