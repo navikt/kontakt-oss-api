@@ -34,6 +34,8 @@ public class SalesforceService {
             return;
         }
 
+        // TODO Skal ikke sende med kontaktskjema hvis tema er forebygging av sykefravær?
+
         if (erPilotfylke(kontaktskjema.getFylke())) {
             ContactForm contactForm = new ContactForm(
                     kontaktskjema.getTemaType(),
