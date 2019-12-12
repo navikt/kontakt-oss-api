@@ -43,19 +43,9 @@ public class SalesforceKlient {
     }
 
     @SneakyThrows
-    public void sendKontaktskjemaTilSalesforce(Kontaktskjema kontaktskjema) {
-        ContactForm contactForm = new ContactForm(
-                kontaktskjema.getTemaType(),
-                kontaktskjema.getKommunenr(),
-                kontaktskjema.getBedriftsnavn(),
-                kontaktskjema.getOrgnr(),
-                kontaktskjema.getFornavn(),
-                kontaktskjema.getEtternavn(),
-                kontaktskjema.getEpost(),
-                kontaktskjema.getTelefonnr()
-        );
-
+    public void sendContactFormTilSalesforce(ContactForm contactForm) {
         SalesforceToken token = hentSalesforceToken();
+
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Authorization", "Bearer " + token.getAccessToken());

@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import static no.nav.tag.kontakt.oss.testUtils.TestData.contactForm;
 import static no.nav.tag.kontakt.oss.testUtils.TestData.kontaktskjema;
 import static org.mockito.Mockito.*;
 
@@ -36,7 +37,7 @@ public class SalesforceKlientTest {
         mockAuthKall(new ResponseEntity<>(new SalesforceToken("token"), HttpStatus.OK));
         mockApiKall(new ResponseEntity(HttpStatus.OK));
 
-        salesforceKlient.sendKontaktskjemaTilSalesforce(kontaktskjema());
+        salesforceKlient.sendContactFormTilSalesforce(contactForm());
 
         verify(restTemplate, times(1))
                 .exchange(eq(authUrl), eq(HttpMethod.POST), any(HttpEntity.class), eq(SalesforceToken.class));
@@ -46,7 +47,7 @@ public class SalesforceKlientTest {
     public void sendKontaktskjemaTilSalesforce__skal_kaste_exception_hvis_resultatet_ikke_gir_200() {
         mockAuthKall(new ResponseEntity<>(new SalesforceToken("token"), HttpStatus.OK));
         mockApiKall(new ResponseEntity(HttpStatus.NOT_FOUND));
-        salesforceKlient.sendKontaktskjemaTilSalesforce(kontaktskjema());
+        salesforceKlient.sendContactFormTilSalesforce(contactForm());
     }
 
     @Test(expected = SalesforceException.class)
