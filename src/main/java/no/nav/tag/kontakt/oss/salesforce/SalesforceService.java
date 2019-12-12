@@ -2,6 +2,7 @@ package no.nav.tag.kontakt.oss.salesforce;
 
 import lombok.extern.slf4j.Slf4j;
 import no.nav.tag.kontakt.oss.Kontaktskjema;
+import no.nav.tag.kontakt.oss.TemaType;
 import no.nav.tag.kontakt.oss.featureToggles.FeatureToggleService;
 import org.springframework.stereotype.Component;
 
@@ -28,28 +29,33 @@ public class SalesforceService {
     }
 
     public void sendKontaktskjemaTilSalesforce(Kontaktskjema kontaktskjema) {
-        boolean erEnabled = featureToggles.erEnabled("tag.kontakt-oss-api.send-til-salesforce");
-
-        if (!erEnabled) {
+        if (!skalSendeInnSkjema(kontaktskjema)) {
             return;
         }
 
-        // TODO Skal ikke sende med kontaktskjema hvis tema er forebygging av sykefravær?
+        salesforceKlient.sendContactFormTilSalesforce(new ContactForm(
+                kontaktskjema.getTemaType(),
+                kontaktskjema.getKommunenr(),
+                kontaktskjema.getBedriftsnavn(),
+                kontaktskjema.getOrgnr(),
+                kontaktskjema.getFornavn(),
+                kontaktskjema.getEtternavn(),
+                kontaktskjema.getEpost(),
+                kontaktskjema.getTelefonnr()
+        ));
+    }
 
-        if (erPilotfylke(kontaktskjema.getFylke())) {
-            ContactForm contactForm = new ContactForm(
-                    kontaktskjema.getTemaType(),
-                    kontaktskjema.getKommunenr(),
-                    kontaktskjema.getBedriftsnavn(),
-                    kontaktskjema.getOrgnr(),
-                    kontaktskjema.getFornavn(),
-                    kontaktskjema.getEtternavn(),
-                    kontaktskjema.getEpost(),
-                    kontaktskjema.getTelefonnr()
-            );
+    private boolean skalSendeInnSkjema(Kontaktskjema kontaktskjema) {
+        return harTemaSomSkalSendesInnTilSalesforce(kontaktskjema)
+                && erPilotfylke(kontaktskjema.getFylke())
+                && featureToggles.erEnabled("tag.kontakt-oss-api.send-til-salesforce");
+    }
 
-            salesforceKlient.sendContactFormTilSalesforce(contactForm);
-        }
+    private boolean harTemaSomSkalSendesInnTilSalesforce(Kontaktskjema kontaktskjema) {
+        TemaType temaType = kontaktskjema.getTemaType();
+        return TemaType.REKRUTTERING.equals(temaType)
+                || TemaType.REKRUTTERING_MED_TILRETTELEGGING.equals(temaType)
+                || TemaType.ARBEIDSTRENING.equals(temaType);
     }
 
     private boolean erPilotfylke(String fylkenr) {

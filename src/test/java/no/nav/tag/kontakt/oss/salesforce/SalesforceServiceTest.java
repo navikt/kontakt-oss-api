@@ -72,10 +72,8 @@ public class SalesforceServiceTest {
 
     @Test
     public void sendKontaktskjemaTilSalesforce__skal_ikke_sende_kontaktskjema_hvis_fylke_ikke_er_pilot() {
-        when(featureToggles.erEnabled(anyString())).thenReturn(true);
-
         salesforceService.sendKontaktskjemaTilSalesforce(
-                kontaktskjemaBuilder().fylke("1234").build()
+                kontaktskjemaBuilder().fylke("1234").temaType(TemaType.REKRUTTERING).build()
         );
 
         verify(salesforceKlient, times(0)).sendContactFormTilSalesforce(any());
@@ -86,7 +84,16 @@ public class SalesforceServiceTest {
         when(featureToggles.erEnabled(anyString())).thenReturn(false);
 
         salesforceService.sendKontaktskjemaTilSalesforce(
-                kontaktskjemaBuilder().fylke("1000").build()
+                kontaktskjemaBuilder().fylke("1000").temaType(TemaType.REKRUTTERING).build()
+        );
+
+        verify(salesforceKlient, times(0)).sendContactFormTilSalesforce(any());
+    }
+
+    @Test
+    public void sendKontaktskjemaTilSalesforce__skal_ikke_sende_kontaktskjema_hvis_tema_er_forebygging_av_sykefravær() {
+        salesforceService.sendKontaktskjemaTilSalesforce(
+                kontaktskjemaBuilder().fylke("1000").temaType(TemaType.FOREBYGGE_SYKEFRAVÆR).build()
         );
 
         verify(salesforceKlient, times(0)).sendContactFormTilSalesforce(any());
