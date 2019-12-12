@@ -72,7 +72,7 @@ unleash.url: https://unleash.nais.adeo.no/api/
 
 salesforce:
   auth.url: https://test.salesforce.com/services/oauth2/token
-  contactform.url: https://cs82.salesforce.com/services/apexrest/ContactForm
+  contactform.url: https://cs106.salesforce.com/services/apexrest/ContactForm
 
 database.navn: kontakt-oss-preprod
 vault.mount-path: postgresql/preprod-fss
@@ -102,6 +102,10 @@ unleash.url: https://unleash.nais.adeo.no/api/
 
 kontaktskjema:
   max-requests-per-10-min: 10
+
+salesforce:
+  auth.url: skal-fylles-inn
+  contactform.url: skal-fylles-inn
 
 database.navn: kontakt-oss-prod
 vault.mount-path: postgresql/prod-fss
