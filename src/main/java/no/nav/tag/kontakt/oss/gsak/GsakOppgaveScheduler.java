@@ -32,8 +32,9 @@ public class GsakOppgaveScheduler {
     @Scheduled(cron = "* * * * * ?")
     public void scheduledOpprettOppgaveForSkjemaer() {
 
-        Instant lockAtMostUntil = Instant.now().plusSeconds(60);
-        Instant lockAtLeastUntil = Instant.now().plusSeconds(30);
+        // TODO Sett til 60 og 30 sekunder etter nyttår 2019.
+        Instant lockAtMostUntil = Instant.now().plusSeconds(1800);
+        Instant lockAtLeastUntil = Instant.now().plusSeconds(1500);
 
         taskExecutor.executeWithLock(
                 (Runnable)this::opprettOppgaveForSkjemaer,
