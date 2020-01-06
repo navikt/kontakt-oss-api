@@ -11,8 +11,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.time.LocalDateTime;
 
-import static no.nav.tag.kontakt.oss.testUtils.TestData.kontaktskjemaBuilder;
-import static org.junit.Assert.*;
+import static no.nav.tag.kontakt.oss.testUtils.TestData.kontaktskjema;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -71,31 +70,16 @@ public class SalesforceServiceTest {
     }
 
     @Test
-    public void sendKontaktskjemaTilSalesforce__skal_ikke_sende_kontaktskjema_hvis_fylke_ikke_er_pilot() {
-        salesforceService.sendKontaktskjemaTilSalesforce(
-                kontaktskjemaBuilder().fylke("1234").temaType(TemaType.REKRUTTERING).build()
-        );
-
-        verify(salesforceKlient, times(0)).sendContactFormTilSalesforce(any());
-    }
-
-    @Test
     public void sendKontaktskjemaTilSalesforce__skal_ikke_sende_kontaktskjema_hvis_toggle_er_avskrudd() {
         when(featureToggles.erEnabled(anyString())).thenReturn(false);
-
-        salesforceService.sendKontaktskjemaTilSalesforce(
-                kontaktskjemaBuilder().fylke("1000").temaType(TemaType.REKRUTTERING).build()
-        );
-
+        salesforceService.sendKontaktskjemaTilSalesforce(kontaktskjema());
         verify(salesforceKlient, times(0)).sendContactFormTilSalesforce(any());
     }
 
     @Test
-    public void sendKontaktskjemaTilSalesforce__skal_ikke_sende_kontaktskjema_hvis_tema_er_forebygging_av_sykefravær() {
-        salesforceService.sendKontaktskjemaTilSalesforce(
-                kontaktskjemaBuilder().fylke("1000").temaType(TemaType.FOREBYGGE_SYKEFRAVÆR).build()
-        );
-
-        verify(salesforceKlient, times(0)).sendContactFormTilSalesforce(any());
+    public void sendKontaktskjemaTilSalesforce__skal_sende_kontaktskjema_hvis_toggle_er_påskrudd() {
+        when(featureToggles.erEnabled(anyString())).thenReturn(true);
+        salesforceService.sendKontaktskjemaTilSalesforce(kontaktskjema());
+        verify(salesforceKlient, times(1)).sendContactFormTilSalesforce(any());
     }
 }
