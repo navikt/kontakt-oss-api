@@ -4,10 +4,10 @@ metadata:
   name: kontakt-oss-api
   namespace: default
   labels:
-    team: teamtag
+    team: {{team}}
 spec:
-  image: navikt/kontakt-oss-api:{{version}}
-  team: teamtag
+  image: {{version}}
+  team: {{team}}
   port: 8080
   vault:
     enabled: true
