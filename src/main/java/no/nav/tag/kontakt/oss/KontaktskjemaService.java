@@ -61,7 +61,7 @@ public class KontaktskjemaService {
             salesforceService.sendKontaktskjemaTilSalesforce(kontaktskjema);
         } catch (Exception e) {
             eventPublisher.publishEvent(new BesvarelseMottatt(false, kontaktskjema));
-            log.error("Feil ved lagring av kontaktskjema", e);
+            log.error("Feil ved mottak av kontaktskjema", e);
             throw e;
         }
         eventPublisher.publishEvent(new BesvarelseMottatt(true, kontaktskjema));
