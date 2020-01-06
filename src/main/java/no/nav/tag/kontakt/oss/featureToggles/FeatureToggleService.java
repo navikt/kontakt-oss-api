@@ -26,4 +26,8 @@ public class FeatureToggleService {
                 feature -> unleash.isEnabled(feature, unleashContext)
         ));
     }
+
+    public boolean erEnabled(String feature) {
+        return unleash.isEnabled(feature);
+    }
 }

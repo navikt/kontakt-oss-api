@@ -14,14 +14,14 @@ import org.springframework.context.annotation.Configuration;
 public class FeatureToggleConfig {
 
     private final String APP_NAME = "kontakt-oss-api";
-    private final ByEnvironmentStrategy byEnvironmentStrategy;
+    private final ByClusterStrategy byClusterStrategy;
 
     @Value("${unleash.url}") private String unleashUrl;
     @Value("${spring.profiles.active}") private String profile;
 
     @Autowired
-    public FeatureToggleConfig(ByEnvironmentStrategy byEnvironmentStrategy) {
-        this.byEnvironmentStrategy = byEnvironmentStrategy;
+    public FeatureToggleConfig(ByClusterStrategy byClusterStrategy) {
+        this.byClusterStrategy = byClusterStrategy;
     }
 
 
@@ -35,7 +35,7 @@ public class FeatureToggleConfig {
 
         return new DefaultUnleash(
                 config,
-                byEnvironmentStrategy,
+                byClusterStrategy,
                 new GradualRolloutSessionIdStrategy()
         );
     }

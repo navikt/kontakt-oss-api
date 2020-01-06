@@ -5,6 +5,7 @@ import no.nav.tag.kontakt.oss.Kontaktskjema;
 import no.nav.tag.kontakt.oss.TemaType;
 import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.*;
 import no.nav.tag.kontakt.oss.gsak.integrasjon.GsakRequest;
+import no.nav.tag.kontakt.oss.salesforce.ContactForm;
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +39,20 @@ public class TestData {
                 .tema("Rekruttering")
                 .temaType(TemaType.REKRUTTERING)
                 .harSnakketMedAnsattrepresentant(false);
+    }
+
+    public static ContactForm contactForm() {
+        Kontaktskjema kontaktskjema = kontaktskjema();
+        return new ContactForm(
+                kontaktskjema.getTemaType(),
+                kontaktskjema.getKommunenr(),
+                kontaktskjema.getBedriftsnavn(),
+                kontaktskjema.getOrgnr(),
+                kontaktskjema.getFornavn(),
+                kontaktskjema.getEtternavn(),
+                kontaktskjema.getEpost(),
+                kontaktskjema.getTelefonnr()
+        );
     }
 
     public static GsakRequest gsakRequest() {

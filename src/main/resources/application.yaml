@@ -28,6 +28,16 @@ norg.url: ${mock.baseUrl}/norg
 kodeverk.url: ${mock.baseUrl}/kodeverk
 unleash.url: http://unleash.herokuapp.com/api/
 
+salesforce:
+  auth.url: ${mock.baseUrl}/salesforce/auth
+  contactform.url: ${mock.baseUrl}/salesforce/contactform
+  username: user
+  password: pass
+  client:
+    id: blabla
+    secret: sdjhfg
+
+nais.cluster.name: local
 
 ---
 
@@ -60,6 +70,10 @@ kodeverk.url: https://kodeverk.nais.preprod.local/api/v1
 unleash.url: https://unleash.nais.adeo.no/api/
 
 
+salesforce:
+  auth.url: https://test.salesforce.com/services/oauth2/token
+  contactform.url: https://cs106.salesforce.com/services/apexrest/ContactForm
+
 database.navn: kontakt-oss-preprod
 vault.mount-path: postgresql/preprod-fss
 
@@ -88,6 +102,10 @@ unleash.url: https://unleash.nais.adeo.no/api/
 
 kontaktskjema:
   max-requests-per-10-min: 10
+
+salesforce:
+  auth.url: skal-fylles-inn
+  contactform.url: skal-fylles-inn
 
 database.navn: kontakt-oss-prod
 vault.mount-path: postgresql/prod-fss

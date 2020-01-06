@@ -1,4 +1,4 @@
-package no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon;
+package no.nav.tag.kontakt.oss.config;
 
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.ResponseErrorHandler;

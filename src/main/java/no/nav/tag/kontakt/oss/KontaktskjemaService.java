@@ -3,6 +3,7 @@ package no.nav.tag.kontakt.oss;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.tag.kontakt.oss.events.BesvarelseMottatt;
 import no.nav.tag.kontakt.oss.navenhetsmapping.NavEnhetService;
+import no.nav.tag.kontakt.oss.salesforce.SalesforceService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ public class KontaktskjemaService {
     private final ApplicationEventPublisher eventPublisher;
     private final DateProvider dateProvider;
     private final NavEnhetService navEnhetService;
+    private final SalesforceService salesforceService;
 
     private final static String LATIN = "a-zA-Z \\-–'._)(/";
     private final static String SAMISK = "ÁáČčĐđŊŋŠšŦŧŽž";
@@ -40,22 +42,26 @@ public class KontaktskjemaService {
             KontaktskjemaRepository repository,
             ApplicationEventPublisher eventPublisher,
             DateProvider dateProvider,
-            NavEnhetService navEnhetService) {
+            NavEnhetService navEnhetService,
+            SalesforceService salesforceService
+    ) {
         this.maksInnsendingerPerTiMin = maksInnsendingerPerTiMin;
         this.repository = repository;
         this.eventPublisher = eventPublisher;
         this.dateProvider = dateProvider;
         this.navEnhetService = navEnhetService;
+        this.salesforceService = salesforceService;
     }
 
-    public void lagreKontaktskjema(Kontaktskjema kontaktskjema) {
+    public void lagreKontaktskjemaOgSendTilSalesforce(Kontaktskjema kontaktskjema) {
         try {
             validerKontaktskjema(kontaktskjema);
             kontaktskjema.setOpprettet(dateProvider.now());
             repository.save(kontaktskjema);
+            salesforceService.sendKontaktskjemaTilSalesforce(kontaktskjema);
         } catch (Exception e) {
             eventPublisher.publishEvent(new BesvarelseMottatt(false, kontaktskjema));
-            log.error("Feil ved lagring av kontaktskjema", e);
+            log.error("Feil ved mottak av kontaktskjema", e);
             throw e;
         }
         eventPublisher.publishEvent(new BesvarelseMottatt(true, kontaktskjema));

@@ -30,7 +30,7 @@ public class KontaktskjemaControllerTest {
     public void meldInteresse__skal_kalle_service() {
         Kontaktskjema kontaktskjema = kontaktskjema();
         kontaktskjemaController.meldInteresse(kontaktskjema);
-        verify(kontaktskjemaService).lagreKontaktskjema(kontaktskjema);
+        verify(kontaktskjemaService).lagreKontaktskjemaOgSendTilSalesforce(kontaktskjema);
     }
 
     @Test
