@@ -36,7 +36,7 @@ public class GsakOppgaveScheduler {
         Instant lockAtLeastUntil = Instant.now().plusSeconds(30);
 
         taskExecutor.executeWithLock(
-                (Runnable)this::opprettOppgaveForSkjemaer,
+                (Runnable) this::opprettOppgaveForSkjemaer,
                 new LockConfiguration("opprettOppgaveForSkjemaer", lockAtMostUntil, lockAtLeastUntil)
         );
 
@@ -44,7 +44,7 @@ public class GsakOppgaveScheduler {
 
     private void opprettOppgaveForSkjemaer() {
         Collection<Kontaktskjema> skjemaer = kontaktskjemaRepository.findAllWithNoGsakOppgave();
-        if(skjemaer.size() > 0) {
+        if (skjemaer.size() > 0) {
             log.info("Fant {} skjemaer som ikke har gsak-oppgave", skjemaer.size());
         }
         skjemaer.forEach(oppgaveForSkjema::opprettOppgaveOgLagreStatus);

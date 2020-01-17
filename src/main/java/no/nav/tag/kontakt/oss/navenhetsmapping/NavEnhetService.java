@@ -19,15 +19,15 @@ public class NavEnhetService {
                 .hentKommuneNrEllerBydelNrTilNavEnhet()
                 .get(kommunenr);
         if (navEnhet != null) {
-                return navEnhet.getEnhetNr();
+            return navEnhet.getEnhetNr();
         } else {
             throw new KontaktskjemaException("Finner ingen NAV-enhet tilhørende kommune " + kommunenr);
         }
     }
-    
+
     public String mapFraFylkesenhetNrTilArbeidslivssenterEnhetsnr(String fylkesenhetNr) {
         // TODO Manuell mapping foreløpig, fikses i TAG-557
-        switch(fylkesenhetNr) {
+        switch (fylkesenhetNr) {
             case "1000": // Agder
                 return "1091"; // NAV Arbeidslivssenter Agder
 
@@ -64,7 +64,8 @@ public class NavEnhetService {
             case "0600": // Vest-Viken
                 return "0691";
 
-            default: throw new KontaktskjemaException("Fant ikke arbeidslivssenter tilhørende fylkesenhet " + fylkesenhetNr);
+            default:
+                throw new KontaktskjemaException("Fant ikke arbeidslivssenter tilhørende fylkesenhet " + fylkesenhetNr);
         }
     }
 }

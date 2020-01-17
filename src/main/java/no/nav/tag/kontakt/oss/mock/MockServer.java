@@ -40,7 +40,7 @@ public class MockServer {
     ) {
         log.info("Starter mock-server");
 
-        this.server =  new WireMockServer(port);
+        this.server = new WireMockServer(port);
         String norgPath = new URL(norgUrl).getPath();
         String kodeverkPath = new URL(kodeverkUrl).getPath();
         String gsakPath = new URL(gsakUrl).getPath();
@@ -86,7 +86,8 @@ public class MockServer {
     private void mockNorgsMappingFraGeografiTilNavEnhet(String norgPath) {
         Map<String, NavEnhet> fraKommuneEllerBydelTilNavEnhet = objectMapper.readValue(
                 lesFilSomString("mapFraKommuneTilNavEnhet.json"),
-                new TypeReference<Map<String, NavEnhet>>() {}
+                new TypeReference<Map<String, NavEnhet>>() {
+                }
         );
 
         NavEnhet navEnhet;

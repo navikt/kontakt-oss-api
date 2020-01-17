@@ -16,8 +16,10 @@ public class FeatureToggleConfig {
     private final String APP_NAME = "kontakt-oss-api";
     private final ByClusterStrategy byClusterStrategy;
 
-    @Value("${unleash.url}") private String unleashUrl;
-    @Value("${spring.profiles.active}") private String profile;
+    @Value("${unleash.url}")
+    private String unleashUrl;
+    @Value("${spring.profiles.active}")
+    private String profile;
 
     @Autowired
     public FeatureToggleConfig(ByClusterStrategy byClusterStrategy) {

@@ -59,7 +59,7 @@ public class KafkaRepublisher {
             melding += antallSkjemaer + ": kontaktskjemaId=" + kontaktskjema.getId() + ", gsakId=" + gsakId + " --- ";
         }
 
-        return "Antall feil: " + antallFeil + " Antall kontaktskjemaer: " +  antallSkjemaer + " --- "+ melding;
+        return "Antall feil: " + antallFeil + " Antall kontaktskjemaer: " + antallSkjemaer + " --- " + melding;
     }
 
     private Map<Integer, Integer> mapFraKontaktskjemaIdTilGsakId() {

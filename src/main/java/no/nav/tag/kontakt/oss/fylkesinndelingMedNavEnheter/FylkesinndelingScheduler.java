@@ -52,7 +52,7 @@ public class FylkesinndelingScheduler {
         Instant lockAtLeastUntil = Instant.now().plusSeconds(5 * MINUTE);
 
         taskExecutor.executeWithLock(
-                (Runnable)() -> {
+                (Runnable) () -> {
                     log.info("Tvinger oppdatering av fylkesinndeling");
                     fylkesinndelingService.oppdaterFylkesinndeling();
                 },

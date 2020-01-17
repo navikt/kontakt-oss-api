@@ -17,7 +17,7 @@ public class GsakOppgave {
     private Integer gsakId;
     private OppgaveStatus status;
     private LocalDateTime opprettet;
-    
+
     public enum OppgaveStatus {
         OK,
         FEILET
