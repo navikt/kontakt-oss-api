@@ -17,7 +17,7 @@ import net.javacrumbs.shedlock.core.LockingTaskExecutor;
 @Slf4j
 @Component
 public class GsakOppgaveScheduler {
-    
+
     private final KontaktskjemaRepository kontaktskjemaRepository;
     private final GsakOppgaveService oppgaveForSkjema;
     private final LockingTaskExecutor taskExecutor;
@@ -32,9 +32,8 @@ public class GsakOppgaveScheduler {
     @Scheduled(cron = "* * * * * ?")
     public void scheduledOpprettOppgaveForSkjemaer() {
 
-        // TODO Sett til 60 og 30 sekunder etter nyttår 2019.
-        Instant lockAtMostUntil = Instant.now().plusSeconds(1800);
-        Instant lockAtLeastUntil = Instant.now().plusSeconds(1500);
+        Instant lockAtMostUntil = Instant.now().plusSeconds(60);
+        Instant lockAtLeastUntil = Instant.now().plusSeconds(30);
 
         taskExecutor.executeWithLock(
                 (Runnable)this::opprettOppgaveForSkjemaer,
@@ -42,7 +41,7 @@ public class GsakOppgaveScheduler {
         );
 
     }
-    
+
     private void opprettOppgaveForSkjemaer() {
         Collection<Kontaktskjema> skjemaer = kontaktskjemaRepository.findAllWithNoGsakOppgave();
         if(skjemaer.size() > 0) {
