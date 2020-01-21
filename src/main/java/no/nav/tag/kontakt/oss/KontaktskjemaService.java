@@ -62,7 +62,7 @@ public class KontaktskjemaService {
         } catch (Exception e) {
             eventPublisher.publishEvent(new BesvarelseMottatt(false, kontaktskjema));
             log.error("Feil ved mottak av kontaktskjema", e);
-            throw e;
+            throw new KontaktskjemaException(e.getMessage());
         }
         eventPublisher.publishEvent(new BesvarelseMottatt(true, kontaktskjema));
     }
