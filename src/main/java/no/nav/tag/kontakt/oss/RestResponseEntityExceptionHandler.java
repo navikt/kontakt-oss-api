@@ -32,6 +32,12 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return getResponseEntity(e, "Intern tjenefeil", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(value = {BadRequestException.class})
+    @ResponseBody
+    protected ResponseEntity<Object> handleFeilIKontaktskjemaException(RuntimeException e, WebRequest webRequest) {
+        return getResponseEntity(e, "Innsendt informasjon er ugyldig", HttpStatus.BAD_REQUEST);
+    }
+
 
     @ExceptionHandler(value = {Exception.class})
     @ResponseBody

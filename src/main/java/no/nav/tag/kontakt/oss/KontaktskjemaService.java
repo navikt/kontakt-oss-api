@@ -61,8 +61,7 @@ public class KontaktskjemaService {
             salesforceService.sendKontaktskjemaTilSalesforce(kontaktskjema);
         } catch (Exception e) {
             eventPublisher.publishEvent(new BesvarelseMottatt(false, kontaktskjema));
-            log.error("Feil ved mottak av kontaktskjema", e);
-            throw new KontaktskjemaException(e.getMessage());
+            throw e;
         }
         eventPublisher.publishEvent(new BesvarelseMottatt(true, kontaktskjema));
     }
@@ -75,7 +74,8 @@ public class KontaktskjemaService {
                 navEnhetService.mapFraKommunenrTilEnhetsnr(kontaktskjema.getKommunenr());
             }
         } catch (KontaktskjemaException e) {
-            throw new BadRequestException("Innsendt kontaktskjema er ugyldig", e);
+            log.warn("Feil ved validering av kontaktskjema", e);
+            throw new BadRequestException("Innsendt kontaktskjema er ugyldig");
         }
 
         validerFelter(kontaktskjema);

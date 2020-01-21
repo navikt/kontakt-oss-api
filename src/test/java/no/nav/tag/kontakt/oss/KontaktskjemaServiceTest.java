@@ -167,6 +167,13 @@ public class KontaktskjemaServiceTest {
         kontaktskjemaService.lagreKontaktskjemaOgSendTilSalesforce(kontaktskjema);
     }
 
+    @Test(expected = KontaktskjemaException.class)
+    public void lagreKontaktskjema__skal_feile_og_propagere_feil_hvis_salesforceService_feiler() {
+        Kontaktskjema kontaktskjema = kontaktskjema();
+        doThrow(KontaktskjemaException.class).when(salesforceService).sendKontaktskjemaTilSalesforce(kontaktskjema);
+
+        kontaktskjemaService.lagreKontaktskjemaOgSendTilSalesforce(kontaktskjema);
+    }
 
     @Test
     @SneakyThrows
