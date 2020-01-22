@@ -104,8 +104,8 @@ kontaktskjema:
   max-requests-per-10-min: 10
 
 salesforce:
-  auth.url: skal-fylles-inn
-  contactform.url: skal-fylles-inn
+  auth.url: https://login.salesforce.com/services/oauth2/token
+  contactform.url: https://navdialog.my.salesforce.com/services/apexrest/ContactForm
 
 database.navn: kontakt-oss-prod
 vault.mount-path: postgresql/prod-fss
