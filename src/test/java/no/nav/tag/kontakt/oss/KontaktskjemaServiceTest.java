@@ -7,6 +7,7 @@ import no.nav.tag.kontakt.oss.events.BesvarelseMottatt;
 import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.FylkesinndelingMedNavEnheter;
 import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.KommuneEllerBydel;
 import no.nav.tag.kontakt.oss.navenhetsmapping.NavEnhetService;
+import no.nav.tag.kontakt.oss.salesforce.SalesforceException;
 import no.nav.tag.kontakt.oss.salesforce.SalesforceService;
 import org.junit.Before;
 import org.junit.Test;
@@ -167,6 +168,13 @@ public class KontaktskjemaServiceTest {
         kontaktskjemaService.lagreKontaktskjemaOgSendTilSalesforce(kontaktskjema);
     }
 
+    @Test(expected = SalesforceException.class)
+    public void lagreKontaktskjema__skal_feile_og_propagere_feil_hvis_salesforceService_feiler() {
+        Kontaktskjema kontaktskjema = kontaktskjema();
+        doThrow(SalesforceException.class).when(salesforceService).sendKontaktskjemaTilSalesforce(kontaktskjema);
+
+        kontaktskjemaService.lagreKontaktskjemaOgSendTilSalesforce(kontaktskjema);
+    }
 
     @Test
     @SneakyThrows
