@@ -10,6 +10,8 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import static java.lang.String.format;
+
 @Slf4j
 @Component
 public class SalesforceKlient {
@@ -58,7 +60,15 @@ public class SalesforceKlient {
         );
 
         if (!HttpStatus.OK.equals(response.getStatusCode())) {
-            throw new SalesforceException("Kunne ikke sende kontaktskjema til Salesforce. Fikk status: " + response.getStatusCode());
+            log.info(
+                    format("Kunne ikke sende kontaktskjema til Salesforce. " +
+                                    "Fikk response med status: '%s' og innhold: '%s'",
+                            response.getStatusCode(),
+                            response.getBody()
+                    )
+            );
+            throw new SalesforceException("Kunne ikke sende kontaktskjema til Salesforce. Fikk status: " +
+                    response.getStatusCode());
         }
     }
 
@@ -82,7 +92,8 @@ public class SalesforceKlient {
         if (HttpStatus.OK.equals(response.getStatusCode())) {
             return response.getBody();
         } else {
-            throw new SalesforceException("Kunne ikke hente autorisasjonstoken til Salesforce. Fikk status: " + response.getStatusCode());
+            throw new SalesforceException("Kunne ikke hente autorisasjonstoken til Salesforce. Fikk status: " +
+                    response.getStatusCode());
         }
     }
 }
