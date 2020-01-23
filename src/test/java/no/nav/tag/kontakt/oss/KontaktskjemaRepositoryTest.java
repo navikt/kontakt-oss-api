@@ -1,10 +1,10 @@
 package no.nav.tag.kontakt.oss;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
-
-import java.time.LocalDateTime;
-
+import no.nav.tag.kontakt.oss.gsak.GsakOppgave;
+import no.nav.tag.kontakt.oss.gsak.GsakOppgave.OppgaveStatus;
+import no.nav.tag.kontakt.oss.gsak.GsakOppgaveRepository;
+import no.nav.tag.kontakt.oss.salesforce.utsending.KontaktskjemaUtsending;
+import no.nav.tag.kontakt.oss.salesforce.utsending.KontaktskjemaUtsendingRepository;
 import no.nav.tag.kontakt.oss.testUtils.TestData;
 import org.junit.After;
 import org.junit.Test;
@@ -15,9 +15,11 @@ import org.springframework.data.relational.core.conversion.DbActionExecutionExce
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import no.nav.tag.kontakt.oss.gsak.GsakOppgave;
-import no.nav.tag.kontakt.oss.gsak.GsakOppgaveRepository;
-import no.nav.tag.kontakt.oss.gsak.GsakOppgave.OppgaveStatus;
+import java.time.LocalDateTime;
+
+import static java.time.LocalDateTime.now;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -26,6 +28,9 @@ public class KontaktskjemaRepositoryTest {
 
     @Autowired
     private KontaktskjemaRepository kontaktskjemaRepository;
+
+    @Autowired
+    private KontaktskjemaUtsendingRepository kontaktskjemaUtsendingRepository;
 
     @Autowired
     private GsakOppgaveRepository oppgaveRepository;
@@ -67,12 +72,12 @@ public class KontaktskjemaRepositoryTest {
     
     @Test
     public void skalHenteBasertPaDato() {
-        kontaktskjemaRepository.save(skjemaMedDato(LocalDateTime.now().minusDays(3)));
-        kontaktskjemaRepository.save(skjemaMedDato(LocalDateTime.now().minusDays(1)));
+        kontaktskjemaRepository.save(skjemaMedDato(now().minusDays(3)));
+        kontaktskjemaRepository.save(skjemaMedDato(now().minusDays(1)));
 
-        assertThat(kontaktskjemaRepository.findAllNewerThan(LocalDateTime.now().minusDays(4)).size(), is(2));
-        assertThat(kontaktskjemaRepository.findAllNewerThan(LocalDateTime.now().minusDays(2)).size(), is(1));
-        assertThat(kontaktskjemaRepository.findAllNewerThan(LocalDateTime.now()).size(), is(0));
+        assertThat(kontaktskjemaRepository.findAllNewerThan(now().minusDays(4)).size(), is(2));
+        assertThat(kontaktskjemaRepository.findAllNewerThan(now().minusDays(2)).size(), is(1));
+        assertThat(kontaktskjemaRepository.findAllNewerThan(now()).size(), is(0));
     }
 
     private Kontaktskjema skjemaMedDato(LocalDateTime opprettetTidspunkt) {
@@ -110,6 +115,33 @@ public class KontaktskjemaRepositoryTest {
             assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size(), is(0));
         });
     }
+
+    @Test
+    public void skalIkkeHenteSkjemaDersomKontaktskjemaAlleredeSentTilSalesforce() {
+        transactor.inTransaction(() -> {
+            Kontaktskjema lagretSkjema = kontaktskjemaRepository.save(TestData.kontaktskjema());
+            kontaktskjemaUtsendingRepository.save(
+                    KontaktskjemaUtsending.nyKontaktskjemaUtsending(
+                            lagretSkjema.getId(),
+                            now(),
+                            KontaktskjemaUtsending.UtsendingStatus.SENT
+                    )
+            );
+
+            assertThat(kontaktskjemaRepository.hentKontakskjemaerSomSkalSendesTilSalesforce().size(), is(0));
+        });
+    }
+
+    @Test
+    public void skalHenteSkjemaSomIkkeErSentTilSalesforce() {
+        transactor.inTransaction(() -> {
+            Kontaktskjema lagretSkjema = kontaktskjemaRepository.save(TestData.kontaktskjema());
+            kontaktskjemaUtsendingRepository.save(KontaktskjemaUtsending.klarTilUtsending(lagretSkjema.getId(), now()));
+
+            assertThat(kontaktskjemaRepository.hentKontakskjemaerSomSkalSendesTilSalesforce().size(), is(1));
+        });
+    }
+
 }
 
 

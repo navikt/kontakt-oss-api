@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import static no.nav.tag.kontakt.oss.testUtils.TestData.contactForm;
-import static no.nav.tag.kontakt.oss.testUtils.TestData.kontaktskjema;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
