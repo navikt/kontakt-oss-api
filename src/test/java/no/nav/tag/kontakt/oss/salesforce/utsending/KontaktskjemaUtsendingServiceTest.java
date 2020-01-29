@@ -5,6 +5,7 @@ import no.nav.tag.kontakt.oss.KontaktskjemaRepository;
 import no.nav.tag.kontakt.oss.salesforce.SalesforceException;
 import no.nav.tag.kontakt.oss.salesforce.SalesforceService;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,10 +39,14 @@ public class KontaktskjemaUtsendingServiceTest {
     private KontaktskjemaUtsendingService kontaktskjemaUtsendingService;
 
 
+    @Before
+    public void setUp(){
+        cleanUpDb();
+    }
+
     @After
-    public void cleanUp() {
-        kontaktskjemaRepository.deleteAll();
-        kontaktskjemaUtsendingRepository.deleteAll();
+    public void tearDown(){
+        cleanUpDb();
     }
 
     @Test
@@ -84,5 +89,10 @@ public class KontaktskjemaUtsendingServiceTest {
         kontaktskjemaRepository.save(kontaktskjemaBuilder().build());
         Iterable<Kontaktskjema> alleKontaktskjemaer = kontaktskjemaRepository.findAll();
         return alleKontaktskjemaer.iterator().next();
+    }
+
+    private void cleanUpDb() {
+        kontaktskjemaRepository.deleteAll();
+        kontaktskjemaUtsendingRepository.deleteAll();
     }
 }
