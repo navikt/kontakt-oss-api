@@ -49,7 +49,7 @@ public class FeatureToggleConfig {
     @Profile(value= {"local"})
     public Unleash unleashMock() {
         FakeUnleash fakeUnleash = new FakeUnleash();
-        fakeUnleash.enableAll(); //Enabler alle toggles pr. default. Kan endres lokalt ved behov.
+        fakeUnleash.enableAll();
         return fakeUnleash;
     }
 }

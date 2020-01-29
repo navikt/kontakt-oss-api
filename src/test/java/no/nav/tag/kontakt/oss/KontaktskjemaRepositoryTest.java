@@ -35,9 +35,6 @@ public class KontaktskjemaRepositoryTest {
     @Autowired
     private GsakOppgaveRepository oppgaveRepository;
 
-    @Autowired
-    private Transactor transactor;
-
     @After
     public void tearDown() {
         kontaktskjemaRepository.deleteAll();
@@ -56,7 +53,7 @@ public class KontaktskjemaRepositoryTest {
         assertThat(kontaktskjemaRepository.findById(lagretSkjema.getId()).isPresent(), is(true));
     }
 
-    @Test(expected=DbActionExecutionException.class)
+    @Test(expected = DbActionExecutionException.class)
     public void skalFeileHvisKommuneErForLang() {
         Kontaktskjema kontaktskjema = TestData.kontaktskjema();
         kontaktskjema.setKommunenr("1234567");
@@ -69,7 +66,7 @@ public class KontaktskjemaRepositoryTest {
         kontaktskjema.setKommunenr("123456");
         kontaktskjemaRepository.save(kontaktskjema);
     }
-    
+
     @Test
     public void skalHenteBasertPaDato() {
         kontaktskjemaRepository.save(skjemaMedDato(now().minusDays(3)));
@@ -88,58 +85,48 @@ public class KontaktskjemaRepositoryTest {
 
     @Test
     public void skalHenteSkjemaSomIkkeHarGsakOppgave() {
-        transactor.inTransaction(() -> {
-            kontaktskjemaRepository.save(TestData.kontaktskjema());
-            assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size(), is(1));
-        });
+        kontaktskjemaRepository.save(TestData.kontaktskjema());
+        assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size(), is(1));
     }
 
     @Test
     public void skalIkkeHenteSkjemaDersomGsakOppgaveErOpprettet() {
-        transactor.inTransaction(() -> {
-            Kontaktskjema lagretSkjema = kontaktskjemaRepository.save(TestData.kontaktskjema());
-            assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size(), is(1));
-            oppgaveRepository.save(GsakOppgave.builder().kontaktskjemaId(lagretSkjema.getId()).status(OppgaveStatus.OK).build());
-            assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size(), is(0));
-        });
+        Kontaktskjema lagretSkjema = kontaktskjemaRepository.save(TestData.kontaktskjema());
+        assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size(), is(1));
+        oppgaveRepository.save(GsakOppgave.builder().kontaktskjemaId(lagretSkjema.getId()).status(OppgaveStatus.OK).build());
+        assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size(), is(0));
     }
 
     @Test
     public void skalHenteSkjemaDersomGsakOppgaveHarFeilet() {
-        transactor.inTransaction(() -> {
-            Kontaktskjema lagretSkjema = kontaktskjemaRepository.save(TestData.kontaktskjema());
-            assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size(), is(1));
-            oppgaveRepository.save(GsakOppgave.builder().kontaktskjemaId(lagretSkjema.getId()).status(OppgaveStatus.FEILET).build());
-            assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size(), is(1));
-            oppgaveRepository.save(GsakOppgave.builder().kontaktskjemaId(lagretSkjema.getId()).status(OppgaveStatus.OK).build());
-            assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size(), is(0));
-        });
+        Kontaktskjema lagretSkjema = kontaktskjemaRepository.save(TestData.kontaktskjema());
+        assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size(), is(1));
+        oppgaveRepository.save(GsakOppgave.builder().kontaktskjemaId(lagretSkjema.getId()).status(OppgaveStatus.FEILET).build());
+        assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size(), is(1));
+        oppgaveRepository.save(GsakOppgave.builder().kontaktskjemaId(lagretSkjema.getId()).status(OppgaveStatus.OK).build());
+        assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size(), is(0));
     }
 
     @Test
     public void skalIkkeHenteSkjemaDersomKontaktskjemaAlleredeSentTilSalesforce() {
-        transactor.inTransaction(() -> {
-            Kontaktskjema lagretSkjema = kontaktskjemaRepository.save(TestData.kontaktskjema());
-            kontaktskjemaUtsendingRepository.save(
-                    KontaktskjemaUtsending.nyKontaktskjemaUtsending(
-                            lagretSkjema.getId(),
-                            now(),
-                            KontaktskjemaUtsending.UtsendingStatus.SENT
-                    )
-            );
+        Kontaktskjema lagretSkjema = kontaktskjemaRepository.save(TestData.kontaktskjema());
+        kontaktskjemaUtsendingRepository.save(
+                KontaktskjemaUtsending.nyKontaktskjemaUtsending(
+                        lagretSkjema.getId(),
+                        now(),
+                        KontaktskjemaUtsending.UtsendingStatus.SENT
+                )
+        );
 
-            assertThat(kontaktskjemaRepository.hentKontakskjemaerSomSkalSendesTilSalesforce().size(), is(0));
-        });
+        assertThat(kontaktskjemaRepository.hentKontakskjemaerSomSkalSendesTilSalesforce().size(), is(0));
     }
 
     @Test
     public void skalHenteSkjemaSomIkkeErSentTilSalesforce() {
-        transactor.inTransaction(() -> {
-            Kontaktskjema lagretSkjema = kontaktskjemaRepository.save(TestData.kontaktskjema());
-            kontaktskjemaUtsendingRepository.save(KontaktskjemaUtsending.klarTilUtsending(lagretSkjema.getId(), now()));
+        Kontaktskjema lagretSkjema = kontaktskjemaRepository.save(TestData.kontaktskjema());
+        kontaktskjemaUtsendingRepository.save(KontaktskjemaUtsending.klarTilUtsending(lagretSkjema.getId(), now()));
 
-            assertThat(kontaktskjemaRepository.hentKontakskjemaerSomSkalSendesTilSalesforce().size(), is(1));
-        });
+        assertThat(kontaktskjemaRepository.hentKontakskjemaerSomSkalSendesTilSalesforce().size(), is(1));
     }
 
 }
