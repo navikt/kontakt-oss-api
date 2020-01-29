@@ -7,8 +7,7 @@ import no.nav.tag.kontakt.oss.events.BesvarelseMottatt;
 import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.FylkesinndelingMedNavEnheter;
 import no.nav.tag.kontakt.oss.fylkesinndelingMedNavEnheter.KommuneEllerBydel;
 import no.nav.tag.kontakt.oss.navenhetsmapping.NavEnhetService;
-import no.nav.tag.kontakt.oss.salesforce.SalesforceException;
-import no.nav.tag.kontakt.oss.salesforce.SalesforceService;
+import no.nav.tag.kontakt.oss.salesforce.utsending.KontaktskjemaUtsendingRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,11 +20,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static java.time.LocalDateTime.now;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.generate;
 import static no.nav.tag.kontakt.oss.testUtils.TestData.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -37,6 +36,9 @@ public class KontaktskjemaServiceTest {
     private KontaktskjemaRepository repository;
 
     @Mock
+    private KontaktskjemaUtsendingRepository kontaktskjemaUtsendingRepository;
+
+    @Mock
     private ApplicationEventPublisher eventPublisher;
 
     @Mock
@@ -45,8 +47,6 @@ public class KontaktskjemaServiceTest {
     @Mock
     private NavEnhetService navEnhetService;
 
-    @Mock
-    private SalesforceService salesforceService;
 
     private KontaktskjemaService kontaktskjemaService;
 
@@ -55,11 +55,14 @@ public class KontaktskjemaServiceTest {
         kontaktskjemaService = new KontaktskjemaService(
                 maksInnsendingerPerTiMin,
                 repository,
+                kontaktskjemaUtsendingRepository,
                 eventPublisher,
                 dateProvider,
-                navEnhetService,
-                salesforceService
+                navEnhetService
         );
+        Kontaktskjema lagretKontaktskjema = kontaktskjema();
+        lagretKontaktskjema.setId(132);
+        when(repository.save(any())).thenReturn(lagretKontaktskjema);
     }
 
     @Test
@@ -85,7 +88,7 @@ public class KontaktskjemaServiceTest {
 
     @Test
     public void lagreKontaktskjema__skal_sette_dato() {
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = now();
         Kontaktskjema kontaktskjema = kontaktskjema();
         when(dateProvider.now()).thenReturn(now);
         kontaktskjemaService.lagreKontaktskjemaOgSendTilSalesforce(kontaktskjema);
@@ -96,6 +99,7 @@ public class KontaktskjemaServiceTest {
     public void lagreKontaktskjema__skal_sende_event_hvis_vellykket_innsending() {
         Kontaktskjema kontaktskjema = kontaktskjema();
         kontaktskjemaService.lagreKontaktskjemaOgSendTilSalesforce(kontaktskjema);
+
         verify(eventPublisher).publishEvent(new BesvarelseMottatt(true, kontaktskjema));
     }
 
@@ -164,14 +168,6 @@ public class KontaktskjemaServiceTest {
         Kontaktskjema kontaktskjema = kontaktskjema();
         kontaktskjema.setTemaType(TemaType.FOREBYGGE_SYKEFRAVÆR);
         kontaktskjema.setFylke("1234");
-
-        kontaktskjemaService.lagreKontaktskjemaOgSendTilSalesforce(kontaktskjema);
-    }
-
-    @Test(expected = SalesforceException.class)
-    public void lagreKontaktskjema__skal_feile_og_propagere_feil_hvis_salesforceService_feiler() {
-        Kontaktskjema kontaktskjema = kontaktskjema();
-        doThrow(SalesforceException.class).when(salesforceService).sendKontaktskjemaTilSalesforce(kontaktskjema);
 
         kontaktskjemaService.lagreKontaktskjemaOgSendTilSalesforce(kontaktskjema);
     }

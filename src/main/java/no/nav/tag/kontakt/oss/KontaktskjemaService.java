@@ -3,7 +3,8 @@ package no.nav.tag.kontakt.oss;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.tag.kontakt.oss.events.BesvarelseMottatt;
 import no.nav.tag.kontakt.oss.navenhetsmapping.NavEnhetService;
-import no.nav.tag.kontakt.oss.salesforce.SalesforceService;
+import no.nav.tag.kontakt.oss.salesforce.utsending.KontaktskjemaUtsending;
+import no.nav.tag.kontakt.oss.salesforce.utsending.KontaktskjemaUtsendingRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -17,11 +18,11 @@ import static no.bekk.bekkopen.org.OrganisasjonsnummerValidator.isValid;
 @Service
 public class KontaktskjemaService {
     private final int maksInnsendingerPerTiMin;
-    private final KontaktskjemaRepository repository;
+    private final KontaktskjemaRepository kontaktskjemaRepository;
+    private final KontaktskjemaUtsendingRepository kontaktskjemaUtsendingRepository;
     private final ApplicationEventPublisher eventPublisher;
     private final DateProvider dateProvider;
     private final NavEnhetService navEnhetService;
-    private final SalesforceService salesforceService;
 
     private final static String LATIN = "a-zA-Z \\-–'._)(/";
     private final static String SAMISK = "ÁáČčĐđŊŋŠšŦŧŽž";
@@ -39,26 +40,31 @@ public class KontaktskjemaService {
 
     public KontaktskjemaService(
             @Value("${kontaktskjema.max-requests-per-10-min}") Integer maksInnsendingerPerTiMin,
-            KontaktskjemaRepository repository,
+            KontaktskjemaRepository kontaktskjemaRepository,
+            KontaktskjemaUtsendingRepository kontaktskjemaUtsendingRepository,
             ApplicationEventPublisher eventPublisher,
             DateProvider dateProvider,
-            NavEnhetService navEnhetService,
-            SalesforceService salesforceService
+            NavEnhetService navEnhetService
     ) {
         this.maksInnsendingerPerTiMin = maksInnsendingerPerTiMin;
-        this.repository = repository;
+        this.kontaktskjemaRepository = kontaktskjemaRepository;
+        this.kontaktskjemaUtsendingRepository = kontaktskjemaUtsendingRepository;
         this.eventPublisher = eventPublisher;
         this.dateProvider = dateProvider;
         this.navEnhetService = navEnhetService;
-        this.salesforceService = salesforceService;
     }
 
     public void lagreKontaktskjemaOgSendTilSalesforce(Kontaktskjema kontaktskjema) {
         try {
             validerKontaktskjema(kontaktskjema);
             kontaktskjema.setOpprettet(dateProvider.now());
-            repository.save(kontaktskjema);
-            salesforceService.sendKontaktskjemaTilSalesforce(kontaktskjema);
+            Kontaktskjema lagretKontaktskjema = kontaktskjemaRepository.save(kontaktskjema);
+            kontaktskjemaUtsendingRepository.save(
+                    KontaktskjemaUtsending.klarTilUtsending(
+                            lagretKontaktskjema.getId(),
+                            dateProvider.now()
+                    )
+            );
         } catch (Exception e) {
             eventPublisher.publishEvent(new BesvarelseMottatt(false, kontaktskjema));
             throw e;
@@ -111,6 +117,6 @@ public class KontaktskjemaService {
     }
 
     public boolean harMottattForMangeInnsendinger() {
-        return repository.findAllNewerThan(LocalDateTime.now().minusMinutes(10)).size() >= maksInnsendingerPerTiMin;
+        return kontaktskjemaRepository.findAllNewerThan(LocalDateTime.now().minusMinutes(10)).size() >= maksInnsendingerPerTiMin;
     }
 }
