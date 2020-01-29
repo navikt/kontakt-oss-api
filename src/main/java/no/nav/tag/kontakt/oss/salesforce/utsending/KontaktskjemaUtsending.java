@@ -22,7 +22,7 @@ public class KontaktskjemaUtsending {
                 UtsendingStatus.SENT
         );
         kontaktskjemaUtsending.id = lagretKontaktskjemaUtsending.id;
-        return lagretKontaktskjemaUtsending;
+        return kontaktskjemaUtsending;
     }
 
     public static KontaktskjemaUtsending nyKontaktskjemaUtsending(
@@ -42,4 +42,7 @@ public class KontaktskjemaUtsending {
         SENT
     }
 
+    public boolean erSent() {
+        return UtsendingStatus.SENT.equals(utsendingStatus);
+    }
 }

@@ -6,7 +6,6 @@ import net.javacrumbs.shedlock.core.LockConfiguration;
 import net.javacrumbs.shedlock.core.LockingTaskExecutor;
 import no.nav.tag.kontakt.oss.Kontaktskjema;
 import no.nav.tag.kontakt.oss.KontaktskjemaRepository;
-import no.nav.tag.kontakt.oss.salesforce.SalesforceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -18,20 +17,14 @@ import java.util.Collection;
 @Component
 public class KontaktskjemaUtsendingScheduler {
 
-    private final KontaktskjemaRepository kontaktskjemaRepository;
-    private final KontaktskjemaUtsendingRepository kontaktskjemaUtsendingRepository;
-    private final SalesforceService salesforceService;
+    private final KontaktskjemaUtsendingService kontaktskjemaUtsendingService;
     private final LockingTaskExecutor taskExecutor;
+    private final KontaktskjemaRepository kontaktskjemaRepository;
 
     @Autowired
-    public KontaktskjemaUtsendingScheduler(
-            KontaktskjemaRepository kontaktskjemaRepository,
-            KontaktskjemaUtsendingRepository kontaktskjemaUtsendingRepository,
-            SalesforceService salesforceService,
-            LockingTaskExecutor taskExecutor) {
+    public KontaktskjemaUtsendingScheduler(KontaktskjemaUtsendingService kontaktskjemaUtsendingService, KontaktskjemaRepository kontaktskjemaRepository, LockingTaskExecutor taskExecutor) {
+        this.kontaktskjemaUtsendingService = kontaktskjemaUtsendingService;
         this.kontaktskjemaRepository = kontaktskjemaRepository;
-        this.kontaktskjemaUtsendingRepository = kontaktskjemaUtsendingRepository;
-        this.salesforceService = salesforceService;
         this.taskExecutor = taskExecutor;
     }
 
@@ -48,7 +41,7 @@ public class KontaktskjemaUtsendingScheduler {
 
     }
 
-    private void sendSkjemaTilSalesForce() {
+    public void sendSkjemaTilSalesForce() {
         Collection<Kontaktskjema> skjemaer = kontaktskjemaRepository.hentKontakskjemaerSomSkalSendesTilSalesforce();
 
         if (skjemaer.size() > 0) {
@@ -56,13 +49,7 @@ public class KontaktskjemaUtsendingScheduler {
         }
 
         skjemaer.forEach(
-                skjema -> {
-                    salesforceService.sendKontaktskjemaTilSalesforce(skjema);
-                    KontaktskjemaUtsending kontaktskjemaUtsending =
-                            kontaktskjemaUtsendingRepository.hentKontakskjemaUtsending(
-                                    skjema.getId()
-                            );
-                    kontaktskjemaUtsendingRepository.save(KontaktskjemaUtsending.sent(kontaktskjemaUtsending));
-                });
+                skjema ->  kontaktskjemaUtsendingService.sendSkjemaTilSalesForce(skjema));
     }
+
 }

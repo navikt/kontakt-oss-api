@@ -1,6 +1,7 @@
 package no.nav.tag.kontakt.oss.featureToggles;
 
 import no.finn.unleash.DefaultUnleash;
+import no.finn.unleash.FakeUnleash;
 import no.finn.unleash.Unleash;
 import no.finn.unleash.strategy.GradualRolloutSessionIdStrategy;
 import no.finn.unleash.util.UnleashConfig;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 
 @Configuration
@@ -28,6 +30,7 @@ public class FeatureToggleConfig {
 
 
     @Bean
+    @Profile(value= {"dev", "prod"})
     public Unleash initializeUnleash() {
         UnleashConfig config = UnleashConfig.builder()
                 .appName(APP_NAME)
@@ -40,5 +43,13 @@ public class FeatureToggleConfig {
                 byClusterStrategy,
                 new GradualRolloutSessionIdStrategy()
         );
+    }
+
+    @Bean
+    @Profile(value= {"local"})
+    public Unleash unleashMock() {
+        FakeUnleash fakeUnleash = new FakeUnleash();
+        fakeUnleash.enableAll(); //Enabler alle toggles pr. default. Kan endres lokalt ved behov.
+        return fakeUnleash;
     }
 }
