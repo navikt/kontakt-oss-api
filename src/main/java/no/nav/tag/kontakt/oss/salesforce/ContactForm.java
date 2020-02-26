@@ -8,6 +8,7 @@ import no.nav.tag.kontakt.oss.TemaType;
 @AllArgsConstructor
 public class ContactForm {
     private final TemaType type;
+    private final String regionCode;
     private final String municipalityCode;
     private final String organisationName;
     private final String organisationNumber;

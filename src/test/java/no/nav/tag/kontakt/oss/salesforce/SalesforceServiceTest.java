@@ -55,6 +55,7 @@ public class SalesforceServiceTest {
 
         ContactForm ønsketContactForm = new ContactForm(
                 TemaType.REKRUTTERING,
+                "1000",
                 "0101",
                 "Min bedrift AS",
                 "999999999",

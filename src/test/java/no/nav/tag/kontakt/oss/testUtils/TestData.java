@@ -27,9 +27,9 @@ public class TestData {
         return Kontaktskjema.builder()
                 .id(null)
                 .opprettet(LocalDateTime.now())
-                .fylke("nordland")
+                .fylke("1800")
                 .kommune("Bodø")
-                .kommunenr("0011")
+                .kommunenr("1804")
                 .bedriftsnavn("Flesk og Fisk AS")
                 .orgnr("979312059")
                 .fornavn("Ola")
@@ -45,6 +45,7 @@ public class TestData {
         Kontaktskjema kontaktskjema = kontaktskjema();
         return new ContactForm(
                 kontaktskjema.getTemaType(),
+                kontaktskjema.getFylke(),
                 kontaktskjema.getKommunenr(),
                 kontaktskjema.getBedriftsnavn(),
                 kontaktskjema.getOrgnr(),
