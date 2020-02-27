@@ -29,7 +29,7 @@ public class KontaktskjemaForKafka {
                 .id(kontaktskjema.getId())
                 .gsakId(gsakId)
                 .opprettet(kontaktskjema.getOpprettet())
-                .fylke(kontaktskjema.getFylke())
+                .fylke(kontaktskjema.getFylkesenhetsnr())
                 .kommune(kontaktskjema.getKommune())
                 .kommunenr(kontaktskjema.getKommunenr())
                 .bedriftsnavn(kontaktskjema.getBedriftsnavn())

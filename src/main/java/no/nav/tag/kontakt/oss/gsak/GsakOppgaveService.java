@@ -117,7 +117,7 @@ public class GsakOppgaveService {
         String beskrivelse;
 
         if (TemaType.FOREBYGGE_SYKEFRAVÆR.equals(kontaktskjema.getTemaType())) {
-            enhetsnr = navEnhetService.mapFraFylkesenhetNrTilArbeidslivssenterEnhetsnr(kontaktskjema.getFylke());
+            enhetsnr = navEnhetService.mapFraFylkesenhetNrTilArbeidslivssenterEnhetsnr(kontaktskjema.getFylkesenhetsnr());
             tema = GSAK_TEMA_INKLUDERENDE_ARBEIDSLIV;
             beskrivelse = lagBeskrivelseForHenvendelseOmSykefravær(kontaktskjema);
         } else {

@@ -72,7 +72,7 @@ public class KafkaTest {
         LocalDateTime opprettet = LocalDateTime.parse(json.getString("opprettet"));
         assertThat(opprettet).isEqualToIgnoringNanos(kontaktskjema.getOpprettet());
 
-        assertThat(json.getString("fylke")).isEqualTo(kontaktskjema.getFylke());
+        assertThat(json.getString("fylke")).isEqualTo(kontaktskjema.getFylkesenhetsnr());
         assertThat(json.getString("kommune")).isEqualTo(kontaktskjema.getKommune());
         assertThat(json.getString("kommunenr")).isEqualTo(kontaktskjema.getKommunenr());
         assertThat(json.getString("bedriftsnavn")).isEqualTo(kontaktskjema.getBedriftsnavn());

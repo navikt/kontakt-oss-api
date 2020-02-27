@@ -24,7 +24,7 @@ public class SalesforceService {
 
         salesforceKlient.sendContactFormTilSalesforce(new ContactForm(
                 kontaktskjema.getTemaType(),
-                kontaktskjema.getFylke(),
+                kontaktskjema.getFylkesenhetsnr(),
                 kontaktskjema.getKommunenr(),
                 kontaktskjema.getBedriftsnavn(),
                 kontaktskjema.getOrgnr(),

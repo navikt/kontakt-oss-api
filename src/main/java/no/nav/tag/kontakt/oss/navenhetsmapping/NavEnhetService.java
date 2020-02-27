@@ -25,9 +25,9 @@ public class NavEnhetService {
         }
     }
 
-    public String mapFraFylkesenhetNrTilArbeidslivssenterEnhetsnr(String fylkesenhetNr) {
+    public String mapFraFylkesenhetNrTilArbeidslivssenterEnhetsnr(String fylkesenhetsnr) {
         // TODO Manuell mapping foreløpig, fikses i TAG-557
-        switch (fylkesenhetNr) {
+        switch (fylkesenhetsnr) {
             case "1000": // Agder
                 return "1091"; // NAV Arbeidslivssenter Agder
 
@@ -65,7 +65,7 @@ public class NavEnhetService {
                 return "0691";
 
             default:
-                throw new KontaktskjemaException("Fant ikke arbeidslivssenter tilhørende fylkesenhet " + fylkesenhetNr);
+                throw new KontaktskjemaException("Fant ikke arbeidslivssenter tilhørende fylkesenhet " + fylkesenhetsnr);
         }
     }
 }
