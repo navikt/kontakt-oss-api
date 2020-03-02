@@ -18,6 +18,8 @@ public class Kontaktskjema {
     private Integer id;
     @JsonIgnore
     private LocalDateTime opprettet;
+
+    private String fylkesenhetsnr;
     private String fylke;
     private String kommune;
     private String kommunenr;

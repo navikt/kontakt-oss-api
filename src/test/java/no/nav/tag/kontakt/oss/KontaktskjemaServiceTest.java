@@ -156,7 +156,7 @@ public class KontaktskjemaServiceTest {
 
         Kontaktskjema kontaktskjema = kontaktskjema();
         kontaktskjema.setTemaType(TemaType.FOREBYGGE_SYKEFRAVÆR);
-        kontaktskjema.setFylke("1234");
+        kontaktskjema.setFylkesenhetsnr("1234");
 
         kontaktskjemaService.lagreKontaktskjemaOgSendTilSalesforce(kontaktskjema);
     }
@@ -167,7 +167,7 @@ public class KontaktskjemaServiceTest {
 
         Kontaktskjema kontaktskjema = kontaktskjema();
         kontaktskjema.setTemaType(TemaType.FOREBYGGE_SYKEFRAVÆR);
-        kontaktskjema.setFylke("1234");
+        kontaktskjema.setFylkesenhetsnr("1234");
 
         kontaktskjemaService.lagreKontaktskjemaOgSendTilSalesforce(kontaktskjema);
     }

@@ -41,7 +41,7 @@ public class MetricsListeners {
         // f.eks. REKRUTTERING og REKRUTTERING_MED_TILRETTELEGGING.
         log.info("event=kontaktskjema.mottatt"
                 + ",success=" + event.isSuksess()
-                + ",fylke=" + kontaktskjema.getFylke()
+                + ",fylke=" + kontaktskjema.getFylkesenhetsnr()
                 + ",kommunenr=" + kontaktskjema.getKommunenr()
                 + ",kommune=" + kontaktskjema.getKommune()
                 + ",orgnr=" + kontaktskjema.getOrgnr()

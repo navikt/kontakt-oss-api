@@ -75,7 +75,7 @@ public class KontaktskjemaService {
     private void validerKontaktskjema(Kontaktskjema kontaktskjema) {
         try {
             if (TemaType.FOREBYGGE_SYKEFRAVÆR.equals(kontaktskjema.getTemaType())) {
-                navEnhetService.mapFraFylkesenhetNrTilArbeidslivssenterEnhetsnr(kontaktskjema.getFylke());
+                navEnhetService.mapFraFylkesenhetNrTilArbeidslivssenterEnhetsnr(kontaktskjema.getFylkesenhetsnr());
             } else {
                 navEnhetService.mapFraKommunenrTilEnhetsnr(kontaktskjema.getKommunenr());
             }
@@ -91,7 +91,7 @@ public class KontaktskjemaService {
         validerSkjemafelt(kontaktskjema.getBedriftsnavn(), RAUS_TEKST);
         validerSkjemafelt(kontaktskjema.getFornavn(), RAUS_TEKST);
         validerSkjemafelt(kontaktskjema.getEtternavn(), RAUS_TEKST);
-        validerSkjemafelt(kontaktskjema.getFylke(), RAUS_TEKST);
+        validerSkjemafelt(kontaktskjema.getFylkesenhetsnr(), RAUS_TEKST);
         validerSkjemafelt(kontaktskjema.getKommune(), RAUS_TEKST);
         validerSkjemafelt(kontaktskjema.getTelefonnr(), SIFRE_MELLOMROM_OG_PLUSS);
         validerSkjemafelt(kontaktskjema.getEpost(), EPOST);
