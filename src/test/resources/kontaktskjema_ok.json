@@ -1,13 +1,13 @@
 {
-    "fylkesenhetsnr":"1800",
-    "kommune":"Fauske-Fuossko",
-    "bedriftsnavn":"testbedrift",
-    "orgnr":"552615255",
-    "fornavn":"test",
-    "etternavn":"testesen",
-    "epost":"epost",
-    "telefonnr":"123",
-    "kommunenr":"1841",
-    "tema":"Arbeidstrening",
-    "temaType": "REKRUTTERING"
+  "fylkesenhetsnr": "1800",
+  "kommune": "Fauske-Fuossko",
+  "bedriftsnavn": "testbedrift",
+  "orgnr": "552615255",
+  "fornavn": "test",
+  "etternavn": "testesen",
+  "epost": "epost",
+  "telefonnr": "123",
+  "kommunenr": "1841",
+  "tema": "Arbeidstrening",
+  "temaType": "REKRUTTERING"
 }
