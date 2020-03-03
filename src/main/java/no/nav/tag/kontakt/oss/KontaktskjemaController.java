@@ -26,16 +26,6 @@ public class KontaktskjemaController {
     @PostMapping(value = "/meldInteresse")
     public ResponseEntity meldInteresse(@RequestBody Kontaktskjema kontaktskjema) {
 
-        if (StringUtils.isNotEmpty(kontaktskjema.getFylke())
-                && StringUtils.isEmpty(kontaktskjema.getFylkesenhetsnr())
-        ) {
-            kontaktskjema.setFylkesenhetsnr(kontaktskjema.getFylke());
-        } else if (StringUtils.isNotEmpty(kontaktskjema.getFylkesenhetsnr())
-                && StringUtils.isEmpty(kontaktskjema.getFylke())
-        ) {
-            kontaktskjema.setFylke(kontaktskjema.getFylkesenhetsnr());
-        }
-
         if (kontaktskjemaService.harMottattForMangeInnsendinger()) {
             return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
         }

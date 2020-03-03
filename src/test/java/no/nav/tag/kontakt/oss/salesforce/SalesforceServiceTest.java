@@ -40,7 +40,6 @@ public class SalesforceServiceTest {
                 15,
                 LocalDateTime.now(),
                 "1000",
-                "1000",
                 "Kommunenavn",
                 "0101",
                 "Min bedrift AS",

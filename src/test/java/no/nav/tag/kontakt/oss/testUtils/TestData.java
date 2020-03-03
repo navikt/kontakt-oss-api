@@ -27,7 +27,6 @@ public class TestData {
         return Kontaktskjema.builder()
                 .id(null)
                 .opprettet(LocalDateTime.now())
-                .fylke("1800")
                 .fylkesenhetsnr("1800")
                 .kommune("Bodø")
                 .kommunenr("1804")

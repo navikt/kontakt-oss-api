@@ -20,7 +20,6 @@ public class Kontaktskjema {
     private LocalDateTime opprettet;
 
     private String fylkesenhetsnr;
-    private String fylke;
     private String kommune;
     private String kommunenr;
     private String bedriftsnavn;
