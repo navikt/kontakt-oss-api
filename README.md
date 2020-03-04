@@ -1,4 +1,4 @@
-#TAG - Kontaktskjema for inkludering
+#Arbeidsgiver - Kontaktskjema for inkludering
 ===========================
 Byggejobb: [![CircleCI](https://circleci.com/gh/navikt/kontakt-oss-api.svg?style=svg)](https://circleci.com/gh/navikt/kontakt-oss-api)
 
@@ -38,7 +38,8 @@ Spørsmål knyttet til koden eller prosjektet kan rettes mot:
 
 * Lars Andreas Tveiten, lars.andreas.van.woensel.kooy.tveiten@nav.no
 * Thomas Dufourd, thomas.dufourd@nav.no
+* Malaz Alkoj, malaz.alkoj@nav.no
 
 ## For NAV-ansatte
 
-Interne henvendelser kan sendes via Slack i kanalen #tag-teamia.
+Interne henvendelser kan sendes via Slack i kanalen #arbeidsgiver-teamia.
