@@ -4,15 +4,15 @@ metadata:
   name: kontakt-oss-api
   namespace: default
   labels:
-    team: {{team}}
+    team: arbeidsgiver
 spec:
   image: {{version}}
-  team: {{team}}
+  team: arbeidsgiver
   port: 8080
   vault:
     enabled: true
   ingresses:
-    - https://arbeidsgiver.nais.preprod.local/kontakt-oss-api/
+    - https://arbeidsgiver.nais.adeo.no/kontakt-oss-api/
   liveness:
     path: /kontakt-oss-api/internal/healthcheck
     initialDelay: 30
@@ -21,7 +21,7 @@ spec:
     initialDelay: 30
   env:
     - name: SPRING_PROFILES_ACTIVE
-      value: dev
+      value: prod
     - name: FYLKESINNDELING_TVING_OPPDATERING
       value: "false"
   prometheus:
