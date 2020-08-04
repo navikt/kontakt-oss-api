@@ -132,6 +132,6 @@ public class TestData {
 
     @SneakyThrows
     public static String lesFil(String filnavn) {
-        return IOUtils.toString(TestData.class.getClassLoader().getResourceAsStream(filnavn), UTF_8);
+        return IOUtils.toString(TestData.class.getClassLoader().getResourceAsStream(filnavn));
     }
 }

@@ -39,8 +39,7 @@ public class ApiTest {
     @SneakyThrows
     private static String lesFil(String name) {
         return IOUtils.toString(
-                ApiTest.class.getClassLoader().getResourceAsStream(name),
-                UTF_8
+                ApiTest.class.getClassLoader().getResourceAsStream(name)
         );
     }
 
