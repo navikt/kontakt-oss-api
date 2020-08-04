@@ -98,16 +98,16 @@
         <dependency>
             <groupId>net.javacrumbs.shedlock</groupId>
             <artifactId>shedlock-spring</artifactId>
-            <version>2.2.0</version>
+            <version>4.13.0</version>
         </dependency>
         <dependency>
             <groupId>net.javacrumbs.shedlock</groupId>
             <artifactId>shedlock-provider-jdbc-template</artifactId>
-            <version>2.2.0</version>
+            <version>4.13.0</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
-            <artifactIdg>commons-io</artifactIdg>
+            <artifactId>commons-io</artifactId>
             <version>2.7</version>
         </dependency>
 
