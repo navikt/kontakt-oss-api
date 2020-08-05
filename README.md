@@ -1,6 +1,6 @@
 #Arbeidsgiver - Kontaktskjema for inkludering
 ===========================
-Byggejobb: [![CircleCI](https://circleci.com/gh/navikt/kontakt-oss-api.svg?style=svg)](https://circleci.com/gh/navikt/kontakt-oss-api)
+Byggejobb: [GithubActions](https://github.com/navikt/kontakt-oss-api/actions)
 
 Backend for kontaktskjema for arbeidsgivere
 ================
