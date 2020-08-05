@@ -112,6 +112,6 @@ public class MockServer {
 
     @SneakyThrows
     private String lesFilSomString(String filnavn) {
-        return IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("mock/" + filnavn), UTF_8);
+        return IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("mock/" + filnavn));
     }
 }
