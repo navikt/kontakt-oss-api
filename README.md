@@ -1,6 +1,6 @@
 #Arbeidsgiver - Kontaktskjema for inkludering
 ===========================
-Byggejobb: [![CircleCI](https://circleci.com/gh/navikt/kontakt-oss-api.svg?style=svg)](https://circleci.com/gh/navikt/kontakt-oss-api)
+Byggejobb: [GithubActions](https://github.com/navikt/kontakt-oss-api/actions)
 
 Backend for kontaktskjema for arbeidsgivere
 ================
@@ -24,7 +24,7 @@ Bygg image
 Kjør container
 `docker run -d -p 8080:80 kontakt-oss-api `
 
-Åpnes i browser: [http://localhost:8080/](http://localhost:8080/)
+Åpnes i browser: Nå kjører appen på localhost:8080
 
 Hvis localhost ikke fungerer, prøv med IP-en du finner med følgende kommando:
 
