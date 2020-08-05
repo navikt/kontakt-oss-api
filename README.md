@@ -24,7 +24,7 @@ Bygg image
 Kjør container
 `docker run -d -p 8080:80 kontakt-oss-api `
 
-Åpnes i browser: [http://localhost:8081/kontakt-oss-api/norg/enhet/kontaktinformasjon/organisering/AKTIV](http://localhost:8081/kontakt-oss-api/norg/enhet/kontaktinformasjon/organisering/AKTIV)
+Åpnes i browser: Nå kjører appen på localhost:8080
 
 Hvis localhost ikke fungerer, prøv med IP-en du finner med følgende kommando:
 
