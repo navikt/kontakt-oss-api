@@ -30,6 +30,9 @@ Hvis localhost ikke fungerer, prøv med IP-en du finner med følgende kommando:
 
 `docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' container_name_or_id`
 
+## Grafisk fremstilling av API-ene (swagger-ui)
+API-et kan sees og testes på `http://localhost:8080/kontakt-oss-api/swagger-ui.html`
+
 ---
 
 # Henvendelser
