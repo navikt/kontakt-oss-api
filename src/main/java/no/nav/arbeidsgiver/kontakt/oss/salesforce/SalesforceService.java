@@ -10,18 +10,12 @@ import org.springframework.stereotype.Component;
 public class SalesforceService {
 
     private final SalesforceKlient salesforceKlient;
-    private final FeatureToggleService featureToggles;
 
-    public SalesforceService(SalesforceKlient salesforceKlient, FeatureToggleService featureToggleService) {
+    public SalesforceService(SalesforceKlient salesforceKlient) {
         this.salesforceKlient = salesforceKlient;
-        this.featureToggles = featureToggleService;
     }
 
     public void sendKontaktskjemaTilSalesforce(Kontaktskjema kontaktskjema) {
-        if (!featureToggles.erEnabled("tag.kontakt-oss-api.send-til-salesforce")) {
-            return;
-        }
-
         salesforceKlient.sendContactFormTilSalesforce(new ContactForm(
                 kontaktskjema.getTemaType(),
                 kontaktskjema.getFylkesenhetsnr(),
