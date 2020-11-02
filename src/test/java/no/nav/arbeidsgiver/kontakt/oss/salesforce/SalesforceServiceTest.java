@@ -24,18 +24,13 @@ public class SalesforceServiceTest {
     @Mock
     private SalesforceKlient salesforceKlient;
 
-    @Mock
-    private FeatureToggleService featureToggles;
-
     @Before
     public void setup() {
-        salesforceService = new SalesforceService(salesforceKlient, featureToggles);
+        salesforceService = new SalesforceService(salesforceKlient);
     }
 
     @Test
     public void sendKontaktskjemaTilSalesforce__skal_sende_med_riktig_contactForm() {
-        when(featureToggles.erEnabled(anyString())).thenReturn(true);
-
         Kontaktskjema kontaktskjema = new Kontaktskjema(
                 15,
                 LocalDateTime.now(),
@@ -68,19 +63,5 @@ public class SalesforceServiceTest {
         salesforceService.sendKontaktskjemaTilSalesforce(kontaktskjema);
 
         verify(salesforceKlient, times(1)).sendContactFormTilSalesforce(eq(ønsketContactForm));
-    }
-
-    @Test
-    public void sendKontaktskjemaTilSalesforce__skal_ikke_sende_kontaktskjema_hvis_toggle_er_avskrudd() {
-        when(featureToggles.erEnabled(anyString())).thenReturn(false);
-        salesforceService.sendKontaktskjemaTilSalesforce(kontaktskjema());
-        verify(salesforceKlient, times(0)).sendContactFormTilSalesforce(any());
-    }
-
-    @Test
-    public void sendKontaktskjemaTilSalesforce__skal_sende_kontaktskjema_hvis_toggle_er_påskrudd() {
-        when(featureToggles.erEnabled(anyString())).thenReturn(true);
-        salesforceService.sendKontaktskjemaTilSalesforce(kontaktskjema());
-        verify(salesforceKlient, times(1)).sendContactFormTilSalesforce(any());
     }
 }
