@@ -19,6 +19,7 @@ public class GsakOppgave {
 
     public enum OppgaveStatus {
         OK,
-        FEILET
+        FEILET,
+        SKAL_IKKE_SENDES,
     }
 }

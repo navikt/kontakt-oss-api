@@ -27,7 +27,7 @@ public class TestData {
         return Kontaktskjema.builder()
                 .id(null)
                 .opprettet(LocalDateTime.now())
-                .fylkesenhetsnr("1800")
+                .fylkesenhetsnr("1500")
                 .kommune("Bodø")
                 .kommunenr("1804")
                 .bedriftsnavn("Flesk og Fisk AS")

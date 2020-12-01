@@ -22,8 +22,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 import static no.bekk.bekkopen.org.OrganisasjonsnummerValidator.isValid;
-import static no.nav.arbeidsgiver.kontakt.oss.gsak.GsakOppgave.OppgaveStatus.FEILET;
-import static no.nav.arbeidsgiver.kontakt.oss.gsak.GsakOppgave.OppgaveStatus.OK;
+import static no.nav.arbeidsgiver.kontakt.oss.gsak.GsakOppgave.OppgaveStatus.*;
 
 @Component
 @Slf4j
@@ -39,6 +38,8 @@ public class GsakOppgaveService {
     static final String GSAK_TEMA_OPPFØLGING_ARBEIDSGIVER = "OPA";
     static final String GSAK_TEMA_INKLUDERENDE_ARBEIDSLIV = "IAR";
     static final String CORRELATION_ID = "correlationId";
+
+    public static final String FYLKESENHETNR_TIL_MØRE_OG_ROMSDAL = "1500";
 
     @Autowired
     public GsakOppgaveService(
@@ -64,15 +65,25 @@ public class GsakOppgaveService {
     public void opprettOppgaveOgLagreStatus(Kontaktskjema kontaktskjema) {
         try {
             MDC.put(CORRELATION_ID, UUID.randomUUID().toString());
-            GsakRequest gsakRequest = lagGsakInnsending(kontaktskjema);
-            Behandlingsresultat behandlingsresultat = opprettOppgaveIGsak(gsakRequest, kontaktskjema);
-            eventPublisher.publishEvent(new GsakOppgaveSendt(behandlingsresultat, gsakRequest));
-            oppgaveRepository.save(new GsakOppgave.GsakOppgaveBuilder()
-                    .kontaktskjemaId(kontaktskjema.getId())
-                    .status(behandlingsresultat.status)
-                    .opprettet(dateProvider.now())
-                    .gsakId(behandlingsresultat.gsakId)
-                    .build());
+
+            if (FYLKESENHETNR_TIL_MØRE_OG_ROMSDAL.equals(kontaktskjema.getFylkesenhetsnr())) {
+                GsakRequest gsakRequest = lagGsakInnsending(kontaktskjema);
+                Behandlingsresultat behandlingsresultat = opprettOppgaveIGsak(gsakRequest, kontaktskjema);
+                eventPublisher.publishEvent(new GsakOppgaveSendt(behandlingsresultat, gsakRequest));
+                oppgaveRepository.save(new GsakOppgave.GsakOppgaveBuilder()
+                        .kontaktskjemaId(kontaktskjema.getId())
+                        .status(behandlingsresultat.status)
+                        .opprettet(dateProvider.now())
+                        .gsakId(behandlingsresultat.gsakId)
+                        .build());
+            } else {
+                oppgaveRepository.save(new GsakOppgave.GsakOppgaveBuilder()
+                        .kontaktskjemaId(kontaktskjema.getId())
+                        .status(SKAL_IKKE_SENDES)
+                        .opprettet(dateProvider.now())
+                        .gsakId(null)
+                        .build());
+            }
         } finally {
             MDC.remove(CORRELATION_ID);
         }
