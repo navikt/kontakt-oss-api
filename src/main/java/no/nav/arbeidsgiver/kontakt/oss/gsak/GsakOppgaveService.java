@@ -77,6 +77,10 @@ public class GsakOppgaveService {
                         .gsakId(behandlingsresultat.gsakId)
                         .build());
             } else {
+                log.info(
+                        "Oppretter IKKE ny gsak-oppgave for kontaktskjema {}. Skjemaet skal kun sendes til Salesforce.",
+                        kontaktskjema.getId()
+                );
                 oppgaveRepository.save(new GsakOppgave.GsakOppgaveBuilder()
                         .kontaktskjemaId(kontaktskjema.getId())
                         .status(SKAL_IKKE_SENDES)
