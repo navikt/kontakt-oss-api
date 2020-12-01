@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static no.nav.arbeidsgiver.kontakt.oss.gsak.GsakOppgaveService.FYLKESENHETNR_TIL_MØRE_OG_ROMSDAL;
 
 public class TestData {
     public static Kontaktskjema kontaktskjema() {
@@ -27,7 +28,7 @@ public class TestData {
         return Kontaktskjema.builder()
                 .id(null)
                 .opprettet(LocalDateTime.now())
-                .fylkesenhetsnr("1800")
+                .fylkesenhetsnr(FYLKESENHETNR_TIL_MØRE_OG_ROMSDAL)
                 .kommune("Bodø")
                 .kommunenr("1804")
                 .bedriftsnavn("Flesk og Fisk AS")

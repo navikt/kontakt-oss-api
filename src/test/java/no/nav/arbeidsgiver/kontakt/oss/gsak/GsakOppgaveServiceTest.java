@@ -2,6 +2,7 @@ package no.nav.arbeidsgiver.kontakt.oss.gsak;
 
 import no.bekk.bekkopen.org.OrganisasjonsnummerCalculator;
 import no.nav.arbeidsgiver.kontakt.oss.*;
+import no.nav.arbeidsgiver.kontakt.oss.events.FylkesinndelingOppdatert;
 import no.nav.arbeidsgiver.kontakt.oss.events.GsakOppgaveOpprettet;
 import no.nav.arbeidsgiver.kontakt.oss.events.GsakOppgaveSendt;
 import no.nav.arbeidsgiver.kontakt.oss.gsak.integrasjon.GsakKlient;
@@ -21,6 +22,7 @@ import org.springframework.context.ApplicationEventPublisher;
 
 import java.time.LocalDateTime;
 
+import static no.nav.arbeidsgiver.kontakt.oss.gsak.GsakOppgaveService.FYLKESENHETNR_TIL_MØRE_OG_ROMSDAL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentCaptor.forClass;
 import static org.mockito.Mockito.*;
@@ -59,7 +61,7 @@ public class GsakOppgaveServiceTest {
 
     @Test
     public void skalOppdatereDatabaseEtterKallTilGsak() {
-        Kontaktskjema kontaktskjema = Kontaktskjema.builder().id(5).build();
+        Kontaktskjema kontaktskjema = Kontaktskjema.builder().fylkesenhetsnr(FYLKESENHETNR_TIL_MØRE_OG_ROMSDAL).id(5).build();
         gsakOppgaveService.opprettOppgaveOgLagreStatus(kontaktskjema);
 
         verify(oppgaveRepository).save(eq(GsakOppgave.builder().gsakId(0).kontaktskjemaId(5).status(GsakOppgave.OppgaveStatus.OK).opprettet(dateProvider.now()).build()));
@@ -185,7 +187,7 @@ public class GsakOppgaveServiceTest {
         String enhetsnrTilKommunaltKontor = "1234";
         when(navEnhetService.mapFraKommunenrTilEnhetsnr(anyString())).thenReturn(enhetsnrTilKommunaltKontor);
 
-        Kontaktskjema kontaktskjema = TestData.kontaktskjemaBuilder().temaType(TemaType.REKRUTTERING).build();
+        Kontaktskjema kontaktskjema = TestData.kontaktskjemaBuilder().fylkesenhetsnr(FYLKESENHETNR_TIL_MØRE_OG_ROMSDAL).temaType(TemaType.REKRUTTERING).build();
         gsakOppgaveService.opprettOppgaveOgLagreStatus(kontaktskjema);
 
         GsakRequest sendtRequest = capturedGsakRequest();
@@ -214,5 +216,19 @@ public class GsakOppgaveServiceTest {
         }
 
         assertThat(MDC.get(GsakOppgaveService.CORRELATION_ID)).isNull();
+    }
+
+    @Test
+    public void opprettOppgaveOgLagreStatus__skal_ikke_opprette_oppgave_for_andre_fylker_enn_Møre_og_Romsdal() {
+        Kontaktskjema kontaktskjema = TestData.kontaktskjemaBuilder()
+                .id(5)
+                .fylkesenhetsnr("1600")
+                .temaType(TemaType.REKRUTTERING)
+                .build();
+        gsakOppgaveService.opprettOppgaveOgLagreStatus(kontaktskjema);
+
+        verify(gsakKlient, times(0)).opprettGsakOppgave(any());
+        verify(oppgaveRepository).save(eq(GsakOppgave.builder().gsakId(null).kontaktskjemaId(5).status(GsakOppgave.OppgaveStatus.SKAL_IKKE_SENDES).opprettet(dateProvider.now()).build()));
+
     }
 }
