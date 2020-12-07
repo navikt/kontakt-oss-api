@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
 import static java.time.LocalDateTime.now;
-import static org.junit.Assert.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @TestPropertySource(properties = {"mock.enabled=false"})
@@ -26,7 +26,7 @@ public class KontaktskjemaUtsendingRepositoryTest {
         kontaktskjemaUtsendingRepository.save(KontaktskjemaUtsending.klarTilUtsending(123, now()));
 
         KontaktskjemaUtsending kontaktskjemaUtsending = kontaktskjemaUtsendingRepository.hentKontakskjemaUtsending(123);
-        assertNotNull(kontaktskjemaUtsending);
+        assertThat(kontaktskjemaUtsending).isNotNull();
     }
 
 }

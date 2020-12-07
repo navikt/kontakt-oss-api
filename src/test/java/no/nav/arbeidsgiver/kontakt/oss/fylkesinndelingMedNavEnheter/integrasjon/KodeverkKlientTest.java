@@ -17,7 +17,7 @@ import java.util.Arrays;
 
 import static no.nav.arbeidsgiver.kontakt.oss.testUtils.TestData.lesFil;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 

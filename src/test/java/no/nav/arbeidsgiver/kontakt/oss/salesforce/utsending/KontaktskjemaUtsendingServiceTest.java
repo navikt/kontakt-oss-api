@@ -15,7 +15,8 @@ import org.springframework.test.context.TestPropertySource;
 
 import static java.time.LocalDateTime.now;
 import static no.nav.arbeidsgiver.kontakt.oss.testUtils.TestData.kontaktskjemaBuilder;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 
 
@@ -55,7 +56,7 @@ public class KontaktskjemaUtsendingServiceTest {
         kontaktskjemaUtsendingService.sendSkjemaTilSalesForce(kontaktskjema);
 
         KontaktskjemaUtsending kontaktskjemaUtsending = kontaktskjemaUtsendingRepository.findAll().iterator().next();
-        assertTrue(kontaktskjemaUtsending.erSent());
+        assertThat(kontaktskjemaUtsending.erSent()).isTrue();
     }
 
     @Test
@@ -68,18 +69,20 @@ public class KontaktskjemaUtsendingServiceTest {
         sjekkSkjemaErLagretOgKlartTilUtsending(kontaktskjema.getId());
 
         try {
-            kontaktskjemaUtsendingService.sendSkjemaTilSalesForce(kontaktskjema);
-            fail("SalesforceException var forventet her");
+            assertThrows(
+                    SalesforceException.class,
+                    () -> kontaktskjemaUtsendingService.sendSkjemaTilSalesForce(kontaktskjema)
+            );
         } catch (SalesforceException e) { /* Suksess */ }
 
         KontaktskjemaUtsending kontaktskjemaUtsending = kontaktskjemaUtsendingRepository.findAll().iterator().next();
-        assertFalse(kontaktskjemaUtsending.erSent());
+        assertThat(kontaktskjemaUtsending.erSent()).isFalse();
     }
 
 
     private void sjekkSkjemaErLagretOgKlartTilUtsending(Integer kontaktskjemaId) {
         KontaktskjemaUtsending kontaktskjemaUtsendingBeforeSending = kontaktskjemaUtsendingRepository.hentKontakskjemaUtsending(kontaktskjemaId);
-        assertFalse(kontaktskjemaUtsendingBeforeSending.erSent());
+        assertThat(kontaktskjemaUtsendingBeforeSending.erSent()).isFalse();
     }
 
     private Kontaktskjema opprettOgHentKontaktskjema() {
