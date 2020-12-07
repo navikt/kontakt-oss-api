@@ -3,13 +3,13 @@ package no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon
 import no.nav.arbeidsgiver.kontakt.oss.KontaktskjemaException;
 import no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter.NavEnhet;
 import org.assertj.core.api.Assertions;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -19,10 +19,11 @@ import java.util.List;
 
 import static no.nav.arbeidsgiver.kontakt.oss.testUtils.TestData.lesFil;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class NorgKlientTest {
 
     @Mock
@@ -33,7 +34,7 @@ public class NorgKlientTest {
 
     private NorgKlient norgKlient;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         norgKlient = new NorgKlient(restTemplate, "");
     }
@@ -51,18 +52,19 @@ public class NorgKlientTest {
     }
 
 
-    @Test(expected = KontaktskjemaException.class)
+    @Test
     public void hentOrganiseringFraNorg__skal_feile_hvis_respons_ikke_returnerer_ok() {
         ResponseEntity responseEntity = new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         when(restTemplate.exchange(anyString(), eq(HttpMethod.GET), any(), eq(String.class))).thenReturn(responseEntity);
-        norgKlient.hentOrganiseringFraNorg();
+        assertThrows(KontaktskjemaException.class, () -> norgKlient.hentOrganiseringFraNorg());
+        ;
     }
 
-    @Test(expected = KontaktskjemaException.class)
+    @Test
     public void hentOrganiseringFraNorg__skal_feile_hvis_respons_ikke_returnerer_gyldig_json() {
         ResponseEntity<String> responseEntity = new ResponseEntity<>("{ikke gyldig json}", HttpStatus.OK);
         when(restTemplate.exchange(anyString(), eq(HttpMethod.GET), any(), eq(String.class))).thenReturn(responseEntity);
-        norgKlient.hentOrganiseringFraNorg();
+        assertThrows(KontaktskjemaException.class, () -> norgKlient.hentOrganiseringFraNorg());
     }
 
     @Test

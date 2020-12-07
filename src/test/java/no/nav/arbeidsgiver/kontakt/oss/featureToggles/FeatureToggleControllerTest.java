@@ -1,10 +1,10 @@
 package no.nav.arbeidsgiver.kontakt.oss.featureToggles;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import javax.servlet.http.HttpServletResponse;
@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class FeatureToggleControllerTest {
 
     @Mock
@@ -27,7 +27,7 @@ public class FeatureToggleControllerTest {
 
     private FeatureToggleController featureToggleController;
 
-    @Before
+    @BeforeEach
     public void setup() {
         featureToggleController = new FeatureToggleController(featureToggleService);
     }

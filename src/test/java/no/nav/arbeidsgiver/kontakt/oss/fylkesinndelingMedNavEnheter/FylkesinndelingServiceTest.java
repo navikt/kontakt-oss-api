@@ -6,11 +6,11 @@ import no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.
 import no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.NorgKlient;
 import no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.NorgOrganisering;
 import org.assertj.core.api.Assertions;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.Arrays;
@@ -19,9 +19,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class FylkesinndelingServiceTest {
 
     @Mock
@@ -38,7 +39,7 @@ public class FylkesinndelingServiceTest {
 
     private FylkesinndelingService fylkesinndelingService;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         fylkesinndelingService = new FylkesinndelingService(norgKlient, kodeverkKlient, fylkesinndelingRepository, eventPublisher);
     }
@@ -121,10 +122,10 @@ public class FylkesinndelingServiceTest {
         }
     }
 
-    @Test(expected = KontaktskjemaException.class)
+    @Test
     public void oppdaterFylkesinndeling__skal_kaste_kontaktskjema_exception_videre() {
         when(fylkesinndelingService.hentListeOverAlleKommunerOgBydeler()).thenThrow(KontaktskjemaException.class);
-        fylkesinndelingService.oppdaterFylkesinndeling();
+        assertThrows(KontaktskjemaException.class, () ->fylkesinndelingService.oppdaterFylkesinndeling());
     }
 
 }

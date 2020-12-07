@@ -3,13 +3,13 @@ package no.nav.arbeidsgiver.kontakt.oss.gsak.integrasjon;
 import no.nav.arbeidsgiver.kontakt.oss.BadRequestException;
 import no.nav.arbeidsgiver.kontakt.oss.KontaktskjemaException;
 import no.nav.arbeidsgiver.kontakt.oss.testUtils.TestData;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.MDC;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
@@ -17,10 +17,11 @@ import org.springframework.web.client.RestTemplate;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class GsakKlientTest {
 
     @Mock
@@ -31,9 +32,8 @@ public class GsakKlientTest {
 
     private GsakKlient gsakKlient;
 
-    @Before
+    @BeforeEach
     public void setUp() {
-        mockReturverdiFraGsak(TestData.gsakResponseEntity());
         MDC.put("correlationId", "dummy");
         gsakKlient = new GsakKlient(restTemplate, "");
     }
@@ -50,6 +50,7 @@ public class GsakKlientTest {
 
     @Test
     public void opprettGsakOppgave__skal_sende_med_riktig_content_type() {
+        mockReturverdiFraGsak(TestData.gsakResponseEntity());
         gsakKlient.opprettGsakOppgave(TestData.gsakRequest());
 
         captureGsakRequest();
@@ -58,6 +59,7 @@ public class GsakKlientTest {
 
     @Test
     public void opprettGsakOppgave__skal_sende_med_correlation_id() {
+        mockReturverdiFraGsak(TestData.gsakResponseEntity());
         String correlationId = UUID.randomUUID().toString();
         MDC.put("correlationId", correlationId);
 
@@ -68,23 +70,23 @@ public class GsakKlientTest {
         assertThat(headers.get("X-Correlation-ID").get(0)).isEqualTo(correlationId);
     }
 
-    @Test(expected = KontaktskjemaException.class)
+    @Test
     public void opprettGsakOppgave__skal_feile_hvis_correlation_id_ikke_er_satt() {
         MDC.clear();
-        gsakKlient.opprettGsakOppgave(TestData.gsakRequest());
+        assertThrows(KontaktskjemaException.class, () -> gsakKlient.opprettGsakOppgave(TestData.gsakRequest()));
     }
 
-    @Test(expected = KontaktskjemaException.class)
+    @Test
     public void opprettGsakOppgave__skal_feile_hvis_respons_ikke_returnerer_created() {
         mockReturverdiFraGsak(TestData.gsakResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR));
-        gsakKlient.opprettGsakOppgave(TestData.gsakRequest());
+        assertThrows(KontaktskjemaException.class, () -> gsakKlient.opprettGsakOppgave(TestData.gsakRequest()));
     }
 
-    @Test(expected = KontaktskjemaException.class)
+    @Test
     public void opprettGsakOppgave__skal_feile_hvis_respons_ikke_returnerer_gyldig_json() {
         ResponseEntity<String> respons = new ResponseEntity<>("{ikke gyldig json}", HttpStatus.CREATED);
         mockReturverdiFraGsak(respons);
-        gsakKlient.opprettGsakOppgave(TestData.gsakRequest());
+        assertThrows(KontaktskjemaException.class, () -> gsakKlient.opprettGsakOppgave(TestData.gsakRequest()));
     }
 
     @Test
@@ -96,10 +98,10 @@ public class GsakKlientTest {
     }
 
 
-    @Test(expected = BadRequestException.class)
+    @Test
     public void opprettGsakOppgave__skal_kaste_bad_request_exception_hvis_gsak_returnerer_bad_request() {
         mockReturverdiFraGsak(TestData.gsakResponseEntity(HttpStatus.BAD_REQUEST));
-        gsakKlient.opprettGsakOppgave(TestData.gsakRequest());
+        assertThrows(BadRequestException.class, () -> gsakKlient.opprettGsakOppgave(TestData.gsakRequest()));
     }
 
     private void captureGsakRequest() {

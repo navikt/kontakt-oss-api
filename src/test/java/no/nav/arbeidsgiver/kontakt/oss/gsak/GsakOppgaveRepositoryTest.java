@@ -1,20 +1,17 @@
 package no.nav.arbeidsgiver.kontakt.oss.gsak;
 
 import org.hamcrest.Matchers;
-import org.junit.After;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @TestPropertySource(properties = {"mock.enabled=false"})
 public class GsakOppgaveRepositoryTest {
@@ -22,7 +19,7 @@ public class GsakOppgaveRepositoryTest {
     @Autowired
     private GsakOppgaveRepository repository;
 
-    @After
+    @AfterEach
     public void tearDown() {
         repository.deleteAll();
     }

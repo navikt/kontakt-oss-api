@@ -1,10 +1,10 @@
 package no.nav.arbeidsgiver.kontakt.oss.salesforce;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -12,9 +12,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import static no.nav.arbeidsgiver.kontakt.oss.testUtils.TestData.contactForm;
+import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class SalesforceKlientTest {
     private SalesforceKlient salesforceKlient;
 
@@ -24,7 +25,7 @@ public class SalesforceKlientTest {
     private final static String authUrl = "authUrl";
     private final static String apiUrl = "apiUrl";
 
-    @Before
+    @BeforeEach
     public void setUp() {
         salesforceKlient = new SalesforceKlient(
                 restTemplate, authUrl, apiUrl, "", "", "", ""
@@ -42,17 +43,17 @@ public class SalesforceKlientTest {
                 .exchange(eq(authUrl), eq(HttpMethod.POST), any(HttpEntity.class), eq(SalesforceToken.class));
     }
 
-    @Test(expected = SalesforceException.class)
+    @Test
     public void sendKontaktskjemaTilSalesforce__skal_kaste_exception_hvis_resultatet_ikke_gir_200() {
         mockAuthKall(new ResponseEntity<>(new SalesforceToken("token"), HttpStatus.OK));
         mockApiKall(new ResponseEntity(HttpStatus.NOT_FOUND));
-        salesforceKlient.sendContactFormTilSalesforce(contactForm());
+        assertThrows(SalesforceException.class, () -> salesforceKlient.sendContactFormTilSalesforce(contactForm()));
     }
 
-    @Test(expected = SalesforceException.class)
+    @Test
     public void hentSalesforceToken__skal_kaste_exception_hvis_resultatet_ikke_gir_200() {
         mockAuthKall(new ResponseEntity(HttpStatus.BAD_REQUEST));
-        salesforceKlient.hentSalesforceToken();
+        assertThrows(SalesforceException.class, () -> salesforceKlient.hentSalesforceToken());
     }
 
     private void mockApiKall(ResponseEntity response) {
