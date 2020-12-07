@@ -9,11 +9,11 @@ import no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter.KommuneEller
 import no.nav.arbeidsgiver.kontakt.oss.navenhetsmapping.NavEnhetService;
 import no.nav.arbeidsgiver.kontakt.oss.salesforce.utsending.KontaktskjemaUtsendingRepository;
 import no.nav.arbeidsgiver.kontakt.oss.testUtils.TestData;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
 
 import java.time.LocalDateTime;
@@ -25,9 +25,10 @@ import static java.time.LocalDateTime.now;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.generate;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class KontaktskjemaServiceTest {
 
     private int maksInnsendingerPerTiMin = 10;
@@ -50,7 +51,7 @@ public class KontaktskjemaServiceTest {
 
     private KontaktskjemaService kontaktskjemaService;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         kontaktskjemaService = new KontaktskjemaService(
                 maksInnsendingerPerTiMin,
@@ -60,6 +61,9 @@ public class KontaktskjemaServiceTest {
                 dateProvider,
                 navEnhetService
         );
+    }
+
+    private void mockLagretKontaktskjema() {
         Kontaktskjema lagretKontaktskjema = TestData.kontaktskjema();
         lagretKontaktskjema.setId(132);
         when(repository.save(any())).thenReturn(lagretKontaktskjema);
@@ -81,6 +85,7 @@ public class KontaktskjemaServiceTest {
 
     @Test
     public void lagreKontaktskjema__skal_lagre_kontaktskjema_i_repo() {
+        mockLagretKontaktskjema();
         Kontaktskjema kontaktskjema = TestData.kontaktskjema();
         kontaktskjemaService.lagreKontaktskjemaOgSendTilSalesforce(kontaktskjema);
         verify(repository).save(kontaktskjema);
@@ -88,6 +93,7 @@ public class KontaktskjemaServiceTest {
 
     @Test
     public void lagreKontaktskjema__skal_sette_dato() {
+        mockLagretKontaktskjema();
         LocalDateTime now = now();
         Kontaktskjema kontaktskjema = TestData.kontaktskjema();
         when(dateProvider.now()).thenReturn(now);
@@ -97,6 +103,7 @@ public class KontaktskjemaServiceTest {
 
     @Test
     public void lagreKontaktskjema__skal_sende_event_hvis_vellykket_innsending() {
+        mockLagretKontaktskjema();
         Kontaktskjema kontaktskjema = TestData.kontaktskjema();
         kontaktskjemaService.lagreKontaktskjemaOgSendTilSalesforce(kontaktskjema);
 
@@ -130,7 +137,7 @@ public class KontaktskjemaServiceTest {
         verify(eventPublisher, times(1)).publishEvent(new BesvarelseMottatt(false, kontaktskjema));
     }
 
-    @Test(expected = BadRequestException.class)
+    @Test
     public void lagreKontaktskjema__skal_feile_hvis_tematype_IKKE_er_forebygge_sykefravær_og_kommunenr_er_ugyldig() {
         when(navEnhetService.mapFraKommunenrTilEnhetsnr("1234")).thenThrow(KontaktskjemaException.class);
 
@@ -138,11 +145,15 @@ public class KontaktskjemaServiceTest {
         kontaktskjema.setTemaType(TemaType.REKRUTTERING);
         kontaktskjema.setKommunenr("1234");
 
-        kontaktskjemaService.lagreKontaktskjemaOgSendTilSalesforce(kontaktskjema);
+        assertThrows(
+                BadRequestException.class,
+                () -> kontaktskjemaService.lagreKontaktskjemaOgSendTilSalesforce(kontaktskjema)
+        );
     }
 
     @Test
     public void lagreKontaktskjema__skal_fungere_hvis_tematype_IKKE_er_forebygge_sykefravær_og_kommunenr_er_gyldig() {
+        mockLagretKontaktskjema();
         when(navEnhetService.mapFraKommunenrTilEnhetsnr("1234")).thenReturn("4321");
 
         Kontaktskjema kontaktskjema = TestData.kontaktskjema();
@@ -152,7 +163,7 @@ public class KontaktskjemaServiceTest {
         kontaktskjemaService.lagreKontaktskjemaOgSendTilSalesforce(kontaktskjema);
     }
 
-    @Test(expected = BadRequestException.class)
+    @Test
     public void lagreKontaktskjema__skal_feile_hvis_tematype_er_forebygge_sykefravær_og_fylke_er_ugyldig() {
         when(navEnhetService.mapFraFylkesenhetNrTilArbeidslivssenterEnhetsnr("1234")).thenThrow(KontaktskjemaException.class);
 
@@ -160,11 +171,15 @@ public class KontaktskjemaServiceTest {
         kontaktskjema.setTemaType(TemaType.FOREBYGGE_SYKEFRAVÆR);
         kontaktskjema.setFylkesenhetsnr("1234");
 
-        kontaktskjemaService.lagreKontaktskjemaOgSendTilSalesforce(kontaktskjema);
+        assertThrows(
+                BadRequestException.class,
+                () -> kontaktskjemaService.lagreKontaktskjemaOgSendTilSalesforce(kontaktskjema)
+        );
     }
 
     @Test
     public void lagreKontaktskjema__skal_fungere_hvis_tematype_er_forebygge_sykefravær_og_fylke_er_gyldig() {
+        mockLagretKontaktskjema();
         when(navEnhetService.mapFraFylkesenhetNrTilArbeidslivssenterEnhetsnr("1234")).thenReturn("4321");
 
         Kontaktskjema kontaktskjema = TestData.kontaktskjema();
@@ -177,6 +192,7 @@ public class KontaktskjemaServiceTest {
     @Test
     @SneakyThrows
     public void lagreKontaktskjema__skal_returnere_hvis_kontaktskjema_er_gyldig() {
+        mockLagretKontaktskjema();
         Kontaktskjema gyldigKontaktskjema = TestData.kontaktskjemaBuilder()
                 .fornavn("Per")
                 .etternavn("Persén")
@@ -190,48 +206,60 @@ public class KontaktskjemaServiceTest {
     }
 
     @SneakyThrows
-    @Test(expected = BadRequestException.class)
+    @Test
     public void lagreKontaktskjema__skal_feile_ved_ugyldig_bedriftsnavn() {
         Kontaktskjema ugyldigKontaktskjema = TestData.kontaktskjemaBuilder()
                 .bedriftsnavn("$jokoladefabrikken")
                 .build();
-
-        kontaktskjemaService.lagreKontaktskjemaOgSendTilSalesforce(ugyldigKontaktskjema);
+        assertThrows(
+                BadRequestException.class,
+                () -> kontaktskjemaService.lagreKontaktskjemaOgSendTilSalesforce(ugyldigKontaktskjema)
+        );
     }
 
     @SneakyThrows
-    @Test(expected = BadRequestException.class)
+    @Test
     public void lagreKontaktskjema__skal_feile_ved_ugyldig_telefonnumer() {
         Kontaktskjema ugyldigKontaktskjema = TestData.kontaktskjemaBuilder()
                 .telefonnr("abcde")
                 .build();
 
-        kontaktskjemaService.lagreKontaktskjemaOgSendTilSalesforce(ugyldigKontaktskjema);
+        assertThrows(
+                BadRequestException.class,
+                () -> kontaktskjemaService.lagreKontaktskjemaOgSendTilSalesforce(ugyldigKontaktskjema)
+        );
+
     }
 
     @SneakyThrows
-    @Test(expected = BadRequestException.class)
+    @Test
     public void lagreKontaktskjema__skal_feile_ved_ugyldig_epost() {
         Kontaktskjema ugyldigKontaktskjema = TestData.kontaktskjemaBuilder()
                 .epost("hei@$jokoladefabrikken.no")
                 .build();
 
-        kontaktskjemaService.lagreKontaktskjemaOgSendTilSalesforce(ugyldigKontaktskjema);
+        assertThrows(
+                BadRequestException.class,
+                () -> kontaktskjemaService.lagreKontaktskjemaOgSendTilSalesforce(ugyldigKontaktskjema)
+        );
     }
 
     @SneakyThrows
-    @Test(expected = BadRequestException.class)
+    @Test
     public void lagreKontaktskjema__skal_feile_ved_ugyldig_orgnummer() {
         Kontaktskjema ugyldigKontaktskjema = TestData.kontaktskjemaBuilder()
                 .orgnr("abcde")
                 .build();
-
-        kontaktskjemaService.lagreKontaktskjemaOgSendTilSalesforce(ugyldigKontaktskjema);
+        assertThrows(
+                BadRequestException.class,
+                () -> kontaktskjemaService.lagreKontaktskjemaOgSendTilSalesforce(ugyldigKontaktskjema)
+        );
     }
 
     @SneakyThrows
     @Test
     public void lagreKontaktskjema__skal_akseptere_understrek_i_epost() {
+        mockLagretKontaktskjema();
         Kontaktskjema ugyldigKontaktskjema = TestData.kontaktskjemaBuilder()
                 .epost("hei_hei@nav.no")
                 .build();
@@ -241,6 +269,7 @@ public class KontaktskjemaServiceTest {
     @SneakyThrows
     @Test
     public void lagreKontaktskjema__skal_akseptere_skråstrek_og_parenteser_i_bedriftsnavn() {
+        mockLagretKontaktskjema();
         Kontaktskjema ugyldigKontaktskjema = TestData.kontaktskjemaBuilder()
                 .bedriftsnavn("Mark AS (egen bedrift) / Krok ENK (konas bedrift)")
                 .build();
@@ -250,6 +279,7 @@ public class KontaktskjemaServiceTest {
     @SneakyThrows
     @Test
     public void lagreKontaktskjema_skal_ta_imot_alle_kommuner() {
+        mockLagretKontaktskjema();
         hentAlleKommunenavnFraMock()
                 .forEach(kommune -> kontaktskjemaService.lagreKontaktskjemaOgSendTilSalesforce(
                         TestData.kontaktskjemaBuilder().kommune(kommune).build())
@@ -259,6 +289,7 @@ public class KontaktskjemaServiceTest {
     @SneakyThrows
     @Test
     public void lagreKontaktskjema_skal_ta_imot_kontaktskjema_uten_orgnr() {
+        mockLagretKontaktskjema();
         kontaktskjemaService.lagreKontaktskjemaOgSendTilSalesforce(TestData.kontaktskjemaBuilder().orgnr(null).build());
         kontaktskjemaService.lagreKontaktskjemaOgSendTilSalesforce(TestData.kontaktskjemaBuilder().orgnr("").build());
     }

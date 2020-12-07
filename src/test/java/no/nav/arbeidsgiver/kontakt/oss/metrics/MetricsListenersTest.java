@@ -5,12 +5,13 @@ import no.nav.arbeidsgiver.kontakt.oss.events.GsakOppgaveSendt;
 import no.nav.arbeidsgiver.kontakt.oss.gsak.GsakOppgave;
 import no.nav.arbeidsgiver.kontakt.oss.gsak.GsakOppgaveService;
 import no.nav.arbeidsgiver.kontakt.oss.testUtils.TestData;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+
+@ExtendWith(MockitoExtension.class)
 public class MetricsListenersTest {
 
     @Mock
