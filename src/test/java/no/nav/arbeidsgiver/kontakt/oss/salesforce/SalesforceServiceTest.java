@@ -2,21 +2,19 @@ package no.nav.arbeidsgiver.kontakt.oss.salesforce;
 
 import no.nav.arbeidsgiver.kontakt.oss.Kontaktskjema;
 import no.nav.arbeidsgiver.kontakt.oss.TemaType;
-import no.nav.arbeidsgiver.kontakt.oss.featureToggles.FeatureToggleService;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 
-import static no.nav.arbeidsgiver.kontakt.oss.testUtils.TestData.kontaktskjema;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class SalesforceServiceTest {
 
     private SalesforceService salesforceService;
@@ -24,7 +22,7 @@ public class SalesforceServiceTest {
     @Mock
     private SalesforceKlient salesforceKlient;
 
-    @Before
+    @BeforeEach
     public void setup() {
         salesforceService = new SalesforceService(salesforceKlient);
     }

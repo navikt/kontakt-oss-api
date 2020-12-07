@@ -3,13 +3,13 @@ package no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon
 import no.nav.arbeidsgiver.kontakt.oss.KontaktskjemaException;
 import no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter.Kommune;
 import org.assertj.core.api.Assertions;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -17,10 +17,11 @@ import java.util.Arrays;
 
 import static no.nav.arbeidsgiver.kontakt.oss.testUtils.TestData.lesFil;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class KodeverkKlientTest {
 
     @Mock
@@ -31,7 +32,7 @@ public class KodeverkKlientTest {
 
     private KodeverkKlient kodeverkKlient;
 
-    @Before
+    @BeforeEach
     public void setup() {
         kodeverkKlient = new KodeverkKlient(restTemplate, "kodeverkUrl");
     }
@@ -70,10 +71,10 @@ public class KodeverkKlientTest {
         assertThat(kodeverkKlient.hentKommuner()).isEmpty();
     }
 
-    @Test(expected = KontaktskjemaException.class)
+    @Test
     public void hentKommuner__skal_feile_hvis_respons_ikke_returnerer_gyldig_json() {
         mockKommuneRespons("ikke gyldig json");
-        kodeverkKlient.hentKommuner();
+        assertThrows(KontaktskjemaException.class, () -> kodeverkKlient.hentKommuner());
     }
 
     @Test
@@ -110,10 +111,10 @@ public class KodeverkKlientTest {
         assertThat(kodeverkKlient.hentBydeler()).isEmpty();
     }
 
-    @Test(expected = KontaktskjemaException.class)
+    @Test
     public void hentBydeler__skal_feile_hvis_respons_ikke_returnerer_gyldig_json() {
         mockBydelRespons("ikke gyldig json");
-        kodeverkKlient.hentBydeler();
+        assertThrows(KontaktskjemaException.class, () -> kodeverkKlient.hentBydeler());
     }
 
     private void mockKommuneRespons(String jsonResponse) {

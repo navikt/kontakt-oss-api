@@ -6,8 +6,8 @@ import net.javacrumbs.shedlock.core.LockConfiguration;
 import net.javacrumbs.shedlock.core.LockingTaskExecutor;
 import net.javacrumbs.shedlock.provider.jdbctemplate.JdbcTemplateLockProvider;
 import org.flywaydb.core.Flyway;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
@@ -20,8 +20,8 @@ import java.util.stream.Stream;
 
 import static java.util.function.Predicate.isEqual;
 import static java.util.stream.Collectors.toList;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 
 @Slf4j
 public class ShedlockTest {
@@ -30,7 +30,7 @@ public class ShedlockTest {
     private JdbcTemplate jdbcTemplate;
     private LockingTaskExecutor taskExecutor;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         DataSource ds = createDataSource();
         jdbcTemplate = new JdbcTemplate(ds);
@@ -57,7 +57,7 @@ public class ShedlockTest {
         }, new LockConfiguration("shedlockTest1", lockTime, lockTime));
         List<Map<String, Object>> results = jdbcTemplate.queryForList("SELECT * FROM SHEDLOCK");
         int shedlockTestLocks = results.stream().map(m -> (String) m.get("name")).filter(isEqual("shedlockTest1")).collect(toList()).size();
-        assertThat(shedlockTestLocks, is(1));
+        assertThat(shedlockTestLocks).isEqualTo(1);
     }
 
     @Test
@@ -75,7 +75,7 @@ public class ShedlockTest {
                     }, lockConfig);
                 });
 
-        assertThat(listSomPopuleresIJobb.size(), is(1));
+        assertThat(listSomPopuleresIJobb.size()).isEqualTo(1);
     }
 
 }

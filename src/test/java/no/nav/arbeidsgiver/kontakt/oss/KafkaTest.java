@@ -9,51 +9,53 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
-import org.springframework.kafka.test.rule.EmbeddedKafkaRule;
+import org.springframework.kafka.test.EmbeddedKafkaBroker;
+import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.kafka.test.utils.KafkaTestUtils;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
+@DirtiesContext
 @ActiveProfiles({"kafka-test", "local"})
 @TestPropertySource(properties = {"mock.enabled=false"})
-@DirtiesContext
+@EmbeddedKafka(
+        controlledShutdown = true,
+        partitions = 1,
+        topics = {KontaktskjemaMottattProducer.TOPIC}
+)
 public class KafkaTest {
 
     @Autowired
     private ApplicationEventPublisher eventPublisher;
 
-    @ClassRule
-    public static EmbeddedKafkaRule embeddedKafka = new EmbeddedKafkaRule(1, true, 1, KontaktskjemaMottattProducer.TOPIC);
+    @Autowired
+    private EmbeddedKafkaBroker embeddedKafkaBroker;
 
     private Consumer<String, String> consumer;
 
-    @Before
+    @BeforeEach
     public void setUp() {
-        Map<String, Object> consumerProps = KafkaTestUtils.consumerProps("testGroup", "true", embeddedKafka.getEmbeddedKafka());
+        Map<String, Object> consumerProps = KafkaTestUtils.consumerProps("testGroup", "true", embeddedKafkaBroker);
         consumerProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         consumerProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
 
         ConsumerFactory<String, String> cf = new DefaultKafkaConsumerFactory<>(consumerProps);
         consumer = cf.createConsumer();
-        embeddedKafka.getEmbeddedKafka().consumeFromAnEmbeddedTopic(consumer, KontaktskjemaMottattProducer.TOPIC);
+        embeddedKafkaBroker.consumeFromAnEmbeddedTopic(consumer, KontaktskjemaMottattProducer.TOPIC);
     }
 
     @Test

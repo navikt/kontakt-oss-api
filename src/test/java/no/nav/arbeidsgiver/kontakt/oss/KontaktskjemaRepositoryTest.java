@@ -5,22 +5,19 @@ import no.nav.arbeidsgiver.kontakt.oss.gsak.GsakOppgaveRepository;
 import no.nav.arbeidsgiver.kontakt.oss.salesforce.utsending.KontaktskjemaUtsending;
 import no.nav.arbeidsgiver.kontakt.oss.salesforce.utsending.KontaktskjemaUtsendingRepository;
 import no.nav.arbeidsgiver.kontakt.oss.testUtils.TestData;
-import org.junit.After;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.relational.core.conversion.DbActionExecutionException;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
 
 import static java.time.LocalDateTime.now;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @TestPropertySource(properties = {"mock.enabled=false"})
 public class KontaktskjemaRepositoryTest {
@@ -34,7 +31,7 @@ public class KontaktskjemaRepositoryTest {
     @Autowired
     private GsakOppgaveRepository oppgaveRepository;
 
-    @After
+    @AfterEach
     public void tearDown() {
         kontaktskjemaRepository.deleteAll();
         oppgaveRepository.deleteAll();
@@ -49,14 +46,14 @@ public class KontaktskjemaRepositoryTest {
     public void skalLagreOgHenteUt() {
         Kontaktskjema lagretSkjema = kontaktskjemaRepository.save(TestData.kontaktskjema());
 
-        assertThat(kontaktskjemaRepository.findById(lagretSkjema.getId()).isPresent(), is(true));
+        assertThat(kontaktskjemaRepository.findById(lagretSkjema.getId())).isPresent();
     }
 
-    @Test(expected = DbActionExecutionException.class)
+    @Test
     public void skalFeileHvisKommuneErForLang() {
         Kontaktskjema kontaktskjema = TestData.kontaktskjema();
         kontaktskjema.setKommunenr("1234567");
-        kontaktskjemaRepository.save(kontaktskjema);
+        assertThrows(DbActionExecutionException.class, () -> kontaktskjemaRepository.save(kontaktskjema));
     }
 
     @Test
@@ -71,9 +68,10 @@ public class KontaktskjemaRepositoryTest {
         kontaktskjemaRepository.save(skjemaMedDato(now().minusDays(3)));
         kontaktskjemaRepository.save(skjemaMedDato(now().minusDays(1)));
 
-        assertThat(kontaktskjemaRepository.findAllNewerThan(now().minusDays(4)).size(), is(2));
-        assertThat(kontaktskjemaRepository.findAllNewerThan(now().minusDays(2)).size(), is(1));
-        assertThat(kontaktskjemaRepository.findAllNewerThan(now()).size(), is(0));
+        assertThat(kontaktskjemaRepository.findAllNewerThan(now().minusDays(4)).size()).isEqualTo(2);
+
+        assertThat(kontaktskjemaRepository.findAllNewerThan(now().minusDays(2)).size()).isEqualTo(1);
+        assertThat(kontaktskjemaRepository.findAllNewerThan(now()).size()).isEqualTo(0);
     }
 
     private Kontaktskjema skjemaMedDato(LocalDateTime opprettetTidspunkt) {
@@ -85,25 +83,25 @@ public class KontaktskjemaRepositoryTest {
     @Test
     public void skalHenteSkjemaSomIkkeHarGsakOppgave() {
         kontaktskjemaRepository.save(TestData.kontaktskjema());
-        assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size(), is(1));
+        assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size()).isEqualTo(1);
     }
 
     @Test
     public void skalIkkeHenteSkjemaDersomGsakOppgaveErOpprettet() {
         Kontaktskjema lagretSkjema = kontaktskjemaRepository.save(TestData.kontaktskjema());
-        assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size(), is(1));
+        assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size()).isEqualTo(1);
         oppgaveRepository.save(GsakOppgave.builder().kontaktskjemaId(lagretSkjema.getId()).status(GsakOppgave.OppgaveStatus.OK).build());
-        assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size(), is(0));
+        assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size()).isEqualTo(0);
     }
 
     @Test
     public void skalHenteSkjemaDersomGsakOppgaveHarFeilet() {
         Kontaktskjema lagretSkjema = kontaktskjemaRepository.save(TestData.kontaktskjema());
-        assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size(), is(1));
+        assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size()).isEqualTo(1);
         oppgaveRepository.save(GsakOppgave.builder().kontaktskjemaId(lagretSkjema.getId()).status(GsakOppgave.OppgaveStatus.FEILET).build());
-        assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size(), is(1));
+        assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size()).isEqualTo(1);
         oppgaveRepository.save(GsakOppgave.builder().kontaktskjemaId(lagretSkjema.getId()).status(GsakOppgave.OppgaveStatus.OK).build());
-        assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size(), is(0));
+        assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size()).isEqualTo(0);
     }
 
     @Test
@@ -117,7 +115,7 @@ public class KontaktskjemaRepositoryTest {
                 )
         );
 
-        assertThat(kontaktskjemaRepository.hentKontakskjemaerSomSkalSendesTilSalesforce().size(), is(0));
+        assertThat(kontaktskjemaRepository.hentKontakskjemaerSomSkalSendesTilSalesforce().size()).isEqualTo(0);
     }
 
     @Test
@@ -125,7 +123,7 @@ public class KontaktskjemaRepositoryTest {
         Kontaktskjema lagretSkjema = kontaktskjemaRepository.save(TestData.kontaktskjema());
         kontaktskjemaUtsendingRepository.save(KontaktskjemaUtsending.klarTilUtsending(lagretSkjema.getId(), now()));
 
-        assertThat(kontaktskjemaRepository.hentKontakskjemaerSomSkalSendesTilSalesforce().size(), is(1));
+        assertThat(kontaktskjemaRepository.hentKontakskjemaerSomSkalSendesTilSalesforce().size()).isEqualTo(1);
     }
 
 }
