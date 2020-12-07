@@ -1,11 +1,9 @@
 package no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -14,7 +12,6 @@ import static no.nav.arbeidsgiver.kontakt.oss.testUtils.TestData.fraFylkesenhete
 import static no.nav.arbeidsgiver.kontakt.oss.testUtils.TestData.fraKommuneNrTilNavEnhet;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @TestPropertySource(properties = {"mock.enabled=false"})
 public class FylkesinndelingRepositoryTest {

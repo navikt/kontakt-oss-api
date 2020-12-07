@@ -3,14 +3,12 @@ package no.nav.arbeidsgiver.kontakt.oss;
 import lombok.SneakyThrows;
 import no.nav.arbeidsgiver.kontakt.oss.testUtils.DatabasePopulator;
 import org.apache.commons.io.IOUtils;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -20,11 +18,8 @@ import java.net.http.HttpResponse;
 
 import static java.net.http.HttpClient.newBuilder;
 import static java.net.http.HttpResponse.BodyHandlers.ofString;
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class ApiTest {
 
@@ -43,7 +38,7 @@ public class ApiTest {
         );
     }
 
-    @Before
+    @BeforeEach
     @SneakyThrows
     public void populerDatabase() {
         databasePopulator.populerFylkesinndelingRepositoryForÅUnngåNullpointers();
@@ -52,8 +47,8 @@ public class ApiTest {
     @Test
     public void postKontaktskjema_OK() throws Exception {
         HttpResponse<?> response = newBuilder().build().send(createRequest(OK_KONTAKTSKJEMA_JSON), ofString());
-        assertThat(response.statusCode(), is(200));
-        assertThat(response.body(), is("\"OK\""));
+        assertThat(response.statusCode()).isEqualTo(200);
+        assertThat(response.body()).isEqualTo("\"OK\"");
     }
 
     private HttpRequest createRequest(String body) {
@@ -74,7 +69,7 @@ public class ApiTest {
         String bodyMedForLangtKommunenr = OK_KONTAKTSKJEMA_JSON.replaceFirst("1841", "1084109");
 
         HttpResponse<?> response = HttpClient.newBuilder().build().send(createRequest(bodyMedForLangtKommunenr), ofString());
-        assertThat(response.statusCode(), is(400));
+        assertThat(response.statusCode()).isEqualTo(400);
     }
 
 }

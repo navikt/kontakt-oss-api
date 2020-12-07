@@ -4,16 +4,14 @@ import no.nav.arbeidsgiver.kontakt.oss.Kontaktskjema;
 import no.nav.arbeidsgiver.kontakt.oss.KontaktskjemaRepository;
 import no.nav.arbeidsgiver.kontakt.oss.salesforce.SalesforceException;
 import no.nav.arbeidsgiver.kontakt.oss.salesforce.SalesforceService;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import static java.time.LocalDateTime.now;
 import static no.nav.arbeidsgiver.kontakt.oss.testUtils.TestData.kontaktskjemaBuilder;
@@ -21,7 +19,6 @@ import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @TestPropertySource(properties = {"mock.enabled=false"})
 public class KontaktskjemaUtsendingServiceTest {
@@ -39,12 +36,12 @@ public class KontaktskjemaUtsendingServiceTest {
     private KontaktskjemaUtsendingService kontaktskjemaUtsendingService;
 
 
-    @Before
+    @BeforeEach
     public void setUp() {
         cleanUpDb();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         cleanUpDb();
     }
