@@ -44,7 +44,7 @@ public class SalesforceKlient {
     }
 
     @SneakyThrows
-    public void sendContactFormTilSalesforce(ContactForm contactForm) {
+    public void sendContactFormTilSalesforce(int skjemaId, ContactForm contactForm) {
         SalesforceToken token = hentSalesforceToken();
 
         HttpHeaders headers = new HttpHeaders();
@@ -60,14 +60,20 @@ public class SalesforceKlient {
 
         if (!HttpStatus.OK.equals(response.getStatusCode())) {
             log.info(
-                    format("Kunne ikke sende kontaktskjema til Salesforce. " +
+                    format("Kunne ikke sende kontaktskjema med id '%d' til Salesforce. " +
                                     "Fikk response med status: '%s' og innhold: '%s'",
+                            skjemaId,
                             response.getStatusCode(),
                             response.getBody()
                     )
             );
             throw new SalesforceException("Kunne ikke sende kontaktskjema til Salesforce. Fikk status: " +
                     response.getStatusCode());
+        } else {
+            log.info(format(
+                    "Utsending av kontaktskjema med id '%d' til Salesforce fullført med response code: '%s'",
+                    skjemaId,
+                    response.getStatusCode()));
         }
     }
 
