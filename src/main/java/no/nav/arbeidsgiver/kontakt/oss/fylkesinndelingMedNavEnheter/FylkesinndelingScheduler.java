@@ -36,7 +36,7 @@ public class FylkesinndelingScheduler {
 
     @Scheduled(fixedRateString = "${norg.fixed-rate}")
     public void scheduledOppdaterInformasjonFraNorg() {
-        log.info("Sjekker shedlock for fylkesinndeling-oppdatering");
+        log.debug("Sjekker shedlock for fylkesinndeling-oppdatering");
 
         Instant lockAtMostUntil = Instant.now().plusSeconds(28 * HOUR);
         Instant lockAtLeastUntil = Instant.now().plusSeconds(24 * HOUR);

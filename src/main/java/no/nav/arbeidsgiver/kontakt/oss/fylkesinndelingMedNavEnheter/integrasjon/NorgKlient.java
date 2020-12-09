@@ -90,7 +90,7 @@ public class NorgKlient {
         switch (jsonResponse.getStatusCode()) {
             case OK:
                 String enhetsnr = oversettTilEnhetsnr(jsonResponse);
-                log.info("Funnet tilhørende enhetsnr {} for kommune/bydel {}", enhetsnr, kommunenrEllerBydelsnr);
+                log.debug("Funnet tilhørende enhetsnr {} for kommune/bydel {}", enhetsnr, kommunenrEllerBydelsnr);
                 return Optional.of(new NavEnhet(enhetsnr));
             case NOT_FOUND:
                 log.info("Fant ikke tilhørende enhetsnr for kommune/bydel {}", kommunenrEllerBydelsnr);

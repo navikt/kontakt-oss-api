@@ -68,6 +68,10 @@ public class SalesforceKlient {
             );
             throw new SalesforceException("Kunne ikke sende kontaktskjema til Salesforce. Fikk status: " +
                     response.getStatusCode());
+        } else {
+            log.info(format(
+                    "Utsending av kontaktskjema til SalesForce fullført med response code: '%s'",
+                    response.getStatusCode()));
         }
     }
 
