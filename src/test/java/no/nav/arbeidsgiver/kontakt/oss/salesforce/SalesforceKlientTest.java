@@ -37,7 +37,7 @@ public class SalesforceKlientTest {
         mockAuthKall(new ResponseEntity<>(new SalesforceToken("token"), HttpStatus.OK));
         mockApiKall(new ResponseEntity(HttpStatus.OK));
 
-        salesforceKlient.sendContactFormTilSalesforce(contactForm());
+        salesforceKlient.sendContactFormTilSalesforce(1111, contactForm());
 
         verify(restTemplate, times(1))
                 .exchange(eq(authUrl), eq(HttpMethod.POST), any(HttpEntity.class), eq(SalesforceToken.class));
@@ -47,7 +47,7 @@ public class SalesforceKlientTest {
     public void sendKontaktskjemaTilSalesforce__skal_kaste_exception_hvis_resultatet_ikke_gir_200() {
         mockAuthKall(new ResponseEntity<>(new SalesforceToken("token"), HttpStatus.OK));
         mockApiKall(new ResponseEntity(HttpStatus.NOT_FOUND));
-        assertThrows(SalesforceException.class, () -> salesforceKlient.sendContactFormTilSalesforce(contactForm()));
+        assertThrows(SalesforceException.class, () -> salesforceKlient.sendContactFormTilSalesforce(1111, contactForm()));
     }
 
     @Test

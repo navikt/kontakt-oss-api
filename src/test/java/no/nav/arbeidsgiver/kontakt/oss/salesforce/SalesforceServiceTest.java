@@ -60,6 +60,6 @@ public class SalesforceServiceTest {
 
         salesforceService.sendKontaktskjemaTilSalesforce(kontaktskjema);
 
-        verify(salesforceKlient, times(1)).sendContactFormTilSalesforce(eq(ønsketContactForm));
+        verify(salesforceKlient, times(1)).sendContactFormTilSalesforce(eq(15), eq(ønsketContactForm));
     }
 }

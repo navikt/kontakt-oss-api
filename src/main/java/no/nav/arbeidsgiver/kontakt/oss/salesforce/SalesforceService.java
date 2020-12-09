@@ -16,16 +16,19 @@ public class SalesforceService {
     }
 
     public void sendKontaktskjemaTilSalesforce(Kontaktskjema kontaktskjema) {
-        salesforceKlient.sendContactFormTilSalesforce(new ContactForm(
-                kontaktskjema.getTemaType(),
-                kontaktskjema.getFylkesenhetsnr(),
-                kontaktskjema.getKommunenr(),
-                kontaktskjema.getBedriftsnavn(),
-                kontaktskjema.getOrgnr(),
-                kontaktskjema.getFornavn(),
-                kontaktskjema.getEtternavn(),
-                kontaktskjema.getEpost(),
-                kontaktskjema.getTelefonnr()
-        ));
+        salesforceKlient.sendContactFormTilSalesforce(
+                kontaktskjema.getId(),
+                new ContactForm(
+                        kontaktskjema.getTemaType(),
+                        kontaktskjema.getFylkesenhetsnr(),
+                        kontaktskjema.getKommunenr(),
+                        kontaktskjema.getBedriftsnavn(),
+                        kontaktskjema.getOrgnr(),
+                        kontaktskjema.getFornavn(),
+                        kontaktskjema.getEtternavn(),
+                        kontaktskjema.getEpost(),
+                        kontaktskjema.getTelefonnr()
+                )
+        );
     }
 }
