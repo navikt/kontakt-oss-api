@@ -13,7 +13,7 @@ kontaktskjema:
 
 ---
 spring:
-  profiles: local
+  config.activate.on-profile: local
   h2.console:
     enabled: true
     path: /h2
@@ -42,13 +42,13 @@ nais.cluster.name: local
 ---
 
 spring:
-  profiles: kafka-test
+  config.activate.on-profile: kafka-test
   kafka:
     bootstrap-servers: ${spring.embedded.kafka.brokers}
 
 ---
 spring:
-  profiles: dev
+  config.activate.on-profile: dev
   kafka:
     bootstrap-servers: b27apvl00045.preprod.local:8443, b27apvl00046.preprod.local:8443, b27apvl00047.preprod.local:8443
     client-id: kontakt-oss-api-preprod
@@ -79,7 +79,7 @@ vault.mount-path: postgresql/preprod-fss
 
 ---
 spring:
-  profiles: prod
+  config.activate.on-profile: prod
   kafka:
     bootstrap-servers: a01apvl00145.adeo.no:8443, a01apvl00146.adeo.no:8443, a01apvl00147.adeo.no:8443, a01apvl00148.adeo.no:8443, a01apvl00149.adeo.no:8443, a01apvl00150.adeo.no:8443
     client-id: kontakt-oss-api-prod
