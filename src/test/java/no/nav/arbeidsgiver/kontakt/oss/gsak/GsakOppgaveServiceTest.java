@@ -10,6 +10,7 @@ import no.nav.arbeidsgiver.kontakt.oss.navenhetsmapping.NavEnhetService;
 import no.nav.arbeidsgiver.kontakt.oss.testUtils.TestData;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -58,6 +59,7 @@ public class GsakOppgaveServiceTest {
         );
     }
 
+    @Disabled("Funksjonaliteten skal fjernes. Testen beholdes inntil funksjonaliteten fjernes.")
     @Test
     public void skalOppdatereDatabaseEtterKallTilGsak() {
         Kontaktskjema kontaktskjema = Kontaktskjema.builder().fylkesenhetsnr(FYLKESENHETNR_TIL_MØRE_OG_ROMSDAL).id(5).build();
@@ -82,6 +84,7 @@ public class GsakOppgaveServiceTest {
         assertThat(gsakRequest.getOrgnr()).isEqualTo("");
     }
 
+    @Disabled("Funksjonaliteten skal fjernes. Testen beholdes inntil funksjonaliteten fjernes.")
     @Test
     public void skalPublisereGsakOppgaveSendtOmVellykketInnsending() {
         gsakOppgaveService.opprettOppgaveOgLagreStatus(TestData.kontaktskjema());
@@ -92,6 +95,7 @@ public class GsakOppgaveServiceTest {
         Assertions.assertThat(argumentCaptor.getValue().getBehandlingsresultat().getStatus()).isEqualTo(GsakOppgave.OppgaveStatus.OK);
     }
 
+    @Disabled("Funksjonaliteten skal fjernes. Testen beholdes inntil funksjonaliteten fjernes.")
     @Test
     public void skalPublisereGsakOppgaveOpprettetOmVelykketInnsending() {
         Kontaktskjema kontaktskjema = TestData.kontaktskjema();
@@ -102,6 +106,7 @@ public class GsakOppgaveServiceTest {
         verify(eventPublisher, times(1)).publishEvent(new GsakOppgaveOpprettet(gsakId, kontaktskjema));
     }
 
+    @Disabled("Funksjonaliteten skal fjernes. Testen beholdes inntil funksjonaliteten fjernes.")
     @Test
     public void skalPublisereEventOmFeiletInnsending() {
         when(gsakKlient.opprettGsakOppgave(any())).thenThrow(KontaktskjemaException.class);
@@ -113,6 +118,7 @@ public class GsakOppgaveServiceTest {
         Assertions.assertThat(argumentCaptor.getValue().getBehandlingsresultat().getStatus()).isEqualTo(GsakOppgave.OppgaveStatus.FEILET);
     }
 
+    @Disabled("Funksjonaliteten skal fjernes. Testen beholdes inntil funksjonaliteten fjernes.")
     @Test
     public void opprettGsakOppgaveSkalKallesToGangerHvisReturnertBadRequest() {
         when(gsakKlient.opprettGsakOppgave(any())).thenThrow(BadRequestException.class);
@@ -121,6 +127,7 @@ public class GsakOppgaveServiceTest {
         verify(gsakKlient, times(2)).opprettGsakOppgave(any());
     }
 
+    @Disabled("Funksjonaliteten skal fjernes. Testen beholdes inntil funksjonaliteten fjernes.")
     @Test
     public void opprettGsakOppgaveSkalKallesForAndreGangUtenOrgnr() {
         when(gsakKlient.opprettGsakOppgave(any())).thenThrow(BadRequestException.class);
@@ -135,6 +142,7 @@ public class GsakOppgaveServiceTest {
         assertThat(orgnr).isEmpty();
     }
 
+    @Disabled("Funksjonaliteten skal fjernes. Testen beholdes inntil funksjonaliteten fjernes.")
     @Test
     public void opprettGsakOppgaveSkalKallesMaksToGanger() {
         when(gsakKlient.opprettGsakOppgave(any()))
@@ -144,6 +152,7 @@ public class GsakOppgaveServiceTest {
         verify(gsakKlient, times(2)).opprettGsakOppgave(any());
     }
 
+    @Disabled("Funksjonaliteten skal fjernes. Testen beholdes inntil funksjonaliteten fjernes.")
     @Test
     public void opprettOppgaveOgLagreStatus__skal_sette_riktige_gsak_temaer_hvis_tema_er_sykefravær() {
         Kontaktskjema kontaktskjema = TestData.kontaktskjemaBuilder().temaType(TemaType.FOREBYGGE_SYKEFRAVÆR).build();
@@ -156,6 +165,7 @@ public class GsakOppgaveServiceTest {
         assertThat(sendtRequest.getTemagruppe()).isEqualTo(null);
     }
 
+    @Disabled("Funksjonaliteten skal fjernes. Testen beholdes inntil funksjonaliteten fjernes.")
     @Test
     public void opprettOppgaveOgLagreStatus__skal_sette_riktige_gsak_temaer_hvis_tema_IKKE_er_sykefravær() {
         Kontaktskjema kontaktskjema = TestData.kontaktskjemaBuilder().temaType(TemaType.REKRUTTERING).build();
@@ -168,6 +178,7 @@ public class GsakOppgaveServiceTest {
         assertThat(sendtRequest.getTemagruppe()).isEqualTo(GsakOppgaveService.GSAK_TEMAGRUPPE_ARBEID);
     }
 
+    @Disabled("Funksjonaliteten skal fjernes. Testen beholdes inntil funksjonaliteten fjernes.")
     @Test
     public void opprettOppgaveOgLagreStatus__skal_bruke_enhetsnr_til_arbeidslivssenteret_hvis_tema_er_sykefravær() {
         String enhetsnrTilArbeidslivssenter = "1234";
@@ -181,6 +192,7 @@ public class GsakOppgaveServiceTest {
         assertThat(sendtRequest.getTildeltEnhetsnr()).isEqualTo(enhetsnrTilArbeidslivssenter);
     }
 
+    @Disabled("Funksjonaliteten skal fjernes. Testen beholdes inntil funksjonaliteten fjernes.")
     @Test
     public void opprettOppgaveOgLagreStatus__skal_bruke_enhetsnr_til_kommunalt_kontor_hvis_tema_IKKE_er_sykefravær() {
         String enhetsnrTilKommunaltKontor = "1234";

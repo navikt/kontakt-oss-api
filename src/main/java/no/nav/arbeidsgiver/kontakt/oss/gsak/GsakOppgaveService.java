@@ -7,7 +7,6 @@ import no.nav.arbeidsgiver.kontakt.oss.DateProvider;
 import no.nav.arbeidsgiver.kontakt.oss.Kontaktskjema;
 import no.nav.arbeidsgiver.kontakt.oss.TemaType;
 import no.nav.arbeidsgiver.kontakt.oss.events.GsakOppgaveOpprettet;
-import no.nav.arbeidsgiver.kontakt.oss.events.GsakOppgaveSendt;
 import no.nav.arbeidsgiver.kontakt.oss.gsak.GsakOppgave.OppgaveStatus;
 import no.nav.arbeidsgiver.kontakt.oss.gsak.integrasjon.GsakKlient;
 import no.nav.arbeidsgiver.kontakt.oss.gsak.integrasjon.GsakRequest;
@@ -66,28 +65,16 @@ public class GsakOppgaveService {
         try {
             MDC.put(CORRELATION_ID, UUID.randomUUID().toString());
 
-            if (FYLKESENHETNR_TIL_MØRE_OG_ROMSDAL.equals(kontaktskjema.getFylkesenhetsnr())) {
-                GsakRequest gsakRequest = lagGsakInnsending(kontaktskjema);
-                Behandlingsresultat behandlingsresultat = opprettOppgaveIGsak(gsakRequest, kontaktskjema);
-                eventPublisher.publishEvent(new GsakOppgaveSendt(behandlingsresultat, gsakRequest));
-                oppgaveRepository.save(new GsakOppgave.GsakOppgaveBuilder()
-                        .kontaktskjemaId(kontaktskjema.getId())
-                        .status(behandlingsresultat.status)
-                        .opprettet(dateProvider.now())
-                        .gsakId(behandlingsresultat.gsakId)
-                        .build());
-            } else {
-                log.info(
-                        "Oppretter IKKE ny gsak-oppgave for kontaktskjema {}. Skjemaet skal kun sendes til Salesforce.",
-                        kontaktskjema.getId()
-                );
-                oppgaveRepository.save(new GsakOppgave.GsakOppgaveBuilder()
-                        .kontaktskjemaId(kontaktskjema.getId())
-                        .status(SKAL_IKKE_SENDES)
-                        .opprettet(dateProvider.now())
-                        .gsakId(null)
-                        .build());
-            }
+            log.info(
+                    "Oppretter IKKE ny gsak-oppgave for kontaktskjema {}. Skjemaet skal kun sendes til Salesforce.",
+                    kontaktskjema.getId()
+            );
+            oppgaveRepository.save(new GsakOppgave.GsakOppgaveBuilder()
+                    .kontaktskjemaId(kontaktskjema.getId())
+                    .status(SKAL_IKKE_SENDES)
+                    .opprettet(dateProvider.now())
+                    .gsakId(null)
+                    .build());
         } finally {
             MDC.remove(CORRELATION_ID);
         }
