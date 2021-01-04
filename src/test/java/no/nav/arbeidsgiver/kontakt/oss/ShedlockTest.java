@@ -21,7 +21,6 @@ import java.util.stream.Stream;
 import static java.util.function.Predicate.isEqual;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.is;
 
 @Slf4j
 public class ShedlockTest {

@@ -3,7 +3,11 @@ package no.nav.arbeidsgiver.kontakt.oss.testUtils;
 import lombok.SneakyThrows;
 import no.nav.arbeidsgiver.kontakt.oss.Kontaktskjema;
 import no.nav.arbeidsgiver.kontakt.oss.TemaType;
-import no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter.*;
+import no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter.Bydel;
+import no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter.FylkesinndelingMedNavEnheter;
+import no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter.Kommune;
+import no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter.KommuneEllerBydel;
+import no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter.NavEnhet;
 import no.nav.arbeidsgiver.kontakt.oss.gsak.integrasjon.GsakRequest;
 import no.nav.arbeidsgiver.kontakt.oss.salesforce.ContactForm;
 import org.apache.commons.io.IOUtils;
@@ -16,7 +20,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static no.nav.arbeidsgiver.kontakt.oss.gsak.GsakOppgaveService.FYLKESENHETNR_TIL_MØRE_OG_ROMSDAL;
 
 public class TestData {
