@@ -24,7 +24,8 @@ public class KontaktskjemaService {
     private final DateProvider dateProvider;
     private final NavEnhetService navEnhetService;
 
-    private final static String LATIN = "a-zA-Z \\-–'._)(/";
+    @SuppressWarnings("RegExpRedundantEscape") // brukes i character class, må escapes
+    private final static String LATIN = "a-zA-Z ?\\-–'._)(/";
     private final static String SAMISK = "ÁáČčĐđŊŋŠšŦŧŽž";
     private final static String NORSK = "æøåÆØÅ";
 
