@@ -57,7 +57,7 @@ public class TestData {
                 kontaktskjema.getEtternavn().get(),
                 kontaktskjema.getEpost(),
                 kontaktskjema.getTelefonnr(),
-                kontaktskjema.getNavn().get()
+                null
         );
     }
 
