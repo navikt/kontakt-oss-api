@@ -24,10 +24,11 @@ public class SalesforceService {
                         kontaktskjema.getKommunenr(),
                         kontaktskjema.getBedriftsnavn(),
                         kontaktskjema.getOrgnr(),
-                        kontaktskjema.getFornavn(),
-                        kontaktskjema.getEtternavn(),
+                        kontaktskjema.getFornavn().get(),
+                        kontaktskjema.getEtternavn().get(),
                         kontaktskjema.getEpost(),
-                        kontaktskjema.getTelefonnr()
+                        kontaktskjema.getTelefonnr(),
+                        kontaktskjema.getNavn().get()
                 )
         );
     }

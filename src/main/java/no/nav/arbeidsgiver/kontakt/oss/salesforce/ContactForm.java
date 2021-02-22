@@ -16,4 +16,5 @@ public class ContactForm {
     private final String lastName;
     private final String email;
     private final String phoneNo;
+    private final String name;
 }
