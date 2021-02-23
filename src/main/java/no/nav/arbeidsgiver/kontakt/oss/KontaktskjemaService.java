@@ -90,15 +90,31 @@ public class KontaktskjemaService {
 
     private void validerFelter(Kontaktskjema kontaktskjema) {
         validerSkjemafelt(kontaktskjema.getBedriftsnavn(), RAUS_TEKST);
-        validerSkjemafelt(kontaktskjema.getFylkesenhetsnr(), RAUS_TEKST);
         validerSkjemafelt(kontaktskjema.getKommune(), RAUS_TEKST);
         validerSkjemafelt(kontaktskjema.getTelefonnr(), SIFRE_MELLOMROM_OG_PLUSS);
         validerSkjemafelt(kontaktskjema.getEpost(), EPOST);
+        validerKommuneOgFylke(kontaktskjema);
         validerNavn(kontaktskjema);
         validerOrgnr(kontaktskjema.getOrgnr());
     }
-    private void validerNavn(Kontaktskjema kontaktskjema) {
 
+    private void validerKommuneOgFylke(Kontaktskjema kontaktskjema){
+        if(TemaType.REKRUTTERING.equals(kontaktskjema.getTemaType())){
+            validerKommune(kontaktskjema);
+        }else{
+            validerFylke(kontaktskjema);
+        }
+
+    }
+    private void validerFylke(Kontaktskjema kontaktskjema) {
+        validerSkjemafelt(kontaktskjema.getFylkesenhetsnr(), RAUS_TEKST);
+    }
+    private void validerKommune(Kontaktskjema kontaktskjema) {
+        validerSkjemafelt(kontaktskjema.getKommune(), RAUS_TEKST);
+        validerSkjemafelt(kontaktskjema.getTelefonnr(), SIFRE_MELLOMROM_OG_PLUSS);
+    }
+
+    private void validerNavn(Kontaktskjema kontaktskjema) {
         if (kontaktskjema.getFornavn().isPresent() && kontaktskjema.getEtternavn().isPresent()) {
             validerSkjemafelt(kontaktskjema.getFornavn().get(), RAUS_TEKST);
             validerSkjemafelt(kontaktskjema.getEtternavn().get(), RAUS_TEKST);
