@@ -7,6 +7,7 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Data
@@ -31,4 +32,16 @@ public class Kontaktskjema {
     private String tema;
     private TemaType temaType;
     private Boolean harSnakketMedAnsattrepresentant;
+    private String navn;
+
+    public Optional<String> getNavn() {
+        return Optional.ofNullable(navn);
+    }
+    public Optional<String> getFornavn() {
+        return Optional.ofNullable(fornavn);
+    }
+    public Optional<String> getEtternavn() {
+        return Optional.ofNullable(etternavn);
+    }
+
 }

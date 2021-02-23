@@ -16,19 +16,39 @@ public class SalesforceService {
     }
 
     public void sendKontaktskjemaTilSalesforce(Kontaktskjema kontaktskjema) {
-        salesforceKlient.sendContactFormTilSalesforce(
-                kontaktskjema.getId(),
-                new ContactForm(
-                        kontaktskjema.getTemaType(),
-                        kontaktskjema.getFylkesenhetsnr(),
-                        kontaktskjema.getKommunenr(),
-                        kontaktskjema.getBedriftsnavn(),
-                        kontaktskjema.getOrgnr(),
-                        kontaktskjema.getFornavn(),
-                        kontaktskjema.getEtternavn(),
-                        kontaktskjema.getEpost(),
-                        kontaktskjema.getTelefonnr()
-                )
-        );
+        if (kontaktskjema.getNavn().isPresent()) {
+            salesforceKlient.sendContactFormTilSalesforce(
+                    kontaktskjema.getId(),
+                    new ContactForm(
+                            kontaktskjema.getTemaType(),
+                            kontaktskjema.getFylkesenhetsnr(),
+                            kontaktskjema.getKommunenr(),
+                            kontaktskjema.getBedriftsnavn(),
+                            kontaktskjema.getOrgnr(),
+                            null,
+                            null,
+                            kontaktskjema.getEpost(),
+                            kontaktskjema.getTelefonnr(),
+                            kontaktskjema.getNavn().get()
+                    )
+            );
+
+        } else {
+            salesforceKlient.sendContactFormTilSalesforce(
+                    kontaktskjema.getId(),
+                    new ContactForm(
+                            kontaktskjema.getTemaType(),
+                            kontaktskjema.getFylkesenhetsnr(),
+                            kontaktskjema.getKommunenr(),
+                            kontaktskjema.getBedriftsnavn(),
+                            kontaktskjema.getOrgnr(),
+                            kontaktskjema.getFornavn().get(),
+                            kontaktskjema.getEtternavn().get(),
+                            kontaktskjema.getEpost(),
+                            kontaktskjema.getTelefonnr(),
+                            null
+                    )
+            );
+        }
     }
 }

@@ -43,7 +43,8 @@ public class SalesforceServiceTest {
                 "1256456457",
                 "Rekruttering",
                 TemaType.REKRUTTERING,
-                false
+                false,
+                null
         );
 
         ContactForm ønsketContactForm = new ContactForm(
@@ -55,8 +56,9 @@ public class SalesforceServiceTest {
                 "Per",
                 "Perssen",
                 "per@per.no",
-                "1256456457"
-        );
+                "1256456457",
+                null
+                        );
 
         salesforceService.sendKontaktskjemaTilSalesforce(kontaktskjema);
 
