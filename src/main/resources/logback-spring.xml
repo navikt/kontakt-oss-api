@@ -9,6 +9,9 @@
         <root level="INFO">
             <appender-ref ref="consoleAppender"/>
         </root>
+        <logger name="org.flywaydb" additivity="false" level="DEBUG">
+            <appender-ref ref="consoleAppender"/>
+        </logger>
     </springProfile>
     <springProfile name="local">
         <include resource="org/springframework/boot/logging/logback/base.xml"/>
