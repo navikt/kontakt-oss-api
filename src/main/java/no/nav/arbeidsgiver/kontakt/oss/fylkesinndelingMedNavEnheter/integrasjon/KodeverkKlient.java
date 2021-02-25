@@ -7,6 +7,7 @@ import no.nav.arbeidsgiver.kontakt.oss.config.IgnoreAllErrors;
 import no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter.Bydel;
 import no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter.Kommune;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -23,11 +24,10 @@ public class KodeverkKlient {
     private final String kodeverkUrl;
 
     public KodeverkKlient(
-            RestTemplate restTemplate,
+            RestTemplateBuilder restTemplateBuilder,
             @Value("${kodeverk.url}") String kodeverkUrl
     ) {
-        restTemplate.setErrorHandler(new IgnoreAllErrors());
-        this.restTemplate = restTemplate;
+        this.restTemplate = restTemplateBuilder.errorHandler(new IgnoreAllErrors()).build();
         this.kodeverkUrl = kodeverkUrl;
     }
 

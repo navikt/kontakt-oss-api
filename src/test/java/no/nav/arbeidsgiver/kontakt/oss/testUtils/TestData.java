@@ -3,26 +3,23 @@ package no.nav.arbeidsgiver.kontakt.oss.testUtils;
 import lombok.SneakyThrows;
 import no.nav.arbeidsgiver.kontakt.oss.Kontaktskjema;
 import no.nav.arbeidsgiver.kontakt.oss.TemaType;
-import no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter.Bydel;
-import no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter.FylkesinndelingMedNavEnheter;
-import no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter.Kommune;
-import no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter.KommuneEllerBydel;
-import no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter.NavEnhet;
-import no.nav.arbeidsgiver.kontakt.oss.gsak.integrasjon.GsakRequest;
+import no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter.*;
 import no.nav.arbeidsgiver.kontakt.oss.salesforce.ContactForm;
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static no.nav.arbeidsgiver.kontakt.oss.gsak.GsakOppgaveService.FYLKESENHETNR_TIL_MØRE_OG_ROMSDAL;
-
 public class TestData {
+    public static final String FYLKESENHETNR_TIL_MOERE_OG_ROMSDAL = "1500";
+
     public static Kontaktskjema kontaktskjema() {
         return kontaktskjemaBuilder().build();
     }
@@ -31,7 +28,7 @@ public class TestData {
         return Kontaktskjema.builder()
                 .id(null)
                 .opprettet(LocalDateTime.now())
-                .fylkesenhetsnr(FYLKESENHETNR_TIL_MØRE_OG_ROMSDAL)
+                .fylkesenhetsnr(FYLKESENHETNR_TIL_MOERE_OG_ROMSDAL)
                 .kommune("Bodø")
                 .kommunenr("1804")
                 .bedriftsnavn("Flesk og Fisk AS")
@@ -53,26 +50,11 @@ public class TestData {
                 kontaktskjema.getKommunenr(),
                 kontaktskjema.getBedriftsnavn(),
                 kontaktskjema.getOrgnr(),
-                kontaktskjema.getFornavn().get(),
-                kontaktskjema.getEtternavn().get(),
+                kontaktskjema.getFornavn().orElse(null),
+                kontaktskjema.getEtternavn().orElse(null),
                 kontaktskjema.getEpost(),
                 kontaktskjema.getTelefonnr(),
                 null
-        );
-    }
-
-    public static GsakRequest gsakRequest() {
-        return new GsakRequest(
-                "0000",
-                "9999",
-                "979312059",
-                "beskrivelse",
-                "ARBD",
-                "OPA",
-                "VURD_HENV",
-                "HOY",
-                "1970-10-10",
-                "1970-10-12"
         );
     }
 
@@ -137,6 +119,9 @@ public class TestData {
 
     @SneakyThrows
     public static String lesFil(String filnavn) {
-        return IOUtils.toString(TestData.class.getClassLoader().getResourceAsStream(filnavn));
+        return IOUtils.toString(
+                Objects.requireNonNull(TestData.class.getClassLoader().getResourceAsStream(filnavn)),
+                StandardCharsets.UTF_8
+        );
     }
 }

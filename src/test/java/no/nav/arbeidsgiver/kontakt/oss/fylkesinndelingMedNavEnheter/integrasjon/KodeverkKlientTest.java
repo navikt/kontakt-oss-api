@@ -2,6 +2,7 @@ package no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon
 
 import no.nav.arbeidsgiver.kontakt.oss.KontaktskjemaException;
 import no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter.Kommune;
+import no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter.KommuneEllerBydel;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,11 +11,8 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
@@ -31,6 +29,9 @@ public class KodeverkKlientTest {
     @Mock
     private RestTemplate restTemplate;
 
+    @Mock
+    private RestTemplateBuilder restTemplateBuilder;
+
     @Captor
     ArgumentCaptor<HttpEntity<String>> requestCaptor;
 
@@ -38,7 +39,9 @@ public class KodeverkKlientTest {
 
     @BeforeEach
     public void setup() {
-        kodeverkKlient = new KodeverkKlient(restTemplate, "kodeverkUrl");
+        when(restTemplateBuilder.errorHandler(any())).thenReturn(restTemplateBuilder);
+        when(restTemplateBuilder.build()).thenReturn(restTemplate);
+        kodeverkKlient = new KodeverkKlient(restTemplateBuilder, "kodeverkUrl");
     }
 
     @Test
@@ -47,6 +50,7 @@ public class KodeverkKlientTest {
         assertThat(kodeverkKlient.hentKommuner().size()).isGreaterThan(400);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     public void hentKommuner__skal_sende_med_riktige_headers_til_kodeverk() {
         mockKommuneRespons(lesFil("kommuner.json"));
@@ -87,6 +91,7 @@ public class KodeverkKlientTest {
         assertThat(kodeverkKlient.hentBydeler().size()).isGreaterThan(30);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     public void hentBydeler__skal_sende_med_riktige_headers_til_kodeverk() {
         mockBydelRespons(lesFil("bydeler.json"));
@@ -104,8 +109,8 @@ public class KodeverkKlientTest {
         mockBydelRespons(lesFil("bydeler.json"));
 
         assertThat(kodeverkKlient.hentBydeler()).isEqualTo(Arrays.asList(
-                new Kommune("110301", "Hundvåg"),
-                new Kommune("110302", "Tasta")
+                new KommuneEllerBydel("110301", "Hundvåg"),
+                new KommuneEllerBydel("110302", "Tasta")
         ));
     }
 

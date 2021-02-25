@@ -5,14 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.arbeidsgiver.kontakt.oss.Kontaktskjema;
 import no.nav.arbeidsgiver.kontakt.oss.events.BesvarelseMottatt;
 import no.nav.arbeidsgiver.kontakt.oss.events.FylkesinndelingOppdatert;
-import no.nav.arbeidsgiver.kontakt.oss.events.GsakOppgaveSendt;
-import no.nav.arbeidsgiver.kontakt.oss.gsak.GsakOppgave.OppgaveStatus;
-import no.nav.arbeidsgiver.kontakt.oss.gsak.GsakOppgaveService.Behandlingsresultat;
-import no.nav.arbeidsgiver.kontakt.oss.gsak.integrasjon.GsakRequest;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-
-import java.util.Optional;
 
 @Slf4j
 @Component
@@ -46,19 +40,6 @@ public class MetricsListeners {
                 + ",temaType=" + kontaktskjema.getTemaType()
                 + ",harSnakketMedAnsattrepresentant=" + kontaktskjema.getHarSnakketMedAnsattrepresentant()
                 + ","
-        );
-    }
-
-    @EventListener
-    public void gsakOppgaveSendt(GsakOppgaveSendt event) {
-        Behandlingsresultat resultat = event.getBehandlingsresultat();
-        Optional<GsakRequest> gsakRequest = Optional.ofNullable(event.getGsakRequest());
-        log.info(
-                "event=gsakoppgave.sendt, success={}, gsakId={}, orgnr={}, tildeltEnhetsnr={}",
-                OppgaveStatus.FEILET != resultat.getStatus(),
-                resultat.getGsakId(),
-                gsakRequest.isEmpty() ? null : gsakRequest.get().getOrgnr(),
-                gsakRequest.isEmpty() ? null : gsakRequest.get().getTildeltEnhetsnr()
         );
     }
 
