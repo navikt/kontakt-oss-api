@@ -93,8 +93,8 @@ public class KontaktskjemaService {
         validerSkjemafelt(kontaktskjema.getKommune(), RAUS_TEKST);
         validerSkjemafelt(kontaktskjema.getTelefonnr(), SIFRE_MELLOMROM_OG_PLUSS);
         validerSkjemafelt(kontaktskjema.getEpost(), EPOST);
+        validerSkjemafelt(kontaktskjema.getNavn(), RAUS_TEKST);
         validerKommuneOgFylke(kontaktskjema);
-        validerNavn(kontaktskjema);
         validerOrgnr(kontaktskjema.getOrgnr());
     }
 
@@ -112,19 +112,6 @@ public class KontaktskjemaService {
     private void validerKommune(Kontaktskjema kontaktskjema) {
         validerSkjemafelt(kontaktskjema.getKommune(), RAUS_TEKST);
         validerSkjemafelt(kontaktskjema.getTelefonnr(), SIFRE_MELLOMROM_OG_PLUSS);
-    }
-
-    private void validerNavn(Kontaktskjema kontaktskjema) {
-        if (kontaktskjema.getFornavn().isPresent() && kontaktskjema.getEtternavn().isPresent()) {
-            validerSkjemafelt(kontaktskjema.getFornavn().get(), RAUS_TEKST);
-            validerSkjemafelt(kontaktskjema.getEtternavn().get(), RAUS_TEKST);
-        }else if(kontaktskjema.getNavn().isPresent() ){
-            validerSkjemafelt(kontaktskjema.getNavn().get(),RAUS_TEKST);
-        }
-        else{
-            String feil = "Navn eller fornavn eller etternavn må være utfylt";
-            throw new BadRequestException(feil);
-        }
     }
 
     private void validerSkjemafelt(String felt, Pattern skalBareInneholde) {

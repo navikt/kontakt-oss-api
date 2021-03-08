@@ -56,12 +56,10 @@ public class SalesforceServiceTest {
                 "0101",
                 "Min bedrift AS",
                 "999999999",
-                "Per",
-                "Perssen",
                 "per@per.no",
                 "1256456457",
-                null
-                        );
+                "Per Perssen"
+        );
 
         salesforceService.sendKontaktskjemaTilSalesforce(kontaktskjema);
 

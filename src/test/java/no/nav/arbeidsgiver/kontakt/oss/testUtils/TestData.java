@@ -50,11 +50,9 @@ public class TestData {
                 kontaktskjema.getKommunenr(),
                 kontaktskjema.getBedriftsnavn(),
                 kontaktskjema.getOrgnr(),
-                kontaktskjema.getFornavn().orElse(null),
-                kontaktskjema.getEtternavn().orElse(null),
                 kontaktskjema.getEpost(),
                 kontaktskjema.getTelefonnr(),
-                null
+                kontaktskjema.getNavn()
         );
     }
 
