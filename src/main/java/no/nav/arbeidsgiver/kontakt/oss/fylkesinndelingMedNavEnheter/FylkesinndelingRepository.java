@@ -7,8 +7,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 public class FylkesinndelingRepository {
@@ -24,18 +26,13 @@ public class FylkesinndelingRepository {
         return jdbcTemplate.queryForObject("SELECT sistOppdatert FROM norg_mapping", LocalDateTime.class);
     }
 
-    @SneakyThrows
-    public Map<String, NavEnhet> hentKommuneNrEllerBydelNrTilNavEnhet() {
-        String json = jdbcTemplate.queryForObject("SELECT mapFraKommunerOgBydelerTilNavEnheter FROM norg_mapping", String.class);
-        return objectMapper.readValue(json, new TypeReference<Map<String, NavEnhet>>() {
-        });
-    }
-
-    @SneakyThrows
-    public FylkesinndelingMedNavEnheter hentFylkesinndeling() {
-        String json = jdbcTemplate.queryForObject("SELECT mapFraFylkesenheterTilKommunerOgBydeler FROM norg_mapping", String.class);
-        return new FylkesinndelingMedNavEnheter(objectMapper.readValue(json, new TypeReference<Map<String, List<KommuneEllerBydel>>>() {
-        }));
+    public List<KommuneEllerBydel> alleLokasjoner() {
+        return hentFylkesinndeling()
+                .getFylkeTilKommuneEllerBydel()
+                .values()
+                .stream()
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
     }
 
     @SneakyThrows
@@ -49,5 +46,21 @@ public class FylkesinndelingRepository {
                 objectMapper.writeValueAsString(fylkesinndeling.getFylkeTilKommuneEllerBydel()),
                 objectMapper.writeValueAsString(kommuneNrEllerBydelNrTilNavEnhet)
         );
+    }
+
+    @SneakyThrows
+    @Deprecated
+    public Map<String, NavEnhet> hentKommuneNrEllerBydelNrTilNavEnhet() {
+        String json = jdbcTemplate.queryForObject("SELECT mapFraKommunerOgBydelerTilNavEnheter FROM norg_mapping", String.class);
+        return objectMapper.readValue(json, new TypeReference<Map<String, NavEnhet>>() {
+        });
+    }
+
+    @SneakyThrows
+    @Deprecated
+    public FylkesinndelingMedNavEnheter hentFylkesinndeling() {
+        String json = jdbcTemplate.queryForObject("SELECT mapFraFylkesenheterTilKommunerOgBydeler FROM norg_mapping", String.class);
+        return new FylkesinndelingMedNavEnheter(objectMapper.readValue(json, new TypeReference<Map<String, List<KommuneEllerBydel>>>() {
+        }));
     }
 }
