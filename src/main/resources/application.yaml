@@ -31,7 +31,6 @@ mock:
   port: 8081
   baseUrl: http://localhost:${mock.port}${server.servlet.context-path}
 
-gsak.url: ${mock.baseUrl}/gsak
 norg.url: ${mock.baseUrl}/norg
 kodeverk.url: ${mock.baseUrl}/kodeverk
 unleash.url: http://unleash.herokuapp.com/api/
