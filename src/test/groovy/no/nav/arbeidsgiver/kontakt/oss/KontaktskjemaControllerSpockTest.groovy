@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         NavEnhetService,
 ])
 @WebMvcTest(
-        controllers = [KontaktskjemaController, KontaktskjemaService, DateProvider],
+        controllers = [KontaktskjemaController, KontaktskjemaService, DateProvider, KontaktskjemaValidator],
         properties = [
                 "kontaktskjema.max-requests-per-10-min=200"
         ]

@@ -48,7 +48,6 @@ public class KontaktskjemaServiceTest {
     @Mock
     private NavEnhetService navEnhetService;
 
-
     private KontaktskjemaService kontaktskjemaService;
 
     @BeforeEach
@@ -59,7 +58,7 @@ public class KontaktskjemaServiceTest {
                 kontaktskjemaUtsendingRepository,
                 eventPublisher,
                 dateProvider,
-                navEnhetService
+                new KontaktskjemaValidator(navEnhetService)
         );
     }
 
