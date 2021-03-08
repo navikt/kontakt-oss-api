@@ -1,6 +1,6 @@
 package no.nav.arbeidsgiver.kontakt.oss;
 
-import no.nav.arbeidsgiver.kontakt.oss.salesforce.SalesforceException;
+import no.nav.arbeidsgiver.kontakt.oss.salesforce.klient.SalesforceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

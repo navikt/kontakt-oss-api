@@ -4,7 +4,7 @@ import lombok.SneakyThrows;
 import no.nav.arbeidsgiver.kontakt.oss.Kontaktskjema;
 import no.nav.arbeidsgiver.kontakt.oss.TemaType;
 import no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter.*;
-import no.nav.arbeidsgiver.kontakt.oss.salesforce.ContactForm;
+import no.nav.arbeidsgiver.kontakt.oss.salesforce.klient.ContactForm;
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package no.nav.arbeidsgiver.kontakt.oss.salesforce;
+package no.nav.arbeidsgiver.kontakt.oss.salesforce.klient;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

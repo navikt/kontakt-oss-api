@@ -1,5 +1,8 @@
 package no.nav.arbeidsgiver.kontakt.oss.salesforce;
 
+import no.nav.arbeidsgiver.kontakt.oss.salesforce.klient.SalesforceException;
+import no.nav.arbeidsgiver.kontakt.oss.salesforce.klient.SalesforceKlient;
+import no.nav.arbeidsgiver.kontakt.oss.salesforce.klient.SalesforceToken;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

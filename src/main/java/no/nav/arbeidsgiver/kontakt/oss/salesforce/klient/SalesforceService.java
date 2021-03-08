@@ -1,8 +1,9 @@
-package no.nav.arbeidsgiver.kontakt.oss.salesforce;
+package no.nav.arbeidsgiver.kontakt.oss.salesforce.klient;
 
 import lombok.extern.slf4j.Slf4j;
 import no.nav.arbeidsgiver.kontakt.oss.Kontaktskjema;
-import no.nav.arbeidsgiver.kontakt.oss.featureToggles.FeatureToggleService;
+import no.nav.arbeidsgiver.kontakt.oss.salesforce.klient.ContactForm;
+import no.nav.arbeidsgiver.kontakt.oss.salesforce.klient.SalesforceKlient;
 import org.springframework.stereotype.Component;
 
 @Slf4j

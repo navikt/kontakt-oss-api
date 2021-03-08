@@ -2,7 +2,7 @@ package no.nav.arbeidsgiver.kontakt.oss.salesforce.utsending;
 
 import lombok.extern.slf4j.Slf4j;
 import no.nav.arbeidsgiver.kontakt.oss.Kontaktskjema;
-import no.nav.arbeidsgiver.kontakt.oss.salesforce.SalesforceService;
+import no.nav.arbeidsgiver.kontakt.oss.salesforce.klient.SalesforceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
