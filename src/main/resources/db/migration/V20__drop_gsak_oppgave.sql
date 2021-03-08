@@ -1,0 +1,1 @@
+drop table gsak_oppgave;

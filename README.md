@@ -37,12 +37,15 @@ API-et kan sees og testes på `http://localhost:8080/kontakt-oss-api/swagger-ui.
 
 # Henvendelser
 
-Spørsmål knyttet til koden eller prosjektet kan rettes mot:
-
-* Lars Andreas Tveiten, lars.andreas.van.woensel.kooy.tveiten@nav.no
-* Thomas Dufourd, thomas.dufourd@nav.no
-* Malaz Alkoj, malaz.alkoj@nav.no
+Spørsmål knyttet til koden eller prosjektet kan opprettes som github issues.
+Eller for genereller spørsmål sjekk commit log for personer som aktivt jobber med koden.
 
 ## For NAV-ansatte
 
-Interne henvendelser kan sendes via Slack i kanalen #arbeidsgiver-teamia.
+Interne henvendelser kan sendes via Slack i kanalen #arbeidsgiver-min-side-arbeidsgiver.
+
+# urler
+
+dev: https://arbeidsgiver-q.nav.no/kontakt-oss (i vdi)
+prod: https://arbeidsgiver.nav.no/kontakt-oss/kontaktskjema
+logs: https://logs.adeo.no/app/dashboards#/view/754c72d0-76d8-11eb-90cb-7315dfb7dea6

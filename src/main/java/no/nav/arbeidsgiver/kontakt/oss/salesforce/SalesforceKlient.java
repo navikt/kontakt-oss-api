@@ -3,8 +3,9 @@ package no.nav.arbeidsgiver.kontakt.oss.salesforce;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
+import no.nav.arbeidsgiver.kontakt.oss.config.IgnoreAllErrors;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -26,7 +27,7 @@ public class SalesforceKlient {
     private final String clientSecret;
 
     public SalesforceKlient(
-            @Qualifier("restTemplate") RestTemplate restTemplate,
+            RestTemplateBuilder restTemplateBuilder,
             @Value("${salesforce.auth.url}") String authUrl,
             @Value("${salesforce.contactform.url}") String apiUrl,
             @Value("${salesforce.username}") String username,
@@ -34,7 +35,7 @@ public class SalesforceKlient {
             @Value("${salesforce.client.id}") String clientId,
             @Value("${salesforce.client.secret}") String clientSecret
     ) {
-        this.restTemplate = restTemplate;
+        this.restTemplate = restTemplateBuilder.errorHandler(new IgnoreAllErrors()).build();
         this.authUrl = authUrl;
         this.apiUrl = apiUrl;
         this.username = username;

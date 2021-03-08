@@ -1,34 +1,52 @@
 package no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.arbeidsgiver.kontakt.oss.KontaktskjemaException;
-import no.nav.arbeidsgiver.kontakt.oss.config.IgnoreAllErrors;
 import no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter.KommuneEllerBydel;
 import no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter.NavEnhet;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
+import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import static java.util.stream.Collectors.toMap;
 
 @Slf4j
 @Service
 public class NorgKlient {
-    private final static ObjectMapper objectMapper = new ObjectMapper();
 
     private final RestTemplate restTemplate;
     private final String norgUrl;
 
     public NorgKlient(
-            RestTemplate restTemplate,
+            RestTemplateBuilder restTemplateBuilder,
             @Value("${norg.url}") String norgUrl
     ) {
-        restTemplate.setErrorHandler(new IgnoreAllErrors());
-        this.restTemplate = restTemplate;
+        this.restTemplate = restTemplateBuilder.errorHandler(new DefaultResponseErrorHandler() {
+            @Override
+            protected boolean hasError(@NonNull HttpStatus statusCode) {
+                return !statusCode.equals(HttpStatus.NOT_FOUND) && super.hasError(statusCode);
+            }
+
+            @Override
+            protected void handleError(
+                    @NonNull ClientHttpResponse response,
+                    @NonNull HttpStatus statusCode
+            ) throws IOException {
+                throw new KontaktskjemaException(response.getStatusText());
+            }
+        }).build();
         this.norgUrl = norgUrl;
     }
 
@@ -37,76 +55,36 @@ public class NorgKlient {
         headers.set("consumerId", "kontakt-oss-api");
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        ResponseEntity<String> jsonResponse = restTemplate.exchange(
+        return restTemplate.exchange(
                 norgUrl + "/enhet/kontaktinformasjon/organisering/AKTIV",
                 HttpMethod.GET,
                 new HttpEntity<>(headers),
-                String.class
-        );
-
-        if (HttpStatus.OK.equals(jsonResponse.getStatusCode())) {
-            return oversettTilNorgOrganisering(jsonResponse);
-        } else {
-            throw new KontaktskjemaException("Kall til NORG returnerte ikke 200 OK. Returverdi: " + jsonResponse.getBody());
-        }
+                new ParameterizedTypeReference<List<NorgOrganisering>>() {
+                }
+        ).getBody();
     }
 
-    private List<NorgOrganisering> oversettTilNorgOrganisering(ResponseEntity<String> jsonResponse) {
-        try {
-            List<NorgOrganisering> norgOrganisering = new ArrayList<>();
-
-            JsonNode jsonNode = objectMapper.readTree(jsonResponse.getBody());
-            jsonNode.forEach(organisering -> norgOrganisering.add(
-                    new NorgOrganisering(
-                            organisering.get("enhet").get("enhetNr").textValue(),
-                            organisering.get("enhet").get("status").textValue(),
-                            organisering.get("overordnetEnhet").textValue()
-                    )
-            ));
-
-            return norgOrganisering;
-        } catch (IOException e) {
-            throw new KontaktskjemaException("Returverdi fra NORG er ikke riktig formatert JSON, eller passer ikke med vår modell. Returverdi: " + jsonResponse.getBody());
-        }
-    }
-
-    public Map<KommuneEllerBydel, NavEnhet> hentMapFraKommuneEllerBydelTilNavenhet(List<KommuneEllerBydel> kommunerOgBydeler) {
-        Map<KommuneEllerBydel, NavEnhet> map = new HashMap<>();
-
-        for (KommuneEllerBydel kommuneEllerBydel : kommunerOgBydeler) {
-            Optional<NavEnhet> enhetsnrOptional = hentTilhoerendeNavEnhet(kommuneEllerBydel.getNummer());
-            enhetsnrOptional.ifPresent(enhetsnr -> map.put(kommuneEllerBydel, enhetsnr));
-        }
-
-        return map;
+    public Map<KommuneEllerBydel, NavEnhet> hentMapFraKommuneEllerBydelTilNavenhet(
+            List<KommuneEllerBydel> kommunerOgBydeler
+    ) {
+        return kommunerOgBydeler.stream()
+                .map(kommuneEllerBydel ->
+                        hentTilhoerendeNavEnhet(kommuneEllerBydel.getNummer())
+                                .map((enhetsnr) -> Pair.of(kommuneEllerBydel, enhetsnr))
+                )
+                .filter(Optional::isPresent).map(Optional::get)
+                .collect(toMap(
+                        Pair::getKey,
+                        Pair::getValue
+                ));
     }
 
     public Optional<NavEnhet> hentTilhoerendeNavEnhet(String kommunenrEllerBydelsnr) {
-        ResponseEntity<String> jsonResponse = restTemplate.getForEntity(
-                norgUrl + "/enhet/navkontor/" + kommunenrEllerBydelsnr,
-                String.class
+        return Optional.ofNullable(
+                restTemplate.getForEntity(
+                        norgUrl + "/enhet/navkontor/" + kommunenrEllerBydelsnr,
+                        NavEnhet.class
+                ).getBody()
         );
-
-        switch (jsonResponse.getStatusCode()) {
-            case OK:
-                String enhetsnr = oversettTilEnhetsnr(jsonResponse);
-                log.debug("Funnet tilhørende enhetsnr {} for kommune/bydel {}", enhetsnr, kommunenrEllerBydelsnr);
-                return Optional.of(new NavEnhet(enhetsnr));
-            case NOT_FOUND:
-                log.info("Fant ikke tilhørende enhetsnr for kommune/bydel {}", kommunenrEllerBydelsnr);
-                return Optional.empty();
-            default:
-                throw new KontaktskjemaException(
-                        "Kall til NORG for bydel/fylke " + kommunenrEllerBydelsnr + " feilet. Returverdi: " + jsonResponse.getBody()
-                );
-        }
-    }
-
-    private String oversettTilEnhetsnr(ResponseEntity<String> jsonResponse) {
-        try {
-            return objectMapper.readTree(jsonResponse.getBody()).get("enhetNr").textValue();
-        } catch (IOException e) {
-            throw new KontaktskjemaException("Returverdi fra NORG er ikke riktig formatert JSON, eller passer ikke med vår modell. Returverdi: " + jsonResponse.getBody());
-        }
     }
 }

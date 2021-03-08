@@ -1,7 +1,5 @@
 package no.nav.arbeidsgiver.kontakt.oss;
 
-import no.nav.arbeidsgiver.kontakt.oss.gsak.GsakOppgave;
-import no.nav.arbeidsgiver.kontakt.oss.gsak.GsakOppgaveRepository;
 import no.nav.arbeidsgiver.kontakt.oss.salesforce.utsending.KontaktskjemaUtsending;
 import no.nav.arbeidsgiver.kontakt.oss.salesforce.utsending.KontaktskjemaUtsendingRepository;
 import no.nav.arbeidsgiver.kontakt.oss.testUtils.TestData;
@@ -28,13 +26,10 @@ public class KontaktskjemaRepositoryTest {
     @Autowired
     private KontaktskjemaUtsendingRepository kontaktskjemaUtsendingRepository;
 
-    @Autowired
-    private GsakOppgaveRepository oppgaveRepository;
 
     @AfterEach
     public void tearDown() {
         kontaktskjemaRepository.deleteAll();
-        oppgaveRepository.deleteAll();
     }
 
     @Test
@@ -78,30 +73,6 @@ public class KontaktskjemaRepositoryTest {
         Kontaktskjema skjema1 = TestData.kontaktskjema();
         skjema1.setOpprettet(opprettetTidspunkt);
         return skjema1;
-    }
-
-    @Test
-    public void skalHenteSkjemaSomIkkeHarGsakOppgave() {
-        kontaktskjemaRepository.save(TestData.kontaktskjema());
-        assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size()).isEqualTo(1);
-    }
-
-    @Test
-    public void skalIkkeHenteSkjemaDersomGsakOppgaveErOpprettet() {
-        Kontaktskjema lagretSkjema = kontaktskjemaRepository.save(TestData.kontaktskjema());
-        assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size()).isEqualTo(1);
-        oppgaveRepository.save(GsakOppgave.builder().kontaktskjemaId(lagretSkjema.getId()).status(GsakOppgave.OppgaveStatus.OK).build());
-        assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size()).isEqualTo(0);
-    }
-
-    @Test
-    public void skalHenteSkjemaDersomGsakOppgaveHarFeilet() {
-        Kontaktskjema lagretSkjema = kontaktskjemaRepository.save(TestData.kontaktskjema());
-        assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size()).isEqualTo(1);
-        oppgaveRepository.save(GsakOppgave.builder().kontaktskjemaId(lagretSkjema.getId()).status(GsakOppgave.OppgaveStatus.FEILET).build());
-        assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size()).isEqualTo(1);
-        oppgaveRepository.save(GsakOppgave.builder().kontaktskjemaId(lagretSkjema.getId()).status(GsakOppgave.OppgaveStatus.OK).build());
-        assertThat(kontaktskjemaRepository.findAllWithNoGsakOppgave().size()).isEqualTo(0);
     }
 
     @Test
