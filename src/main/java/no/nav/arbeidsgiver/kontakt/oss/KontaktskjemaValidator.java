@@ -1,7 +1,7 @@
 package no.nav.arbeidsgiver.kontakt.oss;
 
 import lombok.extern.slf4j.Slf4j;
-import no.nav.arbeidsgiver.kontakt.oss.navenhetsmapping.NavEnhetService;
+import no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter.LokasjonsValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -26,11 +26,11 @@ public class KontaktskjemaValidator {
     private final static Pattern EPOST = Pattern.compile("^[" + VANLIGE_BOKSTAVER + SIFRE + AKSENTER + EPOSTTEGN + "]*$");
     private final static Pattern SIFRE_MELLOMROM_OG_PLUSS = Pattern.compile("^[" + SIFRE + "+ " + "]*$");
 
-    private final NavEnhetService navEnhetService;
+    private final LokasjonsValidator lokasjonsValidator;
 
     @Autowired
-    public KontaktskjemaValidator(NavEnhetService navEnhetService) {
-        this.navEnhetService = navEnhetService;
+    public KontaktskjemaValidator(LokasjonsValidator lokasjonsValidator) {
+        this.lokasjonsValidator = lokasjonsValidator;
     }
 
     void valider(Kontaktskjema kontaktskjema) {
@@ -52,12 +52,12 @@ public class KontaktskjemaValidator {
             case REKRUTTERING:
                 validerSkjemafelt(kontaktskjema.getKommune(), RAUS_TEKST);
                 validerSkjemafelt(kontaktskjema.getTelefonnr(), SIFRE_MELLOMROM_OG_PLUSS);
-                navEnhetService.mapFraKommunenrTilEnhetsnr(kontaktskjema.getKommunenr());
+                lokasjonsValidator.validerKommunenr(kontaktskjema.getKommunenr());
                 break;
 
             case FOREBYGGE_SYKEFRAVÆR:
                 validerSkjemafelt(kontaktskjema.getFylkesenhetsnr(), RAUS_TEKST);
-                navEnhetService.mapFraFylkesenhetNrTilArbeidslivssenterEnhetsnr(kontaktskjema.getFylkesenhetsnr());
+                lokasjonsValidator.validerFylkesenhetnr(kontaktskjema.getFylkesenhetsnr());
                 break;
 
             default:

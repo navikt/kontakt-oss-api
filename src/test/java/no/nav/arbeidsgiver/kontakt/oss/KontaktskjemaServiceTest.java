@@ -6,7 +6,7 @@ import lombok.SneakyThrows;
 import no.nav.arbeidsgiver.kontakt.oss.events.BesvarelseMottatt;
 import no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter.FylkesinndelingMedNavEnheter;
 import no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter.KommuneEllerBydel;
-import no.nav.arbeidsgiver.kontakt.oss.navenhetsmapping.NavEnhetService;
+import no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter.LokasjonsValidator;
 import no.nav.arbeidsgiver.kontakt.oss.salesforce.utsending.KontaktskjemaUtsendingRepository;
 import no.nav.arbeidsgiver.kontakt.oss.testUtils.TestData;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,7 +46,7 @@ public class KontaktskjemaServiceTest {
     private DateProvider dateProvider;
 
     @Mock
-    private NavEnhetService navEnhetService;
+    private LokasjonsValidator lokasjonsValidator;
 
     private KontaktskjemaService kontaktskjemaService;
 
@@ -58,7 +58,7 @@ public class KontaktskjemaServiceTest {
                 kontaktskjemaUtsendingRepository,
                 eventPublisher,
                 dateProvider,
-                new KontaktskjemaValidator(navEnhetService)
+                new KontaktskjemaValidator(lokasjonsValidator)
         );
     }
 
@@ -124,7 +124,7 @@ public class KontaktskjemaServiceTest {
 
     @Test
     public void lagreKontaktskjema__skal_sende_event_ved_feilvalidering() {
-        when(navEnhetService.mapFraKommunenrTilEnhetsnr(anyString())).thenThrow(KontaktskjemaException.class);
+        doThrow(KontaktskjemaException.class).when(lokasjonsValidator).validerKommunenr(anyString());
         Kontaktskjema kontaktskjema = TestData.kontaktskjema();
         kontaktskjema.setTemaType(TemaType.REKRUTTERING);
 
@@ -138,7 +138,7 @@ public class KontaktskjemaServiceTest {
 
     @Test
     public void lagreKontaktskjema__skal_feile_hvis_tematype_IKKE_er_forebygge_sykefravær_og_kommunenr_er_ugyldig() {
-        when(navEnhetService.mapFraKommunenrTilEnhetsnr("1234")).thenThrow(KontaktskjemaException.class);
+        doThrow(KontaktskjemaException.class).when(lokasjonsValidator).validerKommunenr("1234");
 
         Kontaktskjema kontaktskjema = TestData.kontaktskjema();
         kontaktskjema.setTemaType(TemaType.REKRUTTERING);
@@ -153,7 +153,6 @@ public class KontaktskjemaServiceTest {
     @Test
     public void lagreKontaktskjema__skal_fungere_hvis_tematype_IKKE_er_forebygge_sykefravær_og_kommunenr_er_gyldig() {
         mockLagretKontaktskjema();
-        when(navEnhetService.mapFraKommunenrTilEnhetsnr("1234")).thenReturn("4321");
 
         Kontaktskjema kontaktskjema = TestData.kontaktskjema();
         kontaktskjema.setTemaType(TemaType.REKRUTTERING);
@@ -164,7 +163,7 @@ public class KontaktskjemaServiceTest {
 
     @Test
     public void lagreKontaktskjema__skal_feile_hvis_tematype_er_forebygge_sykefravær_og_fylke_er_ugyldig() {
-        when(navEnhetService.mapFraFylkesenhetNrTilArbeidslivssenterEnhetsnr("1234")).thenThrow(KontaktskjemaException.class);
+        doThrow(KontaktskjemaException.class).when(lokasjonsValidator).validerFylkesenhetnr("1234");
 
         Kontaktskjema kontaktskjema = TestData.kontaktskjema();
         kontaktskjema.setTemaType(TemaType.FOREBYGGE_SYKEFRAVÆR);
@@ -179,7 +178,6 @@ public class KontaktskjemaServiceTest {
     @Test
     public void lagreKontaktskjema__skal_fungere_hvis_tematype_er_forebygge_sykefravær_og_fylke_er_gyldig() {
         mockLagretKontaktskjema();
-        when(navEnhetService.mapFraFylkesenhetNrTilArbeidslivssenterEnhetsnr("1234")).thenReturn("4321");
 
         Kontaktskjema kontaktskjema = TestData.kontaktskjema();
         kontaktskjema.setTemaType(TemaType.FOREBYGGE_SYKEFRAVÆR);

@@ -1,6 +1,6 @@
 package no.nav.arbeidsgiver.kontakt.oss
 
-import no.nav.arbeidsgiver.kontakt.oss.navenhetsmapping.NavEnhetService
+import no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter.LokasjonsValidator
 import no.nav.arbeidsgiver.kontakt.oss.salesforce.utsending.KontaktskjemaUtsendingRepository
 import org.spockframework.spring.SpringBean
 import org.spockframework.spring.StubBeans
@@ -11,15 +11,13 @@ import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import spock.lang.Specification
 
-import java.time.LocalDate
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @StubBeans([
         KontaktskjemaUtsendingRepository,
         ApplicationEventPublisher,
-        NavEnhetService,
+        LokasjonsValidator,
 ])
 @WebMvcTest(
         controllers = [KontaktskjemaController, KontaktskjemaService, DateProvider, KontaktskjemaValidator],
