@@ -3,6 +3,8 @@ package no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter;
 import no.nav.arbeidsgiver.kontakt.oss.KontaktskjemaException;
 import org.springframework.stereotype.Component;
 
+import java.util.function.Predicate;
+
 @Component
 public class LokasjonsValidator {
 
@@ -13,10 +15,11 @@ public class LokasjonsValidator {
     }
 
     public void validerKommunenr(String kommunenr) {
-        NavEnhet navEnhet = fylkesinndelingRepository
-                .hentKommuneNrEllerBydelNrTilNavEnhet()
-                .get(kommunenr);
-        if (navEnhet == null) {
+        boolean eksisterer = fylkesinndelingRepository.alleLokasjoner()
+                .stream()
+                .map(KommuneEllerBydel::getNummer)
+                .anyMatch(Predicate.isEqual(kommunenr));
+        if (!eksisterer) {
             throw new KontaktskjemaException("Finner ingen NAV-enhet tilhørende kommune " + kommunenr);
         }
     }
