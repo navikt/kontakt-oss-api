@@ -17,17 +17,17 @@ import java.util.*;
 
 @Service
 public class KodeverkKlient {
-
-    private final static ObjectMapper objectMapper = new ObjectMapper();
-
     private final RestTemplate restTemplate;
+    private final ObjectMapper objectMapper;
     private final String kodeverkUrl;
 
     public KodeverkKlient(
             RestTemplateBuilder restTemplateBuilder,
+            ObjectMapper objectMapper,
             @Value("${kodeverk.url}") String kodeverkUrl
     ) {
         this.restTemplate = restTemplateBuilder.errorHandler(new IgnoreAllErrors()).build();
+        this.objectMapper = objectMapper;
         this.kodeverkUrl = kodeverkUrl;
     }
 

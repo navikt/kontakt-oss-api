@@ -24,11 +24,12 @@ import java.util.Map;
 @ConditionalOnProperty(prefix = "mock", name = "enabled", havingValue = "true")
 public class MockServer {
     private final WireMockServer server;
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
 
     @SneakyThrows
     @Autowired
     MockServer(
+            ObjectMapper objectMapper,
             @Value("${norg.url}") String norgUrl,
             @Value("${kodeverk.url}") String kodeverkUrl,
             @Value("${salesforce.auth.url}") String salesforceAuthUrl,
@@ -37,6 +38,7 @@ public class MockServer {
     ) {
         log.info("Starter mock-server");
 
+        this.objectMapper = objectMapper;
         this.server = new WireMockServer(port);
         String norgPath = new URL(norgUrl).getPath();
         String kodeverkPath = new URL(kodeverkUrl).getPath();

@@ -2,6 +2,7 @@ package no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -13,6 +14,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
+@AllArgsConstructor
 public class FylkesinndelingRepository {
     private static final TypeReference<Map<String, List<KommuneEllerBydel>>> FYLKESINNDELING_TYPE = new TypeReference<>() {
     };
@@ -20,14 +22,8 @@ public class FylkesinndelingRepository {
     private static final TypeReference<Map<String, NavEnhet>> KOMMUNE_TIL_ENHET_TYPE = new TypeReference<>() {
     };
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
-
     private final JdbcTemplate jdbcTemplate;
-
-
-    public FylkesinndelingRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
+    private final ObjectMapper objectMapper;
 
     public LocalDateTime hentSistOppdatert() {
         return jdbcTemplate.queryForObject("SELECT sistOppdatert FROM norg_mapping", LocalDateTime.class);
