@@ -8,11 +8,9 @@ import no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter.integrasjon.
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @Component
@@ -34,70 +32,32 @@ public class FylkesinndelingService {
         this.eventPublisher = eventPublisher;
     }
 
-    public Map<NavEnhet, NavFylkesenhet> hentMapFraNavenhetTilFylkesenhet() {
-        return norgKlient.hentOrganiseringFraNorg().stream()
-                .filter(norgOrganisering -> "Aktiv".equals(norgOrganisering.getStatus()))
-                .filter(norgOrganisering -> norgOrganisering.getOverordnetEnhet() != null)
-                .collect(Collectors.toMap(
-                        norgOrganisering -> new NavEnhet(norgOrganisering.getEnhetNr()),
-                        norgOrganisering -> new NavFylkesenhet(norgOrganisering.getOverordnetEnhet())
-                ));
-    }
-
-    public Map<KommuneEllerBydel, NavEnhet> hentMapFraKommuneEllerBydelTilNavEnhet(
-            List<KommuneEllerBydel> kommunerOgBydeler
-    ) {
-        return norgKlient.hentMapFraKommuneEllerBydelTilNavenhet(kommunerOgBydeler);
-    }
-
-    public List<KommuneEllerBydel> hentListeOverAlleKommunerOgBydeler() {
-        return lagNyListeDerKommunerSomHarBydelerBlirErstattetMedBydelene(
-                kodeverkKlient.hentKommuner(),
-                kodeverkKlient.hentBydeler()
-        );
-    }
-
-    private List<KommuneEllerBydel> lagNyListeDerKommunerSomHarBydelerBlirErstattetMedBydelene(List<Kommune> kommuner, List<Bydel> bydeler) {
-        List<KommuneEllerBydel> kommunerOgBydeler = new ArrayList<>();
-        List<Kommune> kommunerSomHarBydeler = new ArrayList<>();
-
-        bydeler.forEach(bydel -> {
-            String bydelensKommunenr = bydel.getNummer().substring(0, 4);
-            Optional<Kommune> kommune = finnKommune(bydelensKommunenr, kommuner);
-            if (kommune.isPresent()) {
-                Bydel bydelMedOppdatertNavn = new Bydel(bydel.getNummer(), kommune.get().getNavn() + " - " + bydel.getNavn());
-                kommunerOgBydeler.add(bydelMedOppdatertNavn);
-                kommunerSomHarBydeler.add(kommune.get());
-            }
-        });
-
-        List<KommuneEllerBydel> kommunerUtenBydeler = new ArrayList<>(kommuner).stream()
-                .filter(kommune -> !kommunerSomHarBydeler.contains(kommune))
-                .collect(Collectors.toList());
-        kommunerOgBydeler.addAll(kommunerUtenBydeler);
-
-        return kommunerOgBydeler;
-    }
-
-    private Optional<Kommune> finnKommune(String kommunenummer, List<Kommune> kommuner) {
-        return kommuner.stream()
-                .filter(kommune -> kommune.getNummer().equals(kommunenummer))
-                .findFirst();
-    }
-
     public void oppdaterFylkesinndeling() {
         log.info("Oppdaterer informasjon fra NORG og Kodeverk");
 
         try {
             List<KommuneEllerBydel> kommunerOgBydeler = hentListeOverAlleKommunerOgBydeler();
-            Map<KommuneEllerBydel, NavEnhet> fraKommuneEllerBydelTilNavEnhet = hentMapFraKommuneEllerBydelTilNavEnhet(kommunerOgBydeler);
+            Map<KommuneEllerBydel, NavEnhet> fraKommuneEllerBydelTilNavEnhet = norgKlient.hentMapFraKommuneEllerBydelTilNavenhet(kommunerOgBydeler);
+
             FylkesinndelingMedNavEnheter fylkesinndeling = new FylkesinndelingMedNavEnheter(
                     hentMapFraNavenhetTilFylkesenhet(),
                     fraKommuneEllerBydelTilNavEnhet,
                     kommunerOgBydeler
             );
 
-            lagreFylkesinndelingIDatabase(fraKommuneEllerBydelTilNavEnhet, fylkesinndeling);
+            Map<String, NavEnhet> fraKommunenrEllerBydelnrTilNavEnhet = fraKommuneEllerBydelTilNavEnhet
+                    .entrySet()
+                    .stream()
+                    .collect(Collectors.toMap(
+                            entry -> entry.getKey().getNummer(),
+                            entry -> entry.getValue()
+                    ));
+
+            fylkesinndelingRepository.oppdaterInformasjonFraNorg(
+                    fylkesinndeling,
+                    fraKommunenrEllerBydelnrTilNavEnhet
+            );
+
             eventPublisher.publishEvent(new FylkesinndelingOppdatert(true));
             log.info("Informasjon om fylkesinndeling ble oppdatert");
 
@@ -107,13 +67,37 @@ public class FylkesinndelingService {
         }
     }
 
-    private void lagreFylkesinndelingIDatabase(Map<KommuneEllerBydel, NavEnhet> fraKommuneEllerBydelTilNavEnhet, FylkesinndelingMedNavEnheter fylkesinndeling) {
-        fylkesinndelingRepository.oppdaterInformasjonFraNorg(
-                fylkesinndeling,
-                fraKommuneEllerBydelTilNavEnhet.keySet().stream().collect(Collectors.toMap(
-                        KommuneEllerBydel::getNummer,
-                        kommunerEllerBydel -> fraKommuneEllerBydelTilNavEnhet.get(kommunerEllerBydel)
-                ))
-        );
+    /* public kun pga testing */
+    public Map<NavEnhet, NavFylkesenhet> hentMapFraNavenhetTilFylkesenhet() {
+        return norgKlient.hentOrganiseringFraNorg()
+                .stream()
+                .filter(norgOrganisering -> "Aktiv".equals(norgOrganisering.getStatus()))
+                .filter(norgOrganisering -> norgOrganisering.getOverordnetEnhet() != null)
+                .collect(Collectors.toMap(
+                        norgOrganisering -> new NavEnhet(norgOrganisering.getEnhetNr()),
+                        norgOrganisering -> new NavFylkesenhet(norgOrganisering.getOverordnetEnhet())
+                ));
+    }
+
+    /* public kun pga testing */
+    public List<KommuneEllerBydel> hentListeOverAlleKommunerOgBydeler() {
+        /* kommunenr til bydeler */
+        Map<String, List<Bydel>> kommunensBydeler = kodeverkKlient
+                .hentBydeler()
+                .stream()
+                .collect(Collectors.groupingBy(Bydel::extractKommunenr));
+
+        return kodeverkKlient
+                .hentKommuner()
+                .stream()
+                .flatMap(kommune -> {
+                    List<Bydel> bydeler = kommunensBydeler.get(kommune.getNummer());
+                    if (bydeler == null) {
+                        return Stream.of(kommune);
+                    } else {
+                        return bydeler.stream().map(bydel -> bydel.medKommunenavn(kommune));
+                    }
+                })
+                .collect(Collectors.toList());
     }
 }
