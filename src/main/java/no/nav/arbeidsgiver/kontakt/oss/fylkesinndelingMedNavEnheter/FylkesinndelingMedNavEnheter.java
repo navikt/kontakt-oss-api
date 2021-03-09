@@ -7,7 +7,6 @@ import java.util.Map;
 
 public class FylkesinndelingMedNavEnheter {
     private FylkesinndelingMedNavEnheter() {
-
     }
 
     public static Map<String, List<KommuneEllerBydel>> beregnFylkesinndeling(

@@ -1,5 +1,6 @@
 package no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.arbeidsgiver.kontakt.oss.KontaktskjemaException;
 import no.nav.arbeidsgiver.kontakt.oss.events.FylkesinndelingOppdatert;
@@ -14,24 +15,12 @@ import java.util.stream.Stream;
 
 @Slf4j
 @Component
+@AllArgsConstructor
 public class FylkesinndelingService {
-
     private final NorgKlient norgKlient;
     private final KodeverkKlient kodeverkKlient;
     private final FylkesinndelingRepository fylkesinndelingRepository;
     private final ApplicationEventPublisher eventPublisher;
-
-    public FylkesinndelingService(
-            NorgKlient norgKlient,
-            KodeverkKlient kodeverkKlient,
-            FylkesinndelingRepository fylkesinndelingRepository,
-            ApplicationEventPublisher eventPublisher
-    ) {
-        this.norgKlient = norgKlient;
-        this.kodeverkKlient = kodeverkKlient;
-        this.fylkesinndelingRepository = fylkesinndelingRepository;
-        this.eventPublisher = eventPublisher;
-    }
 
     public void oppdaterFylkesinndeling() {
         log.info("Oppdaterer informasjon fra NORG og Kodeverk");

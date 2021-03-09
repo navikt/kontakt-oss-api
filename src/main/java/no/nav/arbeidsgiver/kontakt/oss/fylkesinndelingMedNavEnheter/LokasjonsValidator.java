@@ -1,18 +1,15 @@
 package no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter;
 
+import lombok.AllArgsConstructor;
 import no.nav.arbeidsgiver.kontakt.oss.KontaktskjemaException;
 import org.springframework.stereotype.Component;
 
 import java.util.function.Predicate;
 
 @Component
+@AllArgsConstructor
 public class LokasjonsValidator {
-
     private final FylkesinndelingRepository fylkesinndelingRepository;
-
-    public LokasjonsValidator(FylkesinndelingRepository fylkesinndelingRepository) {
-        this.fylkesinndelingRepository = fylkesinndelingRepository;
-    }
 
     public void validerKommunenr(String kommunenr) {
         boolean eksisterer = fylkesinndelingRepository.alleLokasjoner()

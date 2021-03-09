@@ -14,8 +14,15 @@ import java.util.stream.Collectors;
 
 @Component
 public class FylkesinndelingRepository {
-    private final JdbcTemplate jdbcTemplate;
+    private static final TypeReference<Map<String, List<KommuneEllerBydel>>> FYLKESINNDELING_TYPE = new TypeReference<>() {
+    };
+
+    private static final TypeReference<Map<String, NavEnhet>> KOMMUNE_TIL_ENHET_TYPE = new TypeReference<>() {
+    };
+
     private static final ObjectMapper objectMapper = new ObjectMapper();
+
+    private final JdbcTemplate jdbcTemplate;
 
 
     public FylkesinndelingRepository(JdbcTemplate jdbcTemplate) {
@@ -51,18 +58,13 @@ public class FylkesinndelingRepository {
     @Deprecated
     public Map<String, NavEnhet> hentKommuneNrEllerBydelNrTilNavEnhet() {
         String json = jdbcTemplate.queryForObject("SELECT mapFraKommunerOgBydelerTilNavEnheter FROM norg_mapping", String.class);
-        return objectMapper.readValue(json, new TypeReference<Map<String, NavEnhet>>() {
-        });
+        return objectMapper.readValue(json, KOMMUNE_TIL_ENHET_TYPE);
     }
 
     @SneakyThrows
     @Deprecated
     public Map<String, List<KommuneEllerBydel>> hentFylkesinndeling() {
         String json = jdbcTemplate.queryForObject("SELECT mapFraFylkesenheterTilKommunerOgBydeler FROM norg_mapping", String.class);
-        return objectMapper.readValue(
-                json,
-                new TypeReference<Map<String, List<KommuneEllerBydel>>>() {
-                }
-        );
+        return objectMapper.readValue(json, FYLKESINNDELING_TYPE);
     }
 }
