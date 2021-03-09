@@ -25,7 +25,8 @@ public class FylkesinndelingService {
             NorgKlient norgKlient,
             KodeverkKlient kodeverkKlient,
             FylkesinndelingRepository fylkesinndelingRepository,
-            ApplicationEventPublisher eventPublisher) {
+            ApplicationEventPublisher eventPublisher
+    ) {
         this.norgKlient = norgKlient;
         this.kodeverkKlient = kodeverkKlient;
         this.fylkesinndelingRepository = fylkesinndelingRepository;
@@ -39,7 +40,7 @@ public class FylkesinndelingService {
             List<KommuneEllerBydel> kommunerOgBydeler = hentListeOverAlleKommunerOgBydeler();
             Map<KommuneEllerBydel, NavEnhet> fraKommuneEllerBydelTilNavEnhet = norgKlient.hentMapFraKommuneEllerBydelTilNavenhet(kommunerOgBydeler);
 
-            FylkesinndelingMedNavEnheter fylkesinndeling = new FylkesinndelingMedNavEnheter(
+            Map<String, List<KommuneEllerBydel>> fylkesinndeling = FylkesinndelingMedNavEnheter.beregnFylkesinndeling(
                     hentMapFraNavenhetTilFylkesenhet(),
                     fraKommuneEllerBydelTilNavEnhet,
                     kommunerOgBydeler

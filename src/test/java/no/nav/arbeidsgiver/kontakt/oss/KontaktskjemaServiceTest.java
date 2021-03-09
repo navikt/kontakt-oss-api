@@ -294,12 +294,10 @@ public class KontaktskjemaServiceTest {
     @SneakyThrows
     private List<String> hentAlleKommunenavnFraMock() {
         String fylkesinndelingJson = TestData.lesFil("mock/fylkesinndeling.json");
-        FylkesinndelingMedNavEnheter fylkesinndeling = new FylkesinndelingMedNavEnheter(
+        Map<String, List<KommuneEllerBydel>> fylkesinndeling =
                 new ObjectMapper().readValue(fylkesinndelingJson, new TypeReference<Map<String, List<KommuneEllerBydel>>>() {
-                })
-        );
+                });
         return fylkesinndeling
-                .getFylkeTilKommuneEllerBydel()
                 .values()
                 .stream()
                 .flatMap(List::stream)

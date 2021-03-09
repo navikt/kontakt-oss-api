@@ -28,7 +28,6 @@ public class FylkesinndelingRepository {
 
     public List<KommuneEllerBydel> alleLokasjoner() {
         return hentFylkesinndeling()
-                .getFylkeTilKommuneEllerBydel()
                 .values()
                 .stream()
                 .flatMap(Collection::stream)
@@ -37,13 +36,13 @@ public class FylkesinndelingRepository {
 
     @SneakyThrows
     public void oppdaterInformasjonFraNorg(
-            FylkesinndelingMedNavEnheter fylkesinndeling,
+            Map<String, List<KommuneEllerBydel>> fylkesenhetsnrTilKommunerOgBydeler,
             Map<String, NavEnhet> kommuneNrEllerBydelNrTilNavEnhet
     ) {
         jdbcTemplate.update(
                 "UPDATE norg_mapping SET sistOppdatert=?, mapFraFylkesenheterTilKommunerOgBydeler=?, mapFraKommunerOgBydelerTilNavEnheter=?",
                 LocalDateTime.now(),
-                objectMapper.writeValueAsString(fylkesinndeling.getFylkeTilKommuneEllerBydel()),
+                objectMapper.writeValueAsString(fylkesenhetsnrTilKommunerOgBydeler),
                 objectMapper.writeValueAsString(kommuneNrEllerBydelNrTilNavEnhet)
         );
     }
@@ -58,9 +57,12 @@ public class FylkesinndelingRepository {
 
     @SneakyThrows
     @Deprecated
-    public FylkesinndelingMedNavEnheter hentFylkesinndeling() {
+    public Map<String, List<KommuneEllerBydel>> hentFylkesinndeling() {
         String json = jdbcTemplate.queryForObject("SELECT mapFraFylkesenheterTilKommunerOgBydeler FROM norg_mapping", String.class);
-        return new FylkesinndelingMedNavEnheter(objectMapper.readValue(json, new TypeReference<Map<String, List<KommuneEllerBydel>>>() {
-        }));
+        return objectMapper.readValue(
+                json,
+                new TypeReference<Map<String, List<KommuneEllerBydel>>>() {
+                }
+        );
     }
 }

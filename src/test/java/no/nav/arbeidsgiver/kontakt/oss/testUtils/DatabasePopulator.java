@@ -32,11 +32,11 @@ public class DatabasePopulator {
         ObjectMapper mapper = new ObjectMapper();
         Map<String, NavEnhet> norgInfo = mapper.readValue(MAP_FRA_KOMMUNE_TIL_NAVENHET_JSON, new TypeReference<Map<String, NavEnhet>>() {
         });
-        FylkesinndelingMedNavEnheter fylkesinndeling = new FylkesinndelingMedNavEnheter(
+        fylkesinndelingRepository.oppdaterInformasjonFraNorg(
                 mapper.readValue(FYLKESINNDELING_JSON, new TypeReference<Map<String, List<KommuneEllerBydel>>>() {
-                })
+                }),
+                norgInfo
         );
-        fylkesinndelingRepository.oppdaterInformasjonFraNorg(fylkesinndeling, norgInfo);
         log.info("FylkesinndelingRepository populert med testdata.");
     }
 }

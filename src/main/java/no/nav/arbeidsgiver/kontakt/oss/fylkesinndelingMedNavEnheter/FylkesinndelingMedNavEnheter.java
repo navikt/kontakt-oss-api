@@ -1,29 +1,21 @@
 package no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
 public class FylkesinndelingMedNavEnheter {
+    private FylkesinndelingMedNavEnheter() {
 
-    @Getter
-    private Map<String, List<KommuneEllerBydel>> fylkeTilKommuneEllerBydel;
+    }
 
-    public FylkesinndelingMedNavEnheter(
+    public static Map<String, List<KommuneEllerBydel>> beregnFylkesinndeling(
             Map<NavEnhet, NavFylkesenhet> navEnhetTilFylkesenhet,
             Map<KommuneEllerBydel, NavEnhet> kommuneEllerBydelTilNavenhet,
             List<KommuneEllerBydel> kommunerOgBydeler
     ) {
-        this.fylkeTilKommuneEllerBydel = new HashMap<>();
+        Map<String, List<KommuneEllerBydel>> fylkeTilKommuneEllerBydel = new HashMap<>();
 
         for (KommuneEllerBydel kommuneEllerBydel : kommunerOgBydeler) {
             NavEnhet navEnhet = kommuneEllerBydelTilNavenhet.get(kommuneEllerBydel);
@@ -45,5 +37,7 @@ public class FylkesinndelingMedNavEnheter {
                     .computeIfAbsent(fylkesenhetnr, _fylkesenhetnr -> new ArrayList<>())
                     .add(kommuneEllerBydel);
         }
+
+        return fylkeTilKommuneEllerBydel;
     }
 }

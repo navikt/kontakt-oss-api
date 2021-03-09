@@ -11,10 +11,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class TestData {
@@ -95,12 +92,12 @@ public class TestData {
         }};
     }
 
-    public static FylkesinndelingMedNavEnheter fraFylkesenheterTilKommuner() {
-        return new FylkesinndelingMedNavEnheter(new HashMap<>() {{
+    public static Map<String, List<KommuneEllerBydel>> fraFylkesenheterTilKommuner() {
+        return new HashMap<>() {{
             put("fylke1", Arrays.asList(kommune("1.1"), kommune("1.2"), kommune("1.3")));
             put("fylke2", Arrays.asList(kommune("2.1"), kommune("2.2"), kommune("2.3")));
             put("fylke3", Arrays.asList(kommune("3.1"), bydel("3.2"), bydel("3.3")));
-        }});
+        }};
     }
 
     public static NavEnhet navEnhet(String id) {

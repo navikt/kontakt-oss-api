@@ -6,6 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 import static no.nav.arbeidsgiver.kontakt.oss.testUtils.TestData.fraFylkesenheterTilKommuner;
@@ -21,7 +22,7 @@ public class FylkesinndelingRepositoryTest {
 
     @Test
     public void repository__skal_gi_ut_det_som_blir_satt_inn() {
-        FylkesinndelingMedNavEnheter fraFylkesenheterTilKommuner = fraFylkesenheterTilKommuner();
+        Map<String, List<KommuneEllerBydel>> fraFylkesenheterTilKommuner = fraFylkesenheterTilKommuner();
         Map<String, NavEnhet> fraKommuneNrTilNavEnhet = fraKommuneNrTilNavEnhet();
 
         repository.oppdaterInformasjonFraNorg(
@@ -29,8 +30,8 @@ public class FylkesinndelingRepositoryTest {
                 fraKommuneNrTilNavEnhet
         );
 
-        assertThat(repository.hentFylkesinndeling().getFylkeTilKommuneEllerBydel())
-                .isEqualTo(fraFylkesenheterTilKommuner.getFylkeTilKommuneEllerBydel());
+        assertThat(repository.hentFylkesinndeling())
+                .isEqualTo(fraFylkesenheterTilKommuner);
         assertThat(repository.hentKommuneNrEllerBydelNrTilNavEnhet()).isEqualTo(fraKommuneNrTilNavEnhet);
     }
 
