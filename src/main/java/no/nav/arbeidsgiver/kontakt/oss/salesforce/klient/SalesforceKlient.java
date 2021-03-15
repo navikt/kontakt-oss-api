@@ -1,4 +1,4 @@
-package no.nav.arbeidsgiver.kontakt.oss.salesforce;
+package no.nav.arbeidsgiver.kontakt.oss.salesforce.klient;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
@@ -15,7 +15,7 @@ import static java.lang.String.format;
 @Slf4j
 @Component
 public class SalesforceKlient {
-    private final static ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
 
     private final RestTemplate restTemplate;
 
@@ -28,6 +28,7 @@ public class SalesforceKlient {
 
     public SalesforceKlient(
             RestTemplateBuilder restTemplateBuilder,
+            ObjectMapper objectMapper,
             @Value("${salesforce.auth.url}") String authUrl,
             @Value("${salesforce.contactform.url}") String apiUrl,
             @Value("${salesforce.username}") String username,
@@ -36,6 +37,7 @@ public class SalesforceKlient {
             @Value("${salesforce.client.secret}") String clientSecret
     ) {
         this.restTemplate = restTemplateBuilder.errorHandler(new IgnoreAllErrors()).build();
+        this.objectMapper = objectMapper;
         this.authUrl = authUrl;
         this.apiUrl = apiUrl;
         this.username = username;

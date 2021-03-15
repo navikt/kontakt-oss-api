@@ -1,5 +1,9 @@
 package no.nav.arbeidsgiver.kontakt.oss.salesforce;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import no.nav.arbeidsgiver.kontakt.oss.salesforce.klient.SalesforceException;
+import no.nav.arbeidsgiver.kontakt.oss.salesforce.klient.SalesforceKlient;
+import no.nav.arbeidsgiver.kontakt.oss.salesforce.klient.SalesforceToken;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,7 +38,7 @@ public class SalesforceKlientTest {
         when(restTemplateBuilder.errorHandler(any())).thenReturn(restTemplateBuilder);
         when(restTemplateBuilder.build()).thenReturn(restTemplate);
         salesforceKlient = new SalesforceKlient(
-                restTemplateBuilder, authUrl, apiUrl, "", "", "", ""
+                restTemplateBuilder, new ObjectMapper(), authUrl, apiUrl, "", "", "", ""
         );
     }
 

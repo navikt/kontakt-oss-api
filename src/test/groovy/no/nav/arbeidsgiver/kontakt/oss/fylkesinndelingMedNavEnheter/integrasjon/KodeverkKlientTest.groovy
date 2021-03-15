@@ -58,7 +58,7 @@ class KodeverkKlientTest extends Specification {
 
         then:
         result.size() > 400
-        result.first() == new Kommune("0101", "Halden")
+        result.contains( new Kommune("0101", "Halden") )
     }
 
     def "hentKommuner skal hente kommuner fra json"() {

@@ -2,6 +2,9 @@ package no.nav.arbeidsgiver.kontakt.oss.salesforce;
 
 import no.nav.arbeidsgiver.kontakt.oss.Kontaktskjema;
 import no.nav.arbeidsgiver.kontakt.oss.TemaType;
+import no.nav.arbeidsgiver.kontakt.oss.salesforce.klient.ContactForm;
+import no.nav.arbeidsgiver.kontakt.oss.salesforce.klient.SalesforceKlient;
+import no.nav.arbeidsgiver.kontakt.oss.salesforce.klient.SalesforceService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -53,12 +56,10 @@ public class SalesforceServiceTest {
                 "0101",
                 "Min bedrift AS",
                 "999999999",
-                "Per",
-                "Perssen",
                 "per@per.no",
                 "1256456457",
-                null
-                        );
+                "Per Perssen"
+        );
 
         salesforceService.sendKontaktskjemaTilSalesforce(kontaktskjema);
 

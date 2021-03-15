@@ -1,4 +1,4 @@
-package no.nav.arbeidsgiver.kontakt.oss.salesforce;
+package no.nav.arbeidsgiver.kontakt.oss.salesforce.klient;
 
 public class SalesforceException extends RuntimeException {
     public SalesforceException(String msg, Exception e) {

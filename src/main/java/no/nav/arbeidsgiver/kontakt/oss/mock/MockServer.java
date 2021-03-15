@@ -18,21 +18,19 @@ import org.springframework.stereotype.Component;
 import java.net.URL;
 import java.util.Map;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-
 @Slf4j
 @Component
 @Profile("local")
 @ConditionalOnProperty(prefix = "mock", name = "enabled", havingValue = "true")
 public class MockServer {
-    private WireMockServer server;
-    private static ObjectMapper objectMapper = new ObjectMapper();
+    private final WireMockServer server;
+    private final ObjectMapper objectMapper;
 
     @SneakyThrows
     @Autowired
     MockServer(
+            ObjectMapper objectMapper,
             @Value("${norg.url}") String norgUrl,
-            @Value("${gsak.url}") String gsakUrl,
             @Value("${kodeverk.url}") String kodeverkUrl,
             @Value("${salesforce.auth.url}") String salesforceAuthUrl,
             @Value("${salesforce.contactform.url}") String salesforceApiUrl,
@@ -40,15 +38,14 @@ public class MockServer {
     ) {
         log.info("Starter mock-server");
 
+        this.objectMapper = objectMapper;
         this.server = new WireMockServer(port);
         String norgPath = new URL(norgUrl).getPath();
         String kodeverkPath = new URL(kodeverkUrl).getPath();
-        String gsakPath = new URL(gsakUrl).getPath();
         String salesforceAuthPath = new URL(salesforceAuthUrl).getPath();
         String salesforceApiPath = new URL(salesforceApiUrl).getPath();
 
         mockNorgsMappingFraGeografiTilNavEnhet(norgPath);
-        mockResponsFraGsak(gsakPath);
         mockKallFraFil(norgPath + "/enhet/kontaktinformasjon/organisering/AKTIV", "norgOrganisering.json");
         mockKallFraFil(kodeverkPath + "/kodeverk/Kommuner/koder/betydninger", "kommuner.json");
         mockKallFraFil(kodeverkPath + "/kodeverk/Bydeler/koder/betydninger", "bydeler.json");
@@ -98,16 +95,6 @@ public class MockServer {
             navEnhetJson = objectMapper.writeValueAsString(navEnhet);
             mockGet(norgPath + "/enhet/navkontor/" + kommuneNrEllerBydelNr, navEnhetJson);
         }
-    }
-
-    private void mockResponsFraGsak(String gsakPath) {
-        server.stubFor(
-                WireMock.post(WireMock.urlPathEqualTo(gsakPath)).willReturn(WireMock.aResponse()
-                        .withHeader("Content-Type", "application/json")
-                        .withStatus(HttpStatus.CREATED.value())
-                        .withBody("{\"id\": 123456}")
-                )
-        );
     }
 
     @SneakyThrows

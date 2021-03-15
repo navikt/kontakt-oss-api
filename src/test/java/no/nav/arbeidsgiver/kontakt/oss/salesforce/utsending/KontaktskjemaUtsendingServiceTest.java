@@ -2,8 +2,8 @@ package no.nav.arbeidsgiver.kontakt.oss.salesforce.utsending;
 
 import no.nav.arbeidsgiver.kontakt.oss.Kontaktskjema;
 import no.nav.arbeidsgiver.kontakt.oss.KontaktskjemaRepository;
-import no.nav.arbeidsgiver.kontakt.oss.salesforce.SalesforceException;
-import no.nav.arbeidsgiver.kontakt.oss.salesforce.SalesforceService;
+import no.nav.arbeidsgiver.kontakt.oss.salesforce.klient.SalesforceException;
+import no.nav.arbeidsgiver.kontakt.oss.salesforce.klient.SalesforceService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
