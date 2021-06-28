@@ -7,17 +7,17 @@ metadata:
 spec:
   receivers:
     slack:
-      channel: 'arbeidsgiver-teamia-utvikling'
+      channel: 'arbeidsgiver-msa-alerts'
       prependText: '<!here> | '
   alerts:
     - alert: Applikasjon nede
       expr: sum(up{app="kontakt-oss-api", job="kubernetes-pods"}) == 0
       for: 2m
       description: "kontakt-oss-api er nede"
-      action: "Sjekk logs.adeo.no for logger, og Grafana-dashboardet vårt: https://grafana.adeo.no/d/MwhvlzSMz/team-ia-samledashboard"
+      action: "Sjekk logs.adeo.no for logger, og Grafana-dashboardet vårt: https://grafana.nais.io/d/o_9KGF8Gk/fager?orgId=1"
 
     - alert: Det har skjedd en feil i kontakt-oss-api
       expr: sum(increase(logd_messages_total{log_app="kontakt-oss-api",log_level="Error"}[10m])) > 0
       for: 10s
       description: "kontakt-oss-api har logget en feil"
-      action: "Sjekk logs.adeo.no for logger, og Grafana-dashboardet vårt: https://grafana.adeo.no/d/MwhvlzSMz/team-ia-samledashboard"
+      action: "Sjekk logs.adeo.no for logger, og Grafana-dashboardet vårt: https://grafana.nais.io/d/o_9KGF8Gk/fager?orgId=1"
