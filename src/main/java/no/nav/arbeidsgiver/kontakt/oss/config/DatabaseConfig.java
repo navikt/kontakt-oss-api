@@ -3,6 +3,7 @@ package no.nav.arbeidsgiver.kontakt.oss.config;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import no.nav.vault.jdbc.hikaricp.HikariCPVaultUtil;
 import org.flywaydb.core.Flyway;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +16,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @Profile({"dev", "prod"})
+@Slf4j
 public class DatabaseConfig {
 
     @Value("${spring.datasource.url:}")
@@ -46,6 +48,7 @@ public class DatabaseConfig {
 
     @Bean
     public DataSource userDataSource() {
+        log.info("nais cluster name: {}", naisClusterName);
         if (naisClusterName.endsWith("gcp")) {
             return gcpDataSource();
         }
@@ -56,6 +59,7 @@ public class DatabaseConfig {
     private HikariDataSource gcpDataSource() {
         HikariConfig config = new HikariConfig();
         var url = String.format("jdbc:postgresql://%s:%s/%s", dbHostname, dbPort, dbDatabase);
+        log.info("db connection: url: {} username: {}", url, dbUser);
         config.setJdbcUrl(url);
         config.setUsername(dbUser);
         config.setPassword(dbPassword);
