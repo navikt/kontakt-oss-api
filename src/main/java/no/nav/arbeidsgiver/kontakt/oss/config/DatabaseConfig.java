@@ -28,8 +28,8 @@ public class DatabaseConfig {
     @Value("${vault.mount-path:}")
     private String mountPath;
 
-    @Value("${db.hostname:}")
-    private String dbHostname;
+    @Value("${db.host:}")
+    private String dbHost;
 
     @Value("${db.port:}")
     private String dbPort;
@@ -37,8 +37,8 @@ public class DatabaseConfig {
     @Value("${db.database:}")
     private String dbDatabase;
 
-    @Value("${db.user:}")
-    private String dbUser;
+    @Value("${db.username:}")
+    private String dbUsername;
 
     @Value("${db.password:}")
     private String dbPassword;
@@ -58,10 +58,10 @@ public class DatabaseConfig {
     @SneakyThrows
     private HikariDataSource gcpDataSource() {
         HikariConfig config = new HikariConfig();
-        var url = String.format("jdbc:postgresql://%s:%s/%s", dbHostname, dbPort, dbDatabase);
-        log.info("db connection: url: {} username: {}", url, dbUser);
+        var url = String.format("jdbc:postgresql://%s:%s/%s", dbHost, dbPort, dbDatabase);
+        log.info("db connection: url: {} username: {}", url, dbUsername);
         config.setJdbcUrl(url);
-        config.setUsername(dbUser);
+        config.setUsername(dbUsername);
         config.setPassword(dbPassword);
         config.setMaximumPoolSize(2);
         config.setMinimumIdle(1);
