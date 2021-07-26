@@ -7,8 +7,6 @@ metadata:
     team: arbeidsgiver
 spec:
   image: {{version}}
-  team: arbeidsgiver
-  port: 8080
   vault:
     enabled: true
   ingresses:
@@ -22,8 +20,6 @@ spec:
   env:
     - name: SPRING_PROFILES_ACTIVE
       value: prod
-    - name: FYLKESINNDELING_TVING_OPPDATERING
-      value: "false"
   prometheus:
     enabled: true
     path: /kontakt-oss-api/internal/actuator/prometheus

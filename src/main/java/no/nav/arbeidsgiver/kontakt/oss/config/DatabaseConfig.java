@@ -17,18 +17,51 @@ import javax.sql.DataSource;
 @Profile({"dev", "prod"})
 public class DatabaseConfig {
 
-    @Value("${spring.datasource.url}")
+    @Value("${spring.datasource.url:}")
     private String databaseUrl;
 
-    @Value("${database.navn}")
+    @Value("${database.navn:}")
     private String databaseNavn;
 
-    @Value("${vault.mount-path}")
+    @Value("${vault.mount-path:}")
     private String mountPath;
+
+    @Value("${db.hostname:}")
+    private String dbHostname;
+
+    @Value("${db.port:}")
+    private String dbPort;
+
+    @Value("${db.database:}")
+    private String dbDatabase;
+
+    @Value("${db.user:}")
+    private String dbUser;
+
+    @Value("${db.password:}")
+    private String dbPassword;
+
+    @Value("${nais.cluster.name:}")
+    private String naisClusterName;
 
     @Bean
     public DataSource userDataSource() {
+        if (naisClusterName.endsWith("gcp")) {
+            return gcpDataSource();
+        }
         return dataSource("user");
+    }
+
+    @SneakyThrows
+    private HikariDataSource gcpDataSource() {
+        HikariConfig config = new HikariConfig();
+        var url = String.format("jdbc:postgresql://%s:%s/%s", dbHostname, dbPort, dbDatabase);
+        config.setJdbcUrl(url);
+        config.setUsername(dbUser);
+        config.setPassword(dbPassword);
+        config.setMaximumPoolSize(2);
+        config.setMinimumIdle(1);
+        return new HikariDataSource(config);
     }
 
     @SneakyThrows
@@ -42,6 +75,12 @@ public class DatabaseConfig {
 
     @Bean
     public FlywayMigrationStrategy flywayMigrationStrategy() {
+        if (naisClusterName.endsWith("gcp")) {
+            return flyway -> Flyway.configure()
+                    .dataSource(gcpDataSource())
+                    .load()
+                    .migrate();
+        }
         return flyway -> Flyway.configure()
                 .dataSource(dataSource("admin"))
                 .initSql(String.format("SET ROLE \"%s\"", dbRole("admin")))

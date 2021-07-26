@@ -1,0 +1,39 @@
+apiVersion: nais.io/v1alpha1
+kind: Application
+metadata:
+  name: kontakt-oss-api
+  namespace: fager
+  labels:
+    team: fager
+spec:
+  image: {{version}}
+  ingresses:
+    - https://kontakt-oss-api.dev.nav.no/kontakt-oss-api/
+  liveness:
+    path: /kontakt-oss-api/internal/healthcheck
+    initialDelay: 30
+  readiness:
+    path: /kontakt-oss-api/internal/healthcheck
+    initialDelay: 30
+  env:
+    - name: SPRING_PROFILES_ACTIVE
+      value: dev
+  prometheus:
+    enabled: true
+    path: /kontakt-oss-api/internal/actuator/prometheus
+  gcp:
+    sqlInstances:
+      - type: POSTGRES_12
+        databases:
+          - name: kontaktskjema
+            envVarPrefix: DB
+
+  accessPolicy:
+    outbound:
+      external:
+        - host: https://app-q0.adeo.no/norg2/api/v1
+        - host: https://kodeverk.nais.preprod.local/api/v1
+        - host: https://unleash.nais.io/api/
+        - host: https://test.salesforce.com/services/oauth2/token
+        - host: https://navdialog--preprod.my.salesforce.com/services/apexrest/ContactForm
+

@@ -25,7 +25,8 @@ public class FylkesinndelingScheduler {
     public FylkesinndelingScheduler(
             LockingTaskExecutor taskExecutor,
             FylkesinndelingService fylkesinndelingService,
-            @Value("${FYLKESINNDELING_TVING_OPPDATERING:false}") String tvingOppdatering) {
+            @Value("${FYLKESINNDELING_TVING_OPPDATERING:false}") String tvingOppdatering
+    ) {
         this.taskExecutor = taskExecutor;
         this.fylkesinndelingService = fylkesinndelingService;
 
