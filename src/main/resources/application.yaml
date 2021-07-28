@@ -1,3 +1,7 @@
+spring:
+  profiles.active: local
+  main.banner-mode: "off"
+
 server.servlet.context-path: /kontakt-oss-api
 
 management.endpoints.web:
@@ -5,8 +9,6 @@ management.endpoints.web:
   base-path: /internal/actuator
 
 norg.fixed-rate: 3600000 # Hver time i millisekunder: 1000 * 60 * 60 = 3600000
-
-spring.profiles.active: local
 
 kontaktskjema:
   max-requests-per-10-min: 1000
