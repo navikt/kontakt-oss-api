@@ -33,9 +33,9 @@ spec:
   accessPolicy:
     outbound:
       external:
-        - host: https://app-q0.adeo.no/norg2/api/v1
-        - host: https://kodeverk.nais.preprod.local/api/v1
-        - host: https://unleash.nais.io/api/
-        - host: https://test.salesforce.com/services/oauth2/token
-        - host: https://navdialog--preprod.my.salesforce.com/services/apexrest/ContactForm
+        - host: app-q0.adeo.no # norg2
+        - host: kodeverk.nais.preprod.local
+        - host: unleash.nais.io
+        - host: test.salesforce.com
+        - host: navdialog--preprod.my.salesforce.com
 

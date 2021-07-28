@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
 import java.time.Instant;
 
 @Slf4j
@@ -16,8 +17,6 @@ public class FylkesinndelingScheduler {
 
     private final LockingTaskExecutor taskExecutor;
     private final FylkesinndelingService fylkesinndelingService;
-    private static final int HOUR = 60 * 60;
-    private static final int MINUTE = 60;
 
     private static final String FYLKESINNDELING_SHEDLOCK_NAVN = "oppdaterFylkesinndeling";
 
@@ -39,8 +38,9 @@ public class FylkesinndelingScheduler {
     public void scheduledOppdaterInformasjonFraNorg() {
         log.debug("Sjekker shedlock for fylkesinndeling-oppdatering");
 
-        Instant lockAtMostUntil = Instant.now().plusSeconds(28 * HOUR);
-        Instant lockAtLeastUntil = Instant.now().plusSeconds(24 * HOUR);
+        Instant now = Instant.now();
+        Instant lockAtLeastUntil = now.plus(Duration.ofHours(24));
+        Instant lockAtMostUntil = now.plus(Duration.ofHours(28));
 
         taskExecutor.executeWithLock(
                 (Runnable) fylkesinndelingService::oppdaterFylkesinndeling,
@@ -49,8 +49,9 @@ public class FylkesinndelingScheduler {
     }
 
     private void oppdaterFylkesinndelingUtenomSchedule() {
-        Instant lockAtMostUntil = Instant.now().plusSeconds(10 * MINUTE);
-        Instant lockAtLeastUntil = Instant.now().plusSeconds(5 * MINUTE);
+        Instant now = Instant.now();
+        Instant lockAtLeastUntil = now.plus(Duration.ofMinutes(5));
+        Instant lockAtMostUntil = now.plus(Duration.ofMinutes(10));
 
         taskExecutor.executeWithLock(
                 (Runnable) () -> {

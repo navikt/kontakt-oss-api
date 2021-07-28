@@ -53,6 +53,7 @@ public class FylkesinndelingService {
 
         } catch (KontaktskjemaException exception) {
             eventPublisher.publishEvent(new FylkesinndelingOppdatert(false));
+            log.info("oppdaterFylkesinndeling feilet med exception", exception);
             throw exception;
         }
     }
