@@ -7,7 +7,6 @@ metadata:
     team: arbeidsgiver
 spec:
   image: {{version}}
-  team: arbeidsgiver
   port: 8080
   vault:
     enabled: true

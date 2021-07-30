@@ -34,8 +34,7 @@ public class DatabasePopulator {
         });
         fylkesinndelingRepository.oppdaterInformasjonFraNorg(
                 mapper.readValue(FYLKESINNDELING_JSON, new TypeReference<Map<String, List<KommuneEllerBydel>>>() {
-                }),
-                norgInfo
+                })
         );
         log.info("FylkesinndelingRepository populert med testdata.");
     }

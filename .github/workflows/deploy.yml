@@ -1,6 +1,6 @@
 name: Build & deploy
 
-on: [push]
+on: [push, workflow_dispatch]
 
 env:
   IMAGE: docker.pkg.github.com/${{ github.repository }}/kontakt-oss-api:${{ github.sha }}

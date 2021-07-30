@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 import static no.nav.arbeidsgiver.kontakt.oss.testUtils.TestData.fraFylkesenheterTilKommuner;
-import static no.nav.arbeidsgiver.kontakt.oss.testUtils.TestData.fraKommuneNrTilNavEnhet;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -23,21 +22,18 @@ public class FylkesinndelingRepositoryTest {
     @Test
     public void repository__skal_gi_ut_det_som_blir_satt_inn() {
         Map<String, List<KommuneEllerBydel>> fraFylkesenheterTilKommuner = fraFylkesenheterTilKommuner();
-        Map<String, NavEnhet> fraKommuneNrTilNavEnhet = fraKommuneNrTilNavEnhet();
 
         repository.oppdaterInformasjonFraNorg(
-                fraFylkesenheterTilKommuner,
-                fraKommuneNrTilNavEnhet
+                fraFylkesenheterTilKommuner
         );
 
         assertThat(repository.hentFylkesinndeling())
                 .isEqualTo(fraFylkesenheterTilKommuner);
-        assertThat(repository.hentKommuneNrEllerBydelNrTilNavEnhet()).isEqualTo(fraKommuneNrTilNavEnhet);
     }
 
     @Test
     public void repository__skal_sette_sistOppdatert() {
-        repository.oppdaterInformasjonFraNorg(fraFylkesenheterTilKommuner(), fraKommuneNrTilNavEnhet());
+        repository.oppdaterInformasjonFraNorg(fraFylkesenheterTilKommuner());
         assertThat(repository.hentSistOppdatert()).isAfter(LocalDateTime.now().minusSeconds(10));
     }
 

@@ -35,22 +35,12 @@ public class FylkesinndelingService {
                     kommunerOgBydeler
             );
 
-            Map<String, NavEnhet> fraKommunenrEllerBydelnrTilNavEnhet = fraKommuneEllerBydelTilNavEnhet
-                    .entrySet()
-                    .stream()
-                    .collect(Collectors.toMap(
-                            entry -> entry.getKey().getNummer(),
-                            entry -> entry.getValue()
-                    ));
-
             fylkesinndelingRepository.oppdaterInformasjonFraNorg(
-                    fylkesinndeling,
-                    fraKommunenrEllerBydelnrTilNavEnhet
+                    fylkesinndeling
             );
 
             eventPublisher.publishEvent(new FylkesinndelingOppdatert(true));
             log.info("Informasjon om fylkesinndeling ble oppdatert");
-
         } catch (KontaktskjemaException exception) {
             eventPublisher.publishEvent(new FylkesinndelingOppdatert(false));
             throw exception;

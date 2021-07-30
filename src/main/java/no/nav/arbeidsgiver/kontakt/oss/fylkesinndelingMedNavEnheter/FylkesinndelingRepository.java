@@ -19,9 +19,6 @@ public class FylkesinndelingRepository {
     private static final TypeReference<Map<String, List<KommuneEllerBydel>>> FYLKESINNDELING_TYPE = new TypeReference<>() {
     };
 
-    private static final TypeReference<Map<String, NavEnhet>> KOMMUNE_TIL_ENHET_TYPE = new TypeReference<>() {
-    };
-
     private final JdbcTemplate jdbcTemplate;
     private final ObjectMapper objectMapper;
 
@@ -39,22 +36,13 @@ public class FylkesinndelingRepository {
 
     @SneakyThrows
     public void oppdaterInformasjonFraNorg(
-            Map<String, List<KommuneEllerBydel>> fylkesenhetsnrTilKommunerOgBydeler,
-            Map<String, NavEnhet> kommuneNrEllerBydelNrTilNavEnhet
+            Map<String, List<KommuneEllerBydel>> fylkesenhetsnrTilKommunerOgBydeler
     ) {
         jdbcTemplate.update(
-                "UPDATE norg_mapping SET sistOppdatert=?, mapFraFylkesenheterTilKommunerOgBydeler=?, mapFraKommunerOgBydelerTilNavEnheter=?",
+                "UPDATE norg_mapping SET sistOppdatert=?, mapFraFylkesenheterTilKommunerOgBydeler=?",
                 LocalDateTime.now(),
-                objectMapper.writeValueAsString(fylkesenhetsnrTilKommunerOgBydeler),
-                objectMapper.writeValueAsString(kommuneNrEllerBydelNrTilNavEnhet)
+                objectMapper.writeValueAsString(fylkesenhetsnrTilKommunerOgBydeler)
         );
-    }
-
-    @SneakyThrows
-    @Deprecated
-    public Map<String, NavEnhet> hentKommuneNrEllerBydelNrTilNavEnhet() {
-        String json = jdbcTemplate.queryForObject("SELECT mapFraKommunerOgBydelerTilNavEnheter FROM norg_mapping", String.class);
-        return objectMapper.readValue(json, KOMMUNE_TIL_ENHET_TYPE);
     }
 
     @SneakyThrows
