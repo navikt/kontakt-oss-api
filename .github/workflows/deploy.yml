@@ -55,7 +55,7 @@ jobs:
           docker push ${IMAGE}
       - uses: nais/deploy/actions/deploy@v1
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY_FAGER }}
           CLUSTER: dev-fss
           VAR: version=${{ env.IMAGE }}
           RESOURCE: nais/dev-fss.yaml
