@@ -2,9 +2,9 @@ apiVersion: "nais.io/v1alpha1"
 kind: "Application"
 metadata:
   name: kontakt-oss-api
-  namespace: default
+  namespace: fager
   labels:
-    team: arbeidsgiver
+    team: fager
 spec:
   image: {{version}}
   port: 8080
