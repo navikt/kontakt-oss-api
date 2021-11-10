@@ -2,13 +2,14 @@ apiVersion: "nais.io/v1"
 kind: "Alert"
 metadata:
   name: kontakt-oss-api-alert
+  namespace: team-innhold
   labels:
-    team: arbeidsgiver
+    team: team-innhold
 spec:
   receivers:
     slack:
-      channel: 'arbeidsgiver-msa-alerts'
-      prependText: '<!here> | '
+      channel: "arbeidsgiver_tid_alerts"
+      prependText: "<!here> | "
   alerts:
     - alert: Applikasjon nede
       expr: sum(up{app="kontakt-oss-api", job="kubernetes-pods"}) == 0
