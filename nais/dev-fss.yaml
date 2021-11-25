@@ -27,3 +27,5 @@ spec:
     enabled: true
     path: /kontakt-oss-api/internal/actuator/prometheus
   webproxy: true
+  kafka:
+    pool: nav-dev
