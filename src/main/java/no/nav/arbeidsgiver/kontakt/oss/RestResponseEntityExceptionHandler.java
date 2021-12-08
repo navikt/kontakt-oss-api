@@ -1,6 +1,5 @@
 package no.nav.arbeidsgiver.kontakt.oss;
 
-import no.nav.arbeidsgiver.kontakt.oss.salesforce.klient.SalesforceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -19,12 +18,6 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
     private static Logger logger = LoggerFactory.getLogger(ResponseEntityExceptionHandler.class);
 
-
-    @ExceptionHandler(value = {SalesforceException.class})
-    @ResponseBody
-    protected ResponseEntity<Object> handleSalesForceException(RuntimeException e, WebRequest webRequest) {
-        return getResponseEntity(e, "Intern tjenefeil", HttpStatus.INTERNAL_SERVER_ERROR);
-    }
 
     @ExceptionHandler(value = {KontaktskjemaException.class})
     @ResponseBody

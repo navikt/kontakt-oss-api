@@ -1,8 +1,10 @@
-package no.nav.arbeidsgiver.kontakt.oss.salesforce.utsending;
+package no.nav.arbeidsgiver.kontakt.oss.kafka.utsending;
 
 import net.javacrumbs.shedlock.core.LockConfiguration;
 import net.javacrumbs.shedlock.core.LockingTaskExecutor;
 import no.nav.arbeidsgiver.kontakt.oss.KontaktskjemaRepository;
+import no.nav.arbeidsgiver.kontakt.oss.kafka.utsending.KontaktskjemaUtsendingScheduler;
+import no.nav.arbeidsgiver.kontakt.oss.kafka.utsending.KontaktskjemaUtsendingService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -26,7 +28,7 @@ public class KontaktskjemaUtsendingSchedulerTest {
     public void skalSjekkeAtScheduledMetodeBrukerShedlock() {
         KontaktskjemaUtsendingScheduler kontaktskjemaUtsendingScheduler = new KontaktskjemaUtsendingScheduler(kontaktskjemaUtsendingService, kontaktskjemaRepository, taskExecutor);
 
-        kontaktskjemaUtsendingScheduler.scheduledSendSkjemaTilSalesForce();
+        kontaktskjemaUtsendingScheduler.scheduledPublishFormSubmissionToKafka();
 
         verify(taskExecutor).executeWithLock(any(Runnable.class), any(LockConfiguration.class));
     }

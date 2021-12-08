@@ -1,7 +1,7 @@
 package no.nav.arbeidsgiver.kontakt.oss;
 
-import no.nav.arbeidsgiver.kontakt.oss.salesforce.utsending.KontaktskjemaUtsending;
-import no.nav.arbeidsgiver.kontakt.oss.salesforce.utsending.KontaktskjemaUtsendingRepository;
+import no.nav.arbeidsgiver.kontakt.oss.kafka.utsending.KontaktskjemaUtsending;
+import no.nav.arbeidsgiver.kontakt.oss.kafka.utsending.KontaktskjemaUtsendingRepository;
 import no.nav.arbeidsgiver.kontakt.oss.testUtils.TestData;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
