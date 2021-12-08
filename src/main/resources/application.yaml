@@ -46,7 +46,6 @@ salesforce:
 
 nais.cluster.name: local
 
-
 ---
 spring:
   config.activate.on-profile: dev
@@ -62,6 +61,16 @@ salesforce:
 
 database.navn: kontakt-oss-preprod
 vault.mount-path: postgresql/preprod-fss
+
+kafka:
+  outbound:
+    topic: team-innhold.arbeidsgiver-kontaktskjema
+    bootstrapServers: ${KAFKA_BROKERS:localhost:9092}
+    securityProtocol: SSL
+    caPath: ${KAFKA_CA_PATH}
+    keystorePath: ${KAFKA_KEYSTORE_PATH:/dev/zero}
+    truststorePath: ${KAFKA_TRUSTSTORE_PATH:/dev/zero}
+    credstorePassword: ${KAFKA_CREDSTORE_PASSWORD:pwd}
 
 ---
 spring:
@@ -80,3 +89,26 @@ salesforce:
 
 database.navn: kontakt-oss-prod
 vault.mount-path: postgresql/prod-fss
+
+kafka:
+  outbound:
+    topic: team-innhold.arbeidsgiver-kontaktskjema
+    bootstrapServers: ${KAFKA_BROKERS:localhost:9092}
+    securityProtocol: SSL
+    caPath: ${KAFKA_CA_PATH}
+    keystorePath: ${KAFKA_KEYSTORE_PATH:/dev/zero}
+    truststorePath: ${KAFKA_TRUSTSTORE_PATH:/dev/zero}
+    credstorePassword: ${KAFKA_CREDSTORE_PASSWORD:pwd}
+
+---
+spring:
+  config.activate.on-profile: kafka-test
+
+kafka:
+  outbound:
+    bootstrapServers: ${spring.embedded.kafka.brokers}
+
+
+
+
+

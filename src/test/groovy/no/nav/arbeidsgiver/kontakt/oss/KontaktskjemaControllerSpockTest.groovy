@@ -1,7 +1,7 @@
 package no.nav.arbeidsgiver.kontakt.oss
 
 import no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter.LokasjonsValidator
-import no.nav.arbeidsgiver.kontakt.oss.salesforce.utsending.KontaktskjemaUtsendingRepository
+import no.nav.arbeidsgiver.kontakt.oss.kafka.utsending.KontaktskjemaUtsendingRepository;
 import org.spockframework.spring.SpringBean
 import org.spockframework.spring.StubBeans
 import org.springframework.beans.factory.annotation.Autowired

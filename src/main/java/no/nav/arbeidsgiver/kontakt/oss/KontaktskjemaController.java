@@ -29,7 +29,7 @@ public class KontaktskjemaController {
             return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
         }
 
-        kontaktskjemaService.lagreKontaktskjemaOgSendTilSalesforce(kontaktskjema);
+        kontaktskjemaService.saveFormSubmission(kontaktskjema);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 }

@@ -1,4 +1,4 @@
-package no.nav.arbeidsgiver.kontakt.oss.salesforce.utsending;
+package no.nav.arbeidsgiver.kontakt.oss.kafka.utsending;
 
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;

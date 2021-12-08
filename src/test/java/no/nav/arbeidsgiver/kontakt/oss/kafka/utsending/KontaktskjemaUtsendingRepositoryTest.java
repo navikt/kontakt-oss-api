@@ -1,5 +1,7 @@
-package no.nav.arbeidsgiver.kontakt.oss.salesforce.utsending;
+package no.nav.arbeidsgiver.kontakt.oss.kafka.utsending;
 
+import no.nav.arbeidsgiver.kontakt.oss.kafka.utsending.KontaktskjemaUtsending;
+import no.nav.arbeidsgiver.kontakt.oss.kafka.utsending.KontaktskjemaUtsendingRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
