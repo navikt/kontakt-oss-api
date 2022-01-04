@@ -268,7 +268,7 @@ public class KontaktskjemaServiceTest {
     public void lagreKontaktskjema__skal_akseptere_skråstrek_og_parenteser_i_bedriftsnavn() {
         mockLagretKontaktskjema();
         Kontaktskjema ugyldigKontaktskjema = TestData.kontaktskjemaBuilder()
-                .bedriftsnavn("Mark AS (egen bedrift) / Krok ENK (konas bedrift)")
+                .bedriftsnavn("Mark AS (egen bedrift) / Krok ENK")
                 .build();
         kontaktskjemaService.lagreKontaktskjemaOgSendTilSalesforce(ugyldigKontaktskjema);
     }
