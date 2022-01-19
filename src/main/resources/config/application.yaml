@@ -1,0 +1,29 @@
+server:
+  servlet:
+    context-path: /kontakt-oss-api
+
+management:
+  endpoints.web:
+    exposure.include: info, health, metrics, prometheus
+    base-path: /internal/actuator
+
+norg:
+  fixed-rate: 3600000 # Hver time i millisekunder: 1000 * 60 * 60 = 3600000
+
+#spring:
+#  config.activate.on-profile: prod
+
+norg.url: https://app.adeo.no/norg2/api/v1
+kodeverk.url: https://kodeverk.nais.adeo.no/api/v1
+unleash:
+  url: https://unleash.nais.io/api/
+  profile: prod
+
+
+
+salesforce:
+  auth.url: https://login.salesforce.com/services/oauth2/token
+  contactform.url: https://navdialog.my.salesforce.com/services/apexrest/ContactForm
+
+database.navn: kontakt-oss-prod
+vault.mount-path: postgresql/prod-fss

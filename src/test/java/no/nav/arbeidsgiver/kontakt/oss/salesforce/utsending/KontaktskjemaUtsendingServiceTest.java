@@ -11,6 +11,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
 import static java.time.LocalDateTime.now;
@@ -21,6 +22,7 @@ import static org.mockito.ArgumentMatchers.any;
 
 
 @SpringBootTest
+@ActiveProfiles({"local"})
 @TestPropertySource(properties = {"mock.enabled=false"})
 public class KontaktskjemaUtsendingServiceTest {
 

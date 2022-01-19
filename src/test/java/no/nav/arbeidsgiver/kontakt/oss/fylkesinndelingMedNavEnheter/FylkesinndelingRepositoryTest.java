@@ -1,8 +1,11 @@
 package no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
 import java.time.LocalDateTime;
@@ -13,7 +16,9 @@ import static no.nav.arbeidsgiver.kontakt.oss.testUtils.TestData.fraFylkesenhete
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
+@ActiveProfiles({"local"})
 @TestPropertySource(properties = {"mock.enabled=false"})
+@Slf4j
 public class FylkesinndelingRepositoryTest {
 
     @Autowired
