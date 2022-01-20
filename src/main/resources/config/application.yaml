@@ -1,16 +1,33 @@
 spring:
   kafka:
-    bootstrap-servers: ${spring.embedded.kafka.brokers}
+    bootstrap-servers: ${KAFKA_BROKERS}
+    properties:
+      security.protocol: SSL
+      ssl:
+        keystore:
+          type: PKCS12
+          location: ${KAFKA_KEYSTORE_PATH}
+          password: ${KAFKA_CREDSTORE_PASSWORD}
+        truststore:
+          location: ${KAFKA_TRUSTSTORE_PATH}
+          password: ${KAFKA_CREDSTORE_PASSWORD}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: "kontakt-oss"
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
 # kontakt-oss
 kontakt-oss:
   kafka:
     config:
-      bootstrap-servers: ${spring.embedded.kafka.brokers}
-      truststore-path: null
-      truststore-password: null
-      keystore-path: null
-      keystore-password: null
+      bootstrap-servers: ${KAFKA_BROKERS}
+      truststore-path: ${KAFKA_TRUSTSTORE_PATH}
+      truststore-password: ${KAFKA_CREDSTORE_PASSWORD}
+      keystore-path: ${KAFKA_KEYSTORE_PATH}
+      keystore-password: ${KAFKA_CREDSTORE_PASSWORD}
     enabled: false
 
 
@@ -25,9 +42,6 @@ management:
 
 norg:
   fixed-rate: 3600000 # Hver time i millisekunder: 1000 * 60 * 60 = 3600000
-
-#spring:
-#  config.activate.on-profile: prod
 
 norg.url: https://app.adeo.no/norg2/api/v1
 kodeverk.url: https://kodeverk.nais.adeo.no/api/v1

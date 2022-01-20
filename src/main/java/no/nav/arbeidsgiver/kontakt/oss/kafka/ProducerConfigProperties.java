@@ -2,8 +2,10 @@ package no.nav.arbeidsgiver.kontakt.oss.kafka;
 
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
+@ConditionalOnProperty("kontakt-oss.kafka.config.enabled")
 @Data
 @Component
 public class ProducerConfigProperties {

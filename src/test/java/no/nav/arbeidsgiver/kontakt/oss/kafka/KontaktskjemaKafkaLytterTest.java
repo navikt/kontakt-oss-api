@@ -19,10 +19,12 @@ import org.springframework.test.context.ActiveProfiles;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
-@ActiveProfiles("local")
+@ActiveProfiles({"local"})
 @EnableKafka
 @SpringBootTest
-@EmbeddedKafka(partitions = 1, topics = {Topics.KONTAKTSKJEMA})
+@EmbeddedKafka(
+        partitions = 1, topics = {Topics.KONTAKTSKJEMA},
+        brokerProperties = { "listeners=PLAINTEXT://localhost:9092", "port=9092" })
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class KontaktskjemaKafkaLytterTest {
 
