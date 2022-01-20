@@ -15,7 +15,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import java.util.HashMap;
 import java.util.Map;
 
-@ConditionalOnProperty("")
+@ConditionalOnProperty("kontakt-oss.kafka.config.enabled")
 @Configuration
 @Slf4j
 @EnableKafka
@@ -31,7 +31,7 @@ public class ProducerConfig {
         final String pkcs12 = "PKCS12";
 
         Map<String, Object> props = new HashMap<>();
-        props.put(org.apache.kafka.clients.producer.ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, configProps.getGcpBootstrapServers());
+        props.put(org.apache.kafka.clients.producer.ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, configProps.getBootstrapServers());
         props.put(org.apache.kafka.clients.producer.ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(org.apache.kafka.clients.producer.ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, SecurityProtocol.SSL.name);

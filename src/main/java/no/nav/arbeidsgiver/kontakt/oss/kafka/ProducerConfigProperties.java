@@ -1,17 +1,24 @@
 package no.nav.arbeidsgiver.kontakt.oss.kafka;
 
 import lombok.Data;
-
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Data
 @Component
-@ConfigurationProperties(prefix = "kontakt-oss.kafka")
 public class ProducerConfigProperties {
-    private String gcpBootstrapServers;
+    @Value("${kontakt-oss.kafka.config.bootstrap-servers}")
+    private String bootstrapServers;
+
+    @Value("${kontakt-oss.kafka.config.truststore-path}")
     private String sslTruststoreLocationEnvKey;
+
+    @Value("${kontakt-oss.kafka.config.truststore-password}")
     private String sslTruststorePasswordEnvKey;
+
+    @Value("${kontakt-oss.kafka.config.keystore-path}")
     private String sslKeystoreLocationEnvKey;
+
+    @Value("${kontakt-oss.kafka.config.keystore-password}")
     private String sslKeystorePasswordEnvKey;
 }
