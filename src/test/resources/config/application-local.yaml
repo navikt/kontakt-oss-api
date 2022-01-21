@@ -18,9 +18,14 @@ spring:
           truststore: null
       bootstrap-servers: ${spring.embedded.kafka.brokers}
       producer:
+        bootstrap-servers:
+          - localhost:9092
         key-serializer: org.apache.kafka.common.serialization.StringSerializer
         value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       consumer:
+        bootstrap-servers:
+          - localhost:9092
+        auto-offset-reset: earliest
         key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
         value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
         group-id: "kontakt-oss"
@@ -36,6 +41,8 @@ kontakt-oss:
       keystore-password: null
       security-protocol: PLAINTEXT
     enabled: false
+    test-instance:
+      enabled: false
 
 
 kontaktskjema.max-requests-per-10-min: 1000

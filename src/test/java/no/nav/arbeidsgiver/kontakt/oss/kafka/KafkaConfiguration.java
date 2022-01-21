@@ -15,7 +15,7 @@ import org.springframework.kafka.core.ProducerFactory;
 import java.util.HashMap;
 import java.util.Map;
 
-@ConditionalOnProperty("kontakt-oss.kafka.config.enabled")
+@ConditionalOnProperty("kontakt-oss.kafka.enabled")
 @EnableKafka
 public class KafkaConfiguration {
 

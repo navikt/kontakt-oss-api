@@ -1,56 +1,49 @@
 package no.nav.arbeidsgiver.kontakt.oss.kafka;
 
-
-import org.junit.BeforeClass;
-import org.junit.jupiter.api.BeforeAll;
+import lombok.extern.slf4j.Slf4j;
+import no.nav.arbeidsgiver.kontakt.oss.Kontaktskjema;
+import no.nav.arbeidsgiver.kontakt.oss.testUtils.TestData;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.annotation.EnableKafka;
-import org.springframework.kafka.config.KafkaListenerEndpointRegistry;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.listener.MessageListenerContainer;
-import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
-import org.springframework.kafka.test.utils.ContainerTestUtils;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.concurrent.TimeUnit;
+import static org.assertj.core.api.Assertions.assertThat;
 
 
+@SpringBootTest(properties = {"kontakt-oss.kafka.enabled=true", "kontakt-oss.kafka.test-instance.enabled=true", "mock.enabled=false"})
+@DirtiesContext
 @ActiveProfiles({"local"})
 @EnableKafka
-@SpringBootTest
 @EmbeddedKafka(
         partitions = 1, topics = {Topics.KONTAKTSKJEMA},
         brokerProperties = { "listeners=PLAINTEXT://localhost:9092", "port=9092" })
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Slf4j
 public class KontaktskjemaKafkaLytterTest {
 
     @Autowired
-    private EmbeddedKafkaBroker kafkaEmbedded;
+    private KontaktskjemaKafkaProducer kontaktskjemaKafkaProducer;
 
     @Autowired
-    private KafkaListenerEndpointRegistry kafkaListenerEndpointRegistry;
-
-    @Autowired
-    KafkaTemplate<String, String> kafkaTemplate;
-
-
-    @BeforeAll
-    public void setUp() throws Exception {
-        for (MessageListenerContainer messageListenerContainer : kafkaListenerEndpointRegistry.getListenerContainers()) {
-            ContainerTestUtils.waitForAssignment(messageListenerContainer,
-                    kafkaEmbedded.getPartitionsPerTopic());
-        }
-    }
+    KontaktskjemaKafkaLytter kontaktskjemaKafkaLytter;
 
     @Test
-    public void send_melding_pa_kafkatopic() {
+    public void send_melding_pa_kafkatopic() throws InterruptedException {
+        final Kontaktskjema kontaktskjema = TestData.kontaktskjema();
+        kontaktskjema.setId(15);
 
-        kafkaTemplate.send(Topics.KONTAKTSKJEMA, "sending message with kafkaProducer");
-        assertTrue(true);
+        kontaktskjemaKafkaProducer.publiserMelding(kontaktskjema);
+        kontaktskjemaKafkaLytter.getLatch().await(10000, TimeUnit.MILLISECONDS);
+
+         // assertThat(kontaktskjemaKafkaLytter.getLatch().getCount()).isEqualTo(0L);
+
+
+         assertThat(kontaktskjemaKafkaLytter.getPayload()).isNotEmpty();
+
     }
 
 }

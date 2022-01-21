@@ -26,11 +26,11 @@ public class KontaktskjemaKafkaProducer {
         this.objectMapper = objectMapper;
     }
 
-    private String parseKontaktskjemaMelding(KontaktskjemaMelding kontaktskjemaMelding, String id, String topic) {
+    private String parseKontaktskjemaMelding(KontaktskjemaMelding kontaktskjemaMelding, String id) {
         try {
             return objectMapper.writeValueAsString(kontaktskjemaMelding);
         } catch (JsonProcessingException e) {
-            log.error("feilet med å lage JSON for kafka-melding med id {} til topic {}", id, topic);
+            log.error("feilet med å lage JSON for kafka-melding med id {} til topic {}", id, Topics.KONTAKTSKJEMA);
             return null;
         }
     }
@@ -39,7 +39,7 @@ public class KontaktskjemaKafkaProducer {
     public void publiserMelding(Kontaktskjema kontaktskjema) {
         String meldingId = kontaktskjema.getId().toString();
         final KontaktskjemaMelding kontaktskjemaMelding = KontaktskjemaMelding.lagKontaktskjemaMelding(kontaktskjema);
-        String stringifyMelding = parseKontaktskjemaMelding(kontaktskjemaMelding, meldingId, Topics.KONTAKTSKJEMA);
+        String stringifyMelding = parseKontaktskjemaMelding(kontaktskjemaMelding, meldingId);
 
         if (stringifyMelding != null) {
             kafkaTemplate.send(Topics.KONTAKTSKJEMA, meldingId, stringifyMelding)

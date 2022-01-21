@@ -3,7 +3,6 @@ package no.nav.arbeidsgiver.kontakt.oss.kafka;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.common.config.SslConfigs;
-import org.apache.kafka.common.security.auth.SecurityProtocol;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -15,7 +14,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import java.util.HashMap;
 import java.util.Map;
 
-@ConditionalOnProperty("kontakt-oss.kafka.config.enabled")
+@ConditionalOnProperty("kontakt-oss.kafka.enabled")
 @Configuration
 @Slf4j
 @EnableKafka
@@ -34,7 +33,7 @@ public class ProducerConfig {
         props.put(org.apache.kafka.clients.producer.ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, configProps.getBootstrapServers());
         props.put(org.apache.kafka.clients.producer.ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(org.apache.kafka.clients.producer.ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        props.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, SecurityProtocol.SSL.name);
+        props.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, configProps.getSecurityProtocol());
         props.put(SslConfigs.SSL_ENDPOINT_IDENTIFICATION_ALGORITHM_CONFIG, "");
         props.put(SslConfigs.SSL_TRUSTSTORE_TYPE_CONFIG, javaKeystore);
         props.put(SslConfigs.SSL_KEYSTORE_TYPE_CONFIG, pkcs12);

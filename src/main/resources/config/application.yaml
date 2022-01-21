@@ -28,7 +28,10 @@ kontakt-oss:
       truststore-password: ${KAFKA_CREDSTORE_PASSWORD}
       keystore-path: ${KAFKA_KEYSTORE_PATH}
       keystore-password: ${KAFKA_CREDSTORE_PASSWORD}
+      security-protocol: PLAINTEXT
     enabled: false
+    test-instance:
+      enabled: false
 
 
 server:
