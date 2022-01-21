@@ -10,10 +10,9 @@ import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
+import java.util.concurrent.CountDownLatch;
 
-import java.util.concurrent.TimeUnit;
 import static org.assertj.core.api.Assertions.assertThat;
-
 
 @SpringBootTest(properties = {"kontakt-oss.kafka.enabled=true", "kontakt-oss.kafka.test-instance.enabled=true", "mock.enabled=false"})
 @DirtiesContext
@@ -36,14 +35,12 @@ public class KontaktskjemaKafkaLytterTest {
         final Kontaktskjema kontaktskjema = TestData.kontaktskjema();
         kontaktskjema.setId(15);
 
+        Thread.sleep(500L);
         kontaktskjemaKafkaProducer.publiserMelding(kontaktskjema);
-        kontaktskjemaKafkaLytter.getLatch().await(10000, TimeUnit.MILLISECONDS);
+        Thread.sleep(1000L);
+        final CountDownLatch latch = kontaktskjemaKafkaLytter.getLatch();
 
-         // assertThat(kontaktskjemaKafkaLytter.getLatch().getCount()).isEqualTo(0L);
-
-
+         assertThat(latch.getCount()).isEqualTo(0L);
          assertThat(kontaktskjemaKafkaLytter.getPayload()).isNotEmpty();
-
     }
-
 }
