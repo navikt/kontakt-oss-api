@@ -21,3 +21,6 @@ database:
   navn: kontakt-oss-preprod
 vault:
   mount-path: postgresql/preprod-fss
+
+kontaktskjema:
+  max-requests-per-10-min: 10

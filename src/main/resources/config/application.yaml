@@ -52,6 +52,8 @@ unleash:
   url: https://unleash.nais.io/api/
   profile: prod
 
+kontaktskjema:
+  max-requests-per-10-min: 10
 
 
 salesforce:
