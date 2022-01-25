@@ -10,6 +10,8 @@ spec:
   port: 8080
   vault:
     enabled: true
+  kafka:
+    pool: nav-prod
   ingresses:
     - https://arbeidsgiver.nais.adeo.no/kontakt-oss-api/
   liveness:
