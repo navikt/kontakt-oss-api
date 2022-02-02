@@ -20,7 +20,7 @@ public class FeatureToggleConfig {
 
     @Value("${unleash.url}")
     private String unleashUrl;
-    @Value("${spring.profiles.active}")
+    @Value("${unleash.profile}")
     private String profile;
 
     @Autowired
