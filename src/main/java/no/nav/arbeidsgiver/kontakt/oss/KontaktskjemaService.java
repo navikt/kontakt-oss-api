@@ -2,8 +2,8 @@ package no.nav.arbeidsgiver.kontakt.oss;
 
 import lombok.extern.slf4j.Slf4j;
 import no.nav.arbeidsgiver.kontakt.oss.events.BesvarelseMottatt;
-import no.nav.arbeidsgiver.kontakt.oss.salesforce.utsending.KontaktskjemaUtsending;
-import no.nav.arbeidsgiver.kontakt.oss.salesforce.utsending.KontaktskjemaUtsendingRepository;
+import no.nav.arbeidsgiver.kontakt.oss.utsending.KontaktskjemaUtsending;
+import no.nav.arbeidsgiver.kontakt.oss.utsending.KontaktskjemaUtsendingRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;

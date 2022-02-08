@@ -13,7 +13,7 @@ public interface KontaktskjemaRepository extends CrudRepository<Kontaktskjema, I
     Collection<Kontaktskjema> findAllNewerThan(@Param(value = "created") LocalDateTime created);
 
     @Query("SELECT k.* FROM Kontaktskjema k WHERE EXISTS (SELECT ku.id FROM KONTAKTSKJEMA_UTSENDING ku WHERE k.id = ku.kontaktskjema_id AND ku.utsending_status <> 'SENT')")
-    Collection<Kontaktskjema> hentKontakskjemaerSomSkalSendesTilSalesforce();
+    Collection<Kontaktskjema> hentKontakskjemaerSomSkalSendesTilKafka();
 
     @Query("SELECT 'ok'")
     String healthcheck();

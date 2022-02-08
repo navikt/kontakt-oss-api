@@ -4,7 +4,6 @@ import lombok.SneakyThrows;
 import no.nav.arbeidsgiver.kontakt.oss.Kontaktskjema;
 import no.nav.arbeidsgiver.kontakt.oss.TemaType;
 import no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter.*;
-import no.nav.arbeidsgiver.kontakt.oss.salesforce.klient.ContactForm;
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,20 +36,6 @@ public class TestData {
                 .tema("Rekruttering")
                 .temaType(TemaType.REKRUTTERING)
                 .harSnakketMedAnsattrepresentant(false);
-    }
-
-    public static ContactForm contactForm() {
-        Kontaktskjema kontaktskjema = kontaktskjema();
-        return new ContactForm(
-                kontaktskjema.getTemaType(),
-                kontaktskjema.getFylkesenhetsnr(),
-                kontaktskjema.getKommunenr(),
-                kontaktskjema.getBedriftsnavn(),
-                kontaktskjema.getOrgnr(),
-                kontaktskjema.getEpost(),
-                kontaktskjema.getTelefonnr(),
-                kontaktskjema.getNavn()
-        );
     }
 
     public static ResponseEntity<String> gsakResponseEntity() {

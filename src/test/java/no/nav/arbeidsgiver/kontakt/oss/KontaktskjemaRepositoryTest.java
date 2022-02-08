@@ -1,7 +1,7 @@
 package no.nav.arbeidsgiver.kontakt.oss;
 
-import no.nav.arbeidsgiver.kontakt.oss.salesforce.utsending.KontaktskjemaUtsending;
-import no.nav.arbeidsgiver.kontakt.oss.salesforce.utsending.KontaktskjemaUtsendingRepository;
+import no.nav.arbeidsgiver.kontakt.oss.utsending.KontaktskjemaUtsending;
+import no.nav.arbeidsgiver.kontakt.oss.utsending.KontaktskjemaUtsendingRepository;
 import no.nav.arbeidsgiver.kontakt.oss.testUtils.TestData;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -88,7 +88,7 @@ public class KontaktskjemaRepositoryTest {
                 )
         );
 
-        assertThat(kontaktskjemaRepository.hentKontakskjemaerSomSkalSendesTilSalesforce().size()).isEqualTo(0);
+        assertThat(kontaktskjemaRepository.hentKontakskjemaerSomSkalSendesTilKafka().size()).isEqualTo(0);
     }
 
     @Test
@@ -96,7 +96,7 @@ public class KontaktskjemaRepositoryTest {
         Kontaktskjema lagretSkjema = kontaktskjemaRepository.save(TestData.kontaktskjema());
         kontaktskjemaUtsendingRepository.save(KontaktskjemaUtsending.klarTilUtsending(lagretSkjema.getId(), now()));
 
-        assertThat(kontaktskjemaRepository.hentKontakskjemaerSomSkalSendesTilSalesforce().size()).isEqualTo(1);
+        assertThat(kontaktskjemaRepository.hentKontakskjemaerSomSkalSendesTilKafka().size()).isEqualTo(1);
     }
 
 }
