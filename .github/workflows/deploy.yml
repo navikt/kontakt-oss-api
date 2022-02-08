@@ -30,7 +30,7 @@ jobs:
     #########################
     ### DEVELOPERS: Insert your feature branch name below (in addition to master) if you want to deploy it to dev
     #########################
-    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/feature/publish-to-kafka:::'
+    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/feature/feature/remove-sf'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -63,7 +63,7 @@ jobs:
   deploy-kafka-topic-dev:
     name: Deploy kafka topic to dev
     needs: test
-    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/feature/remove-sf'
+    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/kafka-salesforce'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
