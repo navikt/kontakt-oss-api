@@ -1,4 +1,4 @@
-package no.nav.arbeidsgiver.kontakt.oss.salesforce.utsending;
+package no.nav.arbeidsgiver.kontakt.oss.utsending;
 
 import org.springframework.data.annotation.Id;
 
