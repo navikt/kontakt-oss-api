@@ -29,7 +29,7 @@ kontakt-oss:
       keystore-path: ${KAFKA_KEYSTORE_PATH}
       keystore-password: ${KAFKA_CREDSTORE_PASSWORD}
       security-protocol: SSL
-    enabled: false
+    enabled: true
     test-instance:
       enabled: false
 
