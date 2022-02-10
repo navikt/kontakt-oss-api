@@ -1,4 +1,4 @@
-package no.nav.arbeidsgiver.kontakt.oss.salesforce.utsending;
+package no.nav.arbeidsgiver.kontakt.oss.utsending;
 
 
 import lombok.extern.slf4j.Slf4j;
@@ -29,27 +29,27 @@ public class KontaktskjemaUtsendingScheduler {
     }
 
     @Scheduled(cron = "* * * * * ?")
-    public void scheduledSendSkjemaTilSalesForce() {
+    public void scheduledSendSkjemaTilKafka() {
 
         Instant lockAtMostUntil = Instant.now().plusSeconds(60);
         Instant lockAtLeastUntil = Instant.now().plusSeconds(30);
 
         taskExecutor.executeWithLock(
-                (Runnable) this::sendSkjemaTilSalesForce,
+                (Runnable) this::sendSkjemaTilKafka,
                 new LockConfiguration("utsendingAvSkjemaerTilSalesforce", lockAtMostUntil, lockAtLeastUntil)
         );
 
     }
 
-    public void sendSkjemaTilSalesForce() {
-        Collection<Kontaktskjema> skjemaer = kontaktskjemaRepository.hentKontakskjemaerSomSkalSendesTilSalesforce();
+    public void sendSkjemaTilKafka() {
+        Collection<Kontaktskjema> skjemaer = kontaktskjemaRepository.hentKontakskjemaerSomSkalSendesTilKafka();
 
         if (skjemaer.size() > 0) {
             log.info("Fant {} skjemaer som skal sendes til Salesforce", skjemaer.size());
         }
 
         skjemaer.forEach(
-                skjema -> kontaktskjemaUtsendingService.sendSkjemaTilSalesForce(skjema));
+                skjema -> kontaktskjemaUtsendingService.sendSkjemaTilKafka(skjema));
     }
 
 }
