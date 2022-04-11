@@ -1,7 +1,11 @@
 # kontakt-oss
 kontakt-oss:
   kafka:
-    enabled: true
+    enabled: false
+  fylke-scheduler:
+    enabled: false
+  utsending-scheduler:
+    enabled: false
 
 norg:
   url: https://app-q0.adeo.no/norg2/api/v1
@@ -18,9 +22,9 @@ salesforce:
     url: https://navdialog--preprod.my.salesforce.com/services/apexrest/ContactForm
 
 database:
-  navn: kontakt-oss-preprod
+  navn: #kontakt-oss-preprod
 vault:
-  mount-path: postgresql/preprod-fss
+  mount-path: #postgresql/preprod-fss
 
 kontaktskjema:
   max-requests-per-10-min: 10

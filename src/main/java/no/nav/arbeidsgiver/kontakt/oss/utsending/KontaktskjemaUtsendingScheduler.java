@@ -7,12 +7,14 @@ import net.javacrumbs.shedlock.core.LockingTaskExecutor;
 import no.nav.arbeidsgiver.kontakt.oss.Kontaktskjema;
 import no.nav.arbeidsgiver.kontakt.oss.KontaktskjemaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.util.Collection;
 
+@ConditionalOnProperty("kontakt-oss.utsending-scheduler.enabled")
 @Slf4j
 @Component
 public class KontaktskjemaUtsendingScheduler {
