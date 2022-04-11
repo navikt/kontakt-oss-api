@@ -20,10 +20,10 @@ spec:
   ingresses:
     - https://arbeidsgiver.dev.nav.no/kontakt-oss-api/
   liveness:
-    path: /kontakt-oss-api/internal/healthcheck
+    path: /internal/isAlive
     initialDelay: 30
   readiness:
-    path: /kontakt-oss-api/internal/healthcheck
+    path: /internal/isReady
     initialDelay: 30
   prometheus:
     enabled: true
