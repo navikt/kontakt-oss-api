@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import no.nav.arbeidsgiver.kontakt.oss.events.BesvarelseMottatt;
-import no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter.KommuneEllerBydel;
-import no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter.LokasjonsValidator;
+import no.nav.arbeidsgiver.kontakt.oss.fylkesinndeling.KommuneEllerBydel;
+import no.nav.arbeidsgiver.kontakt.oss.fylkesinndeling.LokasjonsValidator;
 import no.nav.arbeidsgiver.kontakt.oss.utsending.KontaktskjemaUtsendingRepository;
 import no.nav.arbeidsgiver.kontakt.oss.testUtils.TestData;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +17,6 @@ import org.springframework.context.ApplicationEventPublisher;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import static java.time.LocalDateTime.now;
@@ -190,8 +189,7 @@ public class KontaktskjemaServiceTest {
     public void lagreKontaktskjema__skal_returnere_hvis_kontaktskjema_er_gyldig() {
         mockLagretKontaktskjema();
         Kontaktskjema gyldigKontaktskjema = TestData.kontaktskjemaBuilder()
-                .fornavn("Per")
-                .etternavn("Persén")
+                .navn("Per Persén")
                 .bedriftsnavn("Årvõll Øks3sk4ft")
                 .epost("hei@årvoll.øks3-sk4ft.no")
                 .telefonnr("+47 99 99 99 99")
@@ -292,14 +290,11 @@ public class KontaktskjemaServiceTest {
 
     @SneakyThrows
     private List<String> hentAlleKommunenavnFraMock() {
-        String fylkesinndelingJson = TestData.lesFil("mock/fylkesinndeling.json");
-        Map<String, List<KommuneEllerBydel>> fylkesinndeling =
-                new ObjectMapper().readValue(fylkesinndelingJson, new TypeReference<Map<String, List<KommuneEllerBydel>>>() {
-                });
-        return fylkesinndeling
-                .values()
+        String kommunerOgBydelerJson = TestData.lesFil("mock/kommunerOgBydeler.json");
+        List<KommuneEllerBydel> kommunerOfBydeler = new ObjectMapper().readValue(kommunerOgBydelerJson, new TypeReference<List<KommuneEllerBydel>>() {
+        });
+        return kommunerOfBydeler
                 .stream()
-                .flatMap(List::stream)
                 .map(KommuneEllerBydel::getNavn)
                 .collect(Collectors.toList());
     }

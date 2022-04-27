@@ -1,0 +1,14 @@
+{
+  "codes": [
+    {
+      "code": "0301",
+      "parentCode": null,
+      "level": "1",
+      "name": "Oslo",
+      "shortName": "",
+      "presentationName": "",
+      "validFromInRequestedRange": "2022-04-13",
+      "validToInRequestedRange": null
+    }
+  ]
+}

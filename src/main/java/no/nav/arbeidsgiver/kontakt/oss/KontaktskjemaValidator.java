@@ -1,7 +1,7 @@
 package no.nav.arbeidsgiver.kontakt.oss;
 
 import lombok.extern.slf4j.Slf4j;
-import no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter.LokasjonsValidator;
+import no.nav.arbeidsgiver.kontakt.oss.fylkesinndeling.LokasjonsValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

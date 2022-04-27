@@ -1,1 +1,0 @@
-ALTER TABLE kontaktskjema ADD tema_type varchar(100);

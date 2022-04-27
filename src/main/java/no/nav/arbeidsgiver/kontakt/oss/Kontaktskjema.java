@@ -17,32 +17,16 @@ public class Kontaktskjema {
     @JsonIgnore
     private LocalDateTime opprettet;
 
-    private String fylkesenhetsnr;
-    private String kommune;
-    private String kommunenr;
-    private String bedriftsnavn;
-    private String orgnr;
-
-    @Deprecated
-    private String fornavn;
-
-    @Deprecated
-    private String etternavn;
-
-    private String epost;
-    private String telefonnr;
-    private String tema;
-    private TemaType temaType;
     private Boolean harSnakketMedAnsattrepresentant;
+    private String fylkesenhetsnr;
+    private String bedriftsnavn;
+    private TemaType temaType;
+    private String telefonnr;
+    private String kommunenr;
+    private String kommune;
+    private String orgnr;
+    private String epost;
+    private String tema;
     private String navn;
 
-    public String getNavn() {
-        if (navn != null) {
-            return navn;
-        } else if (fornavn != null && etternavn != null) {
-            return fornavn + " " + etternavn;
-        } else {
-            return null;
-        }
-    }
 }

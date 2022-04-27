@@ -1,1 +1,0 @@
-alter table kontaktskjema add navn varchar(255);

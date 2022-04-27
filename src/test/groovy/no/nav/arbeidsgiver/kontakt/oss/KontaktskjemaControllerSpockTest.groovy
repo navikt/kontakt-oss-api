@@ -1,6 +1,6 @@
 package no.nav.arbeidsgiver.kontakt.oss
 
-import no.nav.arbeidsgiver.kontakt.oss.fylkesinndelingMedNavEnheter.LokasjonsValidator
+import no.nav.arbeidsgiver.kontakt.oss.fylkesinndeling.LokasjonsValidator
 import no.nav.arbeidsgiver.kontakt.oss.utsending.KontaktskjemaUtsendingRepository
 import org.spockframework.spring.SpringBean
 import org.spockframework.spring.StubBeans
@@ -47,8 +47,7 @@ class KontaktskjemaControllerSpockTest extends Specification {
                     "kommunenr": "42", 
                     "bedriftsnavn": "lol", 
                     "orgnr": "889640782", 
-                    "fornavn": "lol", 
-                    "etternavn": "lol", 
+                    "navn": "lol", 
                     "epost": "lol@lol.no",
                     "telefonnr": "42",
                     "tema": "lol",
