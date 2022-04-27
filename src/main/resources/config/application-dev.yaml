@@ -22,9 +22,12 @@ salesforce:
     url: https://navdialog--preprod.my.salesforce.com/services/apexrest/ContactForm
 
 database:
-  navn: #kontakt-oss-preprod
-vault:
-  mount-path: #postgresql/preprod-fss
+  name: ${NAIS_DATABASE_KONTAKT-OSS-API_KONTAKT-OSS-DEV_DATABASE}
+  url: ${NAIS_DATABASE_KONTAKT-OSS-API_KONTAKT-OSS-DEV_URL}
+  username: ${NAIS_DATABASE_KONTAKT-OSS-API_KONTAKT-OSS-DEV_USERNAME}
+  password: ${NAIS_DATABASE_KONTAKT-OSS-API_KONTAKT-OSS-DEV_PASSWORD}
+  driver-class-name: org.postgresql.Driver
+
 
 kontaktskjema:
   max-requests-per-10-min: 10

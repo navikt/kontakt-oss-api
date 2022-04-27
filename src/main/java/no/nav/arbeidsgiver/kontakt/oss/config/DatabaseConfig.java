@@ -3,7 +3,6 @@ package no.nav.arbeidsgiver.kontakt.oss.config;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.SneakyThrows;
-import no.nav.vault.jdbc.hikaricp.HikariCPVaultUtil;
 import org.flywaydb.core.Flyway;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.flyway.FlywayMigrationStrategy;
@@ -17,39 +16,41 @@ import javax.sql.DataSource;
 @Profile({"dev", "prod"})
 public class DatabaseConfig {
 
-    @Value("${spring.datasource.url}")
+    @Value("${database.name}")
+    private String dbName;
+
+    @Value("${database.url}")
     private String databaseUrl;
 
-    @Value("${database.navn}")
-    private String databaseNavn;
+    @Value("${database.username}")
+    private String username;
 
-    @Value("${vault.mount-path}")
-    private String mountPath;
+    @Value("${database.password}")
+    private String password;
 
     @Bean
     public DataSource userDataSource() {
-        return dataSource("user");
+        return dataSource();
     }
 
     @SneakyThrows
-    private HikariDataSource dataSource(String user) {
+    private HikariDataSource dataSource() {
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl(databaseUrl);
+        config.setUsername(username);
+        config.setPassword(password);
         config.setMaximumPoolSize(2);
         config.setMinimumIdle(1);
-        return HikariCPVaultUtil.createHikariDataSourceWithVaultIntegration(config, mountPath, dbRole(user));
+        return new HikariDataSource(config);
     }
 
     @Bean
     public FlywayMigrationStrategy flywayMigrationStrategy() {
         return flyway -> Flyway.configure()
-                .dataSource(dataSource("admin"))
-                .initSql(String.format("SET ROLE \"%s\"", dbRole("admin")))
+                .dataSource(dataSource())
+                .initSql(String.format("SET ROLE \"%s-admin\"", dbName))
                 .load()
                 .migrate();
     }
 
-    private String dbRole(String role) {
-        return String.join("-", databaseNavn, role);
-    }
 }

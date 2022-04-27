@@ -23,7 +23,7 @@ public class FylkesinndelingRepository implements FylkesinndelingDAO {
 
     @Override
     public List<KommuneEllerBydel> hentFylkesinndelinger() throws JsonProcessingException {
-        String sql = "SELECT kommune_bydel FROM city";
+        String sql = "SELECT kommune_bydel FROM FYLKESINNDELING";
         String json = jdbcTemplate.queryForObject(sql, String.class);
 
         return Arrays.asList(objectMapper.readValue(json, KommuneEllerBydel[].class));
@@ -32,7 +32,7 @@ public class FylkesinndelingRepository implements FylkesinndelingDAO {
     @Override
     public int oppdatereFylkesinndelinger(List<KommuneEllerBydel> municipalities) throws JsonProcessingException {
         String json =  objectMapper.writeValueAsString(municipalities);
-        String sql = "UPDATE city SET kommune_bydel=?, last_updated=?";
+        String sql = "UPDATE FYLKESINNDELING SET kommune_bydel=?, last_updated=?";
 
         return jdbcTemplate.update(sql, json, LocalDateTime.now());
     }

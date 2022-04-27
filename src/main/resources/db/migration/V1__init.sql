@@ -31,9 +31,9 @@ CREATE TABLE SHEDLOCK (
     PRIMARY KEY (name)
 );
 
-CREATE TABLE CITY (
+CREATE TABLE FYLKESINNDELING (
     id BIGSERIAL PRIMARY KEY,
     kommune_bydel varchar(50000) not null,
     last_updated timestamp not null default current_timestamp
 );
-insert into CITY (kommune_bydel) values ('Test');
+insert into FYLKESINNDELING (kommune_bydel) values ('Test');
