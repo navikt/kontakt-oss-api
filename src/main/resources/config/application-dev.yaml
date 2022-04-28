@@ -22,12 +22,9 @@ salesforce:
     url: https://navdialog--preprod.my.salesforce.com/services/apexrest/ContactForm
 
 database:
-  name: ${NAIS_DATABASE_KONTAKT-OSS-API_KONTAKT-OSS-DEV_DATABASE}
-  url: ${NAIS_DATABASE_KONTAKT-OSS-API_KONTAKT-OSS-DEV_URL}
+  url: "jdbc:postgresql://${NAIS_DATABASE_KONTAKT-OSS-API_KONTAKT-OSS-DEV_HOST}:${NAIS_DATABASE_KONTAKT-OSS-API_KONTAKT-OSS-DEV_PORT}/${NAIS_DATABASE_KONTAKT-OSS-API_KONTAKT-OSS-DEV_DATABASE}"
   username: ${NAIS_DATABASE_KONTAKT-OSS-API_KONTAKT-OSS-DEV_USERNAME}
   password: ${NAIS_DATABASE_KONTAKT-OSS-API_KONTAKT-OSS-DEV_PASSWORD}
-  driver-class-name: org.postgresql.Driver
-
 
 kontaktskjema:
   max-requests-per-10-min: 10
