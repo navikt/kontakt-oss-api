@@ -3,12 +3,13 @@ kontakt-oss:
   kafka:
     enabled: false
   fylke-scheduler:
-    enabled: false
+    enabled: true
   utsending-scheduler:
-    enabled: false
+    enabled: true
 
 ssb:
   fixed-rate: 86400000  # Hver dag i millisekunder: 1000 * 1440 * 60 = 86,400,000
+
 unleash:
   url: https://unleash.nais.io/api/
   profile: dev
