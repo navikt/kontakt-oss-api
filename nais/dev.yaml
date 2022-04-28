@@ -32,7 +32,7 @@ spec:
     - name: SPRING_PROFILES_ACTIVE
       value: dev
     - name: FYLKESINNDELING_TVING_OPPDATERING
-      value: "false"
+      value: "true"
   webproxy: true
 
 
