@@ -36,7 +36,7 @@ public class FylkesinndelingScheduler {
         }
     }
 
-    @Scheduled(fixedRateString = "${norg.fixed-rate}")
+    @Scheduled(fixedRateString = "${ssb.fixed-rate}")
     public void scheduledOppdaterInformasjonFraNorg() {
         log.debug("Sjekker shedlock for fylkesinndeling-oppdatering");
 

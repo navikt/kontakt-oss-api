@@ -7,10 +7,8 @@ kontakt-oss:
   utsending-scheduler:
     enabled: false
 
-norg:
-  url: https://app-q0.adeo.no/norg2/api/v1
-kodeverk:
-  url: https://kodeverk.nais.preprod.local/api/v1
+ssb:
+  fixed-rate: 86400000  # Hver dag i millisekunder: 1000 * 1440 * 60 = 86,400,000
 unleash:
   url: https://unleash.nais.io/api/
   profile: dev
