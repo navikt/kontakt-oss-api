@@ -50,7 +50,7 @@ public class FylkesinndelingService {
             log.info("Informasjon om fylkesinndeling ble oppdatert");
         } catch(Exception e){
             eventPublisher.publishEvent(new FylkesinndelingOppdatert(false));
-            throw new KontaktskjemaException("Kunne ikke oppdatere fylkesinndeling", e);
+            throw new KontaktskjemaException("Kunne ikke oppdatere fylkesinndeling\n "+ e.getMessage(), e);
         }
     }
 
