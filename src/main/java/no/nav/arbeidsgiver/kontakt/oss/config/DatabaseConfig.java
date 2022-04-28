@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 @Profile({"dev", "prod"})
 public class DatabaseConfig {
-    
+
     @Value("${database.url}")
     private String databaseUrl;
 
