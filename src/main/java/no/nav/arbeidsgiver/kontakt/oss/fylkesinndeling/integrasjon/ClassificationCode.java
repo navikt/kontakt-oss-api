@@ -1,13 +1,18 @@
 package no.nav.arbeidsgiver.kontakt.oss.fylkesinndeling.integrasjon;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ClassificationCode {
     private String code;
     private String parentCode;
     private String level;
     private String name;
+    private String shortName;
     private String presentationName;
     private String validFromInRequestedRange;
     private String validToInRequestedRange;
+
 
     public String getCode() {
         return code;
@@ -39,6 +44,14 @@ public class ClassificationCode {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getShortName() {
+        return shortName;
+    }
+
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
     }
 
     public String getPresentationName() {
