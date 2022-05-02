@@ -10,9 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+
 
 @Slf4j
 @Service
@@ -43,8 +41,9 @@ public class FylkesinndelingService {
         try{
             List<ClassificationCode> municipalityCodes = ssbKlient.getClassificationCodes(MUNICIPALITY_CLASSIFICATION);
             List<ClassificationCode> cityDistrictCodes = ssbKlient.getClassificationCodes(CITY_DISTRICT_CLASSIFICATION);
-            List<KommuneEllerBydel> munis = mergeListOfMunicipalitiesAndDistricts(municipalityCodes, cityDistrictCodes);
-            kommuneDAO.oppdatereFylkesinndelinger(munis);
+            List<KommuneEllerBydel> inndelinger = mergeListOfMunicipalitiesAndDistricts(municipalityCodes, cityDistrictCodes);
+
+            lagreOppdattertFylkesinndeling(inndelinger);
 
             eventPublisher.publishEvent(new FylkesinndelingOppdatert(true));
             log.info("Informasjon om fylkesinndeling ble oppdatert");
@@ -56,27 +55,29 @@ public class FylkesinndelingService {
 
 
     public List<KommuneEllerBydel> mergeListOfMunicipalitiesAndDistricts(List<ClassificationCode> municipalityCodes, List<ClassificationCode> cityDistrictCodes){
+        List<KommuneEllerBydel> kommunerOgBydel = new ArrayList<>();
 
-        Map<String, KommuneEllerBydel> municipalityDivision = municipalityCodes.stream()
-                .filter(c-> c.getName().equals("Uoppgitt") == false)
-                .map(c-> new KommuneEllerBydel(c.getCode(), c.getName()))
-                .collect(Collectors.toMap(KommuneEllerBydel::getNummer, Function.identity()));
-
-
-        for(ClassificationCode c :cityDistrictCodes){
-            if(c.getName().equals("Uoppgitt")) {
-                continue;
+        for(ClassificationCode kommune: municipalityCodes){
+            boolean hasBydel = false;
+            for(ClassificationCode bydel: cityDistrictCodes){
+                if(bydel.getCode().substring(0, 4).equals(kommune.getCode())){
+                    hasBydel = true;
+                    kommunerOgBydel.add(new KommuneEllerBydel(bydel.getCode(), kommune.getName() + "- "+bydel.getName()));
+                }
             }
-
-            if(!municipalityDivision.containsKey(c.getCode())){
-                municipalityDivision.put(c.getCode(), new KommuneEllerBydel());
+            if(!hasBydel){
+                kommunerOgBydel.add(new KommuneEllerBydel(kommune.getCode(), kommune.getName()));
             }
-            municipalityDivision.get(c.getCode()).setNummer(c.getCode());
-            municipalityDivision.get(c.getCode()).setNavn(municipalityDivision.get(c.getCode().substring(0, 4)).getNavn() + "- " + c.getName());
         }
 
-        return new ArrayList<>(municipalityDivision.values());
+        return kommunerOgBydel;
+    }
 
+    private void lagreOppdattertFylkesinndeling(List<KommuneEllerBydel> inndelinger) throws Exception {
+        int antallOppdatert = kommuneDAO.oppdatereFylkesinndelinger(inndelinger);
+        if(antallOppdatert < 1){
+            throw new IllegalStateException("Kunne ikke lagre oppdatert fylkesinndeling.");
+        }
     }
 
 }

@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles({"local"})
 @TestPropertySource(properties = {"mock.enabled=false"})
 @Slf4j
-public class KommuneRepositoryTest {
+public class FylkesinndelingRepositoryTest {
 
     @Autowired
     private FylkesinndelingRepository repository;

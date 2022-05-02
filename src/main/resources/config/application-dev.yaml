@@ -14,11 +14,6 @@ unleash:
   url: https://unleash.nais.io/api/
   profile: dev
 
-salesforce:
-  auth:
-    url: https://test.salesforce.com/services/oauth2/token
-  contactform:
-    url: https://navdialog--preprod.my.salesforce.com/services/apexrest/ContactForm
 
 database:
   url: "jdbc:postgresql://${NAIS_DATABASE_KONTAKT-OSS-API_KONTAKT-OSS-DEV_HOST}:${NAIS_DATABASE_KONTAKT-OSS-API_KONTAKT-OSS-DEV_PORT}/${NAIS_DATABASE_KONTAKT-OSS-API_KONTAKT-OSS-DEV_DATABASE}"
