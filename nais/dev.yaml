@@ -28,6 +28,10 @@ spec:
   prometheus:
     enabled: true
     path: /kontakt-oss-api/internal/actuator/prometheus
+  accessPolicy:
+    inbound:
+      rules:
+        - application: kontakt-oss
   env:
     - name: SPRING_PROFILES_ACTIVE
       value: dev
